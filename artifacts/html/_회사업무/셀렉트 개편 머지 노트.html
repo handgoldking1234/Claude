@@ -1,0 +1,668 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>셀렉트 개편 머지 노트</title>
+<style>
+  :root {
+    --ground:     #f4f6fa;
+    --surface:    #ffffff;
+    --surface-2:  #edf1f7;
+    --ink:        #141922;
+    --ink-2:      #3f4b63;
+    --ink-3:      #6d7889;
+    --rule:       #dce2ec;
+    --rule-soft:  #e9edf4;
+    --accent:     #2d76f7;
+    --accent-2:   #2549b7;
+    --accent-wash:#e8f0fe;
+    --keep:       #17784d;
+    --keep-wash:  #e6f3ec;
+    --care:       #a8560c;
+    --care-wash:  #fdf2e6;
+    --stop:       #bb433c;
+    --stop-wash:  #fbeceb;
+    --code-bg:    #eef2f8;
+    --shadow:     0 1px 2px rgba(20,25,34,.05), 0 10px 28px -22px rgba(20,25,34,.55);
+
+    --font-body: "Segoe UI Variable Text", "Segoe UI", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-mono: "Cascadia Mono", "Cascadia Code", ui-monospace, Consolas, "Liberation Mono", monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:     #0f1218;
+      --surface:    #171a21;
+      --surface-2:  #1e222b;
+      --ink:        #eef1f7;
+      --ink-2:      #b6c3da;
+      --ink-3:      #8792a5;
+      --rule:       rgba(255,255,255,.11);
+      --rule-soft:  rgba(255,255,255,.06);
+      --accent:     #4aa8ff;
+      --accent-2:   #85b3ff;
+      --accent-wash:rgba(74,168,255,.13);
+      --keep:       #34d39d;
+      --keep-wash:  rgba(52,211,157,.11);
+      --care:       #f0873f;
+      --care-wash:  rgba(240,135,63,.11);
+      --stop:       #f2635c;
+      --stop-wash:  rgba(242,99,92,.11);
+      --code-bg:    rgba(255,255,255,.045);
+      --shadow:     0 1px 2px rgba(0,0,0,.45), 0 10px 28px -22px rgba(0,0,0,.9);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:     #0f1218;
+    --surface:    #171a21;
+    --surface-2:  #1e222b;
+    --ink:        #eef1f7;
+    --ink-2:      #b6c3da;
+    --ink-3:      #8792a5;
+    --rule:       rgba(255,255,255,.11);
+    --rule-soft:  rgba(255,255,255,.06);
+    --accent:     #4aa8ff;
+    --accent-2:   #85b3ff;
+    --accent-wash:rgba(74,168,255,.13);
+    --keep:       #34d39d;
+    --keep-wash:  rgba(52,211,157,.11);
+    --care:       #f0873f;
+    --care-wash:  rgba(240,135,63,.11);
+    --stop:       #f2635c;
+    --stop-wash:  rgba(242,99,92,.11);
+    --code-bg:    rgba(255,255,255,.045);
+    --shadow:     0 1px 2px rgba(0,0,0,.45), 0 10px 28px -22px rgba(0,0,0,.9);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 44px 24px 88px;
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+  }
+
+  /* ── 머리말 ── */
+  .masthead { display: flex; flex-direction: column; gap: 14px; border-bottom: 2px solid var(--ink); padding-bottom: 26px; }
+  .kicker { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+  h1 { margin: 0; font-size: clamp(27px, 4.4vw, 36px); line-height: 1.15; letter-spacing: -.02em; font-weight: 700; text-wrap: balance; }
+  .standfirst { margin: 0; max-width: 64ch; color: var(--ink-2); }
+  .commits { display: flex; flex-wrap: wrap; gap: 8px 22px; font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-3); }
+  .commits b { color: var(--ink-2); font-weight: 600; }
+
+  section { display: flex; flex-direction: column; gap: 18px; scroll-margin-top: 16px; }
+  h2 { margin: 0; font-size: 21px; letter-spacing: -.015em; font-weight: 700; padding-bottom: 9px; border-bottom: 1px solid var(--rule); }
+  h3 { margin: 0; font-size: 15.5px; font-weight: 700; }
+  p { margin: 0; }
+  .lead { max-width: 68ch; color: var(--ink-2); font-size: 14.5px; }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: .86em;
+    background: var(--code-bg);
+    padding: .12em .38em;
+    border-radius: 4px;
+    word-break: break-word;
+  }
+  pre {
+    margin: 0; background: var(--code-bg); border: 1px solid var(--rule-soft);
+    border-radius: 7px; padding: 12px 14px; overflow-x: auto;
+    font-family: var(--font-mono); font-size: 12.5px; line-height: 1.65;
+  }
+  pre code { background: none; padding: 0; font-size: inherit; }
+
+  /* ── 목차 ── */
+  .toc {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1px 24px; padding: 16px 20px;
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; box-shadow: var(--shadow);
+  }
+  .toc a { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-2); text-decoration: none; padding: 5px 0; display: block; }
+  .toc a:hover { color: var(--accent); }
+  .toc a:focus-visible, .card a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+  /* ── 판정 배지 ── */
+  .verdict {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 2px 9px; border-radius: 99px;
+    font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+    letter-spacing: .03em; white-space: nowrap;
+  }
+  .verdict--keep { color: var(--keep); background: var(--keep-wash); }
+  .verdict--care { color: var(--care); background: var(--care-wash); }
+  .verdict--stop { color: var(--stop); background: var(--stop-wash); }
+
+  /* ── 화면 카드 ── */
+  .cards { display: flex; flex-direction: column; gap: 14px; }
+  .card {
+    border: 1px solid var(--rule); border-radius: 10px; background: var(--surface);
+    box-shadow: var(--shadow); overflow: hidden;
+  }
+  .card__head {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px;
+    padding: 13px 18px; border-bottom: 1px solid var(--rule-soft); background: var(--surface-2);
+  }
+  .card__head h3 { flex: 0 0 auto; }
+  .card__url { font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); word-break: break-all; }
+  .card__body { padding: 14px 18px 16px; display: flex; flex-direction: column; gap: 12px; }
+
+  .files { display: flex; flex-direction: column; gap: 10px; }
+  .file { display: grid; grid-template-columns: minmax(0, 300px) 1fr; gap: 4px 18px; align-items: start; }
+  .file__name { font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; color: var(--accent-2); word-break: break-all; }
+  .file__what { font-size: 14px; color: var(--ink-2); }
+  .file__what ul { margin: 3px 0 0; padding-left: 17px; }
+  .file__what li { margin: 1px 0; }
+
+  .note {
+    display: flex; flex-direction: column; gap: 5px;
+    border-left: 3px solid var(--accent); background: var(--accent-wash);
+    border-radius: 0 7px 7px 0; padding: 11px 14px; font-size: 13.5px;
+  }
+  .note--care { border-left-color: var(--care); background: var(--care-wash); }
+  .note--stop { border-left-color: var(--stop); background: var(--stop-wash); }
+  .note__label { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .09em; text-transform: uppercase; font-weight: 700; color: var(--ink-2); }
+
+  /* ── 표 ── */
+  .table-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; min-width: 560px; }
+  th, td { text-align: left; padding: 10px 15px; border-bottom: 1px solid var(--rule-soft); vertical-align: top; }
+  thead th {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--ink-3); font-weight: 600; background: var(--surface-2);
+    border-bottom: 1px solid var(--rule); white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.mono { font-family: var(--font-mono); font-size: 12px; word-break: break-all; }
+
+  footer { border-top: 1px solid var(--rule); padding-top: 20px; font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); line-height: 1.75; }
+
+  @media (max-width: 680px) {
+    .page { padding: 32px 16px 64px; gap: 34px; }
+    .file { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="kicker">feature/front-goldking · 6c0b5d2 → b57c70d</div>
+    <h1>셀렉트 개편 머지 노트</h1>
+    <p class="standfirst">
+      커밋 2개에서 20개 파일이 바뀌었다. 화면별로 <b>무엇을 왜 바꿨는지</b>와,
+      충돌이 났을 때 <b>어느 쪽을 남겨야 하는지</b>를 정리한다.
+    </p>
+    <div class="commits">
+      <span><b>de74679</b> 긴 목록 셀렉트 → 검색 가능 셀렉트 (17파일)</span>
+      <span><b>b57c70d</b> 패널 헤더·페이징 공통 규격 (5파일)</span>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="목차">
+    <a href="#shared">공통 파일 5개 — 먼저 볼 것</a>
+    <a href="#risky">구조가 바뀐 파일 2개</a>
+    <a href="#users">사용자 관리 3화면</a>
+    <a href="#perm">권한 2화면</a>
+    <a href="#etc">그 외 5화면</a>
+    <a href="#rules">충돌 판정 원칙</a>
+  </nav>
+
+  <!-- ============================================================ -->
+  <section id="shared">
+    <h2>공통 파일 5개 — 먼저 볼 것</h2>
+    <p class="lead">
+      여러 화면이 함께 쓰는 파일이라 충돌 확률이 가장 높다. 다행히 <b>전부 순수 추가</b>다 —
+      기존 줄을 고친 것이 하나도 없으므로, 충돌이 나면 원칙적으로 <b>양쪽 다 남기면 된다.</b>
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>파일</th><th>추가한 것</th><th>왜</th><th>판정</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono">shared/components/common/<br>SelectSearch.tsx</td>
+            <td><code>ariaLabel?: string</code> prop — 타입 1줄, 구조분해 1줄, 트리거 <code>aria-label</code> 1줄</td>
+            <td>보이는 라벨이 없는 필터에서 combobox 접근성 이름을 줄 방법이 없었다. 선택적 prop이라 기존 사용처 영향 없음</td>
+            <td><span class="verdict verdict--keep">양쪽 유지</span></td>
+          </tr>
+          <tr>
+            <td class="mono">shared/components/common/<br>select-search.scss</td>
+            <td>파일 상단에 <code>.select-search--filter { width: 180px }</code></td>
+            <td>기본 <code>width:100%</code>라 flex 필터바에 넣으면 한 줄을 다 차지한다</td>
+            <td><span class="verdict verdict--keep">양쪽 유지</span></td>
+          </tr>
+          <tr>
+            <td class="mono">shared/styles/evaluation-design/<br>_02-steps.scss</td>
+            <td><code>.eval-design-page</code> 안에 트리거 <code>min-height:44px</code></td>
+            <td>평가설계만 폼 컨트롤이 44px 규격이라 트리거(36px)와 8px 어긋났다</td>
+            <td><span class="verdict verdict--keep">양쪽 유지</span></td>
+          </tr>
+          <tr>
+            <td class="mono">shared/styles/global/<br>_03-cmp-components.scss</td>
+            <td><code>.users-new-form</code> 트리거 <code>min-height:38px</code></td>
+            <td>사용자 등록은 텍스트 입력이 <code>form-control</code>(38px)이라 셀렉트도 38px 규칙이 이미 있었다</td>
+            <td><span class="verdict verdict--keep">양쪽 유지</span></td>
+          </tr>
+          <tr>
+            <td class="mono">shared/styles/global/<br>_09-page-components.scss</td>
+            <td>블록 2개 — <code>.menu-tree-panel__heading</code>(1276행 근처), <code>.menu-form-field</code> 트리거 42px(2209행 근처)</td>
+            <td>메뉴 트리 헤더 아이콘 배치 / 연합 교사 추가 모달 높이</td>
+            <td><span class="verdict verdict--keep">양쪽 유지</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <span class="note__label">높이 규칙이 3개나 생긴 이유</span>
+      <p>
+        페이지마다 폼 컨트롤 규격이 다르다 — 전역 <b>36px</b>, 평가설계 <b>44px</b>,
+        연합 모달(<code>.menu-form-field</code>) <b>42px</b>, 사용자 등록 <b>38px</b>.
+        <code>SelectSearch</code>는 컴포넌트 기본값이 36px 하나뿐이라 스코프별로 맞춰줘야 했다.
+        <b>새 화면에 SelectSearch를 넣을 때는 옆 컨트롤 높이를 먼저 확인할 것.</b>
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="risky">
+    <h2>구조가 바뀐 파일 2개</h2>
+    <p class="lead">
+      나머지는 셀렉트 한 덩어리만 교체했지만, 이 둘은 파일 구조 자체가 달라졌다.
+      충돌 시 <b>줄 단위로 합치지 말고 통째로 판단</b>해야 한다.
+    </p>
+
+    <div class="cards">
+      <article class="card">
+        <div class="card__head">
+          <h3>userSubjectOptions.tsx</h3>
+          <span class="card__url">features/ops/users/pages/users-edit/</span>
+          <span class="verdict verdict--stop">통째로 판단</span>
+        </div>
+        <div class="card__body">
+          <p class="file__what">
+            <b>렌더 컴포넌트 2개를 삭제하고 옵션 빌더 함수 2개로 대체했다.</b>
+            <code>SelectSearch</code>가 <code>&lt;optgroup&gt;</code>을 지원하지 않기 때문.
+          </p>
+<pre><code>삭제: UserSubjectGroupSelectOptions        (optgroup 렌더)
+삭제: UserCurriculumSubjectSelectOptions   (optgroup 렌더)
+추가: toUserSubjectGroupSelectSearchOptions()
+추가: toUserCurriculumSubjectSelectSearchOptions()
+      → optgroup label(학교급)을 각 항목 description 으로 이동
+삭제: import { Fragment } (더 이상 불필요)</code></pre>
+          <div class="note note--care">
+            <span class="note__label">확인할 것</span>
+            <p>
+              상대 브랜치가 삭제된 두 컴포넌트를 <b>새로 쓰기 시작했다면</b> 그 사용처도 빌더 함수로 바꿔야 한다.
+              현재 사용처는 3곳(<code>UsersEditPage</code> · <code>UserActorsSection</code> · <code>UserAssignmentFormModal</code>)이고 모두 전환 완료.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__head">
+          <h3>UserAssignmentFormModal.tsx</h3>
+          <span class="card__url">features/ops/users/pages/users-edit/ · 167줄 변경</span>
+          <span class="verdict verdict--stop">통째로 판단</span>
+        </div>
+        <div class="card__body">
+          <p class="file__what">직접 조립하던 모달 마크업을 <b>공통 <code>Modal</code> 컴포넌트로 전환</b>했다(학교 정보 수정 모달과 동일 구조).</p>
+          <div class="file__what">
+            <ul>
+              <li><code>ui-modal</code> · <code>ui-modal__backdrop</code> · <code>ui-modal__header</code> 직접 마크업 → <code>&lt;Modal&gt;</code></li>
+              <li>헤더에 아이콘 배지(<code>IconSquareEdit</code>), 푸터 버튼에 <code>IconX</code>/<code>IconSave</code> + <code>ml-auto</code></li>
+              <li><b>body와 footer가 분리</b>되어 <code>&lt;form id&gt;</code> + 버튼 <code>form=</code> 속성으로 제출을 이었다</li>
+              <li>텍스트 입력 6개 <code>form-control</code>(38px) → <code>form-input</code>(36px) — 셀렉트와 높이 정렬</li>
+              <li>인라인 style 그리드 2개 → <code>grid grid-cols-3 gap-3</code> / <code>grid-cols-2</code></li>
+              <li>학교·교과 셀렉트 → <code>SelectSearch</code></li>
+            </ul>
+          </div>
+          <div class="note note--care">
+            <span class="note__label">잃기 쉬운 동작</span>
+            <p>
+              공통 <code>Modal</code>은 배경 클릭을 무조건 <code>onClose</code>로 처리한다.
+              원래 있던 <b>저장 중 닫힘 방지</b>를 <code>onClose</code> 핸들러 안에
+              <code>if (submitting) return;</code>으로 옮겨뒀다. 이 줄이 사라지지 않게 할 것.
+            </p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="users">
+    <h2>사용자 관리 3화면</h2>
+
+    <div class="cards">
+      <article class="card">
+        <div class="card__head">
+          <h3>사용자 역할 할당</h3>
+          <span class="card__url">/admin/roles/user-roles</span>
+        </div>
+        <div class="card__body">
+          <div class="files">
+            <div class="file">
+              <span class="file__name">UsersListPage.tsx</span>
+              <div class="file__what">
+                학교 필터 <code>&lt;select&gt;</code> → <code>SelectSearch</code>
+                <ul>
+                  <li><code>schoolFilterOptions</code> memo 추가 — <code>'all'</code>(전체 학교)을 목록 첫 항목으로</li>
+                  <li><code>className="select-search--filter"</code> · <code>matchTriggerWidth={false}</code></li>
+                  <li>필터 로직(<code>String(row.schoolId) !== schoolFilter</code>)은 <b>변경 없음</b></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__head">
+          <h3>사용자 등록</h3>
+          <span class="card__url">/admin/roles/user-roles/new</span>
+        </div>
+        <div class="card__body">
+          <div class="files">
+            <div class="file">
+              <span class="file__name">UsersNewPage.tsx</span>
+              <div class="file__what">
+                소속 학교 → <code>SelectSearch</code>
+                <ul>
+                  <li>비활성 학교의 <code>(비활성)</code> 접미사를 <code>schoolOptions</code> memo의 label에서 유지</li>
+                  <li>placeholder 3종(불러오는 중 / 등록된 학교 없음 / 선택해주세요) 유지</li>
+                  <li><b>native <code>required</code>가 사라졌다</b> — 제출 시 수동 검증이 이미 있어 동작은 동일</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__head">
+          <h3>사용자 수정 — 파일 4개</h3>
+          <span class="card__url">/admin/roles/user-roles/:userId/edit</span>
+        </div>
+        <div class="card__body">
+          <div class="files">
+            <div class="file">
+              <span class="file__name">UsersEditPage.tsx</span>
+              <div class="file__what">
+                소속 학교 · 주 담당 교과 2개 교체.
+                <code>schoolOptions</code> / <code>subjectGroupSelectOptions</code> memo 추가,
+                <code>useMemo</code> import 추가. 교과는 빌더 함수 사용.
+              </div>
+            </div>
+            <div class="file">
+              <span class="file__name">UserActorsSection.tsx</span>
+              <div class="file__what">
+                Actor 행별 학교 · 교과 2개 교체. draft 행마다 반복 렌더되므로
+                <code>updateDraft(d.key, …)</code> 시그니처는 그대로 두었다.
+              </div>
+            </div>
+            <div class="file">
+              <span class="file__name">UserActorApplySection.tsx</span>
+              <div class="file__what">
+                학교 1개 교체. <b>이 컴포넌트는 어느 화면에도 렌더링되지 않는 죽은 코드다</b> —
+                충돌이 나면 굳이 시간 쓰지 말고 어느 쪽이든 골라도 무방.
+              </div>
+            </div>
+            <div class="file">
+              <span class="file__name">UserAssignmentFormModal.tsx</span>
+              <div class="file__what">위의 <a href="#risky">구조가 바뀐 파일</a> 참조.</div>
+            </div>
+          </div>
+          <div class="note">
+            <span class="note__label">폼 필드 공통 규칙</span>
+            <p>
+              필터와 달리 <b>폼 필드는 미선택을 <code>null</code>로 매핑</b>하고 placeholder로 표시했다.
+              선택 해제가 필요하므로 <code>clearable</code> + <code>onClear</code>로 <code>''</code>를 되돌린다.
+              상태 타입(<code>number | ''</code>)은 어느 파일도 바꾸지 않았다.
+            </p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="perm">
+    <h2>권한 2화면</h2>
+
+    <div class="cards">
+      <article class="card">
+        <div class="card__head">
+          <h3>권한 신청</h3>
+          <span class="card__url">/permissions/requests/new · 두 커밋 모두에서 수정됨</span>
+          <span class="verdict verdict--care">변경 2건</span>
+        </div>
+        <div class="card__body">
+          <div class="files">
+            <div class="file">
+              <span class="file__name">PermissionsNewPage.tsx</span>
+              <div class="file__what">
+                <ul>
+                  <li><b>대상 평가</b> 셀렉트 → <code>SelectSearch</code>. label을 <code>평가명 · 과목</code>으로 합쳐 트리거 표기를 유지하고 검색을 양쪽에 걸리게 했다. 빈 목록은 <code>&lt;option&gt;</code>이 아니라 placeholder + <code>disabled</code>로 처리</li>
+                  <li><b>내 보유 권한</b>을 <code>&lt;Panel&gt;</code>로 감쌌다 — <code>icon={&lt;KeyRound/&gt;}</code> · <code>subTitle</code> · <code>headerLine</code>. 로딩/빈 배너와 카드 그리드가 패널 본문 안으로 들어갔다</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__head">
+          <h3>권한 검토</h3>
+          <span class="card__url">/permissions/requests · 시스템관리자 Actor 로 접속해야 보임</span>
+        </div>
+        <div class="card__body">
+          <div class="files">
+            <div class="file">
+              <span class="file__name">PermissionsReviewPage.tsx</span>
+              <div class="file__what">
+                학교 필터 교체. <code>''</code>(전체)를 첫 항목으로 두고
+                <b><code>전체 학교 (N개교)</code> 개수 표기를 그대로 살렸다.</b>
+                <code>reviewerScope === 'district'</code> 조건부 렌더링은 변경 없음.
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="etc">
+    <h2>그 외 5화면</h2>
+
+    <div class="cards">
+      <article class="card">
+        <div class="card__head">
+          <h3>접근기록 관리</h3>
+          <span class="card__url">/audit/access-logs</span>
+          <span class="verdict verdict--care">API 추가</span>
+        </div>
+        <div class="card__body">
+          <div class="files">
+            <div class="file">
+              <span class="file__name">AccessLogPage.tsx</span>
+              <div class="file__what">
+                <b>이 화면만 새 API 호출이 늘었다.</b> 학교 목록이 <code>&lt;option&gt;전체 학교 (12개교)&lt;/option&gt;</code>
+                리터럴 하나뿐인 목업이라, <code>schoolsApi.list()</code>를 붙여 실데이터로 채웠다.
+                <code>useEffect</code>/<code>useMemo</code>/<code>isAbortError</code> import가 함께 추가됐다.
+                <br>표·차트는 <b>여전히 하드코딩 목업</b>이며 선택해도 필터링되지 않는다(원래 그런 화면).
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__head">
+          <h3>평가설계 · 5단계 채점관</h3>
+          <span class="card__url">/tds/evaluations/:regId/designs/:designId</span>
+        </div>
+        <div class="card__body">
+          <div class="files">
+            <div class="file">
+              <span class="file__name">CandidateSearchPanel.tsx</span>
+              <div class="file__what">
+                「후보 교사 검색」 패널의 <b>학교 필터 · 과목 필터 2개</b> 교체.
+                위쪽 <b>「기본 역할」은 그대로 두었다</b>(역할 3개 고정, 필터가 아님).
+                두 옵션 모두 <code>candidates</code>에서 파생되는 짧은 목록이라 옵션 자체는 짧다.
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__head">
+          <h3>연합 상세 · 교사 추가</h3>
+          <span class="card__url">/evaluation/unions/:unionId</span>
+        </div>
+        <div class="card__body">
+          <div class="files">
+            <div class="file">
+              <span class="file__name">UnionDetailPage.tsx</span>
+              <div class="file__what">
+                교사 추가 모달의 학교 셀렉트 교체 + <code>acceptedSchoolOptions</code> memo 추가.
+                원본 <code>&lt;option&gt;</code>에 있던 <b>fallback 표기 <code>학교 #{'{'}schoolId{'}'}</code></b>를 옵션 빌더에 그대로 옮겼다.
+                목록은 <code>acceptedSchools</code>(참여 수락 학교)라 짧다.
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__head">
+          <h3>메뉴 관리 · 공통코드 관리</h3>
+          <span class="card__url">/admin/menus · /admin/common-codes</span>
+        </div>
+        <div class="card__body">
+          <div class="files">
+            <div class="file">
+              <span class="file__name">MenusTreePanel.tsx</span>
+              <div class="file__what">
+                「메뉴 트리」 제목 앞 아이콘 배지(<code>ListTree</code>).
+                헤더가 <code>space-between</code>이라 아이콘을 형제로 넣으면 3분할이 되므로
+                <b>아이콘+텍스트를 <code>.menu-tree-panel__heading</code>으로 묶었다</b>
+                (<code>_09-page-components.scss</code>에 대응 CSS 있음).
+              </div>
+            </div>
+            <div class="file">
+              <span class="file__name">CommonCodesGroupsPanel.tsx</span>
+              <div class="file__what">
+                「코드분류」 제목 앞 배지 1줄 추가. 이쪽은 이미 표준 <code>.ui-panel__header</code> 구조라
+                마크업 추가만으로 끝났고 CSS는 건드리지 않았다. 형제 패널의
+                <code>IconInfo</code>/<code>IconList</code>와 겹치지 않게 <code>IconStorage</code>를 썼다.
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card__head">
+          <h3>학교정보 관리</h3>
+          <span class="card__url">/admin/schools</span>
+          <span class="verdict verdict--care">동작 변경</span>
+        </div>
+        <div class="card__body">
+          <div class="files">
+            <div class="file">
+              <span class="file__name">SchoolsPage.tsx</span>
+              <div class="file__what">
+                <b>페이징이 원래 동작하지 않았다</b> — <code>const [page] = useState(1)</code>에 setter가 없고
+                버튼에 <code>onClick</code>도 없었으며 표는 <code>filtered</code> 전체를 렌더링했다.
+                직접 만든 <code>&lt;nav class="pager"&gt;</code>를 공통 <code>Pagination</code>으로 교체하고
+                실제 페이징을 연결했다.
+                <ul>
+                  <li><code>PAGE_SIZE = 20</code>, <code>filtered.slice(...)</code> → <code>pageRows</code> 렌더링</li>
+                  <li>필터·검색 변경 시 1페이지 복귀 / 페이지 수 감소 시 현재 페이지를 범위로 당김</li>
+                  <li><code>IconChevronLeft/Right</code> import 제거(공통 컴포넌트가 자체 보유)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="note note--care">
+            <span class="note__label">고치지 않은 것</span>
+            <p>
+              <code>schoolsApi.list()</code>가 <code>?page=0&amp;size=100</code>을 하드코딩해 전체를 한 번에 받는다.
+              <b>학교가 100개를 넘으면 조용히 잘린다.</b> 서버 페이징 전환은 API 협의가 필요해 손대지 않았다.
+            </p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="rules">
+    <h2>충돌 판정 원칙</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>상황</th><th>어떻게</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>공통 파일 5개에서 충돌</td>
+            <td><span class="verdict verdict--keep">양쪽 유지</span> 전부 순수 추가라 기존 줄을 고친 게 없다. 두 블록을 나란히 남기면 된다</td>
+          </tr>
+          <tr>
+            <td><code>&lt;select&gt;</code> ↔ <code>&lt;SelectSearch&gt;</code> 충돌</td>
+            <td>상대가 그 셀렉트의 <b>로직</b>(옵션 소스·필터 조건·disabled)을 바꿨다면 그 변경을 <code>SelectSearch</code> 쪽 props로 옮긴다. 단순 표기 변경이면 <code>SelectSearch</code> 쪽을 채택</td>
+          </tr>
+          <tr>
+            <td>import 줄 충돌</td>
+            <td>거의 전부 <b>합집합</b>이 정답. 단 <code>SchoolsPage</code>는 <code>IconChevronLeft/Right</code>를 <b>제거</b>했으니 되살리지 말 것</td>
+          </tr>
+          <tr>
+            <td><code>useMemo</code> 옵션 빌더 충돌</td>
+            <td>새로 추가한 memo(<code>*Options</code>)는 전부 신규 선언이다. 상대 변경 아래에 그대로 붙이면 된다</td>
+          </tr>
+          <tr>
+            <td>판단이 안 설 때</td>
+            <td>기준은 하나 — <b>기존 동작을 바꾸지 않는 것</b>이 이번 작업의 원칙이었다. 상태 타입·필터 조건·검증 로직은 어느 파일도 건드리지 않았다</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note note--stop">
+      <span class="note__label">머지 후 확인</span>
+      <p>
+        <code>npx tsc -b</code>에 <b>기존 미사용 import 오류 5건</b>이 원래부터 남아 있다
+        (<code>IconChevronLeft/Right</code> · <code>IconExtract/X</code> · <code>IconUser</code>).
+        이건 이번 작업과 무관하니 <b>머지 실패 신호로 오해하지 말 것.</b>
+        그 외 오류가 뜨면 머지 문제다.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    근거: <code>git diff 6c0b5d2..b57c70d</code> 전체 hunk 확인 · 20개 파일 / +443 −311<br>
+    수치·행 번호는 b57c70d 시점 기준이며, 머지 결과에 따라 달라진다.
+  </footer>
+
+</div>
+
+</body></html>

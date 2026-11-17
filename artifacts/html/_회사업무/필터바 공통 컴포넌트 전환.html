@@ -1,0 +1,645 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>필터바 공통 컴포넌트 전환</title>
+<style>
+  :root {
+    --ground:#f2f5f8; --surface:#fff; --surface-2:#e8edf4; --surface-3:#f8fafc;
+    --ink:#131820; --ink-2:#3f4a5c; --ink-3:#6b7686;
+    --rule:#dbe2ec; --rule-soft:#e9eef4;
+    --accent:#1d4ed8; --accent-2:#153ea8; --accent-wash:#e6edfd;
+    --new-c:#0a6b48; --new-wash:#e1f4ec;
+    --warn:#8a5200; --warn-wash:#fdf1dc;
+    --code-bg:#eceff5;
+    --shadow:0 1px 2px rgba(19,24,32,.05), 0 10px 26px -24px rgba(19,24,32,.65);
+    --f-body:"Segoe UI Variable Text","Segoe UI",ui-sans-serif,system-ui,-apple-system,sans-serif;
+    --f-mono:"Cascadia Mono","Cascadia Code",ui-monospace,Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:#0a0d12; --surface:#131820; --surface-2:#1b2029; --surface-3:#161a22;
+      --ink:#eceff6; --ink-2:#adb9cb; --ink-3:#7f8998;
+      --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+      --accent:#5c9bff; --accent-2:#93bcff; --accent-wash:rgba(92,155,255,.13);
+      --new-c:#4ec793; --new-wash:rgba(78,199,147,.13);
+      --warn:#e2a544; --warn-wash:rgba(226,165,68,.13);
+      --code-bg:rgba(255,255,255,.05);
+      --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -24px rgba(0,0,0,.95);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#0a0d12; --surface:#131820; --surface-2:#1b2029; --surface-3:#161a22;
+    --ink:#eceff6; --ink-2:#adb9cb; --ink-3:#7f8998;
+    --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+    --accent:#5c9bff; --accent-2:#93bcff; --accent-wash:rgba(92,155,255,.13);
+    --new-c:#4ec793; --new-wash:rgba(78,199,147,.13);
+    --warn:#e2a544; --warn-wash:rgba(226,165,68,.13);
+    --code-bg:rgba(255,255,255,.05);
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -24px rgba(0,0,0,.95);
+  }
+
+  *, *::before, *::after { box-sizing:border-box; }
+  body { margin:0; background:var(--ground); color:var(--ink);
+    font-family:var(--f-body); font-size:15px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:1080px; margin:0 auto; padding:40px 22px 90px; }
+
+  code { font-family:var(--f-mono); font-size:.88em; background:var(--code-bg);
+    border-radius:4px; padding:.1em .38em; overflow-wrap:anywhere; }
+  a { color:var(--accent); }
+  a:focus-visible { outline:2px solid var(--accent); outline-offset:2px; border-radius:4px; }
+
+  .eyebrow { font-family:var(--f-mono); font-size:11.5px; letter-spacing:.11em;
+    text-transform:uppercase; color:var(--ink-3); margin:0 0 10px; }
+  h1 { font-size:clamp(27px,4vw,36px); line-height:1.18; letter-spacing:-.022em;
+    margin:0 0 12px; text-wrap:balance; }
+  .lede { margin:0; max-width:66ch; color:var(--ink-2); font-size:16px; }
+
+  .meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+  .chip { display:inline-flex; align-items:baseline; gap:7px; background:var(--surface);
+    border:1px solid var(--rule); border-radius:999px; padding:5px 13px;
+    font-size:12.5px; box-shadow:var(--shadow); }
+  .chip b { font-family:var(--f-mono); font-weight:600; font-size:12px; }
+  .chip span { color:var(--ink-3); }
+
+  section { margin-top:46px; }
+  h2 { font-size:19px; letter-spacing:-.015em; margin:0 0 14px; padding-bottom:9px;
+    border-bottom:1px solid var(--rule); display:flex; flex-wrap:wrap;
+    align-items:baseline; gap:4px 12px; }
+  h2 .n { font-family:var(--f-mono); font-size:12px; color:var(--ink-3); font-weight:500; }
+  h3 { font-size:15px; margin:0 0 7px; }
+  p { margin:0 0 12px; max-width:78ch; }
+  p:last-child { margin-bottom:0; }
+
+  .toc { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    gap:1px 22px; margin-top:26px; padding:16px 20px; background:var(--surface);
+    border:1px solid var(--rule); border-radius:12px; box-shadow:var(--shadow); }
+  .toc a { color:var(--ink-2); text-decoration:none; font-size:14px; padding:3px 0; display:block; }
+  .toc a:hover { color:var(--accent); text-decoration:underline; text-underline-offset:3px; }
+  .toc a span { font-family:var(--f-mono); font-size:11px; color:var(--ink-3); }
+
+  .tablewrap { overflow-x:auto; border:1px solid var(--rule); border-radius:12px;
+    background:var(--surface); box-shadow:var(--shadow); }
+  table { border-collapse:collapse; width:100%; min-width:720px; }
+  colgroup .c-scr { width:21%; }
+  colgroup .c-url { width:26%; }
+  th, td { text-align:left; padding:11px 16px; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; }
+  thead th { font-family:var(--f-mono); font-size:10.5px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--ink-3); font-weight:600; background:var(--surface-3); }
+  tbody tr:last-child td { border-bottom:0; }
+  td.scr { font-weight:600; }
+  td.url { font-family:var(--f-mono); font-size:12px; color:var(--accent-2); word-break:break-all; }
+  td.chg { font-size:13px; color:var(--ink-2); }
+  td.chg b { color:var(--ink); }
+  td.chg ul { margin:0; padding-left:16px; }
+  td.chg li { margin-bottom:3px; }
+  td.chg li:last-child { margin-bottom:0; }
+  td.sha { font-family:var(--f-mono); font-size:12px; color:var(--ink-3);
+    font-variant-numeric:tabular-nums; white-space:nowrap; }
+
+  .note { border:1px solid var(--rule); border-left:3px solid var(--accent);
+    border-radius:9px; background:var(--surface); padding:15px 18px;
+    box-shadow:var(--shadow); margin-bottom:12px; }
+  .note:last-child { margin-bottom:0; }
+  .note.warn { border-left-color:var(--warn); }
+  .note p { font-size:14px; color:var(--ink-2); }
+
+  footer { margin-top:52px; padding-top:16px; border-top:1px solid var(--rule);
+    font-size:12.5px; color:var(--ink-3); }
+
+  @media (max-width:640px) {
+    table { min-width:620px; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">작업 이력 · 2026-09-09</p>
+    <h1>필터바 공통 컴포넌트 전환</h1>
+    <p class="lede">
+      목록 화면마다 <code>flex flex-wrap items-center gap-2</code> 를 직접 조합해 쓰던 필터바를
+      공통 클래스 한 벌로 정리하고, 좁은 폭에서 빈 자리 없이 접히도록 만들었습니다.
+      화면 23개와 공통 스타일 4개 파일이 바뀌었습니다.
+    </p>
+    <div class="meta">
+      <span class="chip"><span>브랜치</span><b>feature/front-goldking-new</b></span>
+      <span class="chip"><span>커밋</span><b>d7e8b553</b></span>
+      <span class="chip"><span>변경</span><b>29 files · +712 −273</b></span>
+      <span class="chip"><span>검증</span><b>tsc ✓ · vite build ✓</b></span>
+    </div>
+    <nav class="toc">
+      <a href="#why">왜 grid 인가 <span>· 배경</span></a>
+      <a href="#api">공통 클래스 <span>· 7개 + 토큰 2</span></a>
+      <a href="#global">전역 수정 <span>· 6건</span></a>
+      <a href="#screens">적용 화면 <span>· 23개</span></a>
+      <a href="#panel">패널 · 카드 <span>· 4건</span></a>
+      <a href="#rw">글쓰기튜터 헤더 <span>· 1화면</span></a>
+      <a href="#todo">남은 것 · 확인 필요</a>
+    </nav>
+  </header>
+
+  <!-- ─────────────── 배경 ─────────────── -->
+  <section id="why">
+    <h2>왜 좁은 폭에서만 grid 로 바꿨나 <span class="n">배경</span></h2>
+    <p>
+      필터바는 거의 모두 <code>flex-wrap: wrap</code> 이었습니다. 그런데 <b>flex 의 줄바꿈은
+      남는 자리를 누가 채울지 정할 수 없습니다.</b> 폭이 좁은 select 두 개가 첫 줄에 남고
+      긴 항목이 다음 줄로 떨어지면, 첫 줄 오른쪽이 빈 띠로 남습니다.
+      스크린샷으로 여러 번 지적된 그 공백입니다.
+    </p>
+    <p>
+      여기에 <code>.users-filters</code> 의 <code>justify-content: flex-end</code> 가 겹치면
+      남는 자리가 <i>왼쪽</i>으로 몰립니다. 같은 증상이 화면마다 조금씩 다른 모습으로 나타난 이유입니다.
+    </p>
+    <div class="note">
+      <p>
+        <b>해결</b> — 640px 이하에서만 <code>display: grid</code> 로 바꿉니다.
+        칸이 미리 정해져 있어 빈 자리가 생길 수 없고, 항목마다 "반 칸이냐 한 줄이냐"를
+        선언으로 정할 수 있습니다. 넓은 화면은 기존 flex 배치 그대로입니다.
+      </p>
+    </div>
+    <div class="note">
+      <p>
+        <b>자동 규칙</b> — <code>:last-child:nth-child(odd)</code> 는 "마지막이면서 홀수 번째",
+        곧 <b>전체 개수가 홀수</b>라는 뜻입니다. 이 선택자 하나로 짝이 없는 마지막 항목이
+        자동으로 한 줄을 차지합니다. 필터를 넣거나 빼도 마크업은 손댈 필요가 없습니다.
+        항목이 짝수인 화면에서만 <code>__wide</code> 를 명시했습니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─────────────── 공통 클래스 ─────────────── -->
+  <section id="api">
+    <h2>공통 클래스 <span class="n">_03-cmp-components.scss · 7개 + 토큰 2</span></h2>
+    <p>역할을 <b>자리 · 묶음 · 배치</b> 세 층으로 나눴습니다. 겹쳐 쓸 수 있습니다.</p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col></colgroup>
+        <thead><tr><th>클래스</th><th>층</th><th>역할</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr"><code>.ui-filters</code></td>
+            <td class="url">배치</td>
+            <td class="chg"><ul>
+              <li>640 이하에서 <code>grid</code> 로 바뀌어 칸을 균등 분할</li>
+              <li>안쪽 <code>select</code>·<code>input</code>·<code>SelectSearch</code> 까지 칸에 맞춰 펴짐</li>
+              <li>flex 컨테이너 안에 놓여도 줄어들지 않게 <code>width: 100%</code></li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr"><code>.ui-filters-slot</code></td>
+            <td class="url">자리</td>
+            <td class="chg"><ul>
+              <li>필터가 <i>놓이는 자리</i>. 폭과 정렬만 담당</li>
+              <li>넓은 화면 우측 정렬(<code>ml-auto</code> 대체) · 좁은 폭 100%</li>
+              <li>탭이 윗줄로 접힌 뒤 필터만 오른쪽에 남던 문제를 여기서 되돌림</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr"><code>.ui-filters-group</code></td>
+            <td class="url">묶음</td>
+            <td class="chg"><ul>
+              <li>줄바꿈 <b>단위</b>. 라벨과 딸린 컨트롤이 갈라지지 않게 함</li>
+              <li><code>--tight</code> 같은 종류가 이어지는 줄(버튼 묶음·날짜 범위) · gap 8px</li>
+              <li><code>--unit</code> 넓은 폭에서는 안 쪼개지고(<code>nowrap</code>) 좁은 폭에서만 접힘</li>
+              <li><code>--inline</code> 좁은 폭에서도 한 줄 유지 — 셀렉트가 줄을 독차지하지 않음</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr"><code>.ui-filters__wide</code></td>
+            <td class="url">항목</td>
+            <td class="chg"><ul>
+              <li>값이 길어 반 칸에 넣으면 잘리는 항목만 한 줄을 씀</li>
+              <li>grid 자동 배치가 다음 항목을 새 줄 첫 칸으로 보냄</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr"><code>.ui-filters-break</code></td>
+            <td class="url">항목</td>
+            <td class="chg"><ul>
+              <li>이 항목부터 새 줄. <code>flex-basis: 100%</code></li>
+              <li>flex 줄바꿈은 <b>축소 전 기준 크기</b>로 판단하므로 <code>width</code> 나
+                  <code>min-width</code> 로는 줄을 가를 수 없습니다</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr"><code>.ui-filters--fill</code></td>
+            <td class="url">배치</td>
+            <td class="chg"><ul>
+              <li>남는 폭을 채움. 묶음 <i>안</i>의 일부 항목만 <code>ml-auto</code> 로
+                  오른쪽 끝에 보낼 때 필요합니다 — 묶음이 내용 폭만 차지하면 밀어낼 여백이 없습니다</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr"><code>--ui-filters-columns</code><br><code>--ui-filters-gap</code></td>
+            <td class="url">토큰</td>
+            <td class="chg"><ul>
+              <li>좁은 폭의 열 수(기본 2)와 항목 간격</li>
+              <li><code>.ui-filters--1col</code> / <code>--3col</code> 로 바꿉니다</li>
+              <li><b>2열이 항상 정답은 아닙니다</b> — 수행지시어처럼 항목마다 폭이 큰 화면은 1열</li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── 전역 수정 ─────────────── -->
+  <section id="global">
+    <h2>전역 수정 <span class="n">마크업을 건드리지 않고 CSS 한 곳에서 · 6건</span></h2>
+    <p>
+      같은 관용구가 여러 화면에 흩어져 있던 것들은 화면을 하나씩 고치는 대신
+      공통 규칙으로 한 번에 처리했습니다.
+    </p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col></colgroup>
+        <thead><tr><th>대상</th><th>파일</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">검색 입력 <b>18곳</b></td>
+            <td class="url">_03-cmp-components.scss</td>
+            <td class="chg"><ul>
+              <li>640 이하에서 <code>.search-input-wrap</code> 은 놓인 자리와 무관하게 한 줄</li>
+              <li><code>&amp;.ml-auto { margin-left: 0 }</code> — 툴바 우측 정렬 관용구를 되돌림.
+                  <code>.search-input-wrap.ml-auto</code>(0-2-0)가 <code>.ml-auto</code>(0-1-0)보다
+                  명시도가 높아 로드 순서와 무관하게 이깁니다</li>
+              <li><code>&lt;input&gt;</code> 은 기본 폭이 <code>size</code> 속성(약 20자)으로 정해져
+                  바깥만 펴서는 안쪽이 안 채워집니다</li>
+              <li>연합관리 · 과제관리 · 본채점 · 커뮤니티 · 자료실 · 권한검토 · 접속로그 ·
+                  API성능 · 평가설계 3곳 등이 함께 고쳐집니다</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">패널 액션</td>
+            <td class="url">_03-cmp-components.scss</td>
+            <td class="chg"><ul>
+              <li><code>.ui-panel__actions:has(&gt; .ui-filters)</code> 등 4개 선택자에
+                  <code>flex: 1 1 100%</code></li>
+              <li>액션은 기본이 <code>flex: 0 1 auto</code> 라 내용 폭만 차지합니다.
+                  그 안에서 100%를 줘도 <b>"내용 폭의 100%"</b> 일 뿐입니다</li>
+              <li><code>:has()</code> 로 <b>내용을 보고 가릅니다</b> — 배지·버튼이 든 액션은
+                  그대로 제목 옆에 남고, 필터·검색이 든 액션만 한 줄을 받습니다.
+                  Panel 컴포넌트에 prop 을 추가하지 않은 이유입니다</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">패널 여백</td>
+            <td class="url">_02-ui-components.scss</td>
+            <td class="chg"><ul>
+              <li>토큰화 — <code>--ui-panel-pad-x</code> · <code>-pad-y</code> · <code>-edge-y</code></li>
+              <li>768 이하에서 좌우 24→8px, 상하 20→12px, 끝단 24→16px</li>
+              <li>좌우를 3단계, 상하를 1단계만 줄인 건 이 구간에서 <b>가로가 세로보다 귀하기</b> 때문입니다</li>
+              <li>페이지 예외는 한 줄이면 됩니다 — <code>.some-page .ui-panel { --ui-panel-pad-x: 16px }</code></li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">패널 제목</td>
+            <td class="url">_02-ui-components.scss</td>
+            <td class="chg"><ul>
+              <li><b>아이콘과 텍스트가 분리되던 문제</b> — <code>.ui-panel__title &gt; div</code>(0-1-1)가
+                  <code>.ui-panel__title-description</code>(0-1-0)보다 명시도가 높아,
+                  제목 줄에만 걸려던 <code>nowrap</code> 이 설명에도 걸렸습니다.
+                  설명의 min-content 가 문장 전체 폭이 되고, 그 폭으로는 아이콘 옆에 못 들어간다고
+                  판단해 블록째 다음 줄로 내려갔습니다. <code>:not()</code> 으로 아예 매칭되지 않게 수정</li>
+              <li><b>설명이 일찍 접히던 문제</b> — 액션 <code>flex: auto</code> → <code>0 1 auto</code>.
+                  자라게 두면 제목과 남는 폭을 1:1로 나눠 가져, 배지 오른쪽에 빈 자리를 안은 채
+                  설명만 먼저 줄바꿈됐습니다. 오른쪽 정렬은 <code>margin-left: auto</code> 가
+                  이미 하고 있어 grow 는 필요 없었습니다</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">기간 입력</td>
+            <td class="url">_02-ui-components.scss<br>_09-page-components.scss</td>
+            <td class="chg"><ul>
+              <li><code>.ch-daterange</code> → <b><code>.ui-daterange</code></b> 로 승격.
+                  옛 이름은 별칭으로 남겨 기존 마크업 무수정</li>
+              <li>안쪽 <code>&lt;input&gt;</code> 에 클래스를 주지 않습니다 —
+                  reset 의 <code>border-width: 0</code> 으로 테두리가 없고,
+                  <code>font-size: 100%</code> / <code>color: inherit</code> 로 서체를 물려받습니다.
+                  <code>.form-input</code> 을 붙이면 입력마다 테두리가 생겨 구성이 깨집니다</li>
+              <li>440 이하에서 <code>height: auto</code> + <code>flex-wrap</code> —
+                  날짜 두 칸(각 ~135px) + <code>~</code> + 여백이 310px를 넘겨 기기에 따라 넘칩니다</li>
+              <li><code>aria-label</code> 시작일/종료일 추가</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">상태 카드</td>
+            <td class="url">grid-status.scss</td>
+            <td class="chg"><ul>
+              <li>440 이하에서 간격 12→8px, 카드 여백 <code>18px 20px</code> → <code>16px 8px</code></li>
+              <li>글자 자리가 113px → <b>139px</b> 로 26px 늘어납니다.
+                  <code>자동완성 풀 ON</code> 같은 라벨이 아슬아슬하던 자리입니다</li>
+              <li>간격은 마크업의 <code>gap-3</code> 유틸을 이겨야 해서
+                  <code>.grid.grid-stat-cards</code>(0-2-0)로 걸었습니다</li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── 적용 화면 ─────────────── -->
+  <section id="screens">
+    <h2>적용 화면 <span class="n">23개 · 링크를 눌러 확인</span></h2>
+    <p>모두 <b>className 토큰만 교체</b>했습니다. 로직·구조·포맷은 그대로입니다.</p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col></colgroup>
+        <thead><tr><th>화면</th><th>주소 · 파일</th><th>작업 내역</th></tr></thead>
+        <tbody>
+
+          <tr>
+            <td class="scr">평가 목록</td>
+            <td class="url"><a href="http://127.0.0.1:3100/tds/evaluations">/tds/evaluations</a><br>EvaluationListPage.tsx<br>EvaluationFiltersPanel.tsx</td>
+            <td class="chg"><ul>
+              <li><code>flex flex-wrap items-center gap-2</code> → <code>ui-filters</code></li>
+              <li><code>ml-auto</code> → <code>ui-filters-slot</code></li>
+              <li>교과 · 검색에 <code>__wide</code></li>
+              <li>결과 — 학년|학기 반 칸, 교과 100%, 검색 100%</li>
+            </ul></td>
+          </tr>
+
+          <tr>
+            <td class="scr">채점현황</td>
+            <td class="url"><a href="http://127.0.0.1:3100/grading/status">/grading/status</a><br>ScoringStatusListPage.tsx</td>
+            <td class="chg"><ul>
+              <li><code>users-filters users-filters--perms-toolbar</code> → <code>ui-filters</code></li>
+              <li>Panel <code>actions</code> 안이라 <code>:has()</code> 규칙이 한 줄을 내어 줍니다</li>
+              <li>항목 3개(홀수) → 검색이 자동으로 100%</li>
+            </ul></td>
+          </tr>
+
+          <tr>
+            <td class="scr">내부표준화 목록</td>
+            <td class="url"><a href="http://127.0.0.1:3100/grading/internal-standardization">/grading/internal-standardization</a><br>InternalStandardizationListPage.tsx</td>
+            <td class="chg"><ul>
+              <li>세 덩어리로 분리 — <b>[채점 단계 + 탭] · [조회 조건 + 셀렉트] · [검색 + 새로고침]</b></li>
+              <li>검색과 새로고침을 <code>ui-filters-slot</code> 으로 묶음. 따로 두면 접힐 때 서로 다른 줄로 흩어졌습니다</li>
+              <li>조회 조건 라벨을 셀렉트와 <code>ui-filters-group</code> 으로 묶음</li>
+            </ul></td>
+          </tr>
+
+          <tr>
+            <td class="scr">통계 조회</td>
+            <td class="url"><a href="http://127.0.0.1:3100/report/statistics">/report/statistics</a><br>ReportStatisticsPage.tsx</td>
+            <td class="chg"><ul>
+              <li>셀렉트 4개 + 조회 버튼을 <code>ui-filters ui-filters--fill</code> 한 묶음으로</li>
+              <li>버튼의 <code>ml-auto</code> 는 묶음 <i>안</i>에 둠 — 접힐 때는 함께, 펼쳐졌을 때만 오른쪽 끝</li>
+              <li>항목 5개(홀수) → 조회 버튼이 자동으로 한 줄</li>
+            </ul></td>
+          </tr>
+
+          <tr>
+            <td class="scr">기출문항</td>
+            <td class="url"><a href="http://127.0.0.1:3100/reference/past-items">/reference/past-items</a><br>PastItemsBoardViewPage.tsx</td>
+            <td class="chg"><ul>
+              <li><code>&lt;form&gt;</code> 을 <code>ui-filters</code> 로</li>
+              <li>검색어와 검색 버튼을 <code>ui-filters-slot</code> 묶음으로</li>
+              <li>필터 6개 → 2열 3줄 + 검색 한 줄</li>
+            </ul></td>
+          </tr>
+
+          <tr>
+            <td class="scr">공지사항</td>
+            <td class="url"><a href="http://127.0.0.1:3100/support/notices">/support/notices</a><br>NoticeHelpPage.tsx</td>
+            <td class="chg"><ul>
+              <li>한 요소가 자리와 배치를 겸해 <code>ui-filters-slot ui-filters</code> 를 함께 붙였습니다</li>
+            </ul></td>
+          </tr>
+
+          <tr>
+            <td class="scr">자료실</td>
+            <td class="url"><a href="http://127.0.0.1:3100/community/share">/community/share</a><br>ResourcesPage.tsx</td>
+            <td class="chg"><ul>
+              <li>네 덩어리 — 분류 버튼 7개 · 셀렉트 2개 · <b>기간</b> · 검색</li>
+              <li>기간은 <b>라벨·구분자·두 입력이 갈라지면 범위라는 뜻 자체가 깨집니다</b></li>
+              <li>grid 를 쓰지 않은 이유 — 자식에 버튼 7개와 구분자 텍스트가 섞여 있어 2열 균등 분할하면 구분자 하나가 반 칸을 차지합니다</li>
+            </ul></td>
+          </tr>
+
+          <tr>
+            <td class="scr">커뮤니티</td>
+            <td class="url"><a href="http://127.0.0.1:3100/community/share">/community/share</a> (게시판)<br>CommunityPage.tsx</td>
+            <td class="chg"><ul>
+              <li>정렬 셀렉트를 <code>ui-filters</code> 로 감쌈 — <b>항목이 하나면 그게 곧 마지막이면서 홀수 번째</b>라 새 클래스 없이 100%</li>
+              <li>검색창과 검색 버튼이 위아래로 갈라지던 것을 묶음으로</li>
+              <li>분류 체크박스 5개도 <code>--tight</code> 묶음</li>
+            </ul></td>
+          </tr>
+
+          <tr>
+            <td class="scr">플랫폼 사용 통계</td>
+            <td class="url"><a href="http://127.0.0.1:3100/support/statistics">/support/statistics</a><br>PlatformUsageStatsPage.tsx</td>
+            <td class="chg"><ul>
+              <li>날짜 범위를 <code>.ui-daterange</code> 로 교체 — 테두리 하나에 담아 기간이 하나의 값임을 형태로 보임</li>
+              <li>조회 버튼에 <code>ui-filters-break</code> — 모바일에서만 아래로</li>
+              <li><code>--unit</code> 으로 넓은 화면에서는 중간에서 안 쪼개짐</li>
+            </ul></td>
+          </tr>
+
+          <tr>
+            <td class="scr">접근기록 관리</td>
+            <td class="url"><a href="http://127.0.0.1:3100/audit/access-logs">/audit/access-logs</a><br>AccessLogPage.tsx</td>
+            <td class="chg"><ul>
+              <li>학교 · 업무 <b>둘 다</b> <code>__wide</code> — 학교만 지정하면 업무가 반 칸에 홀로 남고 오른쪽이 빕니다</li>
+            </ul></td>
+          </tr>
+
+          <tr>
+            <td class="scr">알림관리</td>
+            <td class="url"><a href="http://127.0.0.1:3100/admin/notifications">/admin/notifications</a><br>NotificationManagePage.tsx</td>
+            <td class="chg"><ul>
+              <li>템플릿 · 발송이력 두 탭의 필터를 <code>ui-filters-slot ui-filters</code> 로</li>
+              <li><b>인라인 <code>style</code> 폭 5개 제거</b> — 인라인 스타일은 어떤 CSS 규칙보다 우선해, 규칙을 아무리 걸어도 180px·150px·240px 에 묶여 있었습니다</li>
+            </ul></td>
+          </tr>
+
+          <tr>
+            <td class="scr">서비스 요청</td>
+            <td class="url"><a href="http://127.0.0.1:3100/support/requests">/support/requests</a><br>ServiceRequestReviewPage.tsx</td>
+            <td class="chg"><ul><li>검색창과 검색 버튼을 한 묶음으로</li></ul></td>
+          </tr>
+
+          <tr>
+            <td class="scr">메시지코드</td>
+            <td class="url"><a href="http://127.0.0.1:3100/admin/message-codes">/admin/message-codes</a><br>MessageCodesPage.tsx</td>
+            <td class="chg"><ul>
+              <li>사용여부 셀렉트를 <code>ui-filters</code> 로 감싸 100%</li>
+              <li>검색 <code>ml-auto</code> → <code>ui-filters-slot</code></li>
+            </ul></td>
+          </tr>
+
+          <tr>
+            <td class="scr">변경 이력</td>
+            <td class="url"><a href="http://127.0.0.1:3100/admin/master-data/change-history">/admin/master-data/change-history</a><br>ChangeHistoryPage.tsx</td>
+            <td class="chg"><ul>
+              <li><code>users-filters</code> → <code>ui-filters</code>. 날짜 · 작업자에 <code>__wide</code></li>
+              <li><code>.ui-daterange</code> 로 이름 변경 + <code>aria-label</code> 추가</li>
+            </ul></td>
+          </tr>
+
+          <tr>
+            <td class="scr">핵심아이디어</td>
+            <td class="url"><a href="http://127.0.0.1:3100/admin/master-data/core-ideas">/admin/master-data/core-ideas</a><br>CoreIdeasPage.tsx</td>
+            <td class="chg"><ul><li>교과 · 과목 <code>__wide</code>, 영역 | 추천 풀 반 칸씩</li></ul></td>
+          </tr>
+
+          <tr>
+            <td class="scr">수행지시어</td>
+            <td class="url"><a href="http://127.0.0.1:3100/admin/master-data/command-terms">/admin/master-data/command-terms</a><br>CommandTermsPage.tsx</td>
+            <td class="chg"><ul>
+              <li><b><code>flex-wrap</code> 이 아예 없어</b> 줄바꿈이 불가능했고, 넘친 만큼 가로 스크롤이 생겼습니다</li>
+              <li><code>ui-filters ui-filters--1col</code> — 항목마다 폭이 커서 2열이면 다시 잘립니다</li>
+              <li>교과 셀렉트와 과목 탭을 <code>--inline</code> 묶음으로 — 탭이 위 셀렉트에 종속돼 있어 갈라지면 어느 교과의 과목인지 읽히지 않습니다</li>
+            </ul></td>
+          </tr>
+
+          <tr>
+            <td class="scr">교과 핵심역량</td>
+            <td class="url"><a href="http://127.0.0.1:3100/admin/master-data/subject-competencies">/admin/master-data/subject-competencies</a><br>SubjectCompetenciesPage.tsx</td>
+            <td class="chg"><ul><li>클래스 하나 교체로 좌측 여백과 50% 배치가 함께 해결</li></ul></td>
+          </tr>
+
+          <tr>
+            <td class="scr">핵심개념</td>
+            <td class="url"><a href="http://127.0.0.1:3100/admin/master-data/key-concepts">/admin/master-data/key-concepts</a><br>KeyConceptsPage.tsx</td>
+            <td class="chg"><ul>
+              <li>교과 <code>__wide</code>, 출처 | 자동완성 반 칸, 검색 <code>__wide</code></li>
+              <li>항목이 <b>4개(짝수)</b> 라 자동 규칙에 안 걸려 검색을 명시했습니다</li>
+            </ul></td>
+          </tr>
+
+          <tr>
+            <td class="scr">감사 로그</td>
+            <td class="url"><a href="http://127.0.0.1:3100/admin/reference-data/audit-logs">/admin/reference-data/audit-logs</a><br>AuditLogsPage.tsx</td>
+            <td class="chg"><ul><li>이벤트 | 액터 반 칸, 날짜 자동 100%</li></ul></td>
+          </tr>
+
+          <tr>
+            <td class="scr">분류 게시판</td>
+            <td class="url"><a href="http://127.0.0.1:3100/admin/reference-data/category-boards">/admin/reference-data/category-boards</a><br>CategoryBoardsPage.tsx</td>
+            <td class="chg"><ul>
+              <li><b>마크업 무수정</b> — 검색 폼이 Panel <code>actions</code> 에 바로 들어가 있어 <code>:has(&gt; .search-input-wrap)</code> 규칙만으로 해결됐습니다</li>
+            </ul></td>
+          </tr>
+
+          <tr>
+            <td class="scr">학교 목록</td>
+            <td class="url"><a href="http://127.0.0.1:3100/admin/schools">/admin/schools</a><br>SchoolsPage.tsx</td>
+            <td class="chg"><ul>
+              <li>지역 | 학교급 반 칸, 상태 · 검색 <code>__wide</code></li>
+              <li><code>.ops-school-toolbar-search</code> 의 <code>max-width: 220px</code> 상한을 공통 규칙에서 해제(0-3-0)</li>
+            </ul></td>
+          </tr>
+
+          <tr>
+            <td class="scr">사용자 목록</td>
+            <td class="url"><a href="http://127.0.0.1:3100/admin/roles/user-roles">/admin/roles/user-roles</a><br>UsersListPage.tsx</td>
+            <td class="chg"><ul><li>학교 <code>__wide</code>, 역할 | 재직구분 반 칸, 검색 <code>__wide</code></li></ul></td>
+          </tr>
+
+          <tr>
+            <td class="scr">자문위원 목록</td>
+            <td class="url"><a href="http://127.0.0.1:3100/admin/roles/advisors">/admin/roles/advisors</a><br>ExternalAdvisorListPage.tsx</td>
+            <td class="chg"><ul><li>항목 3개(홀수)라 클래스 하나 교체로 완료</li></ul></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── 글쓰기튜터 헤더 ─────────────── -->
+  <section id="rw">
+    <h2>글쓰기 튜터 교사 헤더 <span class="n">rightwrite/teacher · 1화면</span></h2>
+    <p>
+      <a href="http://127.0.0.1:3100/rightwrite/teacher">/rightwrite/teacher</a> ·
+      <code>AppHeader.tsx</code> · <code>report.css</code>
+    </p>
+    <div class="note">
+      <p>
+        640px 이하에서 <b>이름·이메일을 감추고 아이콘만 남깁니다.</b>
+        이름이 두 줄이고 mock 이메일이 길어 헤더 폭을 크게 잡아먹던 자리입니다.
+        감춘 값은 <b>hover(마우스) · 클릭(터치) · 키보드 포커스</b> 세 경로로 열리는
+        드롭다운에서 그대로 보여줍니다. 바깥을 클릭하면 닫힙니다.
+      </p>
+    </div>
+    <div class="note">
+      <p>
+        드롭다운 껍데기(모서리 8px · 보더 · 그림자 · <code>z-index</code>)는
+        공통 헤더의 <code>.active-role-switcher__dropdown</code> 과 같은 값을 씁니다.
+        글자색도 <code>--ui-text</code> / <code>--ui-text-muted</code> 를 써서 다크 테마에서도
+        공통 드롭다운과 같이 동작합니다.
+      </p>
+    </div>
+    <div class="note warn">
+      <p>
+        <b>구현 메모</b> — <code>opacity: 0</code> 만으로는 요소가 레이아웃에 남아 가로 스크롤을
+        만듭니다. <code>visibility: hidden</code> 을 함께 걸었습니다.
+        메시지 목록에서 보이지 않는 툴팁이 빈 띠를 만들던 것과 같은 원인입니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─────────────── 남은 것 ─────────────── -->
+  <section id="todo">
+    <h2>남은 것 · 확인 필요</h2>
+
+    <div class="note warn">
+      <p>
+        <b>1. 제 작업이 아닌 타입 에러가 하나 있습니다.</b><br>
+        <code>src/features/front-progress.rows.ts(756,10): error TS6133: 'inProgress' is declared but its value is never read.</code><br>
+        원격에서 받은 <code>e50c3e22 -프론트진행현황 메뉴ID추가</code> 커밋에서 들어왔습니다.
+        <code>vite build</code> 는 타입체크를 하지 않아 통과하지만, 담당자분께 알려주시는 게 좋겠습니다.
+        다른 분 작업과 충돌할 수 있어 손대지 않았습니다.
+      </p>
+    </div>
+
+    <div class="note">
+      <p>
+        <b>2. <code>.users-filters</code> 를 아직 쓰는 화면</b> — 이 클래스의
+        <code>justify-content: flex-end</code> 가 좁은 폭에서 빈 띠를 만듭니다.
+        이번에 8개를 옮겼고 나머지는 남아 있습니다. 화면을 확인하며 순차적으로
+        옮기거나, 목록을 뽑아 한 번에 정리할 수 있습니다.
+      </p>
+    </div>
+
+    <div class="note">
+      <p>
+        <b>3. 필터바가 남은 화면</b> — 연합관리(<code>/evaluation/unions</code>) ·
+        감독현황(<code>/evaluation/proctor</code>) · 과제관리 · 본채점 · 권한검토 ·
+        API성능 · 자문위원 해촉 2화면 · 평가설계 3곳.
+        전역 검색 규칙 덕에 <b>검색 입력은 이미 100%로 동작</b>하고,
+        셀렉트 배치만 남았습니다.
+      </p>
+    </div>
+
+    <div class="note">
+      <p>
+        <b>4. 상태 카드 360px</b> — 이번에 글자 자리를 113px → 139px 로 넓혔지만,
+        360px 에서는 99px 이라 <code>자동완성 풀 ON</code> 같은 라벨이 한 글자쯤
+        줄바꿈될 수 있습니다. 필요하면 이 구간에서 아이콘을 46 → 40px 로 줄이거나
+        라벨을 12px 로 낮추는 방법이 있습니다.
+      </p>
+    </div>
+
+    <div class="note">
+      <p>
+        <b>5. React 컴포넌트로 올릴지</b> — 지금은 CSS 클래스와 토큰까지입니다.
+        <code>FilterBar</code> 컨테이너와 <code>FilterBar.Search</code> 정도는
+        컴포넌트 이득이 확실하지만, 필터바는 화면마다 컨트롤 종류가 제각각이라
+        <b>실제 형태를 충분히 본 뒤</b> API 를 정하는 편이 안전합니다.
+        이번에 23개 화면을 옮기며 형태가 상당히 드러났으니, 이제 판단할 수 있습니다.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <code>feature/front-goldking-new</code> · <code>ddc81f1e..d7e8b553</code> · 푸시 완료 ·
+    <code>tsc --noEmit</code> · <code>vite build</code> 통과 ·
+    원격 커밋 11개 위로 rebase(충돌 없음)
+  </footer>
+
+</div>
+
+</body></html>

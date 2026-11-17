@@ -1,0 +1,3422 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>푸터 공통화 작업 기록</title>
+<style>
+  :root {
+    --ground:#f2f5f8; --surface:#fff; --surface-3:#f8fafc;
+    --ink:#131820; --ink-2:#3f4a5c; --ink-3:#6b7686;
+    --rule:#dbe2ec; --rule-soft:#e9eef4;
+    --accent:#1d4ed8; --accent-2:#153ea8; --accent-wash:#e6edfd;
+    --ok:#0a6b48; --ok-wash:#e7f5ef; --ok-rule:#8fcfb4;
+    --warn:#8a5200; --warn-wash:#fdf1dc;
+    --danger:#a4243b; --danger-wash:#fdecef; --danger-rule:#e5a5b1;
+    --code-bg:#eceff5;
+    --shadow:0 1px 2px rgba(19,24,32,.05), 0 10px 26px -24px rgba(19,24,32,.65);
+    --f-body:"Segoe UI Variable Text","Segoe UI",ui-sans-serif,system-ui,-apple-system,sans-serif;
+    --f-mono:"Cascadia Mono","Cascadia Code",ui-monospace,Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:#0a0d12; --surface:#131820; --surface-3:#161a22;
+      --ink:#eceff6; --ink-2:#adb9cb; --ink-3:#7f8998;
+      --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+      --accent:#5c9bff; --accent-2:#93bcff; --accent-wash:rgba(92,155,255,.13);
+      --ok:#4ec793; --ok-wash:rgba(78,199,147,.10); --ok-rule:rgba(78,199,147,.45);
+      --warn:#e2a544; --warn-wash:rgba(226,165,68,.13);
+      --danger:#f08096; --danger-wash:rgba(240,128,150,.09); --danger-rule:rgba(240,128,150,.42);
+      --code-bg:rgba(255,255,255,.05);
+      --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -24px rgba(0,0,0,.95);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#0a0d12; --surface:#131820; --surface-3:#161a22;
+    --ink:#eceff6; --ink-2:#adb9cb; --ink-3:#7f8998;
+    --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+    --accent:#5c9bff; --accent-2:#93bcff; --accent-wash:rgba(92,155,255,.13);
+    --ok:#4ec793; --ok-wash:rgba(78,199,147,.10); --ok-rule:rgba(78,199,147,.45);
+    --warn:#e2a544; --warn-wash:rgba(226,165,68,.13);
+    --danger:#f08096; --danger-wash:rgba(240,128,150,.09); --danger-rule:rgba(240,128,150,.42);
+    --code-bg:rgba(255,255,255,.05);
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -24px rgba(0,0,0,.95);
+  }
+
+  *, *::before, *::after { box-sizing:border-box; }
+  body { margin:0; background:var(--ground); color:var(--ink);
+    font-family:var(--f-body); font-size:15px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:1180px; margin:0 auto; padding:40px 22px 90px; }
+
+  code { font-family:var(--f-mono); font-size:.88em; background:var(--code-bg);
+    border-radius:4px; padding:.1em .38em; overflow-wrap:anywhere; }
+  a { color:var(--accent); }
+  a:focus-visible { outline:2px solid var(--accent); outline-offset:2px; border-radius:4px; }
+
+  .eyebrow { font-family:var(--f-mono); font-size:11.5px; letter-spacing:.11em;
+    text-transform:uppercase; color:var(--ink-3); margin:0 0 10px; }
+  h1 { font-size:clamp(27px,4vw,36px); line-height:1.18; letter-spacing:-.022em;
+    margin:0 0 12px; text-wrap:balance; }
+  .lede { margin:0; max-width:68ch; color:var(--ink-2); font-size:16px; }
+
+  .meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+  .chip { display:inline-flex; align-items:baseline; gap:7px; background:var(--surface);
+    border:1px solid var(--rule); border-radius:999px; padding:5px 13px;
+    font-size:12.5px; box-shadow:var(--shadow); }
+  .chip b { font-family:var(--f-mono); font-weight:600; font-size:12px; }
+  .chip span { color:var(--ink-3); }
+
+  section { margin-top:52px; }
+  h2 { font-size:19px; letter-spacing:-.015em; margin:0 0 6px; padding-bottom:9px;
+    border-bottom:1px solid var(--rule); display:flex; flex-wrap:wrap;
+    align-items:baseline; gap:4px 12px; }
+  h2 .n { font-family:var(--f-mono); font-size:12px; color:var(--ink-3); font-weight:500; }
+  p { margin:12px 0; max-width:82ch; }
+  p.tight { margin-top:8px; color:var(--ink-2); font-size:14px; }
+
+  .toc { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:1px 22px; margin-top:26px; padding:16px 20px; background:var(--surface);
+    border:1px solid var(--rule); border-radius:12px; box-shadow:var(--shadow); }
+  .toc a { color:var(--ink-2); text-decoration:none; font-size:14px; padding:3px 0; display:block; }
+  .toc a:hover { color:var(--accent); text-decoration:underline; text-underline-offset:3px; }
+  .toc a span { font-family:var(--f-mono); font-size:11px; color:var(--ink-3); }
+
+  /* ── 화면 항목 ── */
+  .entry { background:var(--surface); border:1px solid var(--rule); border-radius:12px;
+    padding:18px 20px 20px; box-shadow:var(--shadow); margin-top:18px; }
+  .entry__head { display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 14px; }
+  .entry h3 { font-size:16px; margin:0; letter-spacing:-.01em; }
+  .route { font-family:var(--f-mono); font-size:12px; color:var(--accent-2);
+    text-decoration:none; border-bottom:1px solid color-mix(in srgb, var(--accent-2) 32%, transparent);
+    overflow-wrap:anywhere; }
+  .route:hover { color:var(--accent); border-bottom-color:currentColor; }
+  .route.none { color:var(--ink-3); border:0; }
+  .path { font-family:var(--f-mono); font-size:11.5px; color:var(--ink-3);
+    margin:5px 0 0; word-break:break-all; }
+  .note { font-size:13.5px; color:var(--ink-2); margin:9px 0 0; }
+  .sub { font-size:12.5px; color:var(--ink-3); margin:10px 0 0; }
+  .miss { color:var(--danger); font-size:13px; }
+
+  .ba { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; }
+  @media (max-width:900px) { .ba { grid-template-columns:1fr; } }
+  .ba__col { min-width:0; display:flex; flex-direction:column; gap:6px; }
+  .ba__tag { font-family:var(--f-mono); font-size:10.5px; font-weight:600;
+    letter-spacing:.06em; text-transform:uppercase; }
+  .ba__tag.before { color:var(--danger); }
+  .ba__tag.after { color:var(--ok); }
+
+  .code { border-radius:9px; border:1px solid var(--rule-soft); overflow-x:auto; flex:1; }
+  .code pre { margin:0; padding:12px 14px; font-family:var(--f-mono);
+    font-size:12px; line-height:1.62; white-space:pre; color:var(--ink-2); }
+  .code.del { background:var(--danger-wash); border-left:3px solid var(--danger-rule); }
+  .code.add { background:var(--ok-wash); border-left:3px solid var(--ok-rule); }
+  .code.empty { display:flex; align-items:center; justify-content:center;
+    padding:14px; font-size:12px; color:var(--ink-3); font-family:var(--f-mono); }
+
+  /* ── 안내 상자 ── */
+  .note-box { border:1px solid var(--rule); border-left:3px solid var(--accent);
+    border-radius:9px; background:var(--surface); padding:15px 18px;
+    box-shadow:var(--shadow); margin-bottom:12px; }
+  .note-box:last-child { margin-bottom:0; }
+  .note-box.warn { border-left-color:var(--warn); }
+  .note-box h3 { font-size:14px; margin:0 0 6px; }
+  .note-box p { font-size:13.5px; color:var(--ink-2); margin:0; max-width:none; }
+  .note-box p + p { margin-top:8px; }
+
+  .tablewrap { overflow-x:auto; border:1px solid var(--rule); border-radius:12px;
+    background:var(--surface); box-shadow:var(--shadow); margin-top:16px; }
+  table { border-collapse:collapse; width:100%; min-width:560px; }
+  th, td { text-align:left; padding:10px 14px; border-bottom:1px solid var(--rule-soft); vertical-align:top; }
+  thead th { font-family:var(--f-mono); font-size:10.5px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--ink-3); font-weight:600; background:var(--surface-3); }
+  tbody tr:last-child td { border-bottom:0; }
+  td.num { font-family:var(--f-mono); font-variant-numeric:tabular-nums; }
+  td small { display:block; font-size:11.5px; color:var(--ink-3); font-family:var(--f-mono); word-break:break-all; }
+  table.rest { min-width:860px; }
+  table.rest td { font-size:13.5px; }
+  table.rest td small { font-family:var(--f-body); font-size:11.5px; word-break:keep-all; }
+  table.rest td:nth-child(3) small { font-family:var(--f-mono); word-break:break-all; }
+  .steps { display:block; margin-top:5px; font-size:12px; color:var(--ink-2); line-height:1.55; }
+  .steps code { font-size:11px; }
+  .steps b { color:var(--ink); }
+
+  footer { margin-top:56px; padding-top:16px; border-top:1px solid var(--rule);
+    font-size:12.5px; color:var(--ink-3); }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">작업 기록 · 2026-09-04 ~ 09-07 · 커밋 6개 푸시 완료</p>
+    <h1>푸터 공통화 작업 기록</h1>
+    <p class="lede">
+      목록 하단 푸터를 직접 조립하던 <b>푸터 51개</b>를 공통 <code>TableListFooter</code> 로 바꾸고,
+      이어서 화면을 보며 <b>단위 표기와 건수 계산</b>을 손봤습니다.
+      화면마다 이전 소스와 이후 소스를 나란히 실었고, 경로를 누르면 해당 화면이 새 탭으로 열립니다.
+      <code>tsc</code> 통과 · 빌드 성공을 확인하고 <b>커밋 6개로 나눠 푸시</b>했습니다.
+    </p>
+    <div class="meta">
+      <span class="chip"><span>전환한 푸터</span><b>51</b></span>
+      <span class="chip"><span>수정 파일</span><b>58</b></span>
+      <span class="chip"><span>커밋</span><b>6</b></span>
+      <span class="chip"><span>브랜치</span><b>feature/front-goldking-new</b></span>
+      <span class="chip"><span>남은 대상</span><b>4</b></span>
+    </div>
+    <nav class="toc">
+      <a href="#core">공통 컴포넌트 <span>· 2</span></a>
+      <a href="#a">A · 건수 + 페이지네이션 — 그대로 치환 <span>· 18</span></a>
+      <a href="#a2">A · 좌측 표기가 비표준 — info 로 원문 보존 <span>· 8</span></a>
+      <a href="#x">조사에서 빠졌던 화면 <span>· 4</span></a>
+      <a href="#b">B · 건수만 · 버튼 <span>· 6</span></a>
+      <a href="#c">C · 자체 pager 를 Pagination 으로 <span>· 3</span></a>
+      <a href="#d">D · 한 파일에 푸터 여러 개 <span>· 5</span></a>
+      <a href="#panel">Panel footer prop 에서 빼낸 것 <span>· 3</span></a>
+      <a href="#last">툴팁 · 화면 정리 <span>· 2</span></a>
+      <a href="#label">아이콘 버튼 라벨 정리 <span>· 4</span></a>
+      <a href="#filter">조회 필터 위치 <span>· 3</span></a>
+      <a href="#design">평가설계 화면 정리 <span>· 1</span></a>
+      <a href="#fix">후속 보정 <span>· 2</span></a>
+      <a href="#unit">단위·건수 보정 <span>· 9</span></a>
+      <a href="#check">기준 대조 결과 <span>· 3</span></a>
+      <a href="#commit">커밋 <span>· 6</span></a>
+      <a href="#bg">평가설계 배경 정리</a>
+      <a href="#rule">페이징이 보이는 조건</a>
+      <a href="#rest">남은 작업 <span>· 4</span></a>
+    </nav>
+  </header>
+
+  <section id="core">
+    <h2>공통 컴포넌트 <span class="n">2</span></h2>
+    <p class="tight">먼저 컴포넌트가 받을 수 있는 값을 하나 늘렸다. 로딩 중 페이지 버튼을 잠그던 화면들이 기능을 잃지 않고 넘어오게 하기 위한 것으로, 선택 prop 이라 넘기지 않는 화면은 이전과 똑같이 동작한다.</p>
+    
+      <article class="entry">
+        <header class="entry__head">
+          <h3>공통 푸터 컴포넌트</h3>
+          <span class="route none">공통 컴포넌트</span>
+        </header>
+        <p class="path">src/shared/components/common/TableListFooter.tsx</p>
+        <p class="note">paginationDisabled prop 추가. 로딩 중 페이지 이동을 막던 12개 화면이 그대로 전환될 수 있게 통로를 열었다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del empty"><span>— 없음 —</span></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre> /** 페이지네이션 비활성화 (로딩 중 · 읽기 전용 등) */
+ paginationDisabled?: boolean;
+* - paginationDisabled 로 로딩 중 페이지 이동을 막을 수 있다
+ paginationDisabled,
+         disabled={paginationDisabled}</pre></div>
+          </div>
+        </div>
+        
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>컴포넌트 가이드</h3>
+          <a class="route" href="http://127.0.0.1:3100/front-component?tab=nav" target="_blank" rel="noreferrer">/front-component?tab=nav</a>
+        </header>
+        <p class="path">src/features/guide/components/NavigationSections.tsx</p>
+        <p class="note">새 prop 을 가이드 props 표에 반영.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del empty"><span>— 없음 —</span></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>{ name: 'paginationDisabled', type: 'boolean', desc: '페이지네이션 비활성화 (로딩 중 · 읽기 전용 등)' },</pre></div>
+          </div>
+        </div>
+        
+      </article>
+  </section>
+
+  <section id="a">
+    <h2>A · 건수 + 페이지네이션 — 그대로 치환 <span class="n">18</span></h2>
+    <p class="tight">"현재 n–m건 / 총 t건" 표준형. 건수와 페이지 상태를 그대로 prop 으로 옮겼다. 숫자 포맷(toLocaleString)은 컴포넌트가 처리하므로 호출부에서 걷어냈고, 단위는 .count-unit 으로 감싸진다.</p>
+    
+      <article class="entry">
+        <header class="entry__head">
+          <h3>사용자 역할</h3>
+          <a class="route" href="http://127.0.0.1:3100/admin/roles/user-roles" target="_blank" rel="noreferrer">/admin/roles/user-roles</a>
+        </header>
+        <p class="path">src/features/ops/users/pages/UsersListPage.tsx</p>
+        <p class="note">toLocaleString 제거 · disabled → paginationDisabled</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span&gt;
+    현재 &lt;strong className="count-number"&gt;{listLoading || listError ? 0 : rangeStart}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{listLoading || listError ? 0 : rangeEnd}&lt;/strong&gt;명 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{listLoading || listError ? 0 : totalElements.toLocaleString('ko-KR')}&lt;/strong&gt;명
+  &lt;/span&gt;
+  &lt;Pagination
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={(nextPage) =&gt; patchQuery({ page: nextPage }, { resetPage: false })}
+      disabled={listLoading}
+  /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+    rangeStart={listLoading || listError ? 0 : rangeStart}
+    rangeEnd={listLoading || listError ? 0 : rangeEnd}
+    totalCount={listLoading || listError ? 0 : totalElements}
+    unit="명"
+    currentPage={currentPage}
+    totalPages={totalPages}
+    onPageChange={(nextPage) =&gt; patchQuery({ page: nextPage }, { resetPage: false })}
+    paginationDisabled={listLoading}
+    previousLabel="이전 사용자 목록 페이지"
+    nextLabel="다음 사용자 목록 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>서비스 요청</h3>
+          <a class="route" href="http://127.0.0.1:3100/support/requests/new" target="_blank" rel="noreferrer">/support/requests/new</a>
+        </header>
+        <p class="path">src/features/ops/support/pages/ServiceRequestPage.tsx</p>
+        <p class="note">disabled → paginationDisabled</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 1</span>
+            <div class="code del"><pre>aria-label={`${file.name} 삭제`}</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 1</span>
+            <div class="code add"><pre>aria-label="삭제"
+title={`${file.name} 삭제`}</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 2</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+    &lt;span&gt;
+      현재 &lt;strong className="count-number"&gt;{loading ? 0 : rangeStart}&lt;/strong&gt;–
+      &lt;strong className="count-number"&gt;{loading ? 0 : rangeEnd}&lt;/strong&gt;건 / 총 &amp;nbsp;
+      &lt;strong className="count-number"&gt;{totalElements.toLocaleString()}&lt;/strong&gt;건
+    &lt;/span&gt;
+    &lt;Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} disabled={loading} /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 2</span>
+            <div class="code add"><pre>&lt;TableListFooter
+    rangeStart={loading ? 0 : rangeStart}
+    rangeEnd={loading ? 0 : rangeEnd}
+    totalCount={totalElements}
+    currentPage={page}
+    totalPages={totalPages}
+    onPageChange={setPage}
+    paginationDisabled={loading}
+    previousLabel="이전 요청 이력 페이지"
+    nextLabel="다음 요청 이력 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>접근기록 관리</h3>
+          <a class="route" href="http://127.0.0.1:3100/audit/access-logs" target="_blank" rel="noreferrer">/audit/access-logs</a>
+        </header>
+        <p class="path">src/features/ops/common/pages/AccessLogPage.tsx</p>
+        <p class="note">하드코딩 건수를 숫자로 전달</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span className="text-muted"&gt;현재 &lt;strong className="count-number"&gt;1&lt;/strong&gt;–&lt;strong className="count-number"&gt;6&lt;/strong&gt;건 / 총 &amp;nbsp;&lt;strong className="count-number"&gt;12,160&lt;/strong&gt;건&lt;/span&gt;
+  &lt;Pagination currentPage={page}
+              totalPages={3}
+              onPageChange={setPage} /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={1}
+  rangeEnd={6}
+  totalCount={12160}
+  currentPage={page}
+  totalPages={3}
+  onPageChange={setPage}
+  previousLabel="이전 접근기록 페이지"
+  nextLabel="다음 접근기록 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>알림 템플릿</h3>
+          <a class="route" href="http://127.0.0.1:3100/admin/notifications" target="_blank" rel="noreferrer">/admin/notifications</a>
+        </header>
+        <p class="path">src/features/ops/common/pages/NotificationManagePage.tsx</p>
+        <p class="note">발송 이벤트 목록 푸터</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 1</span>
+            <div class="code del empty"><span>— 없음 —</span></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 1</span>
+            <div class="code add"><pre>
+{/* 필터는 패널 헤더가 아니라 탭 줄 우측에 둔다. 탭마다 조건이 다르므로
+    현재 탭의 것만 렌더한다. ml-auto 로 오른쪽 끝에 붙인다. */}
+{tab === 'templates' &amp;&amp; (
+  &lt;div className="flex flex-wrap items-center gap-2 ml-auto"&gt;
+    &lt;select className="form-select" value={templateCategory} onChange={(event) =&gt; setTemplateCategory(event.target.value)} style={{ width: 180 }}&gt;
+      &lt;option value="all"&gt;모든 유형&lt;/option&gt;
+      {CATEGORY_OPTIONS.map((item) =&gt; (
+        &lt;option key={item.code} value={item.code}&gt;{item.label}&lt;/option&gt;
+      ))}
+    &lt;/select&gt;
+    &lt;select className="form-select" value={templateActive} onChange={(event) =&gt; setTemplateActive(event.target.value as ActiveFilter)} style={{ width: 150 }}&gt;
+      &lt;option value="all"&gt;전체 상태&lt;/option&gt;
+      &lt;option value="active"&gt;활성&lt;/option&gt;
+      &lt;option value="inactive"&gt;비활성&lt;/option&gt;
+    &lt;/select&gt;
+    &lt;div className="search-input-wrap"&gt;
+      &lt;IconSearch /&gt;
+      &lt;input
+        className="form-input form-input--search"
+        value={templateKeyword}
+        onChange={(event) =&gt; setTemplateKeyword(event.target.value)}
+        placeholder="이벤트, 제목 검색"
+        autoComplete="off"
+        style={{ minWidth: 240 }}
+      /&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+)}
+
+{tab === 'events' &amp;&amp; (
+  &lt;div className="flex flex-wrap items-center gap-2 ml-auto"&gt;
+    &lt;select className="form-select" value={eventCategory} onChange={(event) =&gt; setEventCategory(event.target.value)} style={{ width: 180 }}&gt;
+      &lt;option value="all"&gt;모든 유형&lt;/option&gt;
+      {CATEGORY_OPTIONS.map((item) =&gt; (
+        &lt;option key={item.code} value={item.code}&gt;{item.label}&lt;/option&gt;
+      ))}
+    &lt;/select&gt;
+    &lt;select className="form-select" value={eventStatus} onChange={(event) =&gt; setEventStatus(event.target.value)} style={{ width: 140 }}&gt;
+      &lt;option value="all"&gt;전체 상태&lt;/option&gt;
+      {EVENT_STATUS_OPTIONS.map((item) =&gt; (
+        &lt;option key={item.code} value={item.code}&gt;{item.label}&lt;/option&gt;
+      ))}
+    &lt;/select&gt;
+    &lt;div className="search-input-wrap"&gt;
+      &lt;IconSearch /&gt;
+      &lt;input
+        className="form-input form-input--search"
+        value={eventSourceService}
+        onChange={(event) =&gt; setEventSourceService(event.target.value)}
+        placeholder="소스 서비스"
+        autoComplete="off"
+      /&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+)}</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 2</span>
+            <div class="code del"><pre>actions={
+  &lt;div style={compactToolbarStyle}&gt;
+    &lt;select className="form-select" value={templateCategory} onChange={(event) =&gt; setTemplateCategory(event.target.value)} style={{ width: 180 }}&gt;
+      &lt;option value="all"&gt;모든 유형&lt;/option&gt;
+      {CATEGORY_OPTIONS.map((item) =&gt; (
+          &lt;option key={item.code} value={item.code}&gt;{item.label}&lt;/option&gt;
+      ))}
+    &lt;/select&gt;
+    &lt;select className="form-select" value={templateActive} onChange={(event) =&gt; setTemplateActive(event.target.value as ActiveFilter)} style={{ width: 150 }}&gt;
+      &lt;option value="all"&gt;전체 상태&lt;/option&gt;
+      &lt;option value="active"&gt;활성&lt;/option&gt;
+      &lt;option value="inactive"&gt;비활성&lt;/option&gt;
+    &lt;/select&gt;
+    &lt;div className="search-input-wrap"&gt;
+      &lt;IconSearch /&gt;
+      &lt;input
+          className="form-input form-input--search"
+          value={templateKeyword}
+          onChange={(event) =&gt; setTemplateKeyword(event.target.value)}
+          placeholder="이벤트, 제목 검색"
+          autoComplete="off"
+          style={{ minWidth: 240 }}
+      /&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+}&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 2</span>
+            <div class="code add"><pre>&gt;</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 3</span>
+            <div class="code del"><pre>        actions={&lt;&gt;
+     &lt;select className="form-select" value={eventCategory} onChange={(event) =&gt; setEventCategory(event.target.value)} style={{ width: 180 }}&gt;
+       &lt;option value="all"&gt;모든 유형&lt;/option&gt;
+       {CATEGORY_OPTIONS.map((item) =&gt; (
+           &lt;option key={item.code} value={item.code}&gt;{item.label}&lt;/option&gt;
+       ))}
+     &lt;/select&gt;
+     &lt;select className="form-select" value={eventStatus} onChange={(event) =&gt; setEventStatus(event.target.value)} style={{ width: 140 }}&gt;
+       &lt;option value="all"&gt;전체 상태&lt;/option&gt;
+       {EVENT_STATUS_OPTIONS.map((item) =&gt; (
+           &lt;option key={item.code} value={item.code}&gt;{item.label}&lt;/option&gt;
+       ))}
+     &lt;/select&gt;
+     &lt;div className="search-input-wrap"&gt;
+       &lt;IconSearch /&gt;
+       &lt;input
+           className="form-input form-input--search"
+           value={eventSourceService}
+           onChange={(event) =&gt; setEventSourceService(event.target.value)}
+           placeholder="소스 서비스"
+           autoComplete="off"
+       /&gt;
+     &lt;/div&gt;
+&lt;/&gt;}&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 3</span>
+            <div class="code add"><pre>&gt;</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 4</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span className="text-muted"&gt;
+    현재 &lt;strong className="count-number"&gt;{(eventPage - 1) * EVENT_PAGE_SIZE + 1}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{(eventPage - 1) * EVENT_PAGE_SIZE + events.length}&lt;/strong&gt;건 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{eventTotal.toLocaleString('ko-KR')}&lt;/strong&gt;건
+  &lt;/span&gt;
+  &lt;Pagination currentPage={Math.min(eventPage, eventTotalPages)}
+              totalPages={eventTotalPages}
+              onPageChange={setEventPage} /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 4</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={(eventPage - 1) * EVENT_PAGE_SIZE + 1}
+  rangeEnd={(eventPage - 1) * EVENT_PAGE_SIZE + events.length}
+  totalCount={eventTotal}
+  currentPage={Math.min(eventPage, eventTotalPages)}
+  totalPages={eventTotalPages}
+  onPageChange={setEventPage}
+  previousLabel="이전 발송 이벤트 페이지"
+  nextLabel="다음 발송 이벤트 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>알림 관리</h3>
+          <span class="route none">라우트 미등록</span>
+        </header>
+        <p class="path">src/features/ops/common/pages/AlarmManagePage.tsx</p>
+        <p class="note">발송 이력 푸터</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span className="text-muted"&gt;현재 &lt;strong className="count-number"&gt;1&lt;/strong&gt;–&lt;strong className="count-number"&gt;6&lt;/strong&gt;건 / 총 &amp;nbsp;&lt;strong className="count-number"&gt;1,842&lt;/strong&gt;건&lt;/span&gt;
+  &lt;Pagination currentPage={page}
+              totalPages={307}
+              onPageChange={setPage} /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={1}
+  rangeEnd={6}
+  totalCount={1842}
+  currentPage={page}
+  totalPages={307}
+  onPageChange={setPage}
+  previousLabel="이전 발송 이력 페이지"
+  nextLabel="다음 발송 이력 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>공지·도움말</h3>
+          <a class="route" href="http://127.0.0.1:3100/support/notices" target="_blank" rel="noreferrer">/support/notices</a>
+        </header>
+        <p class="path">src/features/ops/common/pages/NoticeHelpPage.tsx</p>
+        
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 1</span>
+            <div class="code del empty"><span>— 없음 —</span></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 1</span>
+            <div class="code add"><pre>
+{/* 필터는 패널 헤더가 아니라 탭 줄 우측에 둔다. */}
+&lt;div className="flex flex-wrap items-center gap-2 ml-auto"&gt;
+  &lt;select className="form-select"&gt;
+    &lt;option&gt;전체&lt;/option&gt;
+    &lt;option&gt;시스템&lt;/option&gt;
+    &lt;option&gt;업무&lt;/option&gt;
+  &lt;/select&gt;
+  &lt;select className="form-select"&gt;
+    &lt;option&gt;최근3개월&lt;/option&gt;
+  &lt;/select&gt;
+  &lt;div className="search-input-wrap"&gt;
+    &lt;IconSearch size={15}/&gt;
+    &lt;input type="text"
+           className="form-input form-input--search"
+           placeholder="제목 검색"/&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 2</span>
+            <div class="code del"><pre>actions={&lt;&gt;
+ &lt;select className="form-select"&gt;
+   &lt;option&gt;전체&lt;/option&gt;
+   &lt;option&gt;시스템&lt;/option&gt;
+   &lt;option&gt;업무&lt;/option&gt;
+ &lt;/select&gt;
+ &lt;select className="form-select"&gt;
+   &lt;option&gt;최근3개월&lt;/option&gt;
+ &lt;/select&gt;
+  &lt;div className="search-input-wrap"&gt;
+    &lt;IconSearch size={15}/&gt;
+    &lt;input type="text"
+           className="form-input form-input--search"
+           placeholder="메시지코드 내용 검색"/&gt;
+  &lt;/div&gt;
+&lt;/&gt;}&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 2</span>
+            <div class="code add"><pre>&gt;</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 3</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span className="text-muted"&gt;현재 &lt;strong className="count-number"&gt;1&lt;/strong&gt;–&lt;strong className="count-number"&gt;5&lt;/strong&gt;건 / 총 &amp;nbsp;&lt;strong className="count-number"&gt;85&lt;/strong&gt;건&lt;/span&gt;
+  &lt;Pagination currentPage={1}
+              totalPages={3}
+              onPageChange={()=&gt; {}} /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 3</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={1}
+  rangeEnd={5}
+  totalCount={85}
+  currentPage={1}
+  totalPages={3}
+  onPageChange={() =&gt; {}}
+  previousLabel="이전 공지 목록 페이지"
+  nextLabel="다음 공지 목록 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>커뮤니티 게시판</h3>
+          <a class="route" href="http://127.0.0.1:3100/community/board" target="_blank" rel="noreferrer">/community/board</a>
+        </header>
+        <p class="path">src/features/ops/common/pages/CommunityPage.tsx</p>
+        <p class="note">disabled → paginationDisabled · 빈 목록에서 -1 이 나오던 lastRow 계산식도 함께 고침</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 1</span>
+            <div class="code del"><pre>const lastRow = Math.min(firstRow + items.length - 1, totalElements);</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 1</span>
+            <div class="code add"><pre>// 목록이 비면 firstRow 가 0 이라 -1 이 나온다. 빈 목록은 0 으로 둔다
+const lastRow = items.length === 0 ? 0 : Math.min(firstRow + items.length - 1, totalElements);</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 2</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span className="text-muted"&gt;
+    현재 &lt;strong className="count-number"&gt;{firstRow}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{lastRow}&lt;/strong&gt;건 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{totalElements.toLocaleString()}&lt;/strong&gt;건
+  &lt;/span&gt;
+  &lt;Pagination
+    currentPage={query.page}
+    totalPages={result?.totalPages ?? 1}
+    disabled={loading}
+    onPageChange={(nextPage) =&gt; patchQuery({ page: nextPage }, { resetPage: false })}
+  /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 2</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={firstRow}
+  rangeEnd={lastRow}
+  totalCount={totalElements}
+  currentPage={query.page}
+  totalPages={result?.totalPages ?? 1}
+  onPageChange={(nextPage) =&gt; patchQuery({ page: nextPage }, { resetPage: false })}
+  paginationDisabled={loading}
+  previousLabel="이전 게시글 페이지"
+  nextLabel="다음 게시글 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>자료 공유</h3>
+          <a class="route" href="http://127.0.0.1:3100/community/share" target="_blank" rel="noreferrer">/community/share</a>
+        </header>
+        <p class="path">src/features/ops/common/pages/ResourcesPage.tsx</p>
+        <p class="note">disabled → paginationDisabled · 빈 목록에서 -1 이 나오던 lastRow 계산식도 함께 고침</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 1</span>
+            <div class="code del"><pre>const lastRow = Math.min(firstRow + items.length - 1, totalElements);</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 1</span>
+            <div class="code add"><pre>// 목록이 비면 firstRow 가 0 이라 -1 이 나온다. 빈 목록은 0 으로 둔다
+const lastRow = items.length === 0 ? 0 : Math.min(firstRow + items.length - 1, totalElements);</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 2</span>
+            <div class="code del"><pre>aria-label={`${item.title} 첨부 ${item.attachments.length}개 선택`}</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 2</span>
+            <div class="code add"><pre>aria-label="첨부 선택"</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 3</span>
+            <div class="code del"><pre>aria-label={`${item.title} 첨부 파일 다운로드`}</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 3</span>
+            <div class="code add"><pre>aria-label="다운로드"
+title={`${item.title} 첨부 파일 다운로드`}</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 4</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span className="text-muted"&gt;
+    현재 &lt;strong className="count-number"&gt;{firstRow}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{lastRow}&lt;/strong&gt;건 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{totalElements.toLocaleString()}&lt;/strong&gt;건
+  &lt;/span&gt;
+  &lt;Pagination
+    currentPage={query.page}
+    totalPages={Math.max(1, result?.totalPages ?? 1)}
+    onPageChange={(nextPage) =&gt; patchQuery({ page: nextPage }, { resetPage: false })}
+    disabled={loading}
+    previousLabel="이전 페이지"
+    nextLabel="다음 페이지"
+  /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 4</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={firstRow}
+  rangeEnd={lastRow}
+  totalCount={totalElements}
+  currentPage={query.page}
+  totalPages={Math.max(1, result?.totalPages ?? 1)}
+  onPageChange={(nextPage) =&gt; patchQuery({ page: nextPage }, { resetPage: false })}
+  paginationDisabled={loading}
+  previousLabel="이전 페이지"
+  nextLabel="다음 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>외부 자문위원 목록</h3>
+          <a class="route" href="http://127.0.0.1:3100/admin/roles/advisors" target="_blank" rel="noreferrer">/admin/roles/advisors</a>
+        </header>
+        <p class="path">src/features/ops/external-advisors/pages/ExternalAdvisorListPage.tsx</p>
+        <p class="note">단위 명</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span&gt;
+    현재 &lt;strong className="count-number"&gt;{rangeStart}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{rangeEnd}&lt;/strong&gt;명 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{filteredRows.length.toLocaleString('ko-KR')}&lt;/strong&gt;명
+  &lt;/span&gt;
+  &lt;Pagination currentPage={currentPage} totalPages={totalPages}
+              onPageChange={(nextPage) =&gt; patchQuery({ page: nextPage }, { resetPage: false })} /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={rangeStart}
+  rangeEnd={rangeEnd}
+  totalCount={filteredRows.length}
+  unit="명"
+  currentPage={currentPage}
+  totalPages={totalPages}
+  onPageChange={(nextPage) =&gt; patchQuery({ page: nextPage }, { resetPage: false })}
+  previousLabel="이전 자문위원 목록 페이지"
+  nextLabel="다음 자문위원 목록 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>위촉해제 이력</h3>
+          <a class="route" href="http://127.0.0.1:3100/admin/external-advisor-revocations/history" target="_blank" rel="noreferrer">/admin/external-advisor-revocations/history</a>
+        </header>
+        <p class="path">src/features/ops/external-advisors/pages/ExternalAdvisorRevocationHistoryPage.tsx</p>
+        
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span className="text-muted"&gt;
+    현재 &lt;strong className="count-number"&gt;{rangeStart}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{rangeEnd}&lt;/strong&gt;건 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{filteredRows.length.toLocaleString('ko-KR')}&lt;/strong&gt;건
+  &lt;/span&gt;
+  &lt;Pagination currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setPage}/&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={rangeStart}
+  rangeEnd={rangeEnd}
+  totalCount={filteredRows.length}
+  currentPage={currentPage}
+  totalPages={totalPages}
+  onPageChange={setPage}
+  previousLabel="이전 위촉해제 이력 페이지"
+  nextLabel="다음 위촉해제 이력 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>권한 요청</h3>
+          <a class="route" href="http://127.0.0.1:3100/permissions/requests/new" target="_blank" rel="noreferrer">/permissions/requests/new</a>
+        </header>
+        <p class="path">src/features/ops/permissions/pages/PermissionsNewPage.tsx</p>
+        
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span className="text-muted"&gt;현재 &lt;strong className="count-number"&gt;1&lt;/strong&gt;–&lt;strong className="count-number"&gt;5&lt;/strong&gt;건 / 총 &amp;nbsp;&lt;strong className="count-number"&gt;85&lt;/strong&gt;건&lt;/span&gt;
+  &lt;Pagination currentPage={1}
+              totalPages={3}
+              onPageChange={()=&gt; {}} /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={1}
+  rangeEnd={5}
+  totalCount={85}
+  currentPage={1}
+  totalPages={3}
+  onPageChange={() =&gt; {}}
+  previousLabel="이전 요청 이력 페이지"
+  nextLabel="다음 요청 이력 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>권한 요청 검토</h3>
+          <span class="route none">경로에 파라미터 필요 — /permissions/requests/{id}/review</span>
+        </header>
+        <p class="path">src/features/ops/permissions/pages/PermissionsReviewPage.tsx</p>
+        
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;footer className="users-footer"&gt;
+  &lt;span&gt;
+    현재 &lt;strong className="count-number"&gt;{requests.length ? 1 : 0}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{requests.length}&lt;/strong&gt;건 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{requests.length}&lt;/strong&gt;건
+  &lt;/span&gt;
+  &lt;Pagination currentPage={1}
+              totalPages={3}
+              onPageChange={()=&gt;{}} /&gt;
+&lt;/footer&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={requests.length ? 1 : 0}
+  rangeEnd={requests.length}
+  totalCount={requests.length}
+  currentPage={1}
+  totalPages={3}
+  onPageChange={() =&gt; {}}
+  previousLabel="이전 신청 목록 페이지"
+  nextLabel="다음 신청 목록 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>분류 게시판 관리</h3>
+          <a class="route" href="http://127.0.0.1:3100/admin/reference-data/category-boards" target="_blank" rel="noreferrer">/admin/reference-data/category-boards</a>
+        </header>
+        <p class="path">src/features/ops/reference-data/pages/admin/CategoryBoardsPage.tsx</p>
+        <p class="note">disabled → paginationDisabled</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 1</span>
+            <div class="code del"><pre>aria-label={`${item.title} 다운로드`}</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 1</span>
+            <div class="code add"><pre>aria-label="다운로드"
+title={`${item.title} 다운로드`}</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 2</span>
+            <div class="code del"><pre>aria-label={`${item.title} 수정`}</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 2</span>
+            <div class="code add"><pre>aria-label="수정"
+title={`${item.title} 수정`}</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 3</span>
+            <div class="code del"><pre>aria-label={`${item.title} 삭제`}</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 3</span>
+            <div class="code add"><pre>aria-label="삭제"
+title={`${item.title} 삭제`}</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 4</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span className="text-muted"&gt;
+    현재 &lt;strong className="count-number"&gt;{loading ? 0 : rangeStart}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{loading ? 0 : rangeEnd}&lt;/strong&gt;건 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{total.toLocaleString()}&lt;/strong&gt;건
+  &lt;/span&gt;
+  &lt;Pagination
+    currentPage={page}
+    totalPages={Math.max(1, result?.totalPages ?? 1)}
+    disabled={loading}
+    onPageChange={setPage}
+  /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 4</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={loading ? 0 : rangeStart}
+  rangeEnd={loading ? 0 : rangeEnd}
+  totalCount={total}
+  currentPage={page}
+  totalPages={Math.max(1, result?.totalPages ?? 1)}
+  onPageChange={setPage}
+  paginationDisabled={loading}
+  previousLabel="이전 게시판 목록 페이지"
+  nextLabel="다음 게시판 목록 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>기출문항 게시판</h3>
+          <a class="route" href="http://127.0.0.1:3100/reference/past-items" target="_blank" rel="noreferrer">/reference/past-items</a>
+        </header>
+        <p class="path">src/features/ops/reference-data/pages/board/PastItemsBoardViewPage.tsx</p>
+        <p class="note">disabled → paginationDisabled · 빈 목록에서 -1 이 나오던 lastRow 계산식도 함께 고침</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 1</span>
+            <div class="code del"><pre>const lastRow = Math.min(firstRow + items.length - 1, totalElements);</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 1</span>
+            <div class="code add"><pre>// 목록이 비면 firstRow 가 0 이라 -1 이 나온다. 빈 목록은 0 으로 둔다
+const lastRow = items.length === 0 ? 0 : Math.min(firstRow + items.length - 1, totalElements);</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 2</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span className="text-muted"&gt;
+    현재 &lt;strong className="count-number"&gt;{firstRow}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{lastRow}&lt;/strong&gt;건 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{totalElements.toLocaleString()}&lt;/strong&gt;건
+  &lt;/span&gt;
+  &lt;Pagination
+    currentPage={page}
+    totalPages={result?.totalPages ?? 1}
+    disabled={loading}
+    onPageChange={setPage}
+  /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 2</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={firstRow}
+  rangeEnd={lastRow}
+  totalCount={totalElements}
+  currentPage={page}
+  totalPages={result?.totalPages ?? 1}
+  onPageChange={setPage}
+  paginationDisabled={loading}
+  previousLabel="이전 기출문항 페이지"
+  nextLabel="다음 기출문항 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>문항 성능테스트</h3>
+          <a class="route" href="http://127.0.0.1:3100/monitoring/question-performance" target="_blank" rel="noreferrer">/monitoring/question-performance</a>
+        </header>
+        <p class="path">src/features/ops/ai-question-performance-test/pages/AiQuestionPerformanceTestPage.tsx</p>
+        
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span&gt;
+    현재 &lt;strong className="count-number"&gt;{rangeStart}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{rangeEnd}&lt;/strong&gt;건 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{rows.length}&lt;/strong&gt;건
+  &lt;/span&gt;
+
+  &lt;Pagination currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setPage} /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={rangeStart}
+  rangeEnd={rangeEnd}
+  totalCount={rows.length}
+  currentPage={currentPage}
+  totalPages={totalPages}
+  onPageChange={setPage}
+  previousLabel="이전 테스트 이력 페이지"
+  nextLabel="다음 테스트 이력 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>API 사용량 로그</h3>
+          <a class="route" href="http://127.0.0.1:3100/monitoring/api-usage" target="_blank" rel="noreferrer">/monitoring/api-usage</a>
+        </header>
+        <p class="path">src/features/ops/api-performance/pages/ApiPerformanceLogPage.tsx</p>
+        <p class="note">formatNumber 제거 · disabled → paginationDisabled</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span&gt;
+    현재 &lt;strong className="count-number"&gt;{loading ? 0 : rangeStart}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{loading ? 0 : rangeEnd}&lt;/strong&gt;건 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{formatNumber(totalElements)}&lt;/strong&gt;건
+  &lt;/span&gt;
+  &lt;Pagination
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={setPage}
+      disabled={loading}
+  /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={loading ? 0 : rangeStart}
+  rangeEnd={loading ? 0 : rangeEnd}
+  totalCount={totalElements}
+  currentPage={currentPage}
+  totalPages={totalPages}
+  onPageChange={setPage}
+  paginationDisabled={loading}
+  previousLabel="이전 API 로그 페이지"
+  nextLabel="다음 API 로그 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>사용자 배정 이력</h3>
+          <span class="route none">경로에 파라미터 필요 — /admin/roles/user-roles/{userId}/edit</span>
+        </header>
+        <p class="path">src/features/ops/users/pages/users-edit/UserAssignmentsSection.tsx</p>
+        
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span className="text-muted"&gt;
+    현재 &lt;strong className="count-number"&gt;{pageStart + 1}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{pageStart + pagedRows.length}&lt;/strong&gt;건 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{rows.length}&lt;/strong&gt;건
+  &lt;/span&gt;
+  &lt;Pagination currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setPage} /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={pageStart + 1}
+  rangeEnd={pageStart + pagedRows.length}
+  totalCount={rows.length}
+  currentPage={currentPage}
+  totalPages={totalPages}
+  onPageChange={setPage}
+  previousLabel="이전 배정 이력 페이지"
+  nextLabel="다음 배정 이력 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>채점자 후보 검색</h3>
+          <span class="route none">경로에 파라미터 필요 — /tds/evaluations/{regId}/designs/new</span>
+        </header>
+        <p class="path">src/features/tds/evaluation-design/pages/design-all-in-one/scorer-assignment/CandidateSearchPanel.tsx</p>
+        <p class="note">readOnly → paginationDisabled</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span className="text-muted"&gt;
+  현재 &lt;strong className="count-number"&gt;{filtered.length ? pageStart + 1 : 0}&lt;/strong&gt;–
+  &lt;strong className="count-number"&gt;{pageStart + pagedCandidates.length}&lt;/strong&gt;명 / 총 &amp;nbsp;
+  &lt;strong className="count-number"&gt;{filtered.length}&lt;/strong&gt;명
+&lt;/span&gt;
+  &lt;Pagination currentPage={currentPage}
+              totalPages={totalPages}
+              disabled={readOnly}
+              onPageChange={setPage} /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={filtered.length ? pageStart + 1 : 0}
+  rangeEnd={pageStart + pagedCandidates.length}
+  totalCount={filtered.length}
+  unit="명"
+  currentPage={currentPage}
+  totalPages={totalPages}
+  onPageChange={setPage}
+  paginationDisabled={readOnly}
+  previousLabel="이전 채점자 후보 페이지"
+  nextLabel="다음 채점자 후보 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+  </section>
+
+  <section id="a2">
+    <h2>A · 좌측 표기가 비표준 — info 로 원문 보존 <span class="n">8</span></h2>
+    <p class="tight">기간·비율·기준 문구 등 표준형에 담기지 않는 표기가 있는 화면. 건수 계산을 다시 쓰지 않고 info prop 에 기존 마크업을 그대로 넣어, 보이는 글자는 한 자도 바뀌지 않는다.</p>
+    
+      <article class="entry">
+        <header class="entry__head">
+          <h3>자문위원 위촉해제 목록</h3>
+          <a class="route" href="http://127.0.0.1:3100/admin/external-advisor-revocations" target="_blank" rel="noreferrer">/admin/external-advisor-revocations</a>
+        </header>
+        <p class="path">src/features/ops/external-advisors/pages/ExternalAdvisorRevocationListPage.tsx</p>
+        <p class="note">전체·활성·비활성 3분할 표기</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span className="text-muted"&gt;
+    전체 &lt;strong className="text-teal"&gt;{filteredRows.length.toLocaleString('ko-KR')}&lt;/strong&gt;건
+    / 활성 {filteredRows.filter((row) =&gt; row.isActive).length}
+    / 비활성 {filteredRows.filter((row) =&gt; !row.isActive).length}
+  &lt;/span&gt;
+  &lt;Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setPage} /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  info={(
+    &lt;span className="text-muted"&gt;
+      전체 &lt;strong className="text-teal"&gt;{filteredRows.length.toLocaleString('ko-KR')}&lt;/strong&gt;건
+      / 활성 {filteredRows.filter((row) =&gt; row.isActive).length}
+      / 비활성 {filteredRows.filter((row) =&gt; !row.isActive).length}
+    &lt;/span&gt;
+  )}
+  currentPage={currentPage}
+  totalPages={totalPages}
+  onPageChange={setPage}
+  previousLabel="이전 위촉해제 목록 페이지"
+  nextLabel="다음 위촉해제 목록 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>기준데이터 변경이력</h3>
+          <a class="route" href="http://127.0.0.1:3100/admin/master-data/change-history" target="_blank" rel="noreferrer">/admin/master-data/change-history</a>
+        </header>
+        <p class="path">src/features/ops/master-data/pages/ChangeHistoryPage.tsx</p>
+        <p class="note">조회 기간 표기</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div&gt;{groups.map((group) =&gt; &lt;div key={group.date} className="ch-day-block"&gt;&lt;div className="ch-day"&gt;&lt;span className="ch-day__date"&gt;{group.date}&lt;/span&gt;&lt;span className="ch-day__weekday"&gt;{new Date(`${group.date}T00:00:00`).toLocaleDateString('ko-KR', { weekday: 'long' })}&lt;/span&gt;&lt;span className="ch-day__count"&gt;{group.items.length}건&lt;/span&gt;&lt;span className="ch-day__line" /&gt;&lt;/div&gt;&lt;div className="ch-group"&gt;{group.items.map((item) =&gt; &lt;div key={item.id} className={`ch-ev ch-ev--${ACTION_CLASS[item.actionType]}`}&gt;&lt;span className="ch-ev__time"&gt;{new Date(item.createdAt).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false })}&lt;/span&gt;&lt;span className={`badge ${ACTION_BADGE[item.actionType]}`}&gt;{ACTION_LABEL[item.actionType]}&lt;/span&gt;&lt;span className="ch-type"&gt;{TYPE_LABEL[item.dataType]}&lt;/span&gt;&lt;span className="ch-ev__target"&gt;{item.targetName} &lt;span className="ch-ev__sub"&gt;{item.summary ? `· ${item.summary}` : ''}&lt;/span&gt;&lt;/span&gt;&lt;span className="ch-actor"&gt;&lt;span className="ch-actor__avatar"&gt;{item.actorName.charAt(0)}&lt;/span&gt;&lt;span className="ch-actor__name"&gt;{item.actorName}&lt;/span&gt;&lt;/span&gt;{(item.beforeJson || item.afterJson) &amp;&amp; &lt;button type="button" className="ch-cmp" onClick={() =&gt; setSelected(item)}&gt;&lt;IconCompare size={14} /&gt;비교&lt;/button&gt;}&lt;/div&gt;)}&lt;/div&gt;&lt;/div&gt;)}&lt;div className="users-footer"&gt;&lt;span className="text-muted"&gt;{from} ~ {to} / &lt;strong className="count-number"&gt;{filtered.length}&lt;/strong&gt;건&lt;/span&gt;&lt;Pagination currentPage={Math.min(page, totalPages)} totalPages={totalPages} onPageChange={setPage} /&gt;&lt;/div&gt;&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;div&gt;{groups.map((group) =&gt; &lt;div key={group.date} className="ch-day-block"&gt;&lt;div className="ch-day"&gt;&lt;span className="ch-day__date"&gt;{group.date}&lt;/span&gt;&lt;span className="ch-day__weekday"&gt;{new Date(`${group.date}T00:00:00`).toLocaleDateString('ko-KR', { weekday: 'long' })}&lt;/span&gt;&lt;span className="ch-day__count"&gt;{group.items.length}건&lt;/span&gt;&lt;span className="ch-day__line" /&gt;&lt;/div&gt;&lt;div className="ch-group"&gt;{group.items.map((item) =&gt; &lt;div key={item.id} className={`ch-ev ch-ev--${ACTION_CLASS[item.actionType]}`}&gt;&lt;span className="ch-ev__time"&gt;{new Date(item.createdAt).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false })}&lt;/span&gt;&lt;span className={`badge ${ACTION_BADGE[item.actionType]}`}&gt;{ACTION_LABEL[item.actionType]}&lt;/span&gt;&lt;span className="ch-type"&gt;{TYPE_LABEL[item.dataType]}&lt;/span&gt;&lt;span className="ch-ev__target"&gt;{item.targetName} &lt;span className="ch-ev__sub"&gt;{item.summary ? `· ${item.summary}` : ''}&lt;/span&gt;&lt;/span&gt;&lt;span className="ch-actor"&gt;&lt;span className="ch-actor__avatar"&gt;{item.actorName.charAt(0)}&lt;/span&gt;&lt;span className="ch-actor__name"&gt;{item.actorName}&lt;/span&gt;&lt;/span&gt;{(item.beforeJson || item.afterJson) &amp;&amp; &lt;button type="button" className="ch-cmp" onClick={() =&gt; setSelected(item)}&gt;&lt;IconCompare size={14} /&gt;비교&lt;/button&gt;}&lt;/div&gt;)}&lt;/div&gt;&lt;/div&gt;)}&lt;TableListFooter info={&lt;span className="text-muted"&gt;{from} ~ {to} / &lt;strong className="count-number"&gt;{filtered.length}&lt;/strong&gt;건&lt;/span&gt;} currentPage={Math.min(page, totalPages)} totalPages={totalPages} onPageChange={setPage} previousLabel="이전 변경이력 페이지" nextLabel="다음 변경이력 페이지" /&gt;&lt;/div&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>핵심아이디어</h3>
+          <a class="route" href="http://127.0.0.1:3100/admin/master-data/core-ideas" target="_blank" rel="noreferrer">/admin/master-data/core-ideas</a>
+        </header>
+        <p class="path">src/features/ops/master-data/pages/CoreIdeasPage.tsx</p>
+        <p class="note">조회 / 선택 교과 전체 2분할</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;&lt;span&gt;조회 &lt;strong className="count-number"&gt;{filtered.length}&lt;/strong&gt;건 / 선택 교과 전체 &lt;strong className="count-number"&gt;{rows.length}&lt;/strong&gt;건&lt;/span&gt;&lt;Pagination currentPage={Math.min(page, totalPages)} totalPages={totalPages} onPageChange={setPage} /&gt;&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter info={&lt;span&gt;조회 &lt;strong className="count-number"&gt;{filtered.length}&lt;/strong&gt;건 / 선택 교과 전체 &lt;strong className="count-number"&gt;{rows.length}&lt;/strong&gt;건&lt;/span&gt;} currentPage={Math.min(page, totalPages)} totalPages={totalPages} onPageChange={setPage} previousLabel="이전 핵심아이디어 페이지" nextLabel="다음 핵심아이디어 페이지" /&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>핵심개념</h3>
+          <a class="route" href="http://127.0.0.1:3100/admin/master-data/key-concepts" target="_blank" rel="noreferrer">/admin/master-data/key-concepts</a>
+        </header>
+        <p class="path">src/features/ops/master-data/pages/KeyConceptsPage.tsx</p>
+        <p class="note">학교급 · 교과명 표기</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span&gt;{group?.schoolLevelName} / {group?.name} &lt;strong className="count-number"&gt;{filtered.length}&lt;/strong&gt;개&lt;/span&gt;
+  &lt;Pagination currentPage={Math.min(page, totalPages)} totalPages={totalPages} onPageChange={setPage} /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  info={&lt;span&gt;{group?.schoolLevelName} / {group?.name} &lt;strong className="count-number"&gt;{filtered.length}&lt;/strong&gt;개&lt;/span&gt;}
+  currentPage={Math.min(page, totalPages)}
+  totalPages={totalPages}
+  onPageChange={setPage}
+  previousLabel="이전 핵심개념 페이지"
+  nextLabel="다음 핵심개념 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>NEIS 동기화 이력</h3>
+          <a class="route" href="http://127.0.0.1:3100/admin/neis/sync-history" target="_blank" rel="noreferrer">/admin/neis/sync-history</a>
+        </header>
+        <p class="path">src/features/ops/neis/pages/NeisSyncHistoryPage.tsx</p>
+        <p class="note">총계 / 실패 2분할</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span&gt;총 &lt;strong className="text-teal"&gt;1,284&lt;/strong&gt;건 / 실패 &lt;strong className="text-danger-500"&gt;2&lt;/strong&gt;건&lt;/span&gt;
+  &lt;Pagination currentPage={1} totalPages={2} onPageChange={() =&gt; {}} /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  info={&lt;span&gt;총 &lt;strong className="text-teal"&gt;1,284&lt;/strong&gt;건 / 실패 &lt;strong className="text-danger-500"&gt;2&lt;/strong&gt;건&lt;/span&gt;}
+  currentPage={1}
+  totalPages={2}
+  onPageChange={() =&gt; {}}
+  previousLabel="이전 동기화 이력 페이지"
+  nextLabel="다음 동기화 이력 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>감사 로그</h3>
+          <a class="route" href="http://127.0.0.1:3100/admin/reference-data/audit-logs" target="_blank" rel="noreferrer">/admin/reference-data/audit-logs</a>
+        </header>
+        <p class="path">src/features/ops/reference-data/pages/admin/AuditLogsPage.tsx</p>
+        <p class="note">기간 / 표시 / 전체 3분할</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span className="text-muted"&gt;2026-03-12 ~ 03-14 / &lt;strong className="count-number"&gt;9&lt;/strong&gt;건 표시 / 전체 &lt;strong className="count-number"&gt;2,404&lt;/strong&gt;건&lt;/span&gt;
+  &lt;Pagination currentPage={1} totalPages={2} onPageChange={() =&gt; {}} /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  info={&lt;span className="text-muted"&gt;2026-03-12 ~ 03-14 / &lt;strong className="count-number"&gt;9&lt;/strong&gt;건 표시 / 전체 &lt;strong className="count-number"&gt;2,404&lt;/strong&gt;건&lt;/span&gt;}
+  currentPage={1}
+  totalPages={2}
+  onPageChange={() =&gt; {}}
+  previousLabel="이전 감사 로그 페이지"
+  nextLabel="다음 감사 로그 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>학생 검색</h3>
+          <span class="route none">학교 마스터 상세의 탭 — /admin/schools/search/{schoolId}</span>
+        </header>
+        <p class="path">src/features/ops/schools/components/SchoolMasterSearchStudent.tsx</p>
+        <p class="note">기준 학년도·학기 문구는 그대로. 학생을 세므로 단위를 건 → 명 으로 고쳤다</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span&gt;총 &lt;strong className="count-number"&gt;{filtered.length}&lt;/strong&gt;건 / {term.academicYear}학년도 {term.semester}학기 OPS 활성 프로필 기준&lt;/span&gt;
+  &lt;Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setPage} /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  info={&lt;span&gt;총 &lt;strong className="count-number"&gt;{filtered.length}&lt;/strong&gt;명 / {term.academicYear}학년도 {term.semester}학기 OPS 활성 프로필 기준&lt;/span&gt;}
+  currentPage={currentPage}
+  totalPages={totalPages}
+  onPageChange={setPage}
+  previousLabel="이전 학생 검색 페이지"
+  nextLabel="다음 학생 검색 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>플랫폼 사용 통계</h3>
+          <a class="route" href="http://127.0.0.1:3100/support/statistics" target="_blank" rel="noreferrer">/support/statistics</a>
+        </header>
+        <p class="path">src/features/ops/support/pages/PlatformUsageStatsPage.tsx</p>
+        <p class="note">건수 없이 페이지네이션만. 빈 <div> 를 걷어냄</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;div&gt;&lt;/div&gt;
+  &lt;Pagination currentPage={eventPage} totalPages={totalEventPages} onPageChange={setEventPage} disabled={loading} /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>{/* 좌측 건수 표기가 없어 1페이지뿐이면 빈 띠만 남으므로 푸터째 감춘다 */}
+{totalEventPages &gt; 1 &amp;&amp; (
+  &lt;TableListFooter
+    currentPage={eventPage}
+    totalPages={totalEventPages}
+    onPageChange={setEventPage}
+    paginationDisabled={loading}
+    previousLabel="이전 이벤트 페이지"
+    nextLabel="다음 이벤트 페이지"
+  /&gt;
+)}</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+  </section>
+
+  <section id="x">
+    <h2>조사에서 빠졌던 화면 <span class="n">4</span></h2>
+    <p class="tight">이전 보고서에 누락돼 있던 4개. 모두 A그룹 표준형이라 같은 방식으로 처리했다.</p>
+    
+      <article class="entry">
+        <header class="entry__head">
+          <h3>감독 · 응시자 목록</h3>
+          <a class="route" href="http://127.0.0.1:3100/evaluation/proctor" target="_blank" rel="noreferrer">/evaluation/proctor</a>
+        </header>
+        <p class="path">src/features/aes/proctor/pages/ProctorPage.tsx</p>
+        <p class="note">빈 &lt;div&gt; 를 걷어내고, 없던 응시자 건수를 명 단위로 새로 넣었다</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;div&gt;&lt;/div&gt;
+  &lt;Pagination
+    currentPage={studentView.safePage}
+    totalPages={studentView.totalPages}
+    onPageChange={setStudentViewPage}
+  /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={studentView.rows.length === 0 ? 0 : (studentView.safePage - 1) * STUDENT_PAGE_SIZE + 1}
+  rangeEnd={(studentView.safePage - 1) * STUDENT_PAGE_SIZE + studentView.rows.length}
+  totalCount={students.length}
+  unit="명"
+  currentPage={studentView.safePage}
+  totalPages={studentView.totalPages}
+  onPageChange={setStudentViewPage}
+  previousLabel="이전 응시자 페이지"
+  nextLabel="다음 응시자 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>내부표준화 목록</h3>
+          <a class="route" href="http://127.0.0.1:3100/grading/internal-standardization" target="_blank" rel="noreferrer">/grading/internal-standardization</a>
+        </header>
+        <p class="path">src/features/grading/front-internal-standardization/pages/InternalStandardizationListPage.tsx</p>
+        <p class="note">단위 개</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span&gt;
+    현재 &lt;strong className="count-number"&gt;{rangeStart}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{rangeEnd}&lt;/strong&gt;개 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{totalCount}&lt;/strong&gt;개
+  &lt;/span&gt;
+  &lt;Pagination currentPage={currentPage} totalPages={totalPages}
+              onPageChange={(nextPage) =&gt; patchQuery({ page: nextPage }, { resetPage: false })} /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={rangeStart}
+  rangeEnd={rangeEnd}
+  totalCount={totalCount}
+  unit="개"
+  currentPage={currentPage}
+  totalPages={totalPages}
+  onPageChange={(nextPage) =&gt; patchQuery({ page: nextPage }, { resetPage: false })}
+  previousLabel="이전 내부표준화 목록 페이지"
+  nextLabel="다음 내부표준화 목록 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>내부표준화 목록 (구버전)</h3>
+          <span class="route none">라우트 미등록</span>
+        </header>
+        <p class="path">src/features/grading/internal-standardization/pages/InternalStandardizationListPage.tsx</p>
+        <p class="note">단위 개</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;footer className="users-footer"&gt;
+  &lt;span&gt;
+    현재 &lt;strong className="count-number"&gt;{rangeStart}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{rangeEnd}&lt;/strong&gt;개 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{totalCount}&lt;/strong&gt;개
+  &lt;/span&gt;
+  &lt;Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setPage} /&gt;
+&lt;/footer&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={rangeStart}
+  rangeEnd={rangeEnd}
+  totalCount={totalCount}
+  unit="개"
+  currentPage={currentPage}
+  totalPages={totalPages}
+  onPageChange={setPage}
+  previousLabel="이전 내부표준화 목록 페이지"
+  nextLabel="다음 내부표준화 목록 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>채점 현황</h3>
+          <a class="route" href="http://127.0.0.1:3100/grading/status" target="_blank" rel="noreferrer">/grading/status</a>
+        </header>
+        <p class="path">src/features/grading/internal-standardization/pages/ScoringStatusListPage.tsx</p>
+        <p class="note">단위 개</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span&gt;
+    현재 &lt;strong className="count-number"&gt;{rangeStart}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{rangeEnd}&lt;/strong&gt;개 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{totalCount}&lt;/strong&gt;개
+  &lt;/span&gt;
+  &lt;Pagination currentPage={currentPage} totalPages={totalPages}
+              onPageChange={(nextPage) =&gt; patchQuery({ page: nextPage }, { resetPage: false })} /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={rangeStart}
+  rangeEnd={rangeEnd}
+  totalCount={totalCount}
+  unit="개"
+  currentPage={currentPage}
+  totalPages={totalPages}
+  onPageChange={(nextPage) =&gt; patchQuery({ page: nextPage }, { resetPage: false })}
+  previousLabel="이전 채점 현황 페이지"
+  nextLabel="다음 채점 현황 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+  </section>
+
+  <section id="b">
+    <h2>B · 건수만 · 버튼 <span class="n">6</span></h2>
+    <p class="tight">페이지네이션이 없는 푸터. 대부분 info 만 넘기면 되고, 메시지코드는 건수가 아니라 버튼이 들어있어 children 으로 받았다.</p>
+    
+      <article class="entry">
+        <header class="entry__head">
+          <h3>교과 역량</h3>
+          <a class="route" href="http://127.0.0.1:3100/admin/master-data/subject-competencies" target="_blank" rel="noreferrer">/admin/master-data/subject-competencies</a>
+        </header>
+        <p class="path">src/features/ops/master-data/pages/SubjectCompetenciesPage.tsx</p>
+        <p class="note">페이지네이션 없음 — info 만</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;&lt;div className="text-muted"&gt;전체 &lt;strong className="count-number"&gt;{rows.length}&lt;/strong&gt;개 / 교과고유 &lt;strong className="count-number"&gt;{counts.subject}&lt;/strong&gt; / 총론연계 &lt;strong className="count-number"&gt;{counts.general}&lt;/strong&gt; / 대구특화 &lt;strong className="count-number"&gt;{counts.district}&lt;/strong&gt;&lt;/div&gt;&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter info={&lt;div className="text-muted"&gt;전체 &lt;strong className="count-number"&gt;{rows.length}&lt;/strong&gt;개 / 교과고유 &lt;strong className="count-number"&gt;{counts.subject}&lt;/strong&gt; / 총론연계 &lt;strong className="count-number"&gt;{counts.general}&lt;/strong&gt; / 대구특화 &lt;strong className="count-number"&gt;{counts.district}&lt;/strong&gt;&lt;/div&gt;} /&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>지시어 관리</h3>
+          <a class="route" href="http://127.0.0.1:3100/admin/master-data/command-terms" target="_blank" rel="noreferrer">/admin/master-data/command-terms</a>
+        </header>
+        <p class="path">src/features/ops/master-data/pages/CommandTermsPage.tsx</p>
+        <p class="note">페이지네이션 없음 — info 만</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 1</span>
+            <div class="code del"><pre>&lt;Panel title={&lt;&gt;&lt;span className="text-teal-dark"&gt;{subject?.name ?? '—'}&lt;/span&gt; 수행지시어&lt;/&gt;} icon={&lt;IconList size={18} /&gt;} actions={&lt;div className="users-filters"&gt;&lt;div className="search-input-wrap"&gt;&lt;IconSearch /&gt;&lt;input className="form-input form-input--search" type="search" value={keyword} onChange={(event) =&gt; setKeyword(event.target.value)} placeholder="이름·정의 검색" /&gt;&lt;/div&gt;&lt;/div&gt;} headerLine&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 1</span>
+            <div class="code add"><pre>    {/* 검색은 패널 헤더가 아니라 조회 조건 줄 우측에 둔다. */}
+    &lt;div className="users-filters ml-auto"&gt;&lt;div className="search-input-wrap"&gt;&lt;IconSearch /&gt;&lt;input className="form-input form-input--search" type="search" value={keyword} onChange={(event) =&gt; setKeyword(event.target.value)} placeholder="이름·정의 검색" /&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;Panel title={&lt;&gt;&lt;span className="text-teal-dark"&gt;{subject?.name ?? '—'}&lt;/span&gt; 수행지시어&lt;/&gt;} icon={&lt;IconList size={18} /&gt;} headerLine&gt;</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 2</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;&lt;span&gt;{subject?.name} &lt;strong className="count-number"&gt;{parents.length}&lt;/strong&gt;개 상위 / &lt;strong className="count-number"&gt;{children.length}&lt;/strong&gt;개 하위&lt;/span&gt;&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 2</span>
+            <div class="code add"><pre>&lt;TableListFooter info={&lt;span&gt;{subject?.name} &lt;strong className="count-number"&gt;{parents.length}&lt;/strong&gt;개 상위 / &lt;strong className="count-number"&gt;{children.length}&lt;/strong&gt;개 하위&lt;/span&gt;} /&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>과목 검색</h3>
+          <span class="route none">학교 마스터 상세의 탭 — /admin/schools/search/{schoolId}</span>
+        </header>
+        <p class="path">src/features/ops/schools/components/SchoolMasterSearchSubject.tsx</p>
+        <p class="note">개설 과목을 세므로 단위를 건 → 개 로 고쳤다</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span&gt;총 &lt;strong className="count-number"&gt;{filtered.length}&lt;/strong&gt;건 / {term.academicYear}학년도 {term.semester}학기 OPS 학교 개설과목 기준&lt;/span&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter info={&lt;span&gt;총 &lt;strong className="count-number"&gt;{filtered.length}&lt;/strong&gt;개 / {term.academicYear}학년도 {term.semester}학기 OPS 학교 개설과목 기준&lt;/span&gt;} /&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>교사 검색</h3>
+          <span class="route none">학교 마스터 상세의 탭 — /admin/schools/search/{schoolId}</span>
+        </header>
+        <p class="path">src/features/ops/schools/components/SchoolMasterSearchTeacher.tsx</p>
+        <p class="note">교직원을 세므로 단위를 건 → 명 으로 고쳤다</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span&gt;총 &lt;strong className="count-number"&gt;{filtered.length}&lt;/strong&gt;건 / OPS 활성 교직원 기준&lt;/span&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter info={&lt;span&gt;총 &lt;strong className="count-number"&gt;{filtered.length}&lt;/strong&gt;명 / OPS 활성 교직원 기준&lt;/span&gt;} /&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>메시지코드</h3>
+          <a class="route" href="http://127.0.0.1:3100/admin/message-codes" target="_blank" rel="noreferrer">/admin/message-codes</a>
+        </header>
+        <p class="path">src/features/ops/message-codes/pages/MessageCodesPage.tsx</p>
+        <p class="note">건수가 아니라 취소·저장 버튼이 들어있어 children 으로 넘김</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter&gt;
+&lt;/TableListFooter&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>연습채점 상세</h3>
+          <span class="route none">내부표준화 상세의 단계 — /grading/internal-standardization/{designId}</span>
+        </header>
+        <p class="path">src/features/grading/front-internal-standardization/components/InternalStandardizationDetailPractice.tsx</p>
+        <p class="note">1페이지 고정 페이지네이션이 사라짐 (아래 확인사항 2번)</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span&gt;총 &lt;strong className="count-number"&gt;{selectedSamples.length}&lt;/strong&gt;건&lt;/span&gt;
+  {/* 목록 전체를 한 번에 보여주므로 항상 1페이지 — 표기만 공통 규격에 맞춘다 */}
+  &lt;Pagination currentPage={1} totalPages={1} onPageChange={() =&gt; {}} /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>{/* 목록 전체를 한 번에 보여주므로 페이지네이션 없이 총계만 표기한다 */}
+&lt;TableListFooter totalCount={selectedSamples.length} /&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+  </section>
+
+  <section id="c">
+    <h2>C · 자체 pager 를 Pagination 으로 <span class="n">3</span></h2>
+    <p class="tight">이전/다음 버튼을 직접 만들어 쓰던 화면. 공통 Pagination 으로 바뀌면서 페이지 번호가 나열되는 형태가 된다.</p>
+    
+      <article class="entry">
+        <header class="entry__head">
+          <h3>역할 목록</h3>
+          <span class="route none">ops.routes.tsx 에서 RolesPage 가 주석 처리됨</span>
+        </header>
+        <p class="path">src/features/ops/roles/pages/roles-page/RolesListPanel.tsx</p>
+        <p class="note">pager → Pagination (아래 확인사항 3번)</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span&gt;
+    현재 &lt;strong className="count-number"&gt;{rangeStart}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{rangeEnd}&lt;/strong&gt;개 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{roles.length}&lt;/strong&gt;개
+  &lt;/span&gt;
+  &lt;div className="pager"&gt;
+    &lt;button
+      type="button"
+      className="btn btn-outline btn-page-icon"
+      aria-label="이전"
+      disabled={rolesLoading || roles.length === 0 || rolesSafePage &lt;= 1}
+      onClick={() =&gt; onSetRolesPage(p =&gt; Math.max(1, p - 1))}
+    &gt;
+      &lt;IconChevronLeft /&gt;
+    &lt;/button&gt;
+    &lt;span className="pager-current"&gt;{rolesSafePage}&lt;/span&gt;
+    &lt;button
+      type="button"
+      className="btn btn-outline btn-page-icon"
+      aria-label="다음"
+      disabled={rolesLoading || roles.length === 0 || rolesSafePage &gt;= rolesTotalPages}
+      onClick={() =&gt; onSetRolesPage(p =&gt; Math.min(rolesTotalPages, p + 1))}
+    &gt;
+      &lt;IconChevronRight /&gt;
+    &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={rangeStart}
+  rangeEnd={rangeEnd}
+  totalCount={roles.length}
+  unit="개"
+  currentPage={rolesSafePage}
+  totalPages={rolesTotalPages}
+  onPageChange={(nextPage) =&gt; onSetRolesPage(() =&gt; nextPage)}
+  paginationDisabled={rolesLoading || roles.length === 0}
+  previousLabel="이전 역할 목록 페이지"
+  nextLabel="다음 역할 목록 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>권한 목록</h3>
+          <span class="route none">ops.routes.tsx 에서 RolesPage 가 주석 처리됨</span>
+        </header>
+        <p class="path">src/features/ops/roles/pages/roles-page/PermissionsListPanel.tsx</p>
+        <p class="note">pager → Pagination (아래 확인사항 3번)</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;span&gt;
+    현재 &lt;strong className="count-number"&gt;{rangeStart}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{rangeEnd}&lt;/strong&gt;개 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{filteredPermsLength}&lt;/strong&gt;개
+  &lt;/span&gt;
+  &lt;div className="pager"&gt;
+    &lt;button
+      type="button"
+      className="btn btn-outline btn-page-icon"
+      aria-label="이전"
+      disabled={permsLoading || filteredPermsLength === 0 || permsSafePage &lt;= 1}
+      onClick={() =&gt; onSetPermsPage(p =&gt; Math.max(1, p - 1))}
+    &gt;
+      &lt;IconChevronLeft /&gt;
+    &lt;/button&gt;
+    &lt;span className="pager-current"&gt;{permsSafePage}&lt;/span&gt;
+    &lt;button
+      type="button"
+      className="btn btn-outline btn-page-icon"
+      aria-label="다음"
+      disabled={permsLoading || filteredPermsLength === 0 || permsSafePage &gt;= permsTotalPages}
+      onClick={() =&gt; onSetPermsPage(p =&gt; Math.min(permsTotalPages, p + 1))}
+    &gt;
+      &lt;IconChevronRight /&gt;
+    &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={rangeStart}
+  rangeEnd={rangeEnd}
+  totalCount={filteredPermsLength}
+  unit="개"
+  currentPage={permsSafePage}
+  totalPages={permsTotalPages}
+  onPageChange={(nextPage) =&gt; onSetPermsPage(() =&gt; nextPage)}
+  paginationDisabled={permsLoading || filteredPermsLength === 0}
+  previousLabel="이전 권한 목록 페이지"
+  nextLabel="다음 권한 목록 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>선임 관리</h3>
+          <span class="route none">경로에 파라미터 필요 — /grading/internal-standardization/senior/{designId}</span>
+        </header>
+        <p class="path">src/features/grading/front-internal-standardization/pages/InternalStandardizationSeniorManagementPage.tsx</p>
+        <p class="note">pager → Pagination</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer no-border"&gt;
+  &lt;span&gt;
+    현재 &lt;strong className="count-number"&gt;{sampleRangeStart}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{sampleRangeEnd}&lt;/strong&gt;건 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{selectedSamples.length}&lt;/strong&gt;건
+  &lt;/span&gt;
+  &lt;div className="pager"&gt;
+    &lt;button type="button" className="btn btn-outline btn-page-icon" aria-label="이전" disabled={selectedSamplePage &lt;= 1} onClick={() =&gt; setSelectedSamplePage((page) =&gt; page - 1)}&gt;&lt;IconChevronLeft /&gt;&lt;/button&gt;
+    &lt;span className="pager-current"&gt;{selectedSamplePage} / {selectedSamplePageCount}&lt;/span&gt;
+    &lt;button type="button" className="btn btn-outline btn-page-icon" aria-label="다음" disabled={selectedSamplePage &gt;= selectedSamplePageCount} onClick={() =&gt; setSelectedSamplePage((page) =&gt; page + 1)}&gt;&lt;IconChevronRight /&gt;&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={sampleRangeStart}
+  rangeEnd={sampleRangeEnd}
+  totalCount={selectedSamples.length}
+  currentPage={selectedSamplePage}
+  totalPages={selectedSamplePageCount}
+  onPageChange={setSelectedSamplePage}
+  previousLabel="이전 표본 답안 페이지"
+  nextLabel="다음 표본 답안 페이지"
+  noBorder
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+  </section>
+
+  <section id="d">
+    <h2>D · 한 파일에 푸터 여러 개 <span class="n">5</span></h2>
+    <p class="tight">한 파일 안에 푸터가 2~3개이고 성격이 서로 달라 마지막으로 미뤄뒀던 그룹. 표준형은 한 번에 치환하고(1단계), 죽은 pager·별도 스타일·버튼이 낀 5개는 하나씩 판단해 처리했다(2단계).</p>
+    
+      <article class="entry">
+        <header class="entry__head">
+          <h3>표본 답안 추출·채점</h3>
+          <span class="route none">위저드 1단계 — 목록에서 상세를 연 첫 화면</span>
+        </header>
+        <p class="path">src/features/grading/front-internal-standardization/components/InternalStandardizationDetailSample.tsx</p>
+        <p class="note">푸터 3개. 표본 답안 확정·표본 답안 채점은 표준 치환(채점 쪽은 · 확정 n건 을 children 으로), 학생 답안은 tstd-caption·sa-checked 스타일이라 info 로 원문을 그대로 보존했다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 1</span>
+            <div class="code del"><pre>&lt;div className="users-footer no-border"&gt;
+  &lt;div className="tstd-caption"&gt;
+    선택 &lt;span className="sa-checked"&gt;{manualSelectedCount}&lt;/span&gt;건
+  &lt;/div&gt;
+  &lt;Pagination
+      currentPage={candidateCurrentPage}
+      totalPages={candidateTotalPages}
+      onPageChange={setCandidatePage}
+      disabled={loading}
+      className="ml-auto"
+      previousLabel="이전 학생 답안 페이지"
+      nextLabel="다음 학생 답안 페이지"
+  /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 1</span>
+            <div class="code add"><pre>&lt;TableListFooter
+    info={(
+      &lt;div className="tstd-caption"&gt;
+        선택 &lt;span className="sa-checked"&gt;{manualSelectedCount}&lt;/span&gt;건
+      &lt;/div&gt;
+    )}
+    currentPage={candidateCurrentPage}
+    totalPages={candidateTotalPages}
+    onPageChange={setCandidatePage}
+    paginationDisabled={loading}
+    previousLabel="이전 학생 답안 페이지"
+    nextLabel="다음 학생 답안 페이지"
+    noBorder
+/&gt;</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 2</span>
+            <div class="code del"><pre>&lt;div className="users-footer no-border"&gt;
+  &lt;span&gt;
+    현재 &lt;strong className="count-number"&gt;{selectedRangeStart}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{selectedRangeEnd}&lt;/strong&gt;건 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{selectedSamples.length}&lt;/strong&gt;건
+  &lt;/span&gt;
+  &lt;Pagination
+      currentPage={selectedCurrentPage}
+      totalPages={selectedTotalPages}
+      onPageChange={setSelectedPage}
+      previousLabel="이전 표본 답안 페이지"
+      nextLabel="다음 표본 답안 페이지"
+  /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 2</span>
+            <div class="code add"><pre>&lt;TableListFooter
+    rangeStart={selectedRangeStart}
+    rangeEnd={selectedRangeEnd}
+    totalCount={selectedSamples.length}
+    currentPage={selectedCurrentPage}
+    totalPages={selectedTotalPages}
+    onPageChange={setSelectedPage}
+    previousLabel="이전 표본 답안 페이지"
+    nextLabel="다음 표본 답안 페이지"
+    noBorder
+/&gt;</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 3</span>
+            <div class="code del"><pre>&lt;div className="users-footer no-border"&gt;
+  &lt;span&gt;
+    현재 &lt;strong className="count-number"&gt;{scoringRangeStart}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{scoringRangeEnd}&lt;/strong&gt;건 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{selectedSamples.length}&lt;/strong&gt;건
+    {" · "}확정 &lt;strong className="count-number"&gt;{selectedBaseScoredCount}&lt;/strong&gt;건
+  &lt;/span&gt;
+  &lt;Pagination
+      currentPage={scoringCurrentPage}
+      totalPages={selectedTotalPages}
+      onPageChange={setScoringPage}
+      previousLabel="이전 표본 채점 페이지"
+      nextLabel="다음 표본 채점 페이지"
+  /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 3</span>
+            <div class="code add"><pre>&lt;TableListFooter
+    rangeStart={scoringRangeStart}
+    rangeEnd={scoringRangeEnd}
+    totalCount={selectedSamples.length}
+    currentPage={scoringCurrentPage}
+    totalPages={selectedTotalPages}
+    onPageChange={setScoringPage}
+    previousLabel="이전 표본 채점 페이지"
+    nextLabel="다음 표본 채점 페이지"
+    noBorder
+&gt;
+  &lt;span&gt;{" · "}확정 &lt;strong className="count-number"&gt;{selectedBaseScoredCount}&lt;/strong&gt;건&lt;/span&gt;
+&lt;/TableListFooter&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>표본 답안 확정 · 채점자 최종 확정</h3>
+          <span class="route none">위저드 4단계 — 상세에서 다음 3번</span>
+        </header>
+        <p class="path">src/features/grading/front-internal-standardization/components/InternalStandardizationDetailConfirm.tsx</p>
+        <p class="note">푸터 2개 모두 이전·다음이 항상 disabled 이고 1 / 1 이 고정된 껍데기 pager 였다. 페이지 상태(useState·slice)가 아예 없어 늘어날 수 없는 구조라 걷어냈다. 긴 요약은 info 로 보존.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 1</span>
+            <div class="code del"><pre>&lt;div className="users-footer no-border"&gt;
+  &lt;span&gt;총 &lt;strong className="count-number"&gt;{seedSettingSummaries.length}&lt;/strong&gt;명&lt;/span&gt;
+  &lt;div className="pager"&gt;
+    &lt;button type="button" className="btn btn-outline btn-page-icon" aria-label="이전" disabled&gt;
+      &lt;IconChevronLeft /&gt;
+    &lt;/button&gt;
+    &lt;span className="pager-current"&gt;1 / 1&lt;/span&gt;
+    &lt;button type="button" className="btn btn-outline btn-page-icon" aria-label="다음" disabled&gt;
+      &lt;IconChevronRight /&gt;
+    &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 1</span>
+            <div class="code add"><pre>{/* 전체를 한 번에 보여주는 목록이라 페이지네이션 없이 총계만 표기한다 */}
+&lt;TableListFooter totalCount={seedSettingSummaries.length} unit="명" noBorder /&gt;</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 2</span>
+            <div class="code del"><pre>&lt;div className="users-footer no-border"&gt;
+  &lt;div className="users-footer__info"&gt;
+    선택 &lt;strong className="count-number"&gt;{selectedScorerIds.size + selectedSeniorScorerIds.size}&lt;/strong&gt;명
+    {" · "}
+    확정 채점교사 &lt;strong className="count-number"&gt;{finalConfirmedCount}&lt;/strong&gt;명
+    {" · "}
+    선임 참여 &lt;strong className="count-number"&gt;{seniorParticipants.length}&lt;/strong&gt;명
+    {showMainScoringSetup &amp;&amp; &lt;&gt;
+      일반학생 배분 &lt;strong className="count-number"&gt;{assignedRegularStudentCount}&lt;/strong&gt;명
+      {" / "}
+      일반답안 &lt;strong className="count-number"&gt;{assignedRegularCount}&lt;/strong&gt;건
+    &lt;/&gt;}
+    {showMainScoringSetup &amp;&amp; seedAnswerCount &gt; 0 &amp;&amp; (
+        &lt;&gt;
+          {" · "}
+          시드 &lt;strong className="count-number"&gt;{seedStudentCount}&lt;/strong&gt;명
+          {" / "}
+          전체 답안 &lt;strong className="count-number"&gt;{seedAnswerCount}&lt;/strong&gt;건
+        &lt;/&gt;
+    )}
+    {confirmation?.practicePassRate !== null &amp;&amp; confirmation?.practicePassRate !== undefined
+        ? ` · 기준 ${confirmation.practicePassRate}%`
+        : ""}
+  &lt;/div&gt;
+  &lt;div className="pager ml-auto"&gt;
+    &lt;button type="button" className="btn btn-outline btn-page-icon" aria-label="이전" disabled&gt;
+      &lt;IconChevronLeft /&gt;
+    &lt;/button&gt;
+    &lt;span className="pager-current"&gt;1 / 1&lt;/span&gt;
+    &lt;button type="button" className="btn btn-outline btn-page-icon" aria-label="다음" disabled&gt;
+      &lt;IconChevronRight /&gt;
+    &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 2</span>
+            <div class="code add"><pre>{/* 전체를 한 번에 보여주는 목록이라 페이지네이션 없이 요약만 표기한다 */}
+&lt;TableListFooter
+  noBorder
+  info={(
+    &lt;div className="users-footer__info"&gt;
+      선택 &lt;strong className="count-number"&gt;{selectedScorerIds.size + selectedSeniorScorerIds.size}&lt;/strong&gt;명
+      확정 채점교사 &lt;strong className="count-number"&gt;{finalConfirmedCount}&lt;/strong&gt;명
+      {" · "}
+      선임 참여 &lt;strong className="count-number"&gt;{seniorParticipants.length}&lt;/strong&gt;명
+      {showMainScoringSetup &amp;&amp; &lt;&gt;
+        {" · "}
+        일반학생 배분 &lt;strong className="count-number"&gt;{assignedRegularStudentCount}&lt;/strong&gt;명
+        {" / "}
+        일반답안 &lt;strong className="count-number"&gt;{assignedRegularCount}&lt;/strong&gt;건
+      &lt;/&gt;}
+      {showMainScoringSetup &amp;&amp; seedAnswerCount &gt; 0 &amp;&amp; (
+          &lt;&gt;
+            {" · "}
+            시드 &lt;strong className="count-number"&gt;{seedStudentCount}&lt;/strong&gt;명
+            {" / "}
+            전체 답안 &lt;strong className="count-number"&gt;{seedAnswerCount}&lt;/strong&gt;건
+          &lt;/&gt;
+      )}
+      {confirmation?.practicePassRate !== null &amp;&amp; confirmation?.practicePassRate !== undefined
+          ? ` · 기준 ${confirmation.practicePassRate}%`
+          : ""}
+    &lt;/div&gt;
+  )}
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>답안 미리보기 모달</h3>
+          <span class="route none">4단계 시드답안 설정 패널의 「시드 답안 설정」 버튼</span>
+        </header>
+        <p class="path">src/features/grading/front-internal-standardization/components/SeedAnswerModal.tsx</p>
+        <p class="note">좌측 표기 없이 죽은 pager 만 있던 자리. 빈 푸터를 남기는 대신 전체 n건 을 넣었다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer gap-3"&gt;
+  &lt;div className="pager ml-auto"&gt;
+    &lt;button type="button" className="btn btn-outline btn-page-icon" aria-label="이전" disabled&gt;
+      &lt;IconChevronLeft /&gt;
+    &lt;/button&gt;
+    &lt;span className="pager-current"&gt;1 / 1&lt;/span&gt;
+    &lt;button type="button" className="btn btn-outline btn-page-icon" aria-label="다음" disabled&gt;
+      &lt;IconChevronRight /&gt;
+    &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>{/* 전체를 한 번에 보여주는 목록이라 페이지네이션 없이 총계만 표기한다 */}
+&lt;TableListFooter className="gap-3" totalCount={candidates.length} /&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>연습채점(교사)</h3>
+          <span class="route none">경로에 파라미터 필요 — /grading/internal-standardization/teacher/{designId}</span>
+        </header>
+        <p class="path">src/features/grading/front-internal-standardization/pages/InternalStandardizationTeacherPage.tsx</p>
+        <p class="note">살아있는 푸터 2개. 본채점 배정은 · 미채점 n건 을 children 으로, 연습채점 마감 푸터는 건수와 페이지네이션 사이의 마감 버튼을 children 으로 옮겨 순서를 유지했다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 1</span>
+            <div class="code del"><pre>&lt;footer className="users-footer gap-3"&gt;
+  &lt;span&gt;
+    현재 &lt;strong className="count-number"&gt;{mainRangeStart}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{mainRangeEnd}&lt;/strong&gt;건 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{mainAssignments.length}&lt;/strong&gt;건
+    {mainRemainingCount &gt; 0 &amp;&amp; &lt;&gt; · 미채점 &lt;strong className="count-number"&gt;{mainRemainingCount}&lt;/strong&gt;건&lt;/&gt;}
+  &lt;/span&gt;
+  &lt;Pagination className="ml-auto" currentPage={mainSafePage} totalPages={mainTotalPages} onPageChange={setMainPage} /&gt;
+&lt;/footer&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 1</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  className="gap-3"
+  rangeStart={mainRangeStart}
+  rangeEnd={mainRangeEnd}
+  totalCount={mainAssignments.length}
+  currentPage={mainSafePage}
+  totalPages={mainTotalPages}
+  onPageChange={setMainPage}
+  previousLabel="이전 본채점 배정 페이지"
+  nextLabel="다음 본채점 배정 페이지"
+&gt;
+  {mainRemainingCount &gt; 0 &amp;&amp; &lt;span&gt; · 미채점 &lt;strong className="count-number"&gt;{mainRemainingCount}&lt;/strong&gt;건&lt;/span&gt;}
+&lt;/TableListFooter&gt;</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 2</span>
+            <div class="code del"><pre>&lt;footer className="users-footer gap-3"&gt;
+  &lt;span&gt;
+    총 &lt;strong className="count-number"&gt;{queue.length}&lt;/strong&gt;건
+    {unsavedCount &gt; 0 &amp;&amp; &lt;&gt; · 미저장 &lt;strong className="count-number"&gt;{unsavedCount}&lt;/strong&gt;건&lt;/&gt;}
+  &lt;/span&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 2</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  className="gap-3"
+  totalCount={queue.length}
+  currentPage={safePage}
+  totalPages={totalPages}
+  onPageChange={setPage}
+  previousLabel="이전 연습채점 페이지"
+  nextLabel="다음 연습채점 페이지"
+&gt;
+  {unsavedCount &gt; 0 &amp;&amp; &lt;span&gt; · 미저장 &lt;strong className="count-number"&gt;{unsavedCount}&lt;/strong&gt;건&lt;/span&gt;}</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 3</span>
+            <div class="code del"><pre>  &lt;Pagination currentPage={safePage} totalPages={totalPages} onPageChange={setPage} /&gt;
+&lt;/footer&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 3</span>
+            <div class="code add"><pre>&lt;/TableListFooter&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>학생 배정</h3>
+          <span class="route none">평가설계 4단계 — /tds/evaluations/{regId}/designs/new</span>
+        </header>
+        <p class="path">src/features/tds/evaluation-design/pages/design-all-in-one/Step4StudentsPanel.tsx</p>
+        <p class="note">푸터 2개. 단위는 명 · 학급 으로 각각 유지했고, 학생 목록 푸터 안에 주석으로 남아 있던 옛 .pager 마크업 24줄도 함께 걷어냈다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 1</span>
+            <div class="code del"><pre>    &lt;div className="users-footer no-border"&gt;
+      &lt;span className="text-theme-text-muted"&gt;
+        현재 &lt;strong className="count-number"&gt;{pagedStudents.length === 0 ? 0 : (currentPage - 1) * STUDENT_PAGE_SIZE + 1}&lt;/strong&gt;–
+        &lt;strong className="count-number"&gt;{(currentPage - 1) * STUDENT_PAGE_SIZE + pagedStudents.length}&lt;/strong&gt;명 / 총 &amp;nbsp;
+        &lt;strong className="count-number"&gt;{filteredStudents.length}&lt;/strong&gt;명
+      &lt;/span&gt;
+      &lt;Pagination currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage} /&gt;
+      {/*
+&lt;div className="pager"&gt;
+  &lt;button
+      type="button"
+      className="btn btn-outline btn-page-icon"
+      aria-label="이전"
+      disabled={currentPage &lt;= 1}
+      onClick={() =&gt; setCurrentPage((p) =&gt; Math.max(1, p - 1))}
+  &gt;
+    &lt;ChevronLeftIcon /&gt;
+  &lt;/button&gt;
+  &lt;span className="pager-current"&gt;
+    {currentPage} / {totalPages}
+  &lt;/span&gt;
+  &lt;button
+      type="button"
+      className="btn btn-outline btn-page-icon"
+      aria-label="다음"
+      disabled={currentPage &gt;= totalPages}
+      onClick={() =&gt; setCurrentPage((p) =&gt; Math.min(totalPages, p + 1))}
+  &gt;
+    &lt;ChevronRightIcon /&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+*/}
+    &lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 1</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={pagedStudents.length === 0 ? 0 : (currentPage - 1) * STUDENT_PAGE_SIZE + 1}
+  rangeEnd={(currentPage - 1) * STUDENT_PAGE_SIZE + pagedStudents.length}
+  totalCount={filteredStudents.length}
+  unit="명"
+  currentPage={currentPage}
+  totalPages={totalPages}
+  onPageChange={setCurrentPage}
+  previousLabel="이전 학생 목록 페이지"
+  nextLabel="다음 학생 목록 페이지"
+  noBorder
+/&gt;</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 2</span>
+            <div class="code del"><pre>&lt;div className="users-footer no-border"&gt;
+  &lt;span className="text-theme-text-muted"&gt;
+    현재 &lt;strong className="count-number"&gt;{pagedSchedules.length === 0 ? 0 : (schedulePage - 1) * SCHEDULE_PAGE_SIZE + 1}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{(schedulePage - 1) * SCHEDULE_PAGE_SIZE + pagedSchedules.length}&lt;/strong&gt;학급 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{classSchedules.length}&lt;/strong&gt;학급
+  &lt;/span&gt;
+  &lt;Pagination currentPage={schedulePage}
+              totalPages={scheduleTotalPages}
+              onPageChange={setSchedulePage} /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 2</span>
+            <div class="code add"><pre>&lt;TableListFooter
+  rangeStart={pagedSchedules.length === 0 ? 0 : (schedulePage - 1) * SCHEDULE_PAGE_SIZE + 1}
+  rangeEnd={(schedulePage - 1) * SCHEDULE_PAGE_SIZE + pagedSchedules.length}
+  totalCount={classSchedules.length}
+  unit="학급"
+  currentPage={schedulePage}
+  totalPages={scheduleTotalPages}
+  onPageChange={setSchedulePage}
+  previousLabel="이전 학급 일정 페이지"
+  nextLabel="다음 학급 일정 페이지"
+  noBorder
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+  </section>
+
+  <section id="panel">
+    <h2>Panel footer prop 에서 빼낸 것 <span class="n">3</span></h2>
+    <p class="tight">Panel 이 footer prop 을 .users-footer 로 감싸기 때문에 처음 조사(.users-footer 클래스 기준)에 걸리지 않았던 자리. 그대로 TableListFooter 를 넣으면 래퍼가 두 겹이 되므로 표 아래로 빼냈다.</p>
+    
+      <article class="entry">
+        <header class="entry__head">
+          <h3>파일 관리</h3>
+          <a class="route" href="http://127.0.0.1:3100/support/files" target="_blank" rel="noreferrer">/support/files</a>
+        </header>
+        <p class="path">src/features/ops/support/pages/FileManagePage.tsx</p>
+        <p class="note">Panel 의 footer prop 안에 있어 .users-footer 가 두 겹으로 중첩되던 자리. 표 바로 아래로 빼내 다른 목록 화면과 같은 구조로 맞췄다. 보이는 것은 그대로.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 1</span>
+            <div class="code del"><pre>footer={(
+  &lt;&gt;
+    &lt;span&gt;
+      현재 &lt;strong className="count-number"&gt;{loading ? 0 : rangeStart}&lt;/strong&gt;–
+      &lt;strong className="count-number"&gt;{loading ? 0 : rangeEnd}&lt;/strong&gt;건 / 총 &amp;nbsp;
+      &lt;strong className="count-number"&gt;{totalElements.toLocaleString()}&lt;/strong&gt;건
+    &lt;/span&gt;
+    &lt;Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} disabled={loading} /&gt;
+  &lt;/&gt;
+)}</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 1</span>
+            <div class="code add empty"><span>— 없음 —</span></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 2</span>
+            <div class="code del empty"><span>— 없음 —</span></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 2</span>
+            <div class="code add"><pre>
+&lt;TableListFooter
+  rangeStart={loading ? 0 : rangeStart}
+  rangeEnd={loading ? 0 : rangeEnd}
+  totalCount={totalElements}
+  currentPage={page}
+  totalPages={totalPages}
+  onPageChange={setPage}
+  paginationDisabled={loading}
+  previousLabel="이전 관리 파일 페이지"
+  nextLabel="다음 관리 파일 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>서비스 요청 검토</h3>
+          <a class="route" href="http://127.0.0.1:3100/support/requests" target="_blank" rel="noreferrer">/support/requests</a>
+        </header>
+        <p class="path">src/features/ops/support/pages/ServiceRequestReviewPage.tsx</p>
+        <p class="note">페이지네이션이 왼쪽에 붙어 있던 화면. 자식이 하나뿐이라 space-between 이 듣지 않았다. 컴포넌트가 좌측 자리를 비워 두므로 우측으로 붙는다. 건수는 패널 헤더 뱃지에 그대로 두고, 1페이지뿐일 때는 푸터째 감춘다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 1</span>
+            <div class="code del"><pre>footer={(
+  &lt;Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} disabled={loading} /&gt;
+)}</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 1</span>
+            <div class="code add empty"><span>— 없음 —</span></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 2</span>
+            <div class="code del empty"><span>— 없음 —</span></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 2</span>
+            <div class="code add"><pre>
+{/* 건수는 패널 헤더 뱃지에 있으므로 푸터는 페이지네이션만 둔다.
+    좌측 자리를 컴포넌트가 비워 두므로 페이지네이션이 우측으로 붙는다.
+    1페이지뿐이면 페이지네이션이 렌더되지 않아 빈 띠만 남으므로 푸터째 감춘다. */}
+{totalPages &gt; 1 &amp;&amp; (
+  &lt;TableListFooter
+    currentPage={page}
+    totalPages={totalPages}
+    onPageChange={setPage}
+    paginationDisabled={loading}
+    previousLabel="이전 요청 목록 페이지"
+    nextLabel="다음 요청 목록 페이지"
+  /&gt;
+)}</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>플랫폼 사용 통계 · 빈 띠 보정</h3>
+          <a class="route" href="http://127.0.0.1:3100/support/statistics" target="_blank" rel="noreferrer">/support/statistics</a>
+        </header>
+        <p class="path">src/features/ops/support/pages/PlatformUsageStatsPage.tsx</p>
+        <p class="note">좌측 건수 표기가 없어 1페이지뿐이면 빈 푸터 띠만 남던 화면. 서비스 요청 검토와 같은 방식으로 막았다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className="users-footer"&gt;
+  &lt;div&gt;&lt;/div&gt;
+  &lt;Pagination currentPage={eventPage} totalPages={totalEventPages} onPageChange={setEventPage} disabled={loading} /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>{/* 좌측 건수 표기가 없어 1페이지뿐이면 빈 띠만 남으므로 푸터째 감춘다 */}
+{totalEventPages &gt; 1 &amp;&amp; (
+  &lt;TableListFooter
+    currentPage={eventPage}
+    totalPages={totalEventPages}
+    onPageChange={setEventPage}
+    paginationDisabled={loading}
+    previousLabel="이전 이벤트 페이지"
+    nextLabel="다음 이벤트 페이지"
+  /&gt;
+)}</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+  </section>
+
+  <section id="last">
+    <h2>툴팁 · 화면 정리 <span class="n">2</span></h2>
+    <p class="tight">푸터 작업을 마친 뒤 화면을 보며 잡은 것. 오래 남아 있던 메시지코드의 빈 띠를 해결했고, 내 평가 목록을 공통 Panel 안에 넣었다.</p>
+    
+      <article class="entry">
+        <header class="entry__head">
+          <h3>메시지코드 · 빈 띠 해결</h3>
+          <a class="route" href="http://127.0.0.1:3100/admin/message-codes" target="_blank" rel="noreferrer">/admin/message-codes</a>
+        </header>
+        <p class="path">src/features/ops/message-codes/pages/MessageCodesPage.tsx</p>
+        <p class="note">오른쪽에 늘 남던 빈 띠의 원인은 삭제 버튼의 툴팁이었다. aria-label 을 다른 21곳과 같은 짧은 동사로 바꾸고, colgroup 은 같은 페이지의 변경 이력 표와 같은 px + minWidth 방식으로 맞췄다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>  {/* colgroup 합계 1080(150+110+310+150+120+150+90).
+      메시지 내용은 폭이 없어 '남는 자리'만 받아 좁은 화면에서 먼저 뭉개졌다.
+      이보다 좁아지면 감싼 .box 가 가로 스크롤한다. */}
+  &lt;table className="users-table" style={{ minWidth: 1080 }}&gt;
+      &lt;col style={{ width: '110px' }} /&gt;
+      &lt;col style={{ width: '310px' }} /&gt;
+      &lt;col style={{ width: '150px' }} /&gt;
+      &lt;col style={{ width: '120px' }} /&gt;
+              aria-label={`${row.messageCode} 삭제`}
+{/* 안내 배너·저장 버튼은 .box 밖에 둔다. 안에 넣으면 표(1080px)와 폭이 달라
+    가로 스크롤 시 오른쪽에 빈 영역이 남는다. 다른 목록 화면도 .box 안에는
+    표만 둔다. */}
+&lt;div className="px-4"&gt;
+&lt;div className="users-footer"&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>{/* box-scroll-x 로 세로 축을 잠근다. 기본 overflow: auto 는 양축이라
+    세로 스크롤바가 따라 생긴다. */}
+  {/* colgroup 합계 1050(150+100+320+150+90+160+80).
+      같은 페이지의 '변경 이력' 표와 같은 방식이다. 백분율로 두었을 때만
+      오른쪽에 빈 띠가 남았고, px + minWidth 로 맞춘 변경 이력 쪽은 멀쩡했다.
+      .users-table 이 이미 table-layout: fixed 라 별도 클래스는 필요 없다. */}
+  &lt;table className="users-table" style={{ minWidth: 1050 }}&gt;
+      &lt;col style={{ width: '100px' }} /&gt;
+      &lt;col style={{ width: '320px' }} /&gt;
+      &lt;col style={{ width: '160px' }} /&gt;
+      &lt;col style={{ width: '80px' }} /&gt;
+              aria-label="삭제"
+{/* 안내 배너·저장 버튼은 표 박스 밖에 둔다. 안에 넣으면 표와 폭이 달라
+    가로 스크롤 시 오른쪽에 빈 영역이 남는다.
+    좌우 패딩은 빼서 배너가 표와 같은 폭으로 서게 하고,
+    표와 붙지 않도록 위 간격만 준다. */}
+&lt;div className="mt-3"&gt;
+&lt;TableListFooter&gt;
+&lt;/TableListFooter&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>내 평가 · 패널화</h3>
+          <a class="route" href="http://127.0.0.1:3100/my/evaluations" target="_blank" rel="noreferrer">/my/evaluations</a>
+        </header>
+        <p class="path">src/features/ops/my-work/pages/MyEvaluationsPage.tsx</p>
+        <p class="note">탭 3개(응시 대기·진행 중·완료)가 같은 tabpanel 을 공유하므로 한 번만 감쌌다. 패널 제목이 현재 탭을 따라가고 헤더 우측에 건수를 표기한다. 로딩·오류·빈 목록 안내도 패널 안으로 들어온다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>{assignmentWarning &amp;&amp; error === null &amp;&amp; (
+  &lt;div className="py-3" role="status"&gt;
+    &lt;p className="text-sm" style={{ color: 'var(--color-warning, #b45309)' }}&gt;{assignmentWarning}&lt;/p&gt;
+    &lt;button
+      type="button"
+      className="btn btn-secondary btn-shadow"
+      onClick={() =&gt; refreshExams({ includeAssignments: true })}
+      style={{ marginTop: '0.5rem' }}
+    &gt;
+      과제 목록 다시 시도
+    &lt;/button&gt;
+  &lt;/div&gt;
+)}
+{loading ? (
+  &lt;ExamListSkeleton /&gt;
+) : error !== null ? (
+  &lt;div className="py-8 text-center" role="alert"&gt;
+    &lt;p className="text-sm" style={{ color: 'var(--color-danger, #ef4444)' }}&gt;{error}&lt;/p&gt;
+  &lt;/div&gt;
+) : exams.length &gt; 0 ? (
+  &lt;div className="tds-exam-list"&gt;
+    {exams.map((exam) =&gt; (
+      &lt;ExamCard key={exam.id} exam={exam} /&gt;
+    ))}
+  &lt;/div&gt;
+) : (
+  &lt;ExamListEmpty /&gt;
+)}</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>{/* 탭 3개(응시 대기·진행 중·완료)가 이 tabpanel 을 공유하므로 패널은 한 번만 감싼다.
+    건수는 탭마다 달라지므로 헤더 우측에 현재 탭 기준으로 표기한다. */}
+&lt;Panel
+  title={TABS.find((t) =&gt; t.key === activeTab)?.label}
+  icon={&lt;IconCheckBoad size={18} /&gt;}
+  actions={!loading &amp;&amp; error === null
+    ? &lt;span className="badge badge-dot badge-role"&gt;{exams.length}건&lt;/span&gt;
+    : undefined}
+  headerLine
+&gt;
+  {assignmentWarning &amp;&amp; error === null &amp;&amp; (
+    &lt;div className="py-3" role="status"&gt;
+      &lt;p className="text-sm" style={{ color: 'var(--color-warning, #b45309)' }}&gt;{assignmentWarning}&lt;/p&gt;
+      &lt;button
+        type="button"
+        className="btn btn-secondary btn-shadow"
+        onClick={() =&gt; refreshExams({ includeAssignments: true })}
+        style={{ marginTop: '0.5rem' }}
+      &gt;
+        과제 목록 다시 시도
+      &lt;/button&gt;
+    &lt;/div&gt;
+  )}
+  {loading ? (
+    &lt;ExamListSkeleton /&gt;
+  ) : error !== null ? (
+    &lt;div className="py-8 text-center" role="alert"&gt;
+      &lt;p className="text-sm" style={{ color: 'var(--color-danger, #ef4444)' }}&gt;{error}&lt;/p&gt;
+    &lt;/div&gt;
+  ) : exams.length &gt; 0 ? (
+    &lt;div className="tds-exam-list"&gt;
+      {exams.map((exam) =&gt; (
+        &lt;ExamCard key={exam.id} exam={exam} /&gt;
+      ))}
+    &lt;/div&gt;
+  ) : (
+    &lt;ExamListEmpty /&gt;
+  )}
+&lt;/Panel&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+  </section>
+
+  <section id="label">
+    <h2>아이콘 버튼 라벨 정리 <span class="n">4</span></h2>
+    <p class="tight">.btn-icon 은 aria-label 을 그대로 hover 툴팁 텍스트로 쓴다. nowrap 이라 긴 값을 주면 스크롤 박스 밖으로 삐져나가 빈 띠를 만들거나 잘린다. 가이드와 나머지 21곳의 규약대로 짧은 동사로 두고 대상 이름은 title 로 옮겼다.</p>
+    
+      <article class="entry">
+        <header class="entry__head">
+          <h3>분류 게시판 관리</h3>
+          <a class="route" href="http://127.0.0.1:3100/admin/reference-data/category-boards" target="_blank" rel="noreferrer">/admin/reference-data/category-boards</a>
+        </header>
+        <p class="path">src/features/ops/reference-data/pages/admin/CategoryBoardsPage.tsx</p>
+        <p class="note">교재 제목이 통째로 툴팁이 되어 표 밖으로 잘렸다. 다운로드·수정·삭제 3곳 모두 aria-label 은 짧은 동사로, 대상 이름은 title 로 옮겼다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>            aria-label={`${item.title} 다운로드`}
+                aria-label={`${item.title} 수정`}
+                aria-label={`${item.title} 삭제`}
+&lt;div className="users-footer"&gt;
+  &lt;span className="text-muted"&gt;
+    현재 &lt;strong className="count-number"&gt;{loading ? 0 : rangeStart}&lt;/strong&gt;–
+    &lt;strong className="count-number"&gt;{loading ? 0 : rangeEnd}&lt;/strong&gt;건 / 총 &amp;nbsp;
+    &lt;strong className="count-number"&gt;{total.toLocaleString()}&lt;/strong&gt;건
+  &lt;/span&gt;
+  &lt;Pagination
+    currentPage={page}
+    totalPages={Math.max(1, result?.totalPages ?? 1)}
+    disabled={loading}
+    onPageChange={setPage}
+  /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>            aria-label="다운로드"
+            title={`${item.title} 다운로드`}
+                aria-label="수정"
+                title={`${item.title} 수정`}
+                aria-label="삭제"
+                title={`${item.title} 삭제`}
+&lt;TableListFooter
+  rangeStart={loading ? 0 : rangeStart}
+  rangeEnd={loading ? 0 : rangeEnd}
+  totalCount={total}
+  currentPage={page}
+  totalPages={Math.max(1, result?.totalPages ?? 1)}
+  onPageChange={setPage}
+  paginationDisabled={loading}
+  previousLabel="이전 게시판 목록 페이지"
+  nextLabel="다음 게시판 목록 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>커뮤니티 첨부 필드</h3>
+          <span class="route none">커뮤니티 글쓰기·수정의 첨부 영역</span>
+        </header>
+        <p class="path">src/features/ops/common/components/CommunityAttachmentField.tsx</p>
+        <p class="note">파일명이 통째로 툴팁이 되던 3곳.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>  aria-label={`${attachment.fileName} 다운로드`}
+aria-label={`${attachment.fileName} 삭제`}
+aria-label={`${file.name} 삭제`}</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>  aria-label="다운로드"
+  title={`${attachment.fileName} 다운로드`}
+aria-label="삭제"
+title={`${attachment.fileName} 삭제`}
+aria-label="삭제"
+title={`${file.name} 삭제`}</pre></div>
+          </div>
+        </div>
+        
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>자료 공유</h3>
+          <a class="route" href="http://127.0.0.1:3100/community/share" target="_blank" rel="noreferrer">/community/share</a>
+        </header>
+        <p class="path">src/features/ops/common/pages/ResourcesPage.tsx</p>
+        <p class="note">자료 제목이 툴팁이 되던 2곳. 첨부 선택은 title 이 이미 있어 라벨만 줄였다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>const lastRow = Math.min(firstRow + items.length - 1, totalElements);
+                        aria-label={`${item.title} 첨부 ${item.attachments.length}개 선택`}
+                        aria-label={`${item.title} 첨부 파일 다운로드`}
+        &lt;div className="users-footer"&gt;
+          &lt;span className="text-muted"&gt;
+            현재 &lt;strong className="count-number"&gt;{firstRow}&lt;/strong&gt;–
+            &lt;strong className="count-number"&gt;{lastRow}&lt;/strong&gt;건 / 총 &amp;nbsp;
+            &lt;strong className="count-number"&gt;{totalElements.toLocaleString()}&lt;/strong&gt;건
+          &lt;/span&gt;
+          &lt;Pagination
+            currentPage={query.page}
+            totalPages={Math.max(1, result?.totalPages ?? 1)}
+            onPageChange={(nextPage) =&gt; patchQuery({ page: nextPage }, { resetPage: false })}
+            disabled={loading}
+            previousLabel="이전 페이지"
+            nextLabel="다음 페이지"
+          /&gt;
+        &lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>// 목록이 비면 firstRow 가 0 이라 -1 이 나온다. 빈 목록은 0 으로 둔다
+const lastRow = items.length === 0 ? 0 : Math.min(firstRow + items.length - 1, totalElements);
+                        aria-label="첨부 선택"
+                        aria-label="다운로드"
+                        title={`${item.title} 첨부 파일 다운로드`}
+        &lt;TableListFooter
+          rangeStart={firstRow}
+          rangeEnd={lastRow}
+          totalCount={totalElements}
+          currentPage={query.page}
+          totalPages={Math.max(1, result?.totalPages ?? 1)}
+          onPageChange={(nextPage) =&gt; patchQuery({ page: nextPage }, { resetPage: false })}
+          paginationDisabled={loading}
+          previousLabel="이전 페이지"
+          nextLabel="다음 페이지"
+        /&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>연합 목록</h3>
+          <a class="route" href="http://127.0.0.1:3100/evaluation/unions" target="_blank" rel="noreferrer">/evaluation/unions</a>
+        </header>
+        <p class="path">src/features/ops/unions/pages/UnionsPage.tsx</p>
+        <p class="note">title 이 이미 있어 대상 이름과 합쳤다. 같은 속성을 두 번 쓰면 JSX 가 컴파일되지 않는다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>aria-label={`${row.unionName} 삭제`}
+title="작성 중 연합 삭제"</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>aria-label="삭제"
+title={`${row.unionName} 작성 중 연합 삭제`}</pre></div>
+          </div>
+        </div>
+        
+      </article>
+  </section>
+
+  <section id="filter">
+    <h2>조회 필터 위치 <span class="n">3</span></h2>
+    <p class="tight">패널 헤더에 있던 조회 필터를 탭 줄 우측으로 옮겼다. 메시지코드 화면이 이미 쓰던 방식(조회 조건 줄에 탭과 필터를 함께 두기)에 맞춘 것으로, 패널 헤더에는 제목·건수·액션만 남는다.</p>
+    
+      <article class="entry">
+        <header class="entry__head">
+          <h3>알림관리</h3>
+          <a class="route" href="http://127.0.0.1:3100/admin/notifications" target="_blank" rel="noreferrer">/admin/notifications</a>
+        </header>
+        <p class="path">src/features/ops/common/pages/NotificationManagePage.tsx</p>
+        <p class="note">탭마다 조건이 달라 현재 탭의 필터만 렌더한다. 템플릿은 유형·상태·검색, 발송 이력은 유형·상태·소스 서비스. 수동 발송 탭은 필터가 없어 그대로다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>actions={
+  &lt;div style={compactToolbarStyle}&gt;
+    &lt;select className="form-select" value={templateCategory} onChange={(event) =&gt; setTemplateCategory(event.target.value)} style={{ width: 180 }}&gt;
+      &lt;option value="all"&gt;모든 유형&lt;/option&gt;
+      {CATEGORY_OPTIONS.map((item) =&gt; (
+          &lt;option key={item.code} value={item.code}&gt;{item.label}&lt;/option&gt;
+      ))}
+    &lt;/select&gt;
+    &lt;select className="form-select" value={templateActive} onChange={(event) =&gt; setTemplateActive(event.target.value as ActiveFilter)} style={{ width: 150 }}&gt;
+      &lt;option value="all"&gt;전체 상태&lt;/option&gt;
+      &lt;option value="active"&gt;활성&lt;/option&gt;
+      &lt;option value="inactive"&gt;비활성&lt;/option&gt;
+    &lt;/select&gt;
+    &lt;div className="search-input-wrap"&gt;
+      &lt;IconSearch /&gt;
+      &lt;input
+          className="form-input form-input--search"
+          value={templateKeyword}
+          onChange={(event) =&gt; setTemplateKeyword(event.target.value)}
+          placeholder="이벤트, 제목 검색"
+          autoComplete="off"
+          style={{ minWidth: 240 }}
+      /&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+}&gt;
+           actions={&lt;&gt;
+        &lt;select className="form-select" value={eventCategory} onChange={(event) =&gt; setEventCategory(event.target.value)} style={{ width: 180 }}&gt;
+          &lt;option value="all"&gt;모든 유형&lt;/option&gt;
+          {CATEGORY_OPTIONS.map((item) =&gt; (
+              &lt;option key={item.code} value={item.code}&gt;{item.label}&lt;/option&gt;
+          ))}
+        &lt;/select&gt;
+        &lt;select className="form-select" value={eventStatus} onChange={(event) =&gt; setEventStatus(event.target.value)} style={{ width: 140 }}&gt;
+          &lt;option value="all"&gt;전체 상태&lt;/option&gt;
+          {EVENT_STATUS_OPTIONS.map((item) =&gt; (
+              &lt;option key={item.code} value={item.code}&gt;{item.label}&lt;/option&gt;
+          ))}
+        &lt;/select&gt;
+        &lt;div className="search-input-wrap"&gt;
+          &lt;IconSearch /&gt;
+          &lt;input
+              className="form-input form-input--search"
+              value={eventSourceService}
+              onChange={(event) =&gt; setEventSourceService(event.target.value)}
+              placeholder="소스 서비스"
+              autoComplete="off"
+          /&gt;
+        &lt;/div&gt;
+   &lt;/&gt;}&gt;
+            &lt;div className="users-footer"&gt;
+              &lt;span className="text-muted"&gt;
+                현재 &lt;strong className="count-number"&gt;{(eventPage - 1) * EVENT_PAGE_SIZE + 1}&lt;/strong&gt;–
+                &lt;strong className="count-number"&gt;{(eventPage - 1) * EVENT_PAGE_SIZE + events.length}&lt;/strong&gt;건 / 총 &amp;nbsp;
+                &lt;strong className="count-number"&gt;{eventTotal.toLocaleString('ko-KR')}&lt;/strong&gt;건
+              &lt;/span&gt;
+              &lt;Pagination currentPage={Math.min(eventPage, eventTotalPages)}
+                          totalPages={eventTotalPages}
+                          onPageChange={setEventPage} /&gt;
+            &lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>
+    {/* 필터는 패널 헤더가 아니라 탭 줄 우측에 둔다. 탭마다 조건이 다르므로
+        현재 탭의 것만 렌더한다. ml-auto 로 오른쪽 끝에 붙인다. */}
+    {tab === 'templates' &amp;&amp; (
+      &lt;div className="flex flex-wrap items-center gap-2 ml-auto"&gt;
+        &lt;select className="form-select" value={templateCategory} onChange={(event) =&gt; setTemplateCategory(event.target.value)} style={{ width: 180 }}&gt;
+          &lt;option value="all"&gt;모든 유형&lt;/option&gt;
+          {CATEGORY_OPTIONS.map((item) =&gt; (
+            &lt;option key={item.code} value={item.code}&gt;{item.label}&lt;/option&gt;
+          ))}
+        &lt;/select&gt;
+        &lt;select className="form-select" value={templateActive} onChange={(event) =&gt; setTemplateActive(event.target.value as ActiveFilter)} style={{ width: 150 }}&gt;
+          &lt;option value="all"&gt;전체 상태&lt;/option&gt;
+          &lt;option value="active"&gt;활성&lt;/option&gt;
+          &lt;option value="inactive"&gt;비활성&lt;/option&gt;
+        &lt;/select&gt;
+        &lt;div className="search-input-wrap"&gt;
+          &lt;IconSearch /&gt;
+          &lt;input
+            className="form-input form-input--search"
+            value={templateKeyword}
+            onChange={(event) =&gt; setTemplateKeyword(event.target.value)}
+            placeholder="이벤트, 제목 검색"
+            autoComplete="off"
+            style={{ minWidth: 240 }}
+          /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    )}
+
+    {tab === 'events' &amp;&amp; (
+      &lt;div className="flex flex-wrap items-center gap-2 ml-auto"&gt;
+        &lt;select className="form-select" value={eventCategory} onChange={(event) =&gt; setEventCategory(event.target.value)} style={{ width: 180 }}&gt;
+          &lt;option value="all"&gt;모든 유형&lt;/option&gt;
+          {CATEGORY_OPTIONS.map((item) =&gt; (
+            &lt;option key={item.code} value={item.code}&gt;{item.label}&lt;/option&gt;
+          ))}
+        &lt;/select&gt;
+        &lt;select className="form-select" value={eventStatus} onChange={(event) =&gt; setEventStatus(event.target.value)} style={{ width: 140 }}&gt;
+          &lt;option value="all"&gt;전체 상태&lt;/option&gt;
+          {EVENT_STATUS_OPTIONS.map((item) =&gt; (
+            &lt;option key={item.code} value={item.code}&gt;{item.label}&lt;/option&gt;
+          ))}
+        &lt;/select&gt;
+        &lt;div className="search-input-wrap"&gt;
+          &lt;IconSearch /&gt;
+          &lt;input
+            className="form-input form-input--search"
+            value={eventSourceService}
+            onChange={(event) =&gt; setEventSourceService(event.target.value)}
+            placeholder="소스 서비스"
+            autoComplete="off"
+          /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    )}
+&gt;
+           &gt;
+            &lt;TableListFooter
+              rangeStart={(eventPage - 1) * EVENT_PAGE_SIZE + 1}
+              rangeEnd={(eventPage - 1) * EVENT_PAGE_SIZE + events.length}
+              totalCount={eventTotal}
+              currentPage={Math.min(eventPage, eventTotalPages)}
+              totalPages={eventTotalPages}
+              onPageChange={setEventPage}
+              previousLabel="이전 발송 이벤트 페이지"
+              nextLabel="다음 발송 이벤트 페이지"
+            /&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>공지사항·도움말</h3>
+          <a class="route" href="http://127.0.0.1:3100/support/notices" target="_blank" rel="noreferrer">/support/notices</a>
+        </header>
+        <p class="path">src/features/ops/common/pages/NoticeHelpPage.tsx</p>
+        <p class="note">유형·기간·검색을 탭 줄로 옮겼다. 검색 placeholder 가 메시지코드 내용 검색 으로 잘못 들어가 있어 제목 검색 으로 고쳤다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>   actions={&lt;&gt;
+    &lt;select className="form-select"&gt;
+      &lt;option&gt;전체&lt;/option&gt;
+      &lt;option&gt;시스템&lt;/option&gt;
+      &lt;option&gt;업무&lt;/option&gt;
+    &lt;/select&gt;
+    &lt;select className="form-select"&gt;
+      &lt;option&gt;최근3개월&lt;/option&gt;
+    &lt;/select&gt;
+     &lt;div className="search-input-wrap"&gt;
+       &lt;IconSearch size={15}/&gt;
+       &lt;input type="text"
+              className="form-input form-input--search"
+              placeholder="메시지코드 내용 검색"/&gt;
+     &lt;/div&gt;
+   &lt;/&gt;}&gt;
+&lt;div className="users-footer"&gt;
+  &lt;span className="text-muted"&gt;현재 &lt;strong className="count-number"&gt;1&lt;/strong&gt;–&lt;strong className="count-number"&gt;5&lt;/strong&gt;건 / 총 &amp;nbsp;&lt;strong className="count-number"&gt;85&lt;/strong&gt;건&lt;/span&gt;
+  &lt;Pagination currentPage={1}
+              totalPages={3}
+              onPageChange={()=&gt; {}} /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>
+{/* 필터는 패널 헤더가 아니라 탭 줄 우측에 둔다. */}
+&lt;div className="flex flex-wrap items-center gap-2 ml-auto"&gt;
+  &lt;select className="form-select"&gt;
+    &lt;option&gt;전체&lt;/option&gt;
+    &lt;option&gt;시스템&lt;/option&gt;
+    &lt;option&gt;업무&lt;/option&gt;
+  &lt;/select&gt;
+  &lt;select className="form-select"&gt;
+    &lt;option&gt;최근3개월&lt;/option&gt;
+  &lt;/select&gt;
+  &lt;div className="search-input-wrap"&gt;
+    &lt;IconSearch size={15}/&gt;
+    &lt;input type="text"
+           className="form-input form-input--search"
+           placeholder="제목 검색"/&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+   &gt;
+&lt;TableListFooter
+  rangeStart={1}
+  rangeEnd={5}
+  totalCount={85}
+  currentPage={1}
+  totalPages={3}
+  onPageChange={() =&gt; {}}
+  previousLabel="이전 공지 목록 페이지"
+  nextLabel="다음 공지 목록 페이지"
+/&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>수행지시어</h3>
+          <a class="route" href="http://127.0.0.1:3100/admin/master-data/command-terms" target="_blank" rel="noreferrer">/admin/master-data/command-terms</a>
+        </header>
+        <p class="path">src/features/ops/master-data/pages/CommandTermsPage.tsx</p>
+        <p class="note">학교급·교과 선택과 과목 탭이 있는 줄 우측으로 검색을 옮겼다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;Panel title={&lt;&gt;&lt;span className="text-teal-dark"&gt;{subject?.name ?? '—'}&lt;/span&gt; 수행지시어&lt;/&gt;} icon={&lt;IconList size={18} /&gt;} actions={&lt;div className="users-filters"&gt;&lt;div className="search-input-wrap"&gt;&lt;IconSearch /&gt;&lt;input className="form-input form-input--search" type="search" value={keyword} onChange={(event) =&gt; setKeyword(event.target.value)} placeholder="이름·정의 검색" /&gt;&lt;/div&gt;&lt;/div&gt;} headerLine&gt;
+    &lt;div className="users-footer"&gt;&lt;span&gt;{subject?.name} &lt;strong className="count-number"&gt;{parents.length}&lt;/strong&gt;개 상위 / &lt;strong className="count-number"&gt;{children.length}&lt;/strong&gt;개 하위&lt;/span&gt;&lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>    {/* 검색은 패널 헤더가 아니라 조회 조건 줄 우측에 둔다. */}
+    &lt;div className="users-filters ml-auto"&gt;&lt;div className="search-input-wrap"&gt;&lt;IconSearch /&gt;&lt;input className="form-input form-input--search" type="search" value={keyword} onChange={(event) =&gt; setKeyword(event.target.value)} placeholder="이름·정의 검색" /&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;Panel title={&lt;&gt;&lt;span className="text-teal-dark"&gt;{subject?.name ?? '—'}&lt;/span&gt; 수행지시어&lt;/&gt;} icon={&lt;IconList size={18} /&gt;} headerLine&gt;
+    &lt;TableListFooter info={&lt;span&gt;{subject?.name} &lt;strong className="count-number"&gt;{parents.length}&lt;/strong&gt;개 상위 / &lt;strong className="count-number"&gt;{children.length}&lt;/strong&gt;개 하위&lt;/span&gt;} /&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+  </section>
+
+  <section id="design">
+    <h2>평가설계 화면 정리 <span class="n">1</span></h2>
+    <p class="tight">평가설계 헤더와 최종확인 완료 배너의 그라데이션을 걷어내고 단색으로 통일했다. 문항카드 모달에는 헤더 아이콘을 넣었다. SCSS 변경은 소스 대비가 아래 표로 더 잘 보여 따로 정리했다.</p>
+    
+      <article class="entry">
+        <header class="entry__head">
+          <h3>문항카드 크게 보기 모달</h3>
+          <span class="route none">문항설계 단계에서 카드의 「크게 보기」</span>
+        </header>
+        <p class="path">src/features/tds/evaluation-design/pages/design-all-in-one/QuestionCardPreviewModal.tsx</p>
+        <p class="note">제목 앞에 IconEye 추가. 읽기 전용으로 크게 보여주는 화면이라 보기 가 맞고, 아이콘 세트에 확대 계열이 없다. 공통 Modal 을 쓰지 않고 직접 조립한 모달이라 제목이 인라인 스타일이었는데, 공통 Modal 과 같은 마크업으로 맞췄다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;h2 id="question-card-preview-title" style={{ margin: 0, fontSize: 16 }}&gt;
+  문항카드 크게 보기</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>{/* 공통 Modal(ui-modal__title · __header-icon · __header-title)과 같은 마크업. */}
+&lt;h2 id="question-card-preview-title" className="ui-modal__title"&gt;
+  &lt;span className="ui-modal__header-icon"&gt;&lt;IconEye size={18} /&gt;&lt;/span&gt;
+  &lt;div&gt;
+    &lt;p className="ui-modal__header-title"&gt;문항카드 크게 보기&lt;/p&gt;
+  &lt;/div&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함 — TableListFooter import 추가, 더 쓰지 않는 Pagination · 아이콘 import 제거.</p>
+      </article>
+  </section>
+
+  <section id="fix">
+    <h2>후속 보정 <span class="n">2</span></h2>
+    <p class="tight">전환을 마친 뒤 화면을 보며 잡은 것. 이미 전환돼 있던 연합 상세의 단위와, 아직 전환하지 않은 화면의 계산식이다.</p>
+    
+      <article class="entry">
+        <header class="entry__head">
+          <h3>연합 상세 · 참여 학교</h3>
+          <span class="route none">경로에 파라미터 필요 — /evaluation/unions/{id}</span>
+        </header>
+        <p class="path">src/features/ops/unions/pages/UnionDetailPage.tsx</p>
+        <p class="note">같은 페이지에서 참여 교사는 명, 참여 학교는 건이었다. 학교를 세므로 개교로 맞췄다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del empty"><span>— 없음 —</span></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>unit={"개교"}</pre></div>
+          </div>
+        </div>
+        
+      </article>
+
+      <article class="entry">
+        <header class="entry__head">
+          <h3>분류 게시판 보기</h3>
+          <a class="route" href="http://127.0.0.1:3100/reference/category" target="_blank" rel="noreferrer">/reference/category</a>
+        </header>
+        <p class="path">src/features/ops/reference-data/pages/board/CategoryBoardViewPage.tsx</p>
+        <p class="note">푸터는 아직 전환하지 않았다. 빈 목록에서 -1 이 나오던 계산식만 같은 형태로 고쳤다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>const lastRow = Math.min(firstRow + items.length - 1, totalElements);</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>// 목록이 비면 firstRow 가 0 이라 -1 이 나온다. 빈 목록은 0 으로 둔다
+const lastRow = items.length === 0 ? 0 : Math.min(firstRow + items.length - 1, totalElements);</pre></div>
+          </div>
+        </div>
+        
+      </article>
+  </section>
+
+  <!-- ─────────────── 단위·건수 보정 ─────────────── -->
+  <section id="unit">
+    <h2>단위·건수 보정 <span class="n">9</span></h2>
+    <p class="tight">연합 상세의 참여 교사 푸터(<code>현재 1–10명 / 총 47명</code>)를 기준으로 삼아
+    51개 푸터의 단위를 세는 대상과 대조했습니다. 어긋난 곳이 4군데, 계산이 틀린 곳이 4군데,
+    표기가 없던 곳이 1군데 있었습니다.</p>
+
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="width:26%"><col style="width:24%"><col><col></colgroup>
+        <thead><tr><th>화면</th><th>세는 대상</th><th>이전</th><th>이후</th></tr></thead>
+        <tbody>
+          <tr><td>연합 상세 · 참여 학교</td><td>학교<small>학교명 · 학교ID · 응답상태</small></td><td>현재 1–10<b>건</b></td><td>현재 1–10<b>개교</b></td></tr>
+          <tr><td>학교 마스터 · 학생 검색</td><td>학생<small>이름 · 학년 · 반 · 번호</small></td><td>총 47<b>건</b></td><td>총 47<b>명</b></td></tr>
+          <tr><td>학교 마스터 · 교사 검색</td><td>교직원<small>이름 · 역할 · 담당과목</small></td><td>총 47<b>건</b></td><td>총 47<b>명</b></td></tr>
+          <tr><td>학교 마스터 · 과목 검색</td><td>개설 과목<small>교과군 · 과목명</small></td><td>총 47<b>건</b></td><td>총 47<b>개</b></td></tr>
+          <tr><td>감독 · 응시자 목록</td><td>응시자<small>세션 · 학생 · 상태</small></td><td>표기 없음</td><td>현재 1–10<b>명</b> / 총 47<b>명</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note-box" style="margin-top:16px">
+      <h3>첫 줄이 특히 짚어둘 부분입니다</h3>
+      <p>연합 상세는 <b>같은 페이지 안에서</b> 참여 교사가 <code>명</code>, 참여 학교가 <code>건</code> 이었습니다.
+      기준으로 삼은 화면 자체가 어긋나 있던 셈이라 함께 맞췄습니다.</p>
+    </div>
+
+    <div class="note-box warn">
+      <h3>빈 목록에서 <code>-1</code> 이 나오던 계산식 — 4개 파일</h3>
+      <p><code>Math.min(firstRow + items.length - 1, totalElements)</code> 는 목록이 비면
+      <code>firstRow</code> 가 0 이라 <code>Math.min(-1, 0)</code> = <b>-1</b> 이 됩니다.
+      화면에는 <code>현재 0–-1건 / 총 0건</code> 으로 보였습니다.</p>
+      <p>커뮤니티 게시판 · 자료 공유 · 기출문항 게시판 · 분류 게시판 보기 네 곳이 같은 식을 쓰고 있어
+      모두 <code>items.length === 0 ? 0 : …</code> 로 막았습니다. 전환 이전부터 있던 계산 오류이고,
+      마지막 분류 게시판 보기는 아직 푸터를 전환하지 않은 화면이라 계산식만 고쳤습니다.</p>
+    </div>
+
+    <p>나머지는 대조 결과 이미 맞았습니다. 사람을 세는 목록(사용자 역할 · 외부 자문위원 · 채점자 후보)은
+    <code>명</code>, 개체를 세는 목록(역할 · 권한 · 학교 · 내부표준화 · 채점 현황)은 <code>개</code>,
+    로그 · 이력 · 게시글 · 요청처럼 레코드를 세는 나머지는 <code>건</code> 입니다.
+    자문위원 위촉해제 목록은 행이 "자문위원 × 배정 평가" 조합이라 한 사람이 여러 줄이 될 수 있어
+    <code>건</code> 이 맞다고 보고 두었습니다.</p>
+  </section>
+
+  <!-- ─────────────── 기준 대조 결과 ─────────────── -->
+  <section id="check">
+    <h2>기준 대조 결과 <span class="n">3</span></h2>
+    <p class="tight">전환하면서 화면이 달라지는 항목 3가지를 남겨두었는데,
+    연합 상세를 기준으로 대조하니 모두 정리됐습니다. 되돌릴 것은 없습니다.</p>
+
+    <div class="note-box">
+      <h3>1. 좌측 건수의 회색(<code>text-muted</code>) 제거 — 그대로 둡니다</h3>
+      <p>연합 상세의 참여 학교·참여 교사 푸터 어디에도 <code>text-muted</code> 가 없습니다.
+      가이드 예제와 연합 목록·학교 목록도 마찬가지라, 회색이 붙어 있던 12개 화면을 기준에 맞춘 것이 맞습니다.</p>
+      <p>해당 화면: 접근기록 · 알림 템플릿 · 알림 관리 · 공지도움말 · 커뮤니티 · 자료공유 ·
+      위촉해제 이력 · 권한 요청 · 분류 게시판 · 기출문항 · 사용자 배정 이력 · 채점자 후보 검색.</p>
+    </div>
+
+    <div class="note-box">
+      <h3>2. 1페이지짜리 페이지네이션 소멸 — 그대로 둡니다</h3>
+      <p>연합 상세도 <code>totalPages</code> 를 넘기고 컴포넌트가 <code>totalPages &gt; 1</code> 일 때만
+      렌더하도록 맡깁니다. 연습채점 상세의 <code>totalPages={1}</code> 고정 페이지네이션이 사라지는 것이
+      같은 규칙입니다. 원래 코드 주석도 "표기만 공통 규격에 맞춘다" 였습니다.</p>
+    </div>
+
+    <div class="note-box">
+      <h3>3. 역할·권한 목록의 pager 모양 변경 — 그대로 둡니다</h3>
+      <p>연합 상세가 공통 <code>Pagination</code> 을 씁니다. 이전/다음 버튼만 있던 자체 pager 가
+      페이지 번호가 나열되는 형태로 바뀌는 것이 기준에 맞습니다.</p>
+      <p>다만 <code>ops.routes.tsx</code> 에서 <code>RolesPage</code> 가 주석 처리돼 있어
+      지금은 화면으로 확인할 수 없습니다.</p>
+    </div>
+  </section>
+
+  <!-- ─────────────── 커밋 ─────────────── -->
+  <section id="commit">
+    <h2>커밋 <span class="n">feature/front-goldking-new</span></h2>
+    <p class="tight">성격별로 나눠 커밋하고 푸시했습니다.
+    <code>203d6407</code> 이후 <code>f133e958</code> 까지 여섯 개입니다.</p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="width:110px"><col><col style="width:80px"></colgroup>
+        <thead><tr><th>해시</th><th>제목</th><th>파일</th></tr></thead>
+        <tbody>
+          <tr><td><code>6628dfca</code></td><td>refactor: 목록 푸터 51개를 공통 TableListFooter 로 전환</td><td class="num">51</td></tr>
+          <tr><td><code>6c1ac42c</code></td><td>fix: 아이콘 버튼 툴팁이 표 밖으로 넘쳐 생기던 빈 띠</td><td class="num">2</td></tr>
+          <tr><td><code>478c96ad</code></td><td>style: 내 평가 목록 패널화 · 평가설계 헤더 배경 정리</td><td class="num">4</td></tr>
+          <tr><td><code>de30c9dd</code></td><td>fix: 아이콘 버튼의 긴 aria-label 12곳 정리</td><td class="num">9</td></tr>
+          <tr><td><code>2f544007</code></td><td>style: 조회 필터를 패널 헤더에서 탭 줄 우측으로 이동</td><td class="num">3</td></tr>
+          <tr><td><code>f133e958</code></td><td>style: 평가설계 헤더 단색 전환 · 문항카드 모달 헤더 아이콘</td><td class="num">2</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>첫 커밋에는 이전에 미커밋 상태였던 <code>_00-base.scss</code>(<code>rgba(본0, …)</code> 오타)와
+    <code>_02-ui-components.scss</code>(<code>.box-scroll-x</code>)도 함께 들어갔습니다.
+    푸터 작업과 같은 표·박스 정리 맥락이라 묶었습니다.</p>
+  </section>
+
+  <!-- ─────────────── 배경 정리 ─────────────── -->
+  <section id="bg">
+    <h2>평가설계 배경 정리 <span class="n">SCSS 2</span></h2>
+    <p class="tight">평가설계 화면의 그라데이션 두 곳을 걷어내고 단색으로 통일했습니다.
+    <a class="route" href="http://127.0.0.1:3100/tds/evaluations" target="_blank" rel="noreferrer">/tds/evaluations</a>
+    에서 평가를 골라 설계로 들어가면 볼 수 있습니다.</p>
+
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="width:24%"><col><col style="width:26%"></colgroup>
+        <thead><tr><th>대상</th><th>이전</th><th>이후</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>평가설계 헤더<small>.eval-design-header</small></td>
+            <td><small>radial(민트) + radial(보라)<br>+ linear(128deg, #092f38 → #0f4c5c → #274690)<br>→ 성적 조회와 같은 남색 그라데이션<br>(132deg, #172554 → #1e3a8a → #2457d6)</small></td>
+            <td><small><b>#1e3a8a</b> 단색</small></td>
+          </tr>
+          <tr>
+            <td>최종확인 완료 배너<small>.eval-locked-hero</small></td>
+            <td><small>radial(보라) + linear(135deg, #eff6ff → #f8fafc → #eef2ff)</small></td>
+            <td><small><b>#eff6ff</b> 단색</small></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note-box" style="margin-top:16px">
+      <h3>단색 값을 고른 기준</h3>
+      <p>둘 다 <b>직전 그라데이션의 정지점 하나</b>를 그대로 씁니다. 헤더는 중간 정지점,
+      배너는 시작색입니다. 전체 인상이 가장 덜 달라지는 값이라서입니다.
+      헤더의 <code>#1e3a8a</code> 는 토큰 <code>--blue-02</code>(<code>#2549b7</code>)보다 어두워
+      흰 글자와 스텝 뱃지의 대비도 확보됩니다.</p>
+      <p>테두리와 그림자는 양쪽 모두 그대로 두어 카드로 떠 보이는 느낌은 유지했습니다.
+      배너의 그라데이션은 <code>--eval-locked-hero-bg</code> 변수에도 중복 정의돼 있어 함께 맞췄습니다.
+      한쪽만 고치면 그 변수를 쓰는 순간 되살아납니다.</p>
+    </div>
+  </section>
+
+  <!-- ─────────────── 페이징 표시 규칙 ─────────────── -->
+  <section id="rule">
+    <h2>페이징이 보이는 조건 <span class="n">공통 규칙</span></h2>
+    <p class="tight">전환 뒤 "요청 목록의 페이징이 안 보인다"는 확인이 있어 정리해 둡니다.
+    <b>2건이 아니라 2페이지 이상</b>일 때 나타납니다.</p>
+
+    <div class="refbox">
+      <p class="tight" style="margin:0"><code>TableListFooter.tsx</code> 의 규칙 — 이번에 만든 것이 아니라
+      컴포넌트에 원래 있던 동작입니다. 연합 상세·학교 목록도 처음부터 이렇게 동작하고 있었습니다.</p>
+      <pre>const showPagination = onPageChange != null && <b>totalPages > 1</b>;</pre>
+    </div>
+
+    <p>그래서 <code>/support/requests</code> 는 한 페이지가 20건이라 <b>21건 이상</b>부터 페이징이 보입니다.
+    그 전까지 그려지던 <code>‹ 1 ›</code> 은 눌러도 아무 일이 없는 버튼이었고,
+    앞서 내부표준화 3곳에서 걷어낸 죽은 pager 와 같은 것입니다.</p>
+
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="width:34%"><col style="width:26%"><col></colgroup>
+        <thead><tr><th>푸터에 든 것</th><th>1페이지일 때</th><th>해당 화면</th></tr></thead>
+        <tbody>
+          <tr><td>건수 + 페이지네이션</td><td><b>건수는 그대로</b>, 페이징만 사라짐</td><td>49개 — 대부분</td></tr>
+          <tr><td>페이지네이션만</td><td><b>빈 띠만 남음</b> → 푸터째 감추도록 보정</td><td>서비스 요청 검토 · 플랫폼 사용 통계</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note-box" style="margin-top:16px">
+      <h3>좌측 표기가 없는 2개만 따로 막았습니다</h3>
+      <p>건수가 함께 있는 푸터는 페이징이 사라져도 건수가 남아 자리가 비지 않습니다.
+      반면 페이지네이션만 있던 두 화면은 아무것도 없는 띠가 남아,
+      <code>{'{'}totalPages &gt; 1 &amp;&amp; …{'}'}</code> 로 푸터 자체를 감쌌습니다.</p>
+      <p>"페이지가 하나여도 페이징 자리는 항상 보여야 한다"가 맞다면
+      화면별이 아니라 <b>공통 컴포넌트 정책</b>을 바꾸는 문제이고, 51개 화면이 모두 영향을 받습니다.</p>
+    </div>
+  </section>
+
+  <!-- ─────────────── 남은 작업 ─────────────── -->
+  <section id="rest">
+    <h2>남은 작업 <span class="n">4</span></h2>
+    <p class="tight">처음 조사를 <code>.users-footer</code> 클래스 기준으로 해서 걸러지지 않았던 6개 중,
+    Panel <code>footer</code> prop 쪽 2개는 처리했고 <b>4개가 남았습니다.</b>
+    모두 <code>&lt;div class="flex items-center justify-between mt-3"&gt;</code> 안에
+    건수와 페이지네이션을 넣은 형태로, A그룹과 같은 방식이면 됩니다.</p>
+
+    <div class="tablewrap">
+      <table class="rest">
+        <colgroup><col style="width:22%"><col style="width:24%"><col><col style="width:150px"></colgroup>
+        <thead><tr><th>화면</th><th>경로</th><th>파일</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>분류 게시판 보기</td>
+            <td><a class="route" href="http://127.0.0.1:3100/reference/category" target="_blank" rel="noreferrer">/reference/category</a></td>
+            <td><small>ops/reference-data/pages/board/<wbr>CategoryBoardViewPage.tsx</small></td>
+            <td><small>게시판을 통째로 교체할 예정이라 <b>보류</b></small></td>
+          </tr>
+          <tr>
+            <td>리포트 · 학급 분석표</td>
+            <td><a class="route" href="http://127.0.0.1:3100/report/create/class" target="_blank" rel="noreferrer">/report/create/class</a></td>
+            <td><small>ops/report/pages/<wbr>ReportCreateClassPage.tsx</small></td>
+            <td><small>좌측 <code>리포트 목록</code> 패널 하단</small></td>
+          </tr>
+          <tr>
+            <td>리포트 · 개인 성적표</td>
+            <td><a class="route" href="http://127.0.0.1:3100/report/create/personal" target="_blank" rel="noreferrer">/report/create/personal</a></td>
+            <td><small>ops/report/pages/<wbr>ReportCreatePersonalPage.tsx</small></td>
+            <td><small>위와 같은 구조</small></td>
+          </tr>
+          <tr>
+            <td>리포트 · 문항 분석표</td>
+            <td><a class="route" href="http://127.0.0.1:3100/report/create/question" target="_blank" rel="noreferrer">/report/create/question</a></td>
+            <td><small>ops/report/pages/<wbr>ReportCreateQuestionPage.tsx</small></td>
+            <td><small>위와 같은 구조</small></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>리포트 3개는 같은 구조의 형제 화면이라 하나만 보시면 나머지도 같습니다.
+    <code>/report/create/result</code> 라는 네 번째 형제도 있는데 페이지네이션이 없어 대상이 아닙니다.</p>
+
+    <h3 style="margin-top:28px">전환 대상이 아닌 것 8개</h3>
+    <div class="tablewrap">
+      <table class="rest">
+        <colgroup><col style="width:30%"><col><col></colgroup>
+        <thead><tr><th>대상</th><th>파일</th><th>이유</th></tr></thead>
+        <tbody>
+          <tr><td>연습채점(교사) 푸터 1개</td>
+            <td><small>grading/front-internal-standardization/pages/<wbr>InternalStandardizationTeacherPage.tsx</small></td>
+            <td><small>828~961줄이 통째로 블록 주석. 화면에 나오지 않는 죽은 코드</small></td></tr>
+          <tr><td>내부표준화 상세 구버전 푸터 2개</td>
+            <td><small>grading/internal-standardization/pages/<wbr>InternalStandardizationDetailPage.tsx</small></td>
+            <td><small>import 하는 곳이 0곳. 라우트도 없는 미참조 파일</small></td></tr>
+          <tr><td>Panel 자체 footer 슬롯</td>
+            <td><small>src/shared/components/common/Panel.tsx</small></td>
+            <td><small>목록 푸터가 아니라 Panel 의 footer 를 담는 자리. 73곳이 사용 중</small></td></tr>
+          <tr><td>감독 화면 사이드 패널 2개</td>
+            <td><small>aes/proctor/pages/ProctorPage.tsx</small></td>
+            <td><small>카드 리스트 옆 페이지네이션. 건수 표기가 없는 목록 푸터가 아닌 자리</small></td></tr>
+          <tr><td>AI 의심 · 웹 인용 상세 2개</td>
+            <td><small>rightwrite/teacher/features/…/<wbr>AiDetailPage.tsx · WebDetailPage.tsx</small></td>
+            <td><small>&lt;ul&gt; 목록 아래 페이지네이션만. 위와 같은 경우</small></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note-box" style="margin-top:16px">
+      <h3>구버전 파일은 삭제를 검토할 만합니다</h3>
+      <p><code>grading/internal-standardization/</code> 폴더에
+      <code>InternalStandardizationDetailPage</code> ·
+      <code>InternalStandardizationListPage</code> ·
+      <code>SeedAnswerModal</code> 등 어디서도 참조하지 않는 파일이 여럿 있습니다.
+      푸터를 전환하는 것보다 파일째 정리하는 편이 나아 보이는데, 이번 작업과는 별개 건으로 두는 것이 좋겠습니다.</p>
+    </div>
+
+    <p>이전 보고서의 푸터 합계 51은 <code>users-footer__info</code> 를 별도 푸터로 잘못 센 것이었습니다.
+    표본 답안 확정은 3개가 아니라 2개였고, 대신 조사에서 빠져 있던 화면이
+    처음 4개 · 나중 6개로 모두 10개 있었습니다.</p>
+  </section>
+
+  <footer>
+    <code>feature/front-goldking-new</code> 에 커밋 3개(<code>6628dfca</code> ·
+    <code>6c1ac42c</code> · <code>478c96ad</code> · <code>de30c9dd</code> ·
+    <code>2f544007</code> · <code>f133e958</code>)로 푸시를 마쳤습니다. 작업 트리는 깨끗합니다.
+    남은 4개(게시판 1 · 리포트 3)는 다음 작업으로 넘겼습니다.
+  </footer>
+</div>
+
+</body></html>

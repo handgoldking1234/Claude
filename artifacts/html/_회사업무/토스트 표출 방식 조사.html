@@ -1,0 +1,404 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>토스트 표출 방식 조사</title>
+<style>
+  :root {
+    --ground:#f4f6f9; --surface:#fff; --surface-2:#eaeff5; --surface-3:#f9fafc;
+    --ink:#11151c; --ink-2:#3e4859; --ink-3:#6a7482;
+    --rule:#d9dfe8; --rule-soft:#e7ebf1;
+    --accent:#1256c4; --accent-2:#0d4297; --accent-wash:#e6eefb;
+    --ok:#15803d; --ok-wash:#dcfce7;
+    --err:#b91c1c; --err-wash:#fef2f2;
+    --wrn:#a16207; --wrn-wash:#fef3c7;
+    --code-bg:#eceff5;
+    --shadow:0 1px 2px rgba(17,21,28,.05), 0 10px 26px -24px rgba(17,21,28,.6);
+    --f-body:"Segoe UI Variable Text","Segoe UI",ui-sans-serif,system-ui,-apple-system,sans-serif;
+    --f-mono:"Cascadia Mono","Cascadia Code",ui-monospace,Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:#0b0e13; --surface:#13171e; --surface-2:#1a1f28; --surface-3:#161a21;
+      --ink:#eceff5; --ink-2:#adbacb; --ink-3:#7f8996;
+      --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+      --accent:#5b9dff; --accent-2:#93bdff; --accent-wash:rgba(91,157,255,.13);
+      --ok:#4ec98a; --ok-wash:rgba(78,201,138,.14);
+      --err:#f2716b; --err-wash:rgba(242,113,107,.14);
+      --wrn:#e3a63f; --wrn-wash:rgba(227,166,63,.14);
+      --code-bg:rgba(255,255,255,.05);
+      --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -24px rgba(0,0,0,.95);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#0b0e13; --surface:#13171e; --surface-2:#1a1f28; --surface-3:#161a21;
+    --ink:#eceff5; --ink-2:#adbacb; --ink-3:#7f8996;
+    --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+    --accent:#5b9dff; --accent-2:#93bdff; --accent-wash:rgba(91,157,255,.13);
+    --ok:#4ec98a; --ok-wash:rgba(78,201,138,.14);
+    --err:#f2716b; --err-wash:rgba(242,113,107,.14);
+    --wrn:#e3a63f; --wrn-wash:rgba(227,166,63,.14);
+    --code-bg:rgba(255,255,255,.05);
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -24px rgba(0,0,0,.95);
+  }
+
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--ground); color:var(--ink);
+         font-family:var(--f-body); font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+  .page { max-width:1160px; margin:0 auto; padding:42px 22px 84px; display:flex; flex-direction:column; gap:36px; }
+
+  .masthead { display:flex; flex-direction:column; gap:11px; padding-bottom:20px; border-bottom:2px solid var(--ink); }
+  .kicker { font-family:var(--f-mono); font-size:12px; letter-spacing:.11em; text-transform:uppercase; color:var(--accent); }
+  h1 { margin:0; font-size:clamp(26px,4.2vw,34px); line-height:1.15; letter-spacing:-.022em; font-weight:700; }
+  .standfirst { margin:0; max-width:68ch; color:var(--ink-2); }
+  .meta { display:flex; flex-wrap:wrap; gap:5px 18px; font-family:var(--f-mono); font-size:12px; color:var(--ink-3); }
+  .meta b { color:var(--ink-2); font-weight:500; }
+
+  .alarm { border:1px solid var(--err); border-radius:11px; background:var(--err-wash); padding:18px 22px;
+           display:flex; flex-direction:column; gap:9px; }
+  .alarm h3 { margin:0; font-size:16px; font-weight:700; color:var(--err); }
+  .alarm p { margin:0; color:var(--ink-2); font-size:14.5px; }
+  .alarm code { background:rgba(255,255,255,.55); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .alarm code { background:rgba(0,0,0,.3); } }
+  :root[data-theme="dark"] .alarm code { background:rgba(0,0,0,.3); }
+
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; }
+  .stat { border:1px solid var(--rule); border-radius:9px; background:var(--surface); padding:11px 14px;
+          display:flex; flex-direction:column; box-shadow:var(--shadow); }
+  .stat__num { font-size:23px; font-weight:700; letter-spacing:-.02em; font-variant-numeric:tabular-nums; line-height:1.2; }
+  .stat__label { font-family:var(--f-mono); font-size:11px; color:var(--ink-3); }
+  .stat.e .stat__num { color:var(--err); }
+  .stat.w .stat__num { color:var(--wrn); }
+
+  section { display:flex; flex-direction:column; gap:13px; scroll-margin-top:16px; }
+  h2 { margin:0; font-size:19px; letter-spacing:-.015em; font-weight:700; padding-bottom:8px; border-bottom:1px solid var(--rule);
+       display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  h2 .n { font-family:var(--f-mono); font-size:12px; color:var(--ink-3); font-weight:500; }
+  p { margin:0; }
+  .lead { max-width:74ch; color:var(--ink-2); font-size:14.5px; }
+
+  code { font-family:var(--f-mono); font-size:.85em; background:var(--code-bg); padding:.1em .36em; border-radius:4px; word-break:break-word; }
+
+  .toc { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1px 22px;
+         padding:14px 18px; background:var(--surface); border:1px solid var(--rule); border-radius:10px; box-shadow:var(--shadow); }
+  .toc a { color:var(--ink-2); text-decoration:none; font-size:14px; padding:3px 0; display:block; }
+  .toc a:hover { color:var(--accent); text-decoration:underline; text-underline-offset:3px; }
+  .toc a span { font-family:var(--f-mono); font-size:11px; color:var(--ink-3); }
+
+  .tablewrap { border:1px solid var(--rule); border-radius:10px; background:var(--surface); box-shadow:var(--shadow); overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; font-size:13.5px; min-width:760px; }
+  colgroup .c-url { width:27%; }
+  colgroup .c-t { width:11%; }
+  thead th { text-align:left; font-size:11px; font-family:var(--f-mono); letter-spacing:.05em; text-transform:uppercase;
+             color:var(--ink-3); font-weight:600; padding:10px 14px; background:var(--surface-2); white-space:nowrap; }
+  td { padding:11px 14px; border-top:1px solid var(--rule-soft); vertical-align:top; }
+  tbody tr:nth-child(even) { background:var(--surface-3); }
+  td.url { font-family:var(--f-mono); font-size:12px; color:var(--accent-2); word-break:break-all; }
+  td.how { color:var(--ink-2); }
+  td.how b { color:var(--ink); font-weight:600; }
+  td.msg { color:var(--ink-3); font-size:12.5px; }
+
+  .tt { display:inline-block; font-family:var(--f-mono); font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px;
+        letter-spacing:.03em; white-space:nowrap; }
+  .tt.s { background:var(--ok-wash); color:var(--ok); }
+  .tt.e { background:var(--err-wash); color:var(--err); }
+  .tt.w { background:var(--wrn-wash); color:var(--wrn); }
+  .tt.x { background:var(--code-bg); color:var(--ink-3); }
+
+  .card { border:1px solid var(--rule); border-radius:10px; background:var(--surface); box-shadow:var(--shadow); padding:17px 20px; }
+  .card h3 { margin:0 0 8px; font-size:15px; font-weight:600; }
+  .card ul { margin:0; padding-left:18px; color:var(--ink-2); font-size:14px; }
+  .card li { margin-bottom:5px; }
+  .card li:last-child { margin-bottom:0; }
+  .card p { color:var(--ink-2); font-size:14px; }
+  .card ol { margin:0; padding-left:20px; color:var(--ink-2); font-size:14px; }
+  .card ol li { margin-bottom:6px; }
+  .grid2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:12px; }
+
+  pre { margin:8px 0 0; padding:11px 13px; border-radius:7px; background:var(--code-bg); overflow-x:auto;
+        font-family:var(--f-mono); font-size:12.5px; line-height:1.6; color:var(--ink); }
+  pre .del { color:var(--ink-3); }
+  pre .add { color:var(--accent-2); font-weight:600; }
+  pre .cm { color:var(--ink-3); }
+  pre .hi { color:var(--err); font-weight:700; }
+
+  footer { border-top:1px solid var(--rule); padding-top:17px; color:var(--ink-3); font-size:13px; }
+  footer code { background:none; padding:0; }
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="kicker">dfe-front · 퍼블 전수조사</div>
+    <h1>토스트 표출 방식 조사</h1>
+    <p class="standfirst">
+      토스트를 띄우는 코드를 전부 열어봤습니다. 방식이 <b>세 갈래</b>로 갈려 있고,
+      그와 별개로 <b>안내 문구가 빨간 오류로 뜨는 화면 5곳</b>을 찾았습니다.
+    </p>
+    <div class="meta">
+      <span><b>조사일</b> 2026-08-31</span>
+      <span><b>기준</b> a5ea050f</span>
+      <span><b>범위</b> src/**/*.tsx · *.ts 전체</span>
+      <span><b>대상</b> 55개 파일</span>
+    </div>
+  </header>
+
+  <div class="alarm">
+    <h3>먼저 볼 것 — 안내 문구가 빨간 오류로 뜹니다</h3>
+    <p>
+      <code>useToast</code>의 <code>show()</code>는 <b>두 번째 인자를 생략하면 <code>'error'</code></b>가 됩니다.
+      성공이 아니라 오류가 기본값입니다. 그래서 타입 없이 부른 <b>5곳</b>이 전부 빨갛게 표시됩니다 —
+      “제목을 입력해 주세요” 같은 입력 안내가 시스템 오류처럼 보입니다.
+    </p>
+    <pre><span class="cm">// shared/hooks/useToast.ts</span>
+const show = useCallback(
+  (message: string, type: ToastType = <span class="hi">'error'</span>) =&gt; { … }</pre>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><span class="stat__num">31</span><span class="stat__label">공통 토스트 화면</span></div>
+    <div class="stat w"><span class="stat__num">2</span><span class="stat__label">전용 CSS 토스트</span></div>
+    <div class="stat w"><span class="stat__num">11</span><span class="stat__label">브라우저 alert</span></div>
+    <div class="stat e"><span class="stat__num">5</span><span class="stat__label">타입 생략 → 빨강</span></div>
+    <div class="stat"><span class="stat__num">3</span><span class="stat__label">표출 방식 종류</span></div>
+  </div>
+
+  <nav class="toc">
+    <a href="#how">토스트 여는 방법</a>
+    <a href="#bug">타입 생략 5곳 <span>· 우선</span></a>
+    <a href="#kinds">세 가지 표출 방식</a>
+    <a href="#list">공통 토스트 화면 <span>· 31</span></a>
+    <a href="#alert">브라우저 alert 화면 <span>· 11</span></a>
+    <a href="#fix">정리 제안</a>
+  </nav>
+
+  <!-- 여는 방법 -->
+  <section id="how">
+    <h2>토스트 여는 방법</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3>가장 빠른 길 — 가이드 페이지</h3>
+        <p style="margin-bottom:9px">
+          <code>/front-component</code>에 <b>토스트 예제 버튼 3개</b>가 있습니다.
+          성공·오류·경고를 클릭 한 번으로 비교할 수 있습니다.
+        </p>
+        <a href="http://127.0.0.1:3100/front-component" style="color:var(--accent); font-family:var(--f-mono); font-size:13px;">http://127.0.0.1:3100/front-component</a>
+        <p style="margin-top:9px">
+          아이콘 섹션의 <b>아이콘 클릭</b>으로도 “복사했습니다” 성공 토스트가 뜹니다.
+        </p>
+      </div>
+      <div class="card">
+        <h3>실제 화면에서 띄우는 공통 패턴</h3>
+        <ol>
+          <li><b>저장·수정·삭제 완료</b> — 대부분의 성공 토스트</li>
+          <li><b>필수값 비우고 제출</b> — 경고 토스트</li>
+          <li><b>복사 버튼</b> — 코드·링크 복사 시 성공 토스트</li>
+          <li><b>Excel 내려받기</b> — 다운로드 완료 성공 토스트</li>
+        </ol>
+        <p style="margin-top:9px">
+          토스트는 <b>화면 상단 중앙에 고정</b>되고 <b>4초 뒤 자동으로 사라집니다</b>.
+          닫기 버튼으로 즉시 닫을 수도 있습니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 버그 -->
+  <section id="bug">
+    <h2>타입 생략 5곳 <span class="n">— 안내 문구가 빨갛게 뜨는 화면</span></h2>
+    <p class="lead">직접 확인해 보시라고 <b>재현 방법</b>을 함께 적었습니다.</p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-url"><col class="c-t"><col><col></colgroup>
+        <thead><tr><th>경로</th><th>현재 색</th><th>재현 방법</th><th>메시지</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="url">/community/board/new</td>
+            <td><span class="tt e">빨강</span></td>
+            <td class="how"><b>제목을 비우고</b> 등록 버튼<br><b>본문을 비우고</b> 등록 버튼</td>
+            <td class="msg">“제목을 입력해 주세요.”<br>“본문을 입력해 주세요.”</td>
+          </tr>
+          <tr>
+            <td class="url">/community/board/{id}/edit</td>
+            <td><span class="tt e">빨강</span></td>
+            <td class="how">글 목록에서 글 진입 → 수정 →<br><b>제목·본문 비우고</b> 저장</td>
+            <td class="msg">“제목을 입력해 주세요.”<br>“본문을 입력해 주세요.”</td>
+          </tr>
+          <tr>
+            <td class="url">/community/board/{id}</td>
+            <td><span class="tt e">빨강</span></td>
+            <td class="how">글 상세에서 <b>댓글 비우고</b> 등록</td>
+            <td class="msg">“댓글을 입력해 주세요.”</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3>이 3화면은 <code>warn</code>이 맞습니다</h3>
+      <p>
+        전부 <b>사용자 입력을 안내</b>하는 문구입니다. 시스템이 실패한 게 아니라 채워야 할 값을 알려주는 것이므로
+        노란 경고가 맞습니다. <code>show('제목을 입력해 주세요.')</code> →
+        <code>show('제목을 입력해 주세요.', 'warn')</code> 한 줄이면 됩니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- 세 방식 -->
+  <section id="kinds">
+    <h2>세 가지 표출 방식</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3>① 공통 <code>ToastBanner</code> <span class="tt s">31화면</span></h3>
+        <p>
+          상단 중앙 고정 · 4초 자동 소멸 · 닫기 버튼 · <code>role="alert"</code>.
+          색은 <b>인라인 스타일</b>로 박혀 있어 CSS로 못 바꿉니다 —
+          <code>--ui-success</code> / <code>--ui-danger</code> / <code>--ui-warn</code> 토큰을 씁니다.
+        </p>
+      </div>
+      <div class="card">
+        <h3>② <code>permission-toast</code> 전용 CSS <span class="tt w">2화면</span></h3>
+        <p style="margin-bottom:8px">
+          권한 신청·검토 2화면만 자체 구현입니다. <b>공통 훅을 안 쓰고</b> 로컬 <code>showToast</code>와
+          <code>_04-ops-permissions.scss</code>의 전용 클래스를 씁니다.
+        </p>
+        <ul>
+          <li><code>/permissions/requests/new</code> — 임시저장 · 신청 제출</li>
+          <li><code>/permissions/requests/{id}/review</code> — 승인 · 반려 · 이력 조회</li>
+        </ul>
+        <p style="margin-top:8px">
+          <b>타입 구분이 없습니다</b> — 항상 체크 아이콘 하나로만 뜹니다.
+        </p>
+      </div>
+      <div class="card">
+        <h3>③ 브라우저 <code>window.alert</code> <span class="tt e">11파일</span></h3>
+        <p>
+          토스트가 아니라 <b>브라우저 기본 팝업</b>입니다. 화면을 막고, 확인을 눌러야 사라지고,
+          디자인을 전혀 적용할 수 없습니다. 자동으로 사라지지도 않습니다.
+        </p>
+      </div>
+      <div class="card">
+        <h3>같은 방식인데 색이 갈리는 이유</h3>
+        <p>
+          <code>ToastBanner</code> 자체는 화면마다 동일합니다. 달라 보이는 건
+          <b>호출할 때 타입을 뭘로 넘기느냐</b>의 문제입니다. 같은 성격의 안내인데
+          어떤 화면은 <code>warn</code>, 어떤 화면은 타입 생략(→빨강)으로 되어 있습니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 목록 -->
+  <section id="list">
+    <h2>공통 토스트 화면 <span class="n">31곳 · 여는 방법</span></h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-url"><col class="c-t"><col><col></colgroup>
+        <thead><tr><th>경로</th><th>타입</th><th>여는 방법</th><th>메시지</th></tr></thead>
+        <tbody>
+          <tr><td class="url">/front-component</td><td><span class="tt s">성공</span> <span class="tt e">오류</span> <span class="tt w">경고</span></td><td class="how"><b>예제 버튼 3개 클릭</b> · 아이콘 클릭(복사)</td><td class="msg">평가가 저장되었습니다 / 저장에 실패했습니다 / 입력값을 확인해 주세요</td></tr>
+
+          <tr><td class="url">/admin/master-data/achievement-standards</td><td><span class="tt s">성공</span></td><td class="how">성취기준 <b>등록·수정·삭제</b></td><td class="msg">…이 …되었습니다 · 삭제되었습니다</td></tr>
+          <tr><td class="url">/admin/master-data/command-terms</td><td><span class="tt s">성공</span></td><td class="how">수행지시어 <b>등록·수정·삭제</b></td><td class="msg">수행지시어가 …되었습니다</td></tr>
+          <tr><td class="url">/admin/master-data/competency-mapping</td><td><span class="tt s">성공</span></td><td class="how">역량 <b>등록·수정·삭제</b></td><td class="msg">역량이 …되었습니다</td></tr>
+          <tr><td class="url">/admin/master-data/core-ideas</td><td><span class="tt s">성공</span></td><td class="how">핵심아이디어 <b>등록·수정·삭제</b></td><td class="msg">핵심아이디어가 …되었습니다</td></tr>
+          <tr><td class="url">/admin/master-data/key-concepts</td><td><span class="tt s">성공</span></td><td class="how">핵심개념 <b>등록·수정·삭제</b></td><td class="msg">핵심개념이 …되었습니다</td></tr>
+          <tr><td class="url">/admin/master-data/subject-competencies</td><td><span class="tt s">성공</span></td><td class="how">핵심역량 <b>등록·수정·삭제</b></td><td class="msg">핵심역량이 …되었습니다</td></tr>
+          <tr><td class="url">/admin/master-data/change-history</td><td><span class="tt w">경고</span></td><td class="how">결과가 없는 상태에서 <b>내보내기</b></td><td class="msg">내보낼 변경 이력이 없습니다</td></tr>
+
+          <tr><td class="url">/admin/notifications</td><td><span class="tt s">성공</span></td><td class="how">템플릿 <b>저장</b> · <b>재처리</b> · <b>수동 발송</b></td><td class="msg">알림 템플릿을 저장했습니다</td></tr>
+          <tr><td class="url">/notifications</td><td><span class="tt s">성공</span></td><td class="how"><b>모두 읽음</b> · 설정 <b>저장</b></td><td class="msg">알림을 모두 읽음 처리했습니다</td></tr>
+          <tr><td class="url">/admin/reference-data/category-boards</td><td><span class="tt s">성공</span></td><td class="how">교과서 자료 <b>등록·수정·삭제</b></td><td class="msg">교과서 자료가 …되었습니다</td></tr>
+          <tr><td class="url">/reference/category</td><td><span class="tt s">성공</span></td><td class="how">파일 <b>다운로드</b></td><td class="msg">—</td></tr>
+
+          <tr><td class="url">/admin/roles/user-roles</td><td><span class="tt s">성공</span> <span class="tt e">오류</span></td><td class="how">역할 배정 후 <b>저장</b></td><td class="msg">…님의 역할을 저장했습니다</td></tr>
+          <tr><td class="url">/admin/roles/advisors</td><td><span class="tt s">성공</span></td><td class="how">목록에서 <b>복사 버튼</b></td><td class="msg">…을 복사했습니다</td></tr>
+          <tr><td class="url">/admin/roles/advisors/{userId}</td><td><span class="tt s">성공</span></td><td class="how">자문위원 정보 <b>수정</b> · <b>위촉 종료</b></td><td class="msg">자문위원 정보가 수정되었습니다</td></tr>
+          <tr><td class="url">/admin/external-advisor-revocations</td><td><span class="tt s">성공</span></td><td class="how"><b>비활성화</b> · <b>재위촉</b></td><td class="msg">평가 배정을 비활성화했습니다</td></tr>
+          <tr><td class="url">/admin/schools</td><td><span class="tt s">성공</span></td><td class="how">학교 <b>등록</b></td><td class="msg">학교가 등록되었습니다</td></tr>
+
+          <tr><td class="url">/community/share</td><td><span class="tt s">성공</span> <span class="tt w">경고</span></td><td class="how">자료 <b>삭제</b> / 첨부 없는 글에서 <b>다운로드</b></td><td class="msg">자료가 삭제되었습니다 · 다운로드할 첨부 파일이 없습니다</td></tr>
+          <tr><td class="url">/community/board</td><td><span class="tt s">성공</span></td><td class="how">글 <b>삭제</b></td><td class="msg">—</td></tr>
+
+          <tr><td class="url">/support/files</td><td><span class="tt s">성공</span> <span class="tt w">경고</span> <span class="tt e">오류</span></td><td class="how">보존 기간에 <b>0 또는 4000 입력</b> 후 저장 → 경고<br>정상 <b>저장</b> · 파일 <b>삭제</b> → 성공</td><td class="msg">보존 기간은 1~3650일 사이의 정수로…</td></tr>
+          <tr><td class="url">/support/requests/new</td><td><span class="tt s">성공</span> <span class="tt w">경고</span> <span class="tt e">오류</span></td><td class="how"><b>필수값 비우고</b> 제출 → 경고<br><b>10MB 넘는 파일</b> 첨부 → 경고</td><td class="msg">요청 유형, 제목, 내용을 모두 입력해 주세요</td></tr>
+          <tr><td class="url">/support/requests</td><td><span class="tt s">성공</span> <span class="tt w">경고</span> <span class="tt e">오류</span></td><td class="how">요청 <b>상태 변경</b></td><td class="msg">… 상태로 변경했습니다</td></tr>
+          <tr><td class="url">/support/statistics</td><td><span class="tt s">성공</span> <span class="tt e">오류</span></td><td class="how"><b>Excel 내려받기</b></td><td class="msg">사용 통계 Excel 파일을 다운로드했습니다</td></tr>
+
+          <tr><td class="url">/evaluation/unions</td><td><span class="tt s">성공</span></td><td class="how">연합 <b>생성</b> · <b>삭제</b></td><td class="msg">연합이 생성되었습니다</td></tr>
+          <tr><td class="url">/evaluation/unions/{unionId}</td><td><span class="tt s">성공</span></td><td class="how"><b>요청 송신</b> · <b>참여 교사 지정</b> · <b>총괄자 지정</b> 등 9종</td><td class="msg">참여 학교에 연합 요청을 송신했습니다</td></tr>
+
+          <tr><td class="url">/tds/evaluations</td><td><span class="tt s">성공</span></td><td class="how">평가 <b>복사</b> · <b>삭제</b></td><td class="msg">복사되었습니다 · 삭제되었습니다</td></tr>
+          <tr><td class="url">/tds/evaluations/new</td><td><span class="tt w">경고</span> <span class="tt e">오류</span></td><td class="how"><b>필수값 비우고</b> 다음 단계</td><td class="msg">—</td></tr>
+          <tr><td class="url">/tds/evaluations/{regId}/designs/new</td><td><span class="tt s">성공</span> <span class="tt w">경고</span> <span class="tt e">오류</span></td><td class="how"><b>최종확인된 설계를 수정</b> 시도 → 경고<br>AI 문항 생성 <b>중지</b> → 경고 · 항목 <b>비우고 생성</b> → 오류</td><td class="msg">최종확인이 완료된 평가설계는 수정할 수 없습니다</td></tr>
+
+          <tr><td class="url">/monitoring/api-usage</td><td><span class="tt e">오류</span></td><td class="how">조회 실패 시</td><td class="msg">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- alert -->
+  <section id="alert">
+    <h2>브라우저 alert 화면 <span class="n">11개 파일 · 토스트가 아님</span></h2>
+    <p class="lead">
+      <code>window.alert</code>은 <b>화면을 막는 브라우저 팝업</b>입니다. 확인을 눌러야 사라지고 디자인을 입힐 수 없습니다.
+    </p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-url"><col style="width:16%"><col></colgroup>
+        <thead><tr><th>경로</th><th>횟수</th><th>여는 방법</th></tr></thead>
+        <tbody>
+          <tr><td class="url">/assignments/{id}/write</td><td>3</td><td class="how">글쓰기 화면에서 <b>제출·저장 검증 실패</b></td></tr>
+          <tr><td class="url">/assignments/{id}/cite</td><td>3</td><td class="how">인용 화면에서 <b>검증 실패</b></td></tr>
+          <tr><td class="url">/assignments/{id}/feedback</td><td>3</td><td class="how">피드백 화면에서 <b>검증 실패</b></td></tr>
+          <tr><td class="url">/community/board/new · /support/help 등</td><td>—</td><td class="how"><b>RaonEditor</b>(공통 에디터) 내부 검증</td></tr>
+          <tr><td class="url">/tds/evaluations/{regId}/designs/new</td><td>2+</td><td class="how">2단계 문항 패널 · AI 문항 생성 검증</td></tr>
+          <tr><td class="url">내부표준화 상세 — 루브릭</td><td>4</td><td class="how">평가요소명·배점 <b>비우고 저장</b> · 변경 없이 저장</td></tr>
+          <tr><td class="url">내부표준화 상세</td><td>1</td><td class="how">SMS 채점 배정 정보 조회 실패</td></tr>
+          <tr><td class="url">(공통 로직 2곳)</td><td>2</td><td class="how"><code>annotationStore</code> · <code>useAutoSave</code> — 첨삭 저장 실패</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 제안 -->
+  <section id="fix">
+    <h2>정리 제안</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3>1순위 — 타입 생략 5곳 <span class="tt e">지금 어색함</span></h3>
+        <p>
+          커뮤니티 3화면의 입력 안내가 빨간 오류로 뜹니다. <code>'warn'</code>을 넘기면 끝나고,
+          <b>퍼블 범위 안</b>이라 바로 처리할 수 있습니다.
+        </p>
+      </div>
+      <div class="card">
+        <h3>2순위 — <code>permission-toast</code> 2화면</h3>
+        <p>
+          공통 <code>ToastBanner</code>로 바꾸면 위치·소멸시간·닫기 버튼·타입 색이 다른 화면과 같아집니다.
+          로컬 <code>showToast</code>를 <code>useToast</code>로 교체하는 작업이라 <b>상태 로직을 건드립니다</b> — 확인이 필요합니다.
+        </p>
+      </div>
+      <div class="card">
+        <h3>3순위 — <code>window.alert</code> 11파일</h3>
+        <p>
+          토스트로 바꾸면 화면을 막지 않고 디자인도 통일됩니다. 다만 <code>alert</code>은
+          <b>사용자가 확인을 누를 때까지 다음 코드가 멈추는</b> 동작이라, 그대로 바꾸면 흐름이 달라질 수 있습니다.
+          로직 담당자와 함께 봐야 합니다.
+        </p>
+      </div>
+      <div class="card">
+        <h3>검토해 볼 것 — 기본값</h3>
+        <p>
+          <code>useToast</code>의 기본 타입이 <code>'error'</code>인 것 자체가 사고를 부릅니다.
+          타입을 <b>필수 인자로 바꾸면</b> 앞으로 빠뜨릴 수 없습니다. 공통 훅 변경이라 합의가 필요합니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <code>feature/front-goldking-new</code> · <code>a5ea050f</code> 기준 · 2026-08-31 ·
+    확인은 <code>npm run dev</code> → <code>http://127.0.0.1:3100/front-component</code>
+  </footer>
+
+</div>
+
+</body></html>

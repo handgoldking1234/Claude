@@ -1,0 +1,827 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>버튼·표 규격 정비 목록</title>
+<style>
+  :root {
+    --ground:      #f5f7fa;
+    --surface:     #ffffff;
+    --surface-2:   #eef2f7;
+    --ink:         #131820;
+    --ink-2:       #3d495f;
+    --ink-3:       #6b7687;
+    --rule:        #dbe1eb;
+    --rule-soft:   #e8ecf3;
+    --accent:      #2d76f7;
+    --accent-2:    #2549b7;
+    --accent-wash: #e8f0fe;
+    --new:         #b45309;
+    --new-wash:    #fdf3e5;
+    --code-bg:     #eef2f8;
+    --shadow:      0 1px 2px rgba(19,24,32,.05), 0 8px 26px -22px rgba(19,24,32,.6);
+    --font-body: "Segoe UI Variable Text", "Segoe UI", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-mono: "Cascadia Mono", "Cascadia Code", ui-monospace, Consolas, "Liberation Mono", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:#0e1117; --surface:#161a21; --surface-2:#1d222b;
+      --ink:#eef1f7; --ink-2:#b4c1d7; --ink-3:#8590a3;
+      --rule:rgba(255,255,255,.11); --rule-soft:rgba(255,255,255,.06);
+      --accent:#4aa8ff; --accent-2:#8ab7ff; --accent-wash:rgba(74,168,255,.12);
+      --new:#f0a63f; --new-wash:rgba(240,166,63,.12);
+      --code-bg:rgba(255,255,255,.045);
+      --shadow:0 1px 2px rgba(0,0,0,.45), 0 8px 26px -22px rgba(0,0,0,.95);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#0e1117; --surface:#161a21; --surface-2:#1d222b;
+    --ink:#eef1f7; --ink-2:#b4c1d7; --ink-3:#8590a3;
+    --rule:rgba(255,255,255,.11); --rule-soft:rgba(255,255,255,.06);
+    --accent:#4aa8ff; --accent-2:#8ab7ff; --accent-wash:rgba(74,168,255,.12);
+    --new:#f0a63f; --new-wash:rgba(240,166,63,.12);
+    --code-bg:rgba(255,255,255,.045);
+    --shadow:0 1px 2px rgba(0,0,0,.45), 0 8px 26px -22px rgba(0,0,0,.95);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--ground); color: var(--ink);
+    font-family: var(--font-body); font-size: 15px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 1140px; margin: 0 auto; padding: 44px 22px 88px; display: flex; flex-direction: column; gap: 40px; }
+
+  .masthead { display: flex; flex-direction: column; gap: 12px; border-bottom: 2px solid var(--ink); padding-bottom: 22px; }
+  .kicker { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+  h1 { margin: 0; font-size: clamp(27px, 4.4vw, 35px); line-height: 1.14; letter-spacing: -.022em; font-weight: 700; }
+  .standfirst { margin: 0; max-width: 66ch; color: var(--ink-2); }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); }
+  .meta b { color: var(--ink-2); font-weight: 500; }
+
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 11px; }
+  .stat { border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); padding: 12px 15px;
+          display: flex; flex-direction: column; gap: 1px; box-shadow: var(--shadow); }
+  .stat__num { font-size: 24px; font-weight: 700; letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.15; }
+  .stat__label { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-3); }
+
+  section { display: flex; flex-direction: column; gap: 14px; scroll-margin-top: 16px; }
+  h2 { margin: 0; font-size: 20px; letter-spacing: -.015em; font-weight: 700; padding-bottom: 8px; border-bottom: 1px solid var(--rule); }
+  p { margin: 0; }
+  .lead { max-width: 70ch; color: var(--ink-2); font-size: 14.5px; }
+
+  code { font-family: var(--font-mono); font-size: .85em; background: var(--code-bg); padding: .1em .36em; border-radius: 4px; word-break: break-word; }
+
+  .toc { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1px 22px;
+         padding: 15px 19px; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; box-shadow: var(--shadow); }
+  .toc a { color: var(--ink-2); text-decoration: none; font-size: 14px; padding: 3px 0; display: block; }
+  .toc a:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  .toc a span { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-3); }
+
+  .tablewrap { border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); box-shadow: var(--shadow); overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  colgroup .c-page { width: 21%; }
+  colgroup .c-url  { width: 25%; }
+  thead th { text-align: left; font-size: 11.5px; font-family: var(--font-mono); letter-spacing: .05em; text-transform: uppercase;
+             color: var(--ink-3); font-weight: 600; padding: 11px 16px; background: var(--surface-2); white-space: nowrap; }
+  td { padding: 13px 16px; border-top: 1px solid var(--rule-soft); vertical-align: top; }
+  td.page { font-weight: 600; }
+  td.url { font-family: var(--font-mono); font-size: 12.5px; color: var(--accent-2); word-break: break-all; }
+  td.what ul { margin: 0; padding-left: 17px; }
+  td.what li { margin-bottom: 3px; color: var(--ink-2); }
+  td.what li:last-child { margin-bottom: 0; }
+  td.what b { color: var(--ink); font-weight: 600; }
+
+  .badge-new { display: inline-block; font-family: var(--font-mono); font-size: 10.5px; font-weight: 600;
+               padding: 1px 6px; border-radius: 4px; background: var(--new-wash); color: var(--new); vertical-align: 1px; white-space: nowrap; }
+  .badge-fix { display: inline-block; font-family: var(--font-mono); font-size: 10.5px; font-weight: 600;
+               padding: 1px 6px; border-radius: 4px; background: var(--accent-wash); color: var(--accent-2); vertical-align: 1px; white-space: nowrap; }
+
+  .card { border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); box-shadow: var(--shadow); padding: 18px 20px; }
+  .card h3 { margin: 0 0 8px; font-size: 15.5px; font-weight: 600; }
+  .card ul { margin: 0; padding-left: 18px; color: var(--ink-2); font-size: 14px; }
+  .card li { margin-bottom: 5px; }
+  .card li:last-child { margin-bottom: 0; }
+
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+
+  pre { margin: 8px 0 0; padding: 11px 13px; border-radius: 7px; background: var(--code-bg); overflow-x: auto;
+        font-family: var(--font-mono); font-size: 12.5px; line-height: 1.6; color: var(--ink); }
+  pre .del { color: var(--ink-3); }
+  pre .add { color: var(--accent-2); font-weight: 600; }
+  pre .cm  { color: var(--ink-3); }
+
+  footer { border-top: 1px solid var(--rule); padding-top: 18px; color: var(--ink-3); font-size: 13px; }
+  footer code { background: none; padding: 0; }
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="kicker">dfe-front · 퍼블 작업 공유</div>
+    <h1>버튼·표 규격 정비 화면 목록</h1>
+    <p class="standfirst">
+      화면마다 제각각이던 버튼 클래스와 목록 표의 열 폭을 한 규칙으로 맞췄습니다.
+      아래는 실제로 손댄 화면과 경로입니다. 같은 영역을 작업하실 때 참고해 주세요.
+    </p>
+    <div class="meta">
+      <span><b>작업일</b> 2026-08-25 ~ 26</span>
+      <span><b>브랜치</b> feature/front-goldking-new</span>
+      <span><b>커밋</b> 00ba297 · bdb4d62 · e4c2c7d · 6d0c54d</span>
+      <span><b>검증</b> tsc 통과 · vitest 639건 통과</span>
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><span class="stat__num">102</span><span class="stat__label">변경 파일</span></div>
+    <div class="stat"><span class="stat__num">38</span><span class="stat__label">수정 화면</span></div>
+    <div class="stat"><span class="stat__num">59</span><span class="stat__label">btn-teal 전환</span></div>
+    <div class="stat"><span class="stat__num">73</span><span class="stat__label">헤더 버튼 규격화</span></div>
+    <div class="stat"><span class="stat__num">25</span><span class="stat__label">모달 버튼 아이콘</span></div>
+    <div class="stat"><span class="stat__num">9</span><span class="stat__label">표 열 폭 정비</span></div>
+  </div>
+
+  <nav class="toc">
+    <a href="#all">전 화면 일괄 적용 <span>· 4건</span></a>
+    <a href="#rules">적용한 규칙 요약</a>
+    <a href="#roles">시스템 설정 · 역할/권한 <span>· 4</span></a>
+    <a href="#master">시스템 설정 · 기준/참조데이터 <span>· 7</span></a>
+    <a href="#menu">시스템 설정 · 메뉴/코드 <span>· 5</span></a>
+    <a href="#eval">평가 관리 <span>· 4</span></a>
+    <a href="#grading">채점 관리 <span>· 6</span></a>
+    <a href="#result">평가 결과 <span>· 3</span></a>
+    <a href="#community">커뮤니티 · 지원 <span>· 8</span></a>
+    <a href="#report">리포트 · 모니터링 <span>· 4</span></a>
+    <a href="#traps">주의할 점</a>
+    <a href="#todo">남은 작업</a>
+    <a href="#unverified">확인 요청 <span>· 5</span></a>
+  </nav>
+
+  <!-- ───── 전 화면 일괄 ───── -->
+  <section id="all">
+    <h2>전 화면 일괄 적용</h2>
+    <p class="lead">개별 화면 표에는 다시 적지 않았습니다. 아래 네 가지는 해당하는 모든 화면에 반영돼 있습니다.</p>
+    <div class="grid2">
+      <div class="card">
+        <h3>주 버튼 색 통일 <span class="badge-fix">59곳</span></h3>
+        <ul>
+          <li><code>btn-teal</code> → <code>btn-primary</code>. 저장·등록·확정 등 주 액션 전부</li>
+          <li>사용처 0. 배지의 <code>badge-teal</code>은 별개이므로 유지</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>페이지 헤더 버튼 규격 <span class="badge-fix">71개</span></h3>
+        <ul>
+          <li><code>btn-shadow</code> 적용, <code>btn-lg</code> 제거 → 높이 36px 통일</li>
+          <li>보조 버튼 <code>btn-outline</code> → <code>btn-white</code> (13곳)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>모달 푸터 버튼 아이콘 <span class="badge-fix">25곳</span></h3>
+        <ul>
+          <li>취소·닫기 <code>IconClose</code> / 저장 <code>IconSave</code> / 확인 <code>IconCheck</code> / 삭제 <code>IconDelete</code></li>
+          <li>저장 중에는 <code>IconLoading</code>으로 교체, 아이콘은 텍스트 앞 <code>size={15}</code></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>전역 스타일 손질 <span class="badge-new">공통</span></h3>
+        <ul>
+          <li><b>셀렉트 화살표 복구</b> — <code>.menu-form-field select</code>의 <code>background</code> 단축 속성이 화살표 이미지를 지우던 버그</li>
+          <li><b>셀렉트 우측 여백</b> — <code>.form-select</code>의 <code>padding-right</code> 24px → 30px. 화살표와 글자가 붙던 것을 띄움</li>
+          <li><b>구분자 세로 정렬</b> — <code>.box</code> 안의 장식용 <code>–</code>·<code>h-bar</code>가 줄 위쪽에 붙던 것을 <code>align-self: center</code>로 정렬</li>
+          <li><b>셀렉트 폭 변형 추가</b> — <code>select-search--filter-auto</code>(내용 폭·최소 130px). 기존 <code>--filter</code>는 180px 고정</li>
+          <li><b>파비콘</b> — 신규 SVG 심볼로 교체. Illustrator가 만든 한글 그라디언트 id를 ASCII로 정리해 인코딩 의존 제거</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── 규칙 요약 ───── -->
+  <section id="rules">
+    <h2>적용한 규칙 요약</h2>
+    <p class="lead">새 화면을 만들 때 이대로 맞춰 주세요. 전부 기존 클래스만 쓰며 신규 CSS는 셀렉트 폭 변형 하나뿐입니다.</p>
+    <div class="grid2">
+      <div class="card">
+        <h3>목록 표 열 폭</h3>
+        <p style="color:var(--ink-2);font-size:14px"><code>&lt;th style&gt;</code>에 흩지 말고 <code>&lt;colgroup&gt;</code>에 모읍니다. 표에 <code>min-width</code>를 걸면 %가 최소 폭이자 확대 비율로 동작합니다.</p>
+        <pre>&lt;table style={{ minWidth: '1000px' }}&gt;
+  &lt;colgroup&gt;
+    &lt;col style={{ width: '56px' }} /&gt;  <span class="cm">No — px</span>
+    &lt;col style={{ width: '26%' }} /&gt;   <span class="cm">이름 — 넓게</span>
+    …
+  &lt;/colgroup&gt;
+
+<span class="cm">/* css — col width 를 쓰려면 필수 */</span>
+.표 { table-layout: fixed; }</pre>
+      </div>
+      <div class="card">
+        <h3>표 정렬</h3>
+        <ul>
+          <li><code>&lt;th&gt;</code>는 모두 가운데</li>
+          <li><code>&lt;td&gt;</code>도 기본 가운데, <b>이름·경로처럼 긴 텍스트 열만</b> <code>text-left</code></li>
+          <li>아이콘 버튼이 들어가는 관리 열은 px 고정 + 가운데</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>필터바 구분선</h3>
+        <ul>
+          <li>성격이 다른 필터 묶음 <b>사이에만</b> <code>&lt;div className="h-bar" /&gt;</code></li>
+          <li><b>오른쪽 검색창 앞에는 넣지 않습니다</b></li>
+          <li>앞머리 라벨은 <code>&lt;span className="text-muted-light text-xs font-bold"&gt;</code></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>검색 가능 셀렉트</h3>
+        <ul>
+          <li>옵션이 API로 채워지고 개수가 많으면 <code>SelectSearch</code></li>
+          <li>학교급·학년처럼 선택지가 몇 개뿐이면 <code>&lt;select&gt;</code> 유지</li>
+          <li>폭 — 값이 길면 <code>select-search--filter</code>(180px), 짧으면 <code>select-search--filter-auto</code>(내용 폭·최소 130px) <span class="badge-new">신규</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── 역할/권한 ───── -->
+  <section id="roles">
+    <h2>시스템 설정 · 역할/권한</h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-page"><col class="c-url"><col></colgroup>
+        <thead><tr><th>화면</th><th>경로</th><th>수정 내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="page">사용자 역할 할당</td>
+            <td class="url">/admin/roles/user-roles</td>
+            <td class="what"><ul>
+              <li>사용자 등록·역할 부여 버튼 주색 전환</li>
+              <li>역할 부여 모달 푸터에 아이콘 추가</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">외부 자문위원</td>
+            <td class="url">/admin/roles/advisors</td>
+            <td class="what"><ul>
+              <li>자문위원 등록·계정 발급 버튼 주색 전환</li>
+              <li>임시 ID·PW 모달 버튼 아이콘</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">자문위원 재위촉</td>
+            <td class="url">/admin/external-advisor-revocations</td>
+            <td class="what"><ul>
+              <li>재위촉 버튼 주색 전환 (목록·제출)</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">권한 신청 검토</td>
+            <td class="url">/permissions/requests</td>
+            <td class="what"><ul>
+              <li>조회 조건 select 묶음과 상태 탭 사이 <b>구분선</b> 추가</li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ───── 기준/참조데이터 ───── -->
+  <section id="master">
+    <h2>시스템 설정 · 기준/참조데이터</h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-page"><col class="c-url"><col></colgroup>
+        <thead><tr><th>화면</th><th>경로</th><th>수정 내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="page">기출문항게시판</td>
+            <td class="url">/reference/past-items</td>
+            <td class="what"><ul>
+              <li>필터바 <b>전면 재구성</b> — 라벨 제거, 한 줄 고정, 조회 범위를 패널 헤더로 올림 <span class="badge-new">큰 변경</span></li>
+              <li>과목 필터를 <b>검색 가능 셀렉트</b>로 교체</li>
+              <li>검색 버튼 높이를 입력창과 동일하게 (<code>btn-sm</code> 제거)</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">수행지시어</td>
+            <td class="url">/admin/master-data/command-terms</td>
+            <td class="what"><ul>
+              <li>학교급·교과 필터를 <b>검색 가능 셀렉트</b>로 교체</li>
+              <li>탭에 밀려 <code>고등학교 · 수…</code>로 잘리던 말줄임 해결</li>
+              <li>등록 버튼·모달 저장 버튼 주색</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">학교정보 관리 (상세)</td>
+            <td class="url">/admin/schools</td>
+            <td class="what"><ul>
+              <li>과목 탭의 교과군 필터를 <b>검색 가능 셀렉트</b>로 교체</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">성취기준</td>
+            <td class="url">/admin/master-data/achievement-standards</td>
+            <td class="what"><ul>
+              <li>등록·수정 모달 저장 버튼 주색 (교과/영역/성취기준 공용 모달)</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">교과 핵심역량</td>
+            <td class="url">/admin/master-data/subject-competencies</td>
+            <td class="what"><ul>
+              <li>핵심역량 등록 버튼·모달 저장 버튼 주색</li>
+              <li>삭제 확인 모달 버튼 아이콘</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">핵심아이디어</td>
+            <td class="url">/admin/master-data/core-ideas</td>
+            <td class="what"><ul>
+              <li>성취기준 연결 모달 확인 버튼 주색 · 아이콘</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">교과서 자료</td>
+            <td class="url">/admin/reference-data/category-boards</td>
+            <td class="what"><ul>
+              <li>자료 등록 버튼 주색</li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ───── 메뉴/코드 ───── -->
+  <section id="menu">
+    <h2>시스템 설정 · 메뉴/코드</h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-page"><col class="c-url"><col></colgroup>
+        <thead><tr><th>화면</th><th>경로</th><th>수정 내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="page">메뉴 관리</td>
+            <td class="url">/admin/menus</td>
+            <td class="what"><ul>
+              <li>아이콘 전용 버튼 3개에 <b>툴팁</b> 추가 — 전체 펼치기/닫기, 최상위 메뉴 추가, 페이지 열기</li>
+              <li>브라우저 기본 <code>title</code> 제거 (툴팁 중복 방지), <code>aria-label</code>은 유지</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">공통코드 관리</td>
+            <td class="url">/admin/common-codes</td>
+            <td class="what"><ul>
+              <li>코드분류 <code>+</code> 버튼에 <b>툴팁</b> 추가</li>
+              <li>패널 밖으로 잘리지 않게 <code>--edge</code> 변형 적용</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">메인화면 구성</td>
+            <td class="url">/admin/home-layouts</td>
+            <td class="what"><ul>
+              <li>‘대상 역할’ 라벨을 <code>&lt;strong&gt;</code>에서 필터바 라벨 스타일로 통일</li>
+              <li>역할별 구성 비교 모달 확인 버튼 아이콘</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">메시지 코드</td>
+            <td class="url">/admin/message-codes</td>
+            <td class="what"><ul>
+              <li>메시지 추가 모달 취소 버튼 아이콘</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">NEIS 연동 설정</td>
+            <td class="url">/admin/neis/settings</td>
+            <td class="what"><ul>
+              <li>설정 모달 저장 확정 버튼 주색</li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ───── 평가 관리 ───── -->
+  <section id="eval">
+    <h2>평가 관리 · 연합 / 평가설계</h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-page"><col class="c-url"><col></colgroup>
+        <thead><tr><th>화면</th><th>경로</th><th>수정 내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="page">연합 관리</td>
+            <td class="url">/evaluation/unions</td>
+            <td class="what"><ul>
+              <li>목록 표 <b>열 폭 정비</b> — 연합 정보 25%, 생성일시 10%, 관리 128px</li>
+              <li>생성일시를 날짜·시각으로 분리 → 좁아지면 <code>오전 11:20</code>이 통째로 개행</li>
+              <li>참여 학교 셀 가운데 정렬, 상세 버튼 가운데 정렬</li>
+              <li>필터바 끝(검색창 앞) 구분선 제거</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">연합 상세</td>
+            <td class="url">/evaluation/unions/{unionId}</td>
+            <td class="what"><ul>
+              <li>교사 추가 모달의 학교 필터를 <b>검색 가능 셀렉트</b>로 교체</li>
+              <li>학교 추가·교사 추가 모달 푸터 아이콘</li>
+              <li>학교·역할 셀렉트의 <b>화살표가 안 보이던 문제</b> 수정 <span class="badge-new">버그</span></li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">평가 목록</td>
+            <td class="url">/tds/evaluations</td>
+            <td class="what"><ul>
+              <li>설계 목록 표 <b>열 폭 정비</b> — 평가명 31%로 확대, 나머지 축소</li>
+              <li>평가명 셀만 좌측 정렬, 나머지 가운데</li>
+              <li>교과 필터를 <b>검색 가능 셀렉트</b>로 교체</li>
+              <li>평가 등록 버튼 규격</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">평가설계 (2·5·6단계)</td>
+            <td class="url">/tds/evaluations/{regId}/designs/{designId}</td>
+            <td class="what"><ul>
+              <li>문항 추가 · 채점자 추가 · 최종확인 완료 버튼 주색</li>
+              <li>교차채점·중복채점 <b>비율 설정 팝업을 공통 Modal 규격으로 전환</b> — 헤더 아이콘·설명, 푸터 버튼 아이콘 <span class="badge-new">08-26</span></li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ───── 채점 관리 ───── -->
+  <section id="grading">
+    <h2>채점 관리</h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-page"><col class="c-url"><col></colgroup>
+        <thead><tr><th>화면</th><th>경로</th><th>수정 내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="page">채점현황 목록</td>
+            <td class="url">/grading/status</td>
+            <td class="what"><ul>
+              <li>표 <b>열 폭 정비</b> — 평가명 24% · 평가설계명 20%, 액션 104px</li>
+              <li><code>&lt;th&gt;</code> 전부 가운데 정렬 (본문 셀은 좌측 유지)</li>
+              <li>과목 필터를 <b>검색 가능 셀렉트</b>로 교체</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">채점현황 대시보드</td>
+            <td class="url">/grading/status/{designId}</td>
+            <td class="what"><ul>
+              <li>직접 작성한 <code>ui-panel</code> 마크업을 <b>공통 <code>Panel</code></b>로 교체 — 제목 앞 아이콘·헤더 구분선 적용 <span class="badge-new">08-26</span></li>
+              <li>진행 요약·품질 지표 카드를 <b><code>GridStatus</code></b>로 교체. 색은 의미 규칙에 맞추고 기존 배지는 <code>desc</code>로 유지</li>
+              <li>본채점 참여 채점자 표에 <b>colgroup</b> 적용, <code>&lt;th&gt;</code> 가운데 정렬</li>
+              <li>표 래퍼를 정의 없는 <code>table-scroll</code> → <code>box box-rounded-16</code>으로 교체</li>
+              <li>건수를 하단 푸터 대신 <b>제목 아래 <code>description</code></b>으로 이동 (페이징 없는 표라 푸터 불필요)</li>
+              <li>파일에 직접 정의돼 있던 인라인 SVG 아이콘 3종을 공통 아이콘으로 교체</li>
+              <li>헤더 버튼 규격 적용 — 내부표준화 <code>btn-white btn-shadow</code>, 새로고침 <code>btn-primary btn-shadow</code>. 이 화면은 <code>users-header</code>가 아닌 자체 헤더라 앞선 일괄 정비에서 누락돼 있었음</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">내부표준화 목록</td>
+            <td class="url">/grading/internal-standardization</td>
+            <td class="what"><ul>
+              <li>표 <b>열 폭 정비</b> (7열) · <code>&lt;th&gt;</code> 가운데 정렬</li>
+              <li>과목 필터를 <b>검색 가능 셀렉트</b>로 교체</li>
+              <li>‘내부표준화 도움말’ 버튼을 공통 버튼 규격으로 (전용 클래스 제거)</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">답안 전처리</td>
+            <td class="url">/grading/answer-preprocessing/*</td>
+            <td class="what"><ul>
+              <li>수집·OCR·수기보정·유사도 화면 헤더 버튼 규격</li>
+              <li>전처리 완료 확정 버튼·모달 주색 및 아이콘</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">본채점</td>
+            <td class="url">/grading/main-grading/*</td>
+            <td class="what"><ul>
+              <li>교차채점·AI 교차채점·조정채점 버튼 주색 (등급 토글 포함)</li>
+              <li>AI 채점 결과·답안 상세 모달 아이콘</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">중복채점</td>
+            <td class="url">/grading/main-grading/duplicate</td>
+            <td class="what"><ul>
+              <li>상단 통계 카드의 <b>색상·아이콘을 내용 의미에 맞게</b> 재배치 — 중복 배정은 총계(중립), 재채점 완료는 <code>ok</code></li>
+              <li>아이콘 교체 — 중복 배정 <code>IconCopy</code>, 평균 점수차 <code>IconCompare</code></li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ───── 평가 결과 ───── -->
+  <section id="result">
+    <h2>평가 결과</h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-page"><col class="c-url"><col></colgroup>
+        <thead><tr><th>화면</th><th>경로</th><th>수정 내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="page">성적처리</td>
+            <td class="url">/evaluation-result/grade-processing/*</td>
+            <td class="what"><ul>
+              <li>산출·검증·확정·NEIS 내보내기 화면 헤더 버튼 규격</li>
+              <li>성적 확정 버튼 및 확인 모달 주색 · 아이콘</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">평가결과질문</td>
+            <td class="url">/evaluation-result/result-inquiry/*</td>
+            <td class="what"><ul>
+              <li>검토·제출·마감·총평 화면 버튼 규격</li>
+              <li>초안 재생성 · 임시저장 버튼 주색</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">시험 감독</td>
+            <td class="url">/evaluation/proctor</td>
+            <td class="what"><ul>
+              <li>시험 시작 버튼에 <code>btn-shadow</code> 적용</li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ───── 커뮤니티·지원 ───── -->
+  <section id="community">
+    <h2>커뮤니티 · 지원</h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-page"><col class="c-url"><col></colgroup>
+        <thead><tr><th>화면</th><th>경로</th><th>수정 내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="page">자료공유</td>
+            <td class="url">/community/share</td>
+            <td class="what"><ul>
+              <li>필터바에 <b>구분선 2개</b> — 분류 칩 │ 범위·정렬 │ 기간</li>
+              <li>기간 구분자(<code>–</code>)가 위로 붙던 세로 정렬 수정</li>
+              <li>분류 필터 칩·자료 등록 버튼 주색</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">커뮤니티</td>
+            <td class="url">/community/board</td>
+            <td class="what"><ul>
+              <li>필터바에 <b>구분선</b> — 분류 체크박스 │ 정렬</li>
+              <li>글 쓰기 · 등록 · 수정하기 · 댓글 등록 버튼 주색</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">파일 관리</td>
+            <td class="url">/support/files</td>
+            <td class="what"><ul>
+              <li>보존 정책·관리 파일 <b>두 표 모두 열 폭 정비</b></li>
+              <li>관리 파일 표 최소 폭 800 → 1000 (9열엔 부족)</li>
+              <li>전용 CSS 신규 생성 <span class="badge-new">신규 파일</span></li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">서비스 요청 검토</td>
+            <td class="url">/support/requests</td>
+            <td class="what"><ul>
+              <li>요청 유형 select와 처리 상태 탭 사이 <b>구분선</b> 추가</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">서비스 요청</td>
+            <td class="url">/support/requests/new</td>
+            <td class="what"><ul>
+              <li>확인 버튼 주색</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">도움말 콘텐츠 관리</td>
+            <td class="url">/support/help</td>
+            <td class="what"><ul>
+              <li>대상 메뉴 패널의 <b>검색바를 패널 폭 100%</b>로</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">알림 관리</td>
+            <td class="url">/admin/notifications</td>
+            <td class="what"><ul>
+              <li>템플릿 표의 <b>이벤트·제목 템플릿 셀 좌측 정렬</b></li>
+              <li>헤더 버튼 규격</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">알림센터</td>
+            <td class="url">/notifications</td>
+            <td class="what"><ul>
+              <li>유형 셀렉트 앞의 ‘유형:’ 라벨 제거 (<code>aria-label</code>로 대체)</li>
+              <li>새로고침·모두 읽음·알림 설정 버튼 규격</li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ───── 리포트·모니터링 ───── -->
+  <section id="report">
+    <h2>리포트 · 모니터링</h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-page"><col class="c-url"><col></colgroup>
+        <thead><tr><th>화면</th><th>경로</th><th>수정 내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="page">통계 조회</td>
+            <td class="url">/report/statistics</td>
+            <td class="what"><ul>
+              <li>‘조회 조건’ 라벨 스타일 통일, 범위 탭을 <b>버튼 스타일</b>로 교체</li>
+              <li>범위 탭과 조건 select 사이 <b>구분선</b> 추가</li>
+              <li>조회 버튼을 흰 버튼으로</li>
+              <li>기본 통계 카드 4개에 <b>아이콘 추가</b>, 색을 내용 의미에 맞게 재배치 <span class="badge-new">08-26</span></li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">리포트 생성</td>
+            <td class="url">/report/create/*</td>
+            <td class="what"><ul>
+              <li>개인 성적표·학급 분석표·평가 결과 보고서·문항 분석표의 출력·다운로드 버튼 주색 (11곳)</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">API 성능 로그</td>
+            <td class="url">/monitoring/api-usage</td>
+            <td class="what"><ul>
+              <li>요약·요청 로그 <b>두 표 모두 열 폭 정비</b> — 엔드포인트·경로 34%</li>
+              <li><code>&lt;th&gt;</code> 전부 가운데, <code>&lt;td&gt;</code>도 가운데 (엔드포인트·경로만 좌측)</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">AI 문항 성능 테스트</td>
+            <td class="url">/monitoring/question-performance</td>
+            <td class="what"><ul>
+              <li>참여 목록 표 <b>열 폭 정비</b> (11열) — 잘리던 이메일 열을 20%로 확대</li>
+              <li>긴 값 줄바꿈 허용</li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+
+  <!-- ───── 주의할 점 ───── -->
+  <section id="traps">
+    <h2>주의할 점</h2>
+    <p class="lead">원인 찾는 데 시간이 걸렸던 것들입니다. 같은 증상을 만나면 여기부터 보세요.</p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="width:28%"><col></colgroup>
+        <thead><tr><th>증상</th><th>원인과 대처</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="page">셀렉트 화살표가 안 보임</td>
+            <td class="what"><ul>
+              <li><code>.form-select</code>는 화살표를 <code>background-image</code>로 깝니다. 컨테이너 규칙이 <code>background</code> <b>단축 속성</b>으로 배경색을 덮으면 이미지까지 지워집니다</li>
+              <li><code>background-color</code>로 분리하고, <code>padding</code>도 덮였다면 <code>padding-right</code>를 다시 확보</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page"><code>&lt;col&gt;</code>의 <code>min-width</code>가 안 먹음</td>
+            <td class="what"><ul>
+              <li><code>&lt;col&gt;</code>에 적용되는 건 <code>width</code>·<code>background</code>·<code>border</code>·<code>visibility</code> 정도입니다</li>
+              <li>폭은 <code>width</code>를 %로, 최소 폭은 <code>&lt;table&gt;</code>의 <code>min-width</code>로</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">패널 안 툴팁이 잘림</td>
+            <td class="what"><ul>
+              <li><code>.ui-panel</code>이 <code>overflow: hidden</code>이라 오른쪽 끝 버튼의 툴팁이 잘립니다</li>
+              <li><code>header-tooltip-host--edge</code>를 함께 주면 안쪽으로 펼쳐집니다. 툴팁을 달면 <code>title</code>은 제거</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">필터바 셀렉트가 한 줄을 다 먹음</td>
+            <td class="what"><ul>
+              <li>전역 규칙 <code>.ui-panel__body .form-select { width: 100% }</code> 때문입니다</li>
+              <li>가로 한 줄 필터바에는 <code>ui-panel__body</code> 대신 <code>p-6</code> 같은 여백 유틸을 사용</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">유틸 클래스가 안 먹음</td>
+            <td class="what"><ul>
+              <li><code>common.css</code>가 <code>styles.scss</code>보다 <b>먼저</b> 로드됩니다. 명시도가 같으면 컴포넌트 규칙이 이깁니다</li>
+              <li>특히 <code>padding</code> 같은 단축 속성은 <code>pb-6</code> 유틸로 못 이깁니다 → 인라인 style이나 명시도 높은 규칙 사용</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">flex 안에서 입력창이 안 줄어듦</td>
+            <td class="what"><ul>
+              <li><code>&lt;input&gt;</code>은 기본 폭 약 180px에 <code>min-width: auto</code>라 안 줄어듭니다 → <code>min-w-0</code> 필요</li>
+              <li>줄어들면 안 되는 요소엔 <code>shrink-0</code>, 남는 공간 흡수는 <code>flex-1 min-w-0</code> + 안쪽 <code>w-full</code></li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ───── 남은 작업 ───── -->
+  <section id="todo">
+    <h2>남은 작업</h2>
+    <p class="lead">이번 커밋에 포함되지 않았습니다. 이어서 하실 분을 위해 남깁니다.</p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-page"><col class="c-url"><col></colgroup>
+        <thead><tr><th>항목</th><th>대상</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="page">화살표 아이콘 복구</td>
+            <td class="url">_06-eval-new.scss</td>
+            <td class="what"><ul>
+              <li><code>.eval-design-page .form-select</code> (평가설계 화면 전체), <code>.admin-eval-new .form-select:disabled</code></li>
+              <li>위 ‘주의할 점’ 첫 항목과 같은 원인 — <code>background</code> → <code>background-color</code></li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">보조 버튼 통일 <b>42곳</b></td>
+            <td class="url">전 화면</td>
+            <td class="what"><ul>
+              <li><code>btn-outline btn-up</code> → <code>btn-white btn-shadow</code></li>
+              <li>커뮤니티 8 · 알림 7 · 내부표준화 6 · 평가결과 5 · 운영관리 12 · 기타 4</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">검색 셀렉트 전환 <b>3곳</b></td>
+            <td class="url">연합 개설 / CBT / 라이트라이트</td>
+            <td class="what"><ul>
+              <li>연합 개설의 교과군·과목은 <b>연동 구조</b> — 교과군을 바꾸면 과목을 다시 불러오고, 이미 추가된 과목은 비활성 옵션</li>
+              <li>CBT 시험 설정 과목, 라이트라이트 교사 리포트 학교는 단순 교체</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">검색 버튼 <b>5곳</b> <span class="badge-new">협의 필요</span></td>
+            <td class="url">past-items · share · board · category · requests</td>
+            <td class="what"><ul>
+              <li>검색 입력이 있는 41개 화면 중 5개만 ‘검색’ 버튼이 있습니다. 나머지 36개는 타이핑하면 바로 걸러집니다</li>
+              <li>이 5곳은 <b>서버 조회</b>라 버튼만 지우면 검색이 동작하지 않습니다. API 호출 시점을 디바운스로 옮겨야 해서 <b>API 연동 담당과 협의 필요</b></li>
+              <li>재사용할 패턴은 <code>useEvaluationListState.ts</code>에 이미 있습니다 (<code>KEYWORD_DEBOUNCE_MS = 400</code>)</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="page">정리 후보</td>
+            <td class="url">—</td>
+            <td class="what"><ul>
+              <li><code>/grading/main-grading</code>은 라우트가 없어 React Router 404가 그대로 노출 (하위 4개만 존재)</li>
+              <li>사용처 0인 CSS — <code>.ist-help-entry</code>, <code>.permission-filter-tabs</code></li>
+              <li><code>.btn-secondary</code>는 CSS 정의가 없음 (<code>MyEvaluationsPage</code>에서 사용 중)</li>
+              <li><code>.unions-table</code> 스타일이 정의돼 있으나 실제 <code>&lt;table&gt;</code>에 클래스가 없어 미적용</li>
+              <li>죽은 파일 — <code>AiModelPerformancePage</code>, <code>AlarmManagePage</code>, <code>CategoryBoardDeniedModal</code></li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ───── 확인 요청 ───── -->
+  <section id="unverified">
+    <h2>확인 요청 — 화면으로 못 본 곳</h2>
+    <p class="lead">
+      코드 수정은 모두 적용됐지만 <b>작업자 계정 권한으로 열리지 않아 눈으로 확인하지 못한 화면</b>입니다.
+      해당 영역을 작업하시게 되면 지나는 김에 한 번 봐주세요. 대부분 모달 푸터 버튼의 아이콘·색입니다.
+    </p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-page"><col class="c-url"><col></colgroup>
+        <thead><tr><th>화면</th><th>경로</th><th>확인할 것</th></tr></thead>
+        <tbody>
+          <tr><td class="page">성적 확정</td><td class="url">/evaluation-result/grade-processing/confirm</td>
+            <td class="what"><ul><li>확인 모달의 취소·확정하기 버튼 아이콘과 주색</li></ul></td></tr>
+          <tr><td class="page">의견마감 확정</td><td class="url">/evaluation-result/result-inquiry/finalize</td>
+            <td class="what"><ul><li>모달 취소·마감 확정 버튼 아이콘</li></ul></td></tr>
+          <tr><td class="page">이의신청 검토</td><td class="url">/evaluation-result/result-inquiry/review</td>
+            <td class="what"><ul><li>초안 재생성 버튼 주색</li><li>에스컬레이션 요청 버튼 아이콘 <span class="badge-new">임의 선택</span></li></ul></td></tr>
+          <tr><td class="page">유사도 검사</td><td class="url">/grading/answer-preprocessing/similarity</td>
+            <td class="what"><ul><li>플래그 해제·유지 버튼 아이콘 <span class="badge-new">임의 선택</span></li></ul></td></tr>
+          <tr><td class="page">AI 교차채점</td><td class="url">/grading/main-grading/cross-ai</td>
+            <td class="what"><ul><li>AI 채점 결과·답안 상세 두 모달의 버튼 아이콘</li></ul></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <code>feature/front-goldking-new</code> · <code>6d0c54d</code> · 2026-08-26 ·
+    확인은 <code>npm run dev</code> → <code>http://127.0.0.1:3100</code>
+  </footer>
+
+</div>
+
+</body></html>

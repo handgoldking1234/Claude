@@ -1,0 +1,453 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>공통 컴포넌트 전환 작업</title>
+<style>
+  :root {
+    --ground:#f2f5f8; --surface:#fff; --surface-2:#e8edf4; --surface-3:#f8fafc;
+    --ink:#131820; --ink-2:#3f4a5c; --ink-3:#6b7686;
+    --rule:#dbe2ec; --rule-soft:#e9eef4;
+    --accent:#1d4ed8; --accent-2:#153ea8; --accent-wash:#e6edfd;
+    --new-c:#0a6b48; --new-wash:#e1f4ec;
+    --warn:#8a5200; --warn-wash:#fdf1dc;
+    --code-bg:#eceff5;
+    --shadow:0 1px 2px rgba(19,24,32,.05), 0 10px 26px -24px rgba(19,24,32,.65);
+    --f-body:"Segoe UI Variable Text","Segoe UI",ui-sans-serif,system-ui,-apple-system,sans-serif;
+    --f-mono:"Cascadia Mono","Cascadia Code",ui-monospace,Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:#0a0d12; --surface:#131820; --surface-2:#1b2029; --surface-3:#161a22;
+      --ink:#eceff6; --ink-2:#adb9cb; --ink-3:#7f8998;
+      --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+      --accent:#5c9bff; --accent-2:#93bcff; --accent-wash:rgba(92,155,255,.13);
+      --new-c:#4ec793; --new-wash:rgba(78,199,147,.13);
+      --warn:#e2a544; --warn-wash:rgba(226,165,68,.13);
+      --code-bg:rgba(255,255,255,.05);
+      --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -24px rgba(0,0,0,.95);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#0a0d12; --surface:#131820; --surface-2:#1b2029; --surface-3:#161a22;
+    --ink:#eceff6; --ink-2:#adb9cb; --ink-3:#7f8998;
+    --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+    --accent:#5c9bff; --accent-2:#93bcff; --accent-wash:rgba(92,155,255,.13);
+    --new-c:#4ec793; --new-wash:rgba(78,199,147,.13);
+    --warn:#e2a544; --warn-wash:rgba(226,165,68,.13);
+    --code-bg:rgba(255,255,255,.05);
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -24px rgba(0,0,0,.95);
+  }
+
+  *, *::before, *::after { box-sizing:border-box; }
+  body { margin:0; background:var(--ground); color:var(--ink);
+    font-family:var(--f-body); font-size:15px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:1080px; margin:0 auto; padding:40px 22px 90px; }
+
+  code { font-family:var(--f-mono); font-size:.88em; background:var(--code-bg);
+    border-radius:4px; padding:.1em .38em; overflow-wrap:anywhere; }
+  a { color:var(--accent); }
+  a:focus-visible { outline:2px solid var(--accent); outline-offset:2px; border-radius:4px; }
+
+  .eyebrow { font-family:var(--f-mono); font-size:11.5px; letter-spacing:.11em;
+    text-transform:uppercase; color:var(--ink-3); margin:0 0 10px; }
+  h1 { font-size:clamp(27px,4vw,36px); line-height:1.18; letter-spacing:-.022em;
+    margin:0 0 12px; text-wrap:balance; }
+  .lede { margin:0; max-width:66ch; color:var(--ink-2); font-size:16px; }
+
+  .meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+  .chip { display:inline-flex; align-items:baseline; gap:7px; background:var(--surface);
+    border:1px solid var(--rule); border-radius:999px; padding:5px 13px;
+    font-size:12.5px; box-shadow:var(--shadow); }
+  .chip b { font-family:var(--f-mono); font-weight:600; font-size:12px; }
+  .chip span { color:var(--ink-3); }
+
+  section { margin-top:46px; }
+  h2 { font-size:19px; letter-spacing:-.015em; margin:0 0 14px; padding-bottom:9px;
+    border-bottom:1px solid var(--rule); display:flex; flex-wrap:wrap;
+    align-items:baseline; gap:4px 12px; }
+  h2 .n { font-family:var(--f-mono); font-size:12px; color:var(--ink-3); font-weight:500; }
+  h3 { font-size:15px; margin:0 0 7px; }
+  p { margin:0 0 12px; max-width:78ch; }
+  p:last-child { margin-bottom:0; }
+
+  .toc { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    gap:1px 22px; margin-top:26px; padding:16px 20px; background:var(--surface);
+    border:1px solid var(--rule); border-radius:12px; box-shadow:var(--shadow); }
+  .toc a { color:var(--ink-2); text-decoration:none; font-size:14px; padding:3px 0; display:block; }
+  .toc a:hover { color:var(--accent); text-decoration:underline; text-underline-offset:3px; }
+  .toc a span { font-family:var(--f-mono); font-size:11px; color:var(--ink-3); }
+
+  .tablewrap { overflow-x:auto; border:1px solid var(--rule); border-radius:12px;
+    background:var(--surface); box-shadow:var(--shadow); }
+  table { border-collapse:collapse; width:100%; min-width:720px; }
+  colgroup .c-scr { width:21%; }
+  colgroup .c-url { width:26%; }
+  th, td { text-align:left; padding:11px 16px; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; }
+  thead th { font-family:var(--f-mono); font-size:10.5px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--ink-3); font-weight:600; background:var(--surface-3); }
+  tbody tr:last-child td { border-bottom:0; }
+  td.scr { font-weight:600; }
+  td.url { font-family:var(--f-mono); font-size:12px; color:var(--accent-2); word-break:break-all; }
+  td.chg { font-size:13px; color:var(--ink-2); }
+  td.chg b { color:var(--ink); }
+  td.chg ul { margin:0; padding-left:16px; }
+  td.chg li { margin-bottom:3px; }
+  td.chg li:last-child { margin-bottom:0; }
+  td.sha { font-family:var(--f-mono); font-size:12px; color:var(--ink-3);
+    font-variant-numeric:tabular-nums; white-space:nowrap; }
+
+  .note { border:1px solid var(--rule); border-left:3px solid var(--accent);
+    border-radius:9px; background:var(--surface); padding:15px 18px;
+    box-shadow:var(--shadow); margin-bottom:12px; }
+  .note:last-child { margin-bottom:0; }
+  .note.warn { border-left-color:var(--warn); }
+  .note p { font-size:14px; color:var(--ink-2); }
+
+  footer { margin-top:52px; padding-top:16px; border-top:1px solid var(--rule);
+    font-size:12.5px; color:var(--ink-3); }
+
+  @media (max-width:640px) {
+    table { min-width:620px; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">작업 이력 · 2026-09-03</p>
+    <h1>공통 컴포넌트 전환 작업</h1>
+    <p class="lede">
+      화면마다 따로 그리던 모달·패널·리스트 행을 공통 컴포넌트로 옮기고,
+      그 과정에서 드러난 이중 박스·겹침·반응형 누락을 정리했습니다.
+      공통 컴포넌트 3개가 함께 바뀌었습니다.
+    </p>
+    <div class="meta">
+      <span class="chip"><span>브랜치</span><b>feature/front-goldking-new</b></span>
+      <span class="chip"><span>커밋</span><b>15</b></span>
+      <span class="chip"><span>변경</span><b>24 files · +695 −639</b></span>
+      <span class="chip"><span>검증</span><b>tsc ✓ · vite build ✓</b></span>
+    </div>
+    <nav class="toc">
+      <a href="#common">공통 컴포넌트 <span>· 3개</span></a>
+      <a href="#nav">사이드바 <span>· 13메뉴</span></a>
+      <a href="#aes">AES 시행 · 데모 시드 <span>· 3화면</span></a>
+      <a href="#grading">채점 · 내부표준화 <span>· 2화면</span></a>
+      <a href="#result">평가결과 <span>· 2화면</span></a>
+      <a href="#rw">글쓰기튜터 교사 <span>· 2화면</span></a>
+      <a href="#commits">커밋 <span>· 15</span></a>
+      <a href="#todo">남은 것 · 확인 필요 <span>· 4</span></a>
+    </nav>
+  </header>
+
+  <!-- ─────────────── 공통 컴포넌트 ─────────────── -->
+  <section id="common">
+    <h2>공통 컴포넌트 <span class="n">src/shared/components/common · 3개</span></h2>
+    <p>
+      세 파일은 여러 화면이 함께 씁니다. 담당 화면에 영향이 갈 수 있어 먼저 적어둡니다.
+      셋 다 기존 사용처를 깨지 않는 변경이지만, <b>Stepper 는 그리는 모양이 바뀝니다.</b>
+    </p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col></colgroup>
+        <thead><tr><th>컴포넌트</th><th>파일</th><th>수정 내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">Modal</td>
+            <td class="url">Modal.tsx</td>
+            <td class="chg"><ul>
+              <li>선택 prop <b><code>className</code></b> 추가 — 루트 <code>.ui-modal</code> 에 붙습니다</li>
+              <li>스코프 훅이 없으면 본문 여백·패널 높이를 조정해야 하는 모달은 공통 컴포넌트를 쓸 수 없었습니다</li>
+              <li>옵셔널이라 안 넘기면 이전과 동일</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">Stepper</td>
+            <td class="url">Stepper.tsx<br>stepper.scss</td>
+            <td class="chg"><ul>
+              <li><b><code>steps[].desc</code></b> 추가 — 라벨 아래 보조 설명. 안 주면 이전과 같습니다</li>
+              <li><b>체크 규칙 변경.</b> 기존엔 <code>upcoming</code> 만 번호를 그리고 <code>done</code>·<code>current</code> 를 모두 체크로 그려, 진행 중인 현재 단계에도 체크가 붙었습니다. 아직 안 끝난 일이 완료로 표시되던 것이라 <code>done</code> 일 때만 체크로. <b>내부표준화 상세 위저드도 함께 바뀝니다</b></li>
+              <li>그림자 <code>--ui-shadow-md</code> → <code>.ui-panel</code> 과 같은 <code>0 1px 3px rgba(16,36,43,.035)</code>. 패널과 나란히 놓이는 자리에서 혼자 두꺼웠습니다</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">ButtonAvatar</td>
+            <td class="url">ButtonAvatar.tsx</td>
+            <td class="chg"><ul>
+              <li>제목·부제에 <code>truncate</code>, 상태 배지에 <code>shrink-0</code></li>
+              <li><b>원인</b> — <code>min-w-0</code> 은 플렉스 아이템이 <i>줄어드는 것</i>만 허용할 뿐 안쪽 <code>div</code> 의 내용을 자르지 않습니다. 공백 없는 긴 값이 넘쳐 배지 아래로 파고들었고, 배지도 <code>flex-shrink</code> 고정이 없어 폭이 모자라면 먼저 눌렸습니다</li>
+              <li>이 컴포넌트를 쓰는 모든 화면이 같이 고쳐집니다</li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── 사이드바 ─────────────── -->
+  <section id="nav">
+    <h2>사이드바 대메뉴 아이콘 <span class="n">전 화면 공통 · 13메뉴</span></h2>
+    <p>
+      13개 대메뉴 중 <b>연합 관리·평가 관리·운영관리가 모두 렌치</b>,
+      <b>채점관리와 리포트·현황이 같은 연필</b>이었습니다.
+      서버가 내려주는 <code>icon</code> 값이 큐레이션돼 있지 않은 데다,
+      대응 아이콘이 없어 별칭을 렌치로 접어둔 탓입니다
+      (<code>key-round</code>·<code>clipboard-list</code>·<code>plus-square</code> → 전부 <code>wrench</code>).
+    </p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col></colgroup>
+        <thead><tr><th>대상</th><th>파일</th><th>수정 내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">아이콘 추가</td>
+            <td class="url">icons.tsx<br>icons/index.tsx</td>
+            <td class="chg"><ul>
+              <li><code>school</code> · <code>clipboard</code> · <code>chart</code> · <code>file</code> · <code>storage</code> · <code>lock</code> · <code>plus</code> 등록</li>
+              <li><b><code>IconMoniterCheck</code> 신규</b> — 화면 안에 체크가 든 모니터. 시행에 원형 재생(<code>play</code>)을 썼더니 동영상으로 읽혔습니다. 기존 <code>IconMoniter</code> 는 CBT 배지·감독 화면에서 일반 모니터로 쓰이므로 그대로</li>
+              <li>별칭을 제 짝에 연결 — <code>clipboard-list</code>→<code>clipboard</code>, <code>key-round</code>→<code>lock</code>, <code>plus-square</code>→<code>plus</code>, <code>school</code>→<code>school</code></li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">라벨 배정</td>
+            <td class="url">menuIcons.ts<br>MainAside.tsx</td>
+            <td class="chg"><ul>
+              <li><code>MENU_LABEL_ICONS</code> 신설. <b>사이드바 대메뉴는 이 배정이 서버 값보다 우선합니다</b> — 서버 값을 먼저 보면 위 중복을 화면에서 풀 방법이 없습니다. 규칙에 안 걸리는 메뉴는 종전대로 서버 값을 씁니다</li>
+              <li>여러 규칙에 걸리는 라벨이 많아 <b>순서가 곧 우선순위</b>입니다. <code>평가시행</code>=평가+시행 → 시행이 앞 · <code>평가 결과</code>=평가+결과 → 결과가 앞 · <code>시스템 설정</code> → 운영보다 앞</li>
+              <li>메뉴 관리 화면 아이콘 선택지 정리. <code>moniter</code> 가 두 번 들어가 React <code>key</code> 가 겹치던 것도 함께 수정</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">배정 결과</td>
+            <td class="url">13개 전부 다름</td>
+            <td class="chg"><ul>
+              <li>대시보드 <code>board</code> · 연합 관리 <code>school</code> · 평가 관리 <code>clipboard</code></li>
+              <li>평가시행 <code>moniter-check</code> · 채점관리 <code>edit</code> · 평가 결과 <code>file</code></li>
+              <li>리포트·현황 <code>chart</code> · 참고자료 <code>storage</code> · 지원 <code>help-circle</code></li>
+              <li>커뮤니티 <code>users-round</code> · 알림센터 <code>bell</code> · 운영관리 <code>wrench</code> · 시스템 설정 <code>settings</code></li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note warn" style="margin-top:14px">
+      <h3>절충 — 메뉴 관리에서 지정한 아이콘이 대메뉴에서는 무시됩니다</h3>
+      <p>라벨 배정을 서버 값보다 앞에 두었기 때문입니다. 서버 <code>icon</code> 데이터가 정리되면 우선순위를 되돌리는 편이 낫습니다. 그때는 <code>resolveMenuIcon</code> 에서 라벨 조회를 서버 값 뒤로 옮기면 됩니다.</p>
+    </div>
+  </section>
+
+  <!-- ─────────────── AES ─────────────── -->
+  <section id="aes">
+    <h2>AES 시행 · 데모 시드 <span class="n">/evaluation · 3화면</span></h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col></colgroup>
+        <thead><tr><th>화면</th><th>경로</th><th>수정 내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">CBT 데모 시드<br><span style="font-weight:400;color:var(--ink-3);font-size:13px">채점 담당 · 실행 결과</span></td>
+            <td class="url">/evaluation/local-seeds</td>
+            <td class="chg"><ul>
+              <li>선임채점관·채점교사 행을 <b>공통 <code>ButtonAvatar</code></b> 로. 로컬 CSS 약 75줄 삭제(<code>.local-seed-person</code>, <code>__avatar</code>, <code>__number</code>, 말줄임 규칙, <code>ul/li</code> 박스)</li>
+              <li>보조 설명으로 <code>loginId</code> 노출 — 컴포넌트가 그 자리를 갖고 있어 비워두면 이름 한 줄만 뜬 채 여백이 남습니다</li>
+              <li>섹션 아이콘을 공통 <code>.icon-box</code> 로. 선임 카드만 앰버 보정 — 크림 배경(<code>#fffbef</code>)과 <code>--ui-warn-weak</code>(<code>#FDF6EE</code>)이 거의 같아 박스가 안 보였습니다. 흰 배경에서 정상인 전역 변형은 그대로</li>
+              <li><b>이름 앞 원형 아이콘이 깨져 보이던 버그</b> — 말줄임 규칙이 <code>.local-seed-person span</code> 전체를 잡아 아바타·번호 원까지 <code>display:block</code> 이 됐습니다. 가운데 정렬이 풀려 글자가 좌상단에 붙고 잘렸습니다</li>
+              <li>메타 값·역할 제목 <code>font-weight</code> 900 → 700</li>
+              <li>채점교사 목록을 <b>항상 1열</b>로. 2열로는 <code>loginId</code> 가 <code>dp_18a…</code> 로 잘려 값을 읽을 수 없었습니다</li>
+              <li>실행 결과의 감독·마스터 감독·학생·내부표준화 링크를 밑줄 텍스트 → <code>btn-white btn-shadow btn-sm</code> + 점프 아이콘. 아이콘이 새 탭을 뜻하므로 <code>target="_blank"</code> 도 함께</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">과제 제출 데모 시드<br><span style="font-weight:400;color:var(--ink-3);font-size:13px">시나리오 카드 · 생성 결과</span></td>
+            <td class="url">/evaluation/assignment-local-seeds</td>
+            <td class="chg"><ul>
+              <li><b>설명이 항상 아래로 떨어지던 문제.</b> <code>__top</code> 이 wrap 플렉스이고 설명 <code>p</code> 에 <code>flex: 1 1 100%</code> 가 걸려 있었습니다. <code>__head</code>·<code>__title-row</code> 로 <code>아이콘 | (제목 ··· 태그 / 설명)</code> 구조로 재편</li>
+              <li><code>flex-basis</code> 는 <b>0 이어야</b> 합니다. <code>auto</code> 면 설명 길이가 기준 폭이 되어 줄바꿈 판정에서 태그가 다음 줄로 밀려납니다</li>
+              <li>설명이 태그 아래 공간까지 쓰게 되어 「…시행입니다. / 다.」 처럼 한 글자만 남기고 감기던 문제 해소</li>
+              <li><code>p</code> 의 <code>min-height: 38px</code> 제거 — 한 줄 설명 아래 빈 공간이 남아 아이콘이 그만큼 밀려 보였습니다. 버튼 줄은 <code>__actions</code> 의 <code>margin-top:auto</code> 가 이미 맞춥니다</li>
+              <li>제목에 <code>font-weight: 700</code> 직접 지정 — <code>reset.css</code> 가 <code>h1~h6</code> 의 굵기를 <code>inherit</code> 으로 되돌립니다</li>
+              <li>생성 결과 요약 값 <code>13px / 700</code> — <code>허용 파일</code> 처럼 값이 긴 칸이 잘렸습니다</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">내부표준화 데모 시드<br><span style="font-weight:400;color:var(--ink-3);font-size:13px">런처 카드</span></td>
+            <td class="url">/evaluation/internal-standardization-demo-seeds</td>
+            <td class="chg"><ul>
+              <li>아이콘이 카드 최상단에 홀로 놓이고 라벨·제목이 아래로 흘렀습니다. <code>__head</code> 행으로 <b>라벨+제목(좌) / 아이콘(우)</b></li>
+              <li>카드가 <code>minmax(320px, .85fr)</code> 칸이라 폭이 크게 변하는데 글자는 고정이었습니다. 제목 <code>clamp(16px,1.45vw,20px)</code>, 설명 <code>clamp(11px,.9vw,13px)</code>, 라벨·아이콘·패딩도 동일 방식</li>
+              <li>그리드 칸이 <code>stretch</code> 라 카드 높이는 왼쪽 칸을 따라가는데 내용은 버튼에서 끝나 아래가 크게 비었습니다. <b>세로 플렉스 + <code>justify-content:center</code></b> 로 남는 높이를 위아래로 나눔. 버튼만 바닥에 고정하면 설명문과 버튼 사이가 통째로 벌어져 더 어색합니다</li>
+              <li>버튼 <code>btn-lg</code></li>
+              <li><b>반응형</b> — 1100px: 학년 카드 4열 → 2열(설명이 잘렸음) · 700px: 학년 카드 설명 <code>nowrap</code> 해제, 메트릭 4열 → 3열 · <b>460px 신규</b>: 아이콘을 제목 위로</li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── 채점 ─────────────── -->
+  <section id="grading">
+    <h2>채점 · 내부표준화 <span class="n">/grading/internal-standardization · 2화면</span></h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col></colgroup>
+        <thead><tr><th>화면</th><th>경로</th><th>수정 내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">채점목록</td>
+            <td class="url">/grading/internal-standardization</td>
+            <td class="chg"><ul>
+              <li>과목 필터 네이티브 <code>select</code> → <b>공통 <code>SelectSearch</code></b>. 채점현황 목록이 이미 쓰는 컴포넌트라 두 화면 동작이 맞습니다</li>
+              <li><code>subjectSelectOptions</code> 를 <code>string[]</code> → <code>SelectSearchOption[]</code>. URL 로 복원한 과목이 목록에 없을 때 앞에 끼워 넣던 동작은 유지</li>
+              <li><b>미선택 표현이 다릅니다.</b> <code>select</code> 는 <code>""</code> 를 「과목 전체」 옵션으로 들고 있었고 <code>SelectSearch</code> 는 <code>null</code> 입니다. <code>value</code> 는 <code>"" → null</code>, <code>onClear</code> 에서 <code>""</code> 로 되돌립니다. <b>URL 쿼리스트링 값은 이전과 동일</b></li>
+              <li>학년·학기 필터는 항목이 적어 그대로 — 참조한 화면도 네이티브 <code>select</code></li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">답안 보기 모달<br><span style="font-weight:400;color:var(--ink-3);font-size:13px">표본 답안 채점에서 열림</span></td>
+            <td class="url">/grading/internal-standardization/{designId}<br>StudentAnswerModal.tsx</td>
+            <td class="chg"><ul>
+              <li><code>createPortal</code> 로 <code>ui-modal</code> 마크업을 직접 조립해 백드롭·패널·헤더·닫기·푸터가 공통값과 따로 놀았습니다. 헤더는 그라데이션 + 인라인 SVG, 닫기는 보라 그라데이션 버튼</li>
+              <li><b>공통 <code>Modal</code> 로 교체.</b> 헤더 아이콘 <code>iconType="info"</code> 배지, 닫기 <code>btn btn-primary</code></li>
+              <li>헤더 <code>description</code> 에 <b>수험번호 · 문항</b> 추가 — 스크롤을 내려도 지금 보는 답안이 무엇인지 남습니다</li>
+              <li>중복 CSS 약 110줄 삭제. 남긴 것은 패널 높이 <code>min(92vh,920px)</code>(공통 기본 640px 은 국어 지문에 짧음), 본문 블록 레이아웃, 푸터 <code>space-between</code> 셋</li>
+              <li>이전/다음 이동 시 스크롤 최상단 복귀 유지 — 공통 <code>Modal</code> 이 본문 ref 를 노출하지 않아 <code>closest('.ui-modal__body')</code> 로 찾습니다</li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── 평가결과 ─────────────── -->
+  <section id="result">
+    <h2>평가결과 <span class="n">/evaluation-result · 2화면</span></h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col></colgroup>
+        <thead><tr><th>화면</th><th>경로</th><th>수정 내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">NEIS 양식 다운로드</td>
+            <td class="url">/evaluation-result/grade-processing/neis-export</td>
+            <td class="chg"><ul>
+              <li><b>이중 박스.</b> <code>.tstd-stepper</code> 가 이미 테두리·라운드·그림자를 가진 박스인데 <code>box box-rounded-16 shadow-sm</code> 으로 한 번 더 감쌌습니다. 다른 Stepper 사용처는 모두 감싸지 않습니다 — 래퍼 제거</li>
+              <li><b>사라진 단계 설명.</b> GridStatus → Stepper 로 바꾸며 부제(<code>SP-10-03 완료</code>, <code>NEIS 양식 변환</code> 등)가 함께 사라졌습니다. Stepper 에 <code>desc</code> 를 추가해 복구</li>
+              <li>현재 단계(<code>다운로드</code>)에 붙던 체크 제거 — 위 공통 컴포넌트 항목 참고</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">확정 처리 (의견마감)</td>
+            <td class="url">/evaluation-result/result-inquiry/finalize</td>
+            <td class="chg"><ul>
+              <li><b>마감 방식 카드가 선택지처럼 읽혔습니다.</b> 교사 수동 마감에만 <code>box-teal</code> 을 줬더니 오른쪽이 「선택됨」, 왼쪽 자동 마감이 「아직 고를 수 있는 나머지」로 읽혔습니다. 실제로는 둘 다 클릭 대상이 아니고 액션은 헤더의 <code>의견마감 확정</code> 버튼 하나뿐입니다</li>
+              <li>색으로 강약을 주는 한 나머지가 「안 고른 것」이 되므로 <b>구분을 글자로</b> — 두 카드를 같은 흰 배경·중립 테두리로 통일하고 <code>이 화면에서 진행</code> 뱃지 추가. <code>emphasis</code> 플래그는 이제 색 대신 이 뱃지를 켭니다</li>
+              <li><code>.box</code> 에 <code>box-outline-teal</code>(테두리 강조 + 흰 배경) 변형 추가 — <code>.bg-white</code> 는 <code>.box.box-teal</code> 보다 명시도가 낮아 이길 수 없습니다</li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note warn" style="margin-top:14px">
+      <h3>되돌린 안 — 자동 마감을 disable 처리</h3>
+      <p>중간에 자동 마감을 비활성처럼 가라앉히는 안을 넣었다가 되돌렸습니다. 그 경로는 꺼져 있는 게 아니라 <b>지금 작동 중</b>이고, 교사가 아무것도 안 하면 2일 뒤 실제로 일어날 기본 결과입니다. disable 표현은 사실과 다르고, 판단 근거인 <code>2일 남음</code> 을 가장 약하게 만듭니다.</p>
+    </div>
+  </section>
+
+  <!-- ─────────────── 글쓰기튜터 ─────────────── -->
+  <section id="rw">
+    <h2>글쓰기튜터 교사 <span class="n">/rightwrite/teacher · 2화면</span></h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col></colgroup>
+        <thead><tr><th>화면</th><th>경로</th><th>수정 내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">학생간 유사도 상세</td>
+            <td class="url">/rightwrite/teacher/assignments/{id}/peer-similarity/{answerId}</td>
+            <td class="chg"><ul>
+              <li><b>화면이 통째로 깨져 보이던 원인</b> — <code>TeacherShell</code> 은 본문을 <code>.tabcard__body</code> 에 넣는데 이 껍데기는 <b>배경·테두리 없이 간격만</b> 잡습니다. 「안쪽 내용이 각자 <code>ui-panel</code> 을 쓴다」가 규격인데, 교사 화면 8개 중 이 화면만 맨몸 마크업을 그대로 뱉었습니다</li>
+              <li>세 덩어리를 <code>ui-panel</code> 로 — <b>문항카드</b>(제목·평가명, <code>actions</code> 에 목록으로) / <b>유사그룹 정보</b>(메트릭 4개 + 학생 정보) / <b>학생간 답안 상세 비교</b>(제목은 헤더로, 범례는 <code>ui-panel__actions</code> 로)</li>
+              <li><code>.psd-group</code> 의 회색 박스와 <code>.psd-card</code>·<code>.psd-section</code> 제목 스타일 제거 — 남기면 패널 안에 박스가 하나 더 생깁니다</li>
+              <li><code>.psd-cmp</code>(비교 카드)·<code>.psd-base</code>(기준학생 바) 테두리는 유지 — 패널 본문 안의 목록 항목·컨트롤 바</li>
+              <li><code>select</code> 에 공통 <code>form-select</code>. 버튼은 rightwrite 교사 화면이 전부 <code>btn--secondary</code> 라 그대로 두고 <code>aria-label</code> 만 보강</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">과제 카드 제목·마감</td>
+            <td class="url">/rightwrite/teacher<br>/my/assignments</td>
+            <td class="chg"><ul>
+              <li>같은 평가가 두 화면에서 다른 색·굵기로 보였습니다. 크기는 이미 사실상 같았고(16 vs 16.32, 12 vs 11.52) 달라 보이는 건 색과 굵기였습니다</li>
+              <li><b>타이틀</b> <code>--ui-fs-lg</code> 16px · 700 · 1.4 · <code>--ui-ink-900</code></li>
+              <li><b>마감</b> <code>--ui-fs-sm</code> 12px · 600 · <code>--ui-text-muted</code></li>
+              <li>제목 색을 <code>--blue-01</code>(<code>#002f77</code>) 에서 잉크로 — 카드 전체가 클릭 대상이 아니라 하단 버튼이 진입점이라 파란 제목은 링크로 오독됩니다</li>
+              <li>마감 굵기 <code>800</code> 은 제목(700)보다 무거워 메타 줄이 제목을 눌렀고 <code>400</code> 은 배지에 묻힙니다. 그 사이값 <code>600</code></li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── 커밋 ─────────────── -->
+  <section id="commits">
+    <h2>커밋 <span class="n">feature/front-goldking-new · a637fb77..b229d61d</span></h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="width:110px"><col></colgroup>
+        <thead><tr><th>SHA</th><th>제목</th></tr></thead>
+        <tbody>
+          <tr><td class="sha">0b93ee74</td><td>refactor: 답안 보기 모달을 공통 Modal 로 전환</td></tr>
+          <tr><td class="sha">ab80d588</td><td>refactor: 학생간 유사도 상세를 공통 ui-panel 규격으로 전환</td></tr>
+          <tr><td class="sha">79ad7496</td><td>fix: ButtonAvatar 에서 긴 값이 상태 배지와 겹치던 문제</td></tr>
+          <tr><td class="sha">a20e97d2</td><td>refactor: 채점 담당 목록을 공통 ButtonAvatar 로 전환</td></tr>
+          <tr><td class="sha">428b65e9</td><td>fix: NEIS 양식 다운로드의 이중 박스와 사라진 단계 설명</td></tr>
+          <tr><td class="sha">ef72072e</td><td>style: 시행 시나리오 카드의 제목·설명·태그 배치 정리</td></tr>
+          <tr><td class="sha">b743a51c</td><td>style: 내부표준화 데모 시드 런처 카드 정리와 반응형 보강</td></tr>
+          <tr><td class="sha">2f12d0b4</td><td>style: 과제 제목·마감 폰트를 두 화면에서 통일</td></tr>
+          <tr><td class="sha">d5eb1422</td><td>fix: 확정 처리의 마감 방식 카드가 선택지처럼 읽히던 문제</td></tr>
+          <tr><td class="sha">ce2d82cf</td><td>feat: 채점목록 과목 필터에 검색 추가</td></tr>
+          <tr><td class="sha">9a8a980f</td><td>style: 생성 결과 요약 값 폰트를 16px/700 으로</td></tr>
+          <tr><td class="sha">036cea04</td><td>fix: 생성 결과 요약 값 폰트를 화면 오버라이드에서 조정</td></tr>
+          <tr><td class="sha">0a06e305</td><td>style: 생성 결과 요약 값 폰트를 13px 로</td></tr>
+          <tr><td class="sha">7e39f6a5</td><td>fix: 채점교사 목록을 항상 1열로</td></tr>
+          <tr><td class="sha">b229d61d</td><td>fix: 사이드바 대메뉴 아이콘이 서로 겹치던 문제</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note warn" style="margin-top:14px">
+      <h3>요약 값 폰트가 세 커밋으로 나뉜 이유</h3>
+      <p>처음에 공통 <code>.cbt-test-summary strong</code> 을 낮췄는데(<code>9a8a980f</code>), 이 화면에는 <code>.local-seed-summary strong { font-size: 18px }</code> 오버라이드가 이미 있어 크기가 적용되지 않고 굵기만 바뀌었습니다. 공통 규칙을 되돌리고 화면 오버라이드로 옮긴 뒤(<code>036cea04</code>), 16px 로도 값이 잘려 13px 까지 내렸습니다(<code>0a06e305</code>).</p>
+    </div>
+  </section>
+
+  <!-- ─────────────── 남은 것 ─────────────── -->
+  <section id="todo">
+    <h2>남은 것 · 확인 필요 <span class="n">4</span></h2>
+
+    <div class="note warn">
+      <h3><code>local-seed.css</code> 는 커밋하지 않았습니다</h3>
+      <p>작업 시작 전부터 워킹트리에 있던 변경(+99 −57)입니다. 이번 작업에서 건드리지 않은 파일이라, 제 커밋 메시지에 섞으면 내용을 잘못 설명하게 되어 남겨뒀습니다. 확인 후 별도로 커밋해 주세요.</p>
+    </div>
+
+    <div class="note">
+      <h3><code>ButtonAvatar</code> 는 <code>&lt;button&gt;</code> 입니다</h3>
+      <p>채점 담당 목록은 표시용이라 <code>onClick</code> 없는 버튼이 됩니다. 눌러도 아무 일이 없고 포커스만 잡힙니다. 정리하려면 ① 컴포넌트에 <code>as</code>/<code>interactive</code> 옵션을 추가해 표시용일 때 <code>div</code> 로 렌더하거나 ② 행을 실제로 클릭 가능하게(해당 채점관 화면으로 이동) 만드는 두 갈래입니다.</p>
+    </div>
+
+    <div class="note">
+      <h3>답안 보기 모달은 껍데기만 컴포넌트화됐습니다</h3>
+      <p>본문은 여전히 로컬 마크업 + 로컬 CSS(<code>student-answer-modal.css</code> 994줄, <code>.sam-answer-view*</code> 규칙 74개)입니다. 섹션 3개는 <code>Panel</code>, 평가 정보 4칸은 <code>GridStatus</code>, 로딩·에러는 <code>BackdropLoading</code>·<code>HelpBanner</code> 로 옮길 수 있습니다. 로딩·에러와 정보 4칸만 해도 CSS 200줄 가까이 줄어듭니다. 다만 섹션을 <code>Panel</code> 로 옮기면 긴 국어 지문의 타이포·여백이 눈에 띄게 바뀌어 별도 확인이 필요합니다.</p>
+    </div>
+
+    <div class="note">
+      <h3><code>.tabcard</code> 규격을 안 따르는 화면이 더 있는지</h3>
+      <p>이번에 고친 <code>PeerSimilarityDetailPage</code> 는 교사 화면 8개 중 유일하게 자체 <code>ui-panel</code> 이 0개였습니다. 같은 유형의 껍데기 계약(<b>래퍼는 간격만, 내용이 각자 패널</b>)이 다른 기능 영역에도 있다면 같은 방식으로 깨져 있을 수 있습니다.</p>
+    </div>
+  </section>
+
+  <footer>
+    <code>feature/front-goldking-new</code> · <code>a637fb77..b229d61d</code> · 푸시 완료 · <code>tsc --noEmit</code> 과 <code>vite build</code> 통과
+  </footer>
+
+</div>
+
+</body></html>

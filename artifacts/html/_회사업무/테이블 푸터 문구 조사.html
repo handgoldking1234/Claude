@@ -1,0 +1,361 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>테이블 푸터 문구 조사</title>
+<style>
+  :root {
+    --ground:#f6f7f9; --surface:#fff; --surface-2:#edf0f4; --surface-3:#f9fafb;
+    --ink:#14181f; --ink-2:#414c5e; --ink-3:#6e7887;
+    --rule:#dce1e9; --rule-soft:#e9ecf2;
+    --accent:#1f6feb; --accent-2:#1a56b8; --accent-wash:#e7f0fd;
+    --go:#146c43; --go-wash:#e3f3ea;
+    --hold:#8a5a00; --hold-wash:#fdf2dc;
+    --skip:#6e7887; --skip-wash:#eef0f3;
+    --code-bg:#eef1f6;
+    --shadow:0 1px 2px rgba(20,24,31,.05), 0 10px 28px -24px rgba(20,24,31,.55);
+    --f-body:"Segoe UI Variable Text","Segoe UI",ui-sans-serif,system-ui,-apple-system,sans-serif;
+    --f-mono:"Cascadia Mono","Cascadia Code",ui-monospace,Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:#0d1015; --surface:#151920; --surface-2:#1c212a; --surface-3:#181c23;
+      --ink:#eef1f6; --ink-2:#b2bfd2; --ink-3:#838d9d;
+      --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.055);
+      --accent:#4d9bff; --accent-2:#8cbcff; --accent-wash:rgba(77,155,255,.13);
+      --go:#4ac57f; --go-wash:rgba(74,197,127,.13);
+      --hold:#e8a83c; --hold-wash:rgba(232,168,60,.13);
+      --skip:#838d9d; --skip-wash:rgba(255,255,255,.06);
+      --code-bg:rgba(255,255,255,.05);
+      --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 28px -24px rgba(0,0,0,.95);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#0d1015; --surface:#151920; --surface-2:#1c212a; --surface-3:#181c23;
+    --ink:#eef1f6; --ink-2:#b2bfd2; --ink-3:#838d9d;
+    --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.055);
+    --accent:#4d9bff; --accent-2:#8cbcff; --accent-wash:rgba(77,155,255,.13);
+    --go:#4ac57f; --go-wash:rgba(74,197,127,.13);
+    --hold:#e8a83c; --hold-wash:rgba(232,168,60,.13);
+    --skip:#838d9d; --skip-wash:rgba(255,255,255,.06);
+    --code-bg:rgba(255,255,255,.05);
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 28px -24px rgba(0,0,0,.95);
+  }
+
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--ground); color:var(--ink);
+         font-family:var(--f-body); font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+  .page { max-width:1160px; margin:0 auto; padding:42px 22px 84px; display:flex; flex-direction:column; gap:38px; }
+
+  .masthead { display:flex; flex-direction:column; gap:11px; padding-bottom:20px; border-bottom:2px solid var(--ink); }
+  .kicker { font-family:var(--f-mono); font-size:12px; letter-spacing:.11em; text-transform:uppercase; color:var(--accent); }
+  h1 { margin:0; font-size:clamp(26px,4.2vw,34px); line-height:1.15; letter-spacing:-.022em; font-weight:700; }
+  .standfirst { margin:0; max-width:68ch; color:var(--ink-2); }
+  .meta { display:flex; flex-wrap:wrap; gap:5px 18px; font-family:var(--f-mono); font-size:12px; color:var(--ink-3); }
+  .meta b { color:var(--ink-2); font-weight:500; }
+
+  .target { border:1px solid var(--rule); border-left:3px solid var(--accent); border-radius:10px;
+            background:var(--surface); box-shadow:var(--shadow); padding:16px 20px; }
+  .target h3 { margin:0 0 9px; font-size:14px; font-family:var(--f-mono); color:var(--ink-3); font-weight:600;
+               letter-spacing:.05em; text-transform:uppercase; }
+  .target .fmt { font-size:19px; font-weight:700; letter-spacing:-.01em; }
+  .target .fmt em { font-style:normal; color:var(--accent); }
+  .target p { margin:9px 0 0; color:var(--ink-2); font-size:14px; }
+
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(118px,1fr)); gap:10px; }
+  .stat { border:1px solid var(--rule); border-radius:9px; background:var(--surface); padding:11px 14px;
+          display:flex; flex-direction:column; box-shadow:var(--shadow); }
+  .stat__num { font-size:23px; font-weight:700; letter-spacing:-.02em; font-variant-numeric:tabular-nums; line-height:1.2; }
+  .stat__label { font-family:var(--f-mono); font-size:11px; color:var(--ink-3); }
+  .stat.go .stat__num { color:var(--go); }
+  .stat.hold .stat__num { color:var(--hold); }
+  .stat.skip .stat__num { color:var(--skip); }
+
+  section { display:flex; flex-direction:column; gap:13px; scroll-margin-top:16px; }
+  h2 { margin:0; font-size:19px; letter-spacing:-.015em; font-weight:700; padding-bottom:8px; border-bottom:1px solid var(--rule);
+       display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  h2 .n { font-family:var(--f-mono); font-size:12px; color:var(--ink-3); font-weight:500; }
+  p { margin:0; }
+  .lead { max-width:74ch; color:var(--ink-2); font-size:14.5px; }
+
+  code { font-family:var(--f-mono); font-size:.85em; background:var(--code-bg); padding:.1em .36em; border-radius:4px; word-break:break-word; }
+
+  .toc { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:1px 22px;
+         padding:14px 18px; background:var(--surface); border:1px solid var(--rule); border-radius:10px; box-shadow:var(--shadow); }
+  .toc a { color:var(--ink-2); text-decoration:none; font-size:14px; padding:3px 0; display:block; }
+  .toc a:hover { color:var(--accent); text-decoration:underline; text-underline-offset:3px; }
+  .toc a span { font-family:var(--f-mono); font-size:11px; color:var(--ink-3); }
+
+  .tablewrap { border:1px solid var(--rule); border-radius:10px; background:var(--surface); box-shadow:var(--shadow); overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; font-size:13.5px; min-width:720px; }
+  colgroup .c-scr { width:23%; }
+  colgroup .c-url { width:25%; }
+  colgroup .c-now { width:26%; }
+  thead th { text-align:left; font-size:11px; font-family:var(--f-mono); letter-spacing:.05em; text-transform:uppercase;
+             color:var(--ink-3); font-weight:600; padding:10px 14px; background:var(--surface-2); white-space:nowrap; }
+  td { padding:11px 14px; border-top:1px solid var(--rule-soft); vertical-align:top; }
+  tbody tr:nth-child(even) { background:var(--surface-3); }
+  td.scr { font-weight:600; }
+  td.url { font-family:var(--f-mono); font-size:12px; color:var(--accent-2); word-break:break-all; }
+  td.now { font-family:var(--f-mono); font-size:12px; color:var(--ink-2); }
+  td.src { font-family:var(--f-mono); font-size:11.5px; color:var(--ink-3); word-break:break-all; }
+
+  .pill { display:inline-block; font-family:var(--f-mono); font-size:10px; font-weight:700; padding:2px 7px; border-radius:4px;
+          letter-spacing:.03em; white-space:nowrap; }
+  .pill.go { background:var(--go-wash); color:var(--go); }
+  .pill.hold { background:var(--hold-wash); color:var(--hold); }
+  .pill.skip { background:var(--skip-wash); color:var(--skip); }
+
+  .card { border:1px solid var(--rule); border-radius:10px; background:var(--surface); box-shadow:var(--shadow); padding:17px 20px; }
+  .card h3 { margin:0 0 8px; font-size:15px; font-weight:600; }
+  .card ul { margin:0; padding-left:18px; color:var(--ink-2); font-size:14px; }
+  .card li { margin-bottom:5px; }
+  .card li:last-child { margin-bottom:0; }
+  .card p { color:var(--ink-2); font-size:14px; }
+  .grid2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(305px,1fr)); gap:12px; }
+
+  pre { margin:8px 0 0; padding:11px 13px; border-radius:7px; background:var(--code-bg); overflow-x:auto;
+        font-family:var(--f-mono); font-size:12.5px; line-height:1.6; color:var(--ink); }
+  pre .del { color:var(--ink-3); }
+  pre .add { color:var(--accent-2); font-weight:600; }
+
+  footer { border-top:1px solid var(--rule); padding-top:17px; color:var(--ink-3); font-size:13px; }
+  footer code { background:none; padding:0; }
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="kicker">dfe-front · 퍼블 전수조사</div>
+    <h1>테이블 푸터 문구 조사</h1>
+    <p class="standfirst">
+      목록 하단의 건수 표기가 화면마다 다릅니다. <code>users-footer</code>를 쓰는 <b>56곳</b>을 전부 열어
+      현재 문구를 확인하고, 통일 대상과 손대면 안 되는 곳을 갈랐습니다.
+    </p>
+    <div class="meta">
+      <span><b>조사일</b> 2026-08-27</span>
+      <span><b>기준</b> 1ed64cf8</span>
+      <span><b>범위</b> src/**/*.tsx 전체</span>
+      <span><b>방식</b> <code>users-footer</code> 출현 지점 56곳 직접 확인</span>
+    </div>
+  </header>
+
+  <div class="target">
+    <h3>목표 형식</h3>
+    <div class="fmt"><em>현재 1–20건 / 총 275건</em> &nbsp;+ &nbsp;디스크립션(존재 시)</div>
+    <p>
+      연합 목록 <code>/evaluation/unions</code>에 먼저 적용했습니다. 숫자 강조는 <code>count-number</code>를 씁니다 —
+      코드베이스에서 이미 쓰이던 클래스이고, 연합 목록에만 있던 <code>text-teal font-mono</code>는 이번에 없앴습니다.
+    </p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><span class="stat__num">56</span><span class="stat__label">푸터 전체</span></div>
+    <div class="stat go"><span class="stat__num">17</span><span class="stat__label">통일 대상</span></div>
+    <div class="stat hold"><span class="stat__num">4</span><span class="stat__label">더미값 확인 필요</span></div>
+    <div class="stat skip"><span class="stat__num">21</span><span class="stat__label">제외 · 개발 중</span></div>
+    <div class="stat skip"><span class="stat__num">14</span><span class="stat__label">푸터 아님 · 성격 다름</span></div>
+  </div>
+
+  <nav class="toc">
+    <a href="#g1">① 범위만 붙이면 되는 곳 <span>· 10</span></a>
+    <a href="#g2">② 순서·표현만 다른 곳 <span>· 7</span></a>
+    <a href="#g3">③ 더미값이라 확인 필요 <span>· 4</span></a>
+    <a href="#g4">④ 손대지 않을 곳 <span>· 14</span></a>
+    <a href="#g5">⑤ 제외 — 개발 중 <span>· 21</span></a>
+    <a href="#how">작업 시 유의점</a>
+  </nav>
+
+  <!-- ① -->
+  <section id="g1">
+    <h2>① 범위만 붙이면 되는 곳 <span class="n">10곳 · 총계만 있고 “N–M” 없음</span></h2>
+    <p class="lead">
+      전부 <code>&lt;Pagination&gt;</code>이 붙어 있어 <code>currentPage</code>와 페이지 크기로 범위를 계산할 수 있습니다.
+      숫자 강조는 이미 <code>count-number</code>를 쓰고 있어 클래스 교체는 필요 없습니다.
+    </p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col class="c-now"><col></colgroup>
+        <thead><tr><th>화면</th><th>경로</th><th>현재 문구</th><th>파일</th></tr></thead>
+        <tbody>
+          <tr><td class="scr">사용자 권한 목록</td><td class="url">/admin/roles/user-roles</td><td class="now">총 <b>N</b>명</td><td class="src">UsersListPage.tsx:659</td></tr>
+          <tr><td class="scr">자문위원 목록</td><td class="url">/admin/roles/advisors</td><td class="now">총 <b>N</b>명</td><td class="src">ExternalAdvisorListPage.tsx:361</td></tr>
+          <tr><td class="scr">자문위원 해촉 이력</td><td class="url">/admin/external-advisor-revocations/history</td><td class="now">총 <b>N</b>건</td><td class="src">ExternalAdvisorRevocationHistoryPage.tsx:174</td></tr>
+          <tr><td class="scr">API 사용 로그</td><td class="url">/monitoring/api-usage</td><td class="now">총 <b>N</b>건</td><td class="src">ApiPerformanceLogPage.tsx:451</td></tr>
+          <tr><td class="scr">문항 성능 테스트</td><td class="url">/monitoring/question-performance</td><td class="now">총 <b>N</b>건</td><td class="src">AiQuestionPerformanceTestPage.tsx:344</td></tr>
+          <tr><td class="scr">서비스 요청 등록</td><td class="url">/support/requests/new</td><td class="now">총 <b>N</b>건</td><td class="src">ServiceRequestPage.tsx:513</td></tr>
+          <tr><td class="scr">채점현황 목록</td><td class="url">/grading/status</td><td class="now">총 <b>N</b>개</td><td class="src">ScoringStatusListPage.tsx:254</td></tr>
+          <tr><td class="scr">평가 목록</td><td class="url">/tds/evaluations</td><td class="now">총 <b>N</b>개</td><td class="src">EvaluationTable.tsx:474</td></tr>
+          <tr><td class="scr">역할 관리 — 역할 목록</td><td class="url">/admin/roles</td><td class="now">총 <b>N</b>개</td><td class="src">RolesListPanel.tsx:187</td></tr>
+          <tr><td class="scr">역할 관리 — 권한 목록</td><td class="url">/admin/roles</td><td class="now">총 <b>N</b>개</td><td class="src">PermissionsListPanel.tsx:180</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3>단위를 어떻게 할지 정해야 합니다</h3>
+      <p>
+        현재 <b>건 / 명 / 개</b>가 섞여 있습니다. 사용자·자문위원은 “명”, 평가·역할은 “개”가 자연스러운데,
+        목표 형식을 <code>현재 1–20건 / 총 275건</code>으로 못 박으면 “총 275명”인 화면과 충돌합니다.
+        <b>단위는 화면별로 유지</b>하고 형식만 맞추는 쪽을 권합니다 — <code>현재 1–20명 / 총 275명</code>.
+      </p>
+    </div>
+  </section>
+
+  <!-- ② -->
+  <section id="g2">
+    <h2>② 순서·표현만 다른 곳 <span class="n">7곳 · 범위는 이미 있음</span></h2>
+    <p class="lead">범위 계산이 이미 되어 있어 문구 순서만 바꾸면 됩니다. 가장 안전한 그룹입니다.</p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col class="c-now"><col></colgroup>
+        <thead><tr><th>화면</th><th>경로</th><th>현재 문구</th><th>파일</th></tr></thead>
+        <tbody>
+          <tr><td class="scr">커뮤니티 게시판</td><td class="url">/community/board</td><td class="now">N–M / <b>K</b>건</td><td class="src">CommunityPage.tsx:278</td></tr>
+          <tr><td class="scr">자료공유</td><td class="url">/community/share</td><td class="now">N–M / K건<br><small>0건일 때 “0건”만 표시</small></td><td class="src">ResourcesPage.tsx:423</td></tr>
+          <tr><td class="scr">기출문항게시판</td><td class="url">/reference/past-items</td><td class="now">N–M / <b>K</b>건</td><td class="src">PastItemsBoardViewPage.tsx:310</td></tr>
+          <tr><td class="scr">알림 발송 관리</td><td class="url">/admin/notifications</td><td class="now">N–M / K건</td><td class="src">NotificationManagePage.tsx:826</td></tr>
+          <tr><td class="scr">사용자 권한 수정 — 업무 배정</td><td class="url">/admin/roles/user-roles/{userId}/edit</td><td class="now">N–M / K건</td><td class="src">UserAssignmentsSection.tsx:280</td></tr>
+          <tr><td class="scr">권한 신청 검토</td><td class="url">/permissions/requests/{id}/review</td><td class="now">N–M / K건 <small>(0건 분기 있음)</small></td><td class="src">PermissionsReviewPage.tsx:355</td></tr>
+          <tr><td class="scr">학교 마스터 조회</td><td class="url">/admin/schools</td><td class="now">총 <b>N</b>개 학교 · N–M<br><small>총계가 앞, 범위가 뒤 — 순서 반대</small></td><td class="src">SchoolsPage.tsx:365</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3>바꾸는 모양</h3>
+      <pre><span class="del">- &lt;span className="text-muted"&gt;{firstRow}–{lastRow} / {totalElements.toLocaleString()}건&lt;/span&gt;</span>
+<span class="add">+ &lt;span className="text-muted"&gt;</span>
+<span class="add">+   현재 &lt;strong className="count-number"&gt;{firstRow}&lt;/strong&gt;–</span>
+<span class="add">+   &lt;strong className="count-number"&gt;{lastRow}&lt;/strong&gt;건 / 총&nbsp;</span>
+<span class="add">+   &lt;strong className="count-number"&gt;{totalElements.toLocaleString()}&lt;/strong&gt;건</span>
+<span class="add">+ &lt;/span&gt;</span></pre>
+      <p style="margin-top:9px">
+        <code>text-muted</code>를 유지할지도 정해야 합니다. 연합 목록은 <code>&lt;span&gt;</code>에 클래스가 없고,
+        이 7곳 중 6곳은 <code>text-muted</code>가 붙어 회색으로 흐리게 보입니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- ③ -->
+  <section id="g3">
+    <h2>③ 더미값이라 확인 필요 <span class="n">4곳</span></h2>
+    <p class="lead">
+      숫자가 <b>하드코딩</b>돼 있습니다. 형식만 바꾸면 “현재 1–6건 / 총 12,160건”이라는 가짜 숫자가 그대로 남습니다.
+      API 연동 전 표본 화면인지 먼저 확인해야 합니다.
+    </p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col class="c-now"><col></colgroup>
+        <thead><tr><th>화면</th><th>경로</th><th>현재 문구 (고정값)</th><th>파일</th></tr></thead>
+        <tbody>
+          <tr><td class="scr">접근기록 <span class="pill hold">더미</span></td><td class="url">/audit/access-logs</td><td class="now">1–6 / 12,160건</td><td class="src">AccessLogPage.tsx:237</td></tr>
+          <tr><td class="scr">공지·도움말 <span class="pill hold">더미</span></td><td class="url">/support/notices</td><td class="now">1–5 / 85건</td><td class="src">NoticeHelpPage.tsx:150</td></tr>
+          <tr><td class="scr">권한 신청 <span class="pill hold">더미</span></td><td class="url">/permissions/requests/new</td><td class="now">1–5 / 85건</td><td class="src">PermissionsNewPage.tsx:593</td></tr>
+          <tr><td class="scr">알림 관리 <span class="pill hold">더미</span></td><td class="url">(라우트 미등록)</td><td class="now">1–6 / 1,842건</td><td class="src">AlarmManagePage.tsx:330</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ④ -->
+  <section id="g4">
+    <h2>④ 손대지 않을 곳 <span class="n">14곳</span></h2>
+    <p class="lead">푸터이긴 하나 <b>페이지 범위 개념이 없거나</b>, 건수 표기가 아예 아닌 곳입니다.</p>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>분류별 집계 — 범위 개념 없음 <span class="pill skip">6</span></h3>
+        <ul>
+          <li><code>/admin/master-data/command-terms</code> — “{과목} <b>N</b>개 상위 · <b>M</b>개 하위”</li>
+          <li><code>/admin/master-data/core-ideas</code> — “조회 N건 · 선택 교과 전체 M건”</li>
+          <li><code>/admin/master-data/key-concepts</code> — “{과목} · {단원} N개”</li>
+          <li><code>/admin/master-data/subject-competencies</code> — “전체 N개 · 교과고유 · 총론연계 · 대구특화”</li>
+          <li><code>/admin/external-advisor-revocations</code> — “전체 N건 · 활성 · 비활성”</li>
+          <li><code>/admin/neis/sync-history</code> — “총 1,284건 · 실패 2건”</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>부가 설명형 <span class="pill skip">4</span></h3>
+        <ul>
+          <li><code>/admin/schools/search/{schoolId}</code> 학생·과목·교직원 3탭 — “총 N건 · {학년도} {학기} OPS 활성 프로필 기준”처럼 <b>기준 설명이 붙는</b> 형태</li>
+          <li><code>/admin/reference-data/audit-logs</code> — “2026-03-12 ~ 03-14 · 9건 표시 · 전체 2,404건”. 기간이 함께 들어감</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>건수 표기가 아님 <span class="pill skip">4</span></h3>
+        <ul>
+          <li><code>Panel.tsx:64</code> — 공통 <code>Panel</code>의 <code>footer</code> prop 렌더 자리. <b>여기가 아니라 각 화면이 실제 문구를 넘깁니다</b></li>
+          <li><code>/evaluation/unions/{id}</code> — “목록으로 돌아가기” 버튼만</li>
+          <li><code>/admin/message-codes</code> — 취소·저장 버튼만</li>
+          <li><code>/admin/reference-data/category-boards</code> — “전체 N건”. 페이징은 있으나 <code>&lt;strong&gt;</code>에 <code>count-number</code>가 빠져 있음 <span class="pill go">클래스만 보정 후보</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>확인 못 한 곳 <span class="pill skip">1</span></h3>
+        <ul>
+          <li><code>/support/statistics</code> — <code>PlatformUsageStatsPage.tsx:311</code>. 푸터 내용이 변수로 조립돼 있어 실제 화면 확인이 필요합니다</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑤ -->
+  <section id="g5">
+    <h2>⑤ 제외 — 개발 중 <span class="n">21곳</span></h2>
+    <p class="lead">채점관리·평가시행은 개발 중이라 이번 통일 범위에서 뺐습니다.</p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col style="width:14%"><col></colgroup>
+        <thead><tr><th>영역</th><th>푸터 수</th><th>파일</th></tr></thead>
+        <tbody>
+          <tr><td class="scr">내부표준화 (front)</td><td>10</td>
+            <td class="src">InternalStandardizationDetailConfirm 3 · DetailSample 3 · DetailPractice 1 · SeniorManagementPage 1 · SeedAnswerModal 1 · TeacherPage 3</td></tr>
+          <tr><td class="scr">내부표준화 (구)</td><td>4</td>
+            <td class="src">InternalStandardizationDetailPage 2 · InternalStandardizationListPage 1 · (ScoringStatusListPage는 ①에 포함)</td></tr>
+          <tr><td class="scr">평가시행 · 설계</td><td>3</td>
+            <td class="src">Step4StudentsPanel 2 · CandidateSearchPanel 1</td></tr>
+          <tr><td class="scr">기타 미등록 라우트</td><td>4</td>
+            <td class="src">AlarmManagePage(③에 포함) · RolesListPanel · PermissionsListPanel · InternalStandardizationTeacherPage</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 유의점 -->
+  <section id="how">
+    <h2>작업 시 유의점</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3>먼저 정해야 할 것 세 가지</h3>
+        <ul>
+          <li><b>단위</b> — 건/명/개를 화면별로 유지할지, “건”으로 통일할지</li>
+          <li><b>글자색</b> — <code>text-muted</code>를 유지할지. 연합 목록은 클래스 없이 기본색입니다</li>
+          <li><b>0건일 때</b> — 자료공유·권한 검토는 “0건”만 따로 보여줍니다. 이 분기를 살릴지</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>클래스는 <code>count-number</code>로 이미 정리됨</h3>
+        <p>
+          숫자 강조는 대부분 <code>count-number</code>를 씁니다. 연합 목록에만 있던
+          <code>text-teal font-mono</code> 3곳을 <code>count-number</code>로 바꿔 코드베이스에 남은 사용처는 0입니다.
+        </p>
+        <p style="margin-top:8px">
+          <code>/admin/reference-data/category-boards</code>의 <code>&lt;strong&gt;</code>만 클래스가 비어 있어,
+          그 한 곳은 문구 통일과 별개로 보정할 수 있습니다.
+        </p>
+      </div>
+    </div>
+    <div class="card">
+      <h3>권장 순서</h3>
+      <ul>
+        <li><b>②부터</b> — 범위 계산이 이미 있어 문구 순서만 바꾸면 됩니다. 7곳, 회귀 위험 거의 없음</li>
+        <li><b>다음 ①</b> — 범위 계산식을 새로 넣어야 합니다. 페이지 크기 상수를 화면마다 확인해야 해서 손이 더 갑니다</li>
+        <li><b>③은 보류</b> — 더미값 여부를 먼저 확인. 형식만 바꾸면 가짜 숫자가 더 그럴듯해 보입니다</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <code>feature/front-goldking-new</code> · <code>1ed64cf8</code> 기준 · 2026-08-27 ·
+    확인은 <code>npm run dev</code> → <code>http://127.0.0.1:3100</code>
+  </footer>
+
+</div>
+
+</body></html>

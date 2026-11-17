@@ -1,0 +1,613 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>손금왕 포트폴리오</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="손금왕은 2003년부터 사용자와 서비스가 만나는 디지털 경험을 설계해온 UX 파트너입니다. 기획·디자인·퍼블리싱에 AI 워크플로우를 연결합니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;800;900&family=IBM+Plex+Sans+KR:wght@200;300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: 단일 다크 원페이지 — 고정 헤더 / 물결선 히어로 / 소개·프로세스 / 수치 / 선언문 / 작업 그리드+상세 다이얼로그 / 클라이언트 / 문의 / 푸터 */
+:root{
+  --ink:#0c0c0d;          /* 바탕 */
+  --ink-2:#151517;        /* 카드·면 */
+  --ink-3:#1e1e21;        /* 호버 면 */
+  --line:#2a2a2e;         /* 구분선 */
+  --paper:#eeece7;        /* 본문 글자 */
+  --mute:#8d8a85;         /* 보조 글자 */
+  --ghost:#3a3a3f;        /* 대형 영문 고스트 타이포 */
+  --ember:#f2692e;        /* 포인트 — 포트폴리오 PDF의 오렌지 */
+  --font-display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --font-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --gutter:clamp(20px,4vw,56px);
+  --max:1360px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{background:var(--ink);color:var(--paper);font-family:var(--font-body);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--ink)}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--ember);outline-offset:3px;border-radius:2px}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+
+.wrap{max-width:var(--max);margin-inline:auto;padding-left:max(var(--gutter),env(safe-area-inset-left,0px));padding-right:max(var(--gutter),env(safe-area-inset-right,0px))}
+.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ember)}
+.ghost{font-family:var(--font-display);font-weight:900;letter-spacing:-.04em;line-height:.85;color:var(--ghost)}
+
+/* ---------- Header ---------- */
+.hd{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--ink) 82%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid transparent;transition:border-color .3s}
+.hd.is-stuck{border-bottom-color:var(--line)}
+.hd .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;height:68px}
+.logo{font-family:var(--font-display);font-weight:800;font-size:19px;letter-spacing:-.02em;display:flex;align-items:baseline;gap:2px}
+.logo b{color:var(--ember)}
+.gnb{display:flex;gap:clamp(16px,3vw,40px);font-family:var(--font-display);font-weight:500;font-size:15px}
+.gnb a{color:var(--mute);transition:color .2s;position:relative;padding-block:6px}
+.gnb a:hover,.gnb a.on{color:var(--paper)}
+.gnb a.on::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--ember)}
+.hd-cta{font-family:var(--font-mono);font-size:12px;letter-spacing:.08em;border:1px solid var(--line);border-radius:999px;padding:8px 16px;transition:border-color .2s,background .2s}
+.hd-cta:hover{border-color:var(--paper);background:var(--paper);color:var(--ink)}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,var(--ink) 100%);pointer-events:none}
+.hero .wrap{position:relative;z-index:1;padding-block:clamp(72px,12vw,150px) clamp(56px,8vw,96px);display:grid;gap:clamp(28px,4vw,48px)}
+.hero h1{font-weight:200;font-size:clamp(44px,8.6vw,128px);line-height:1.08;letter-spacing:-.045em}
+.hero h1 strong{font-weight:700}
+.hero h1 .mark{position:relative;display:inline-block}
+.hero h1 .mark::after{content:"";position:absolute;left:.04em;right:.04em;bottom:.06em;height:.08em;background:var(--ember);transform-origin:left;animation:draw 1.1s .5s cubic-bezier(.7,0,.2,1) both}
+@keyframes draw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.hero-row{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:28px}
+.hero-lead{max-width:30em;color:var(--mute);font-size:clamp(16px,1.4vw,19px);font-weight:300}
+.hero-lead b{color:var(--paper);font-weight:500}
+.btns{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;font-size:15px;font-weight:500;border:1px solid var(--line);transition:background .2s,border-color .2s,color .2s}
+.btn:hover{border-color:var(--paper)}
+.btn.primary{background:var(--ember);border-color:var(--ember);color:var(--ink)}
+.btn.primary:hover{background:var(--paper);border-color:var(--paper)}
+.btn .arr{transition:transform .2s}
+.btn:hover .arr{transform:translateX(3px)}
+.hero-meta{display:flex;flex-wrap:wrap;gap:8px 28px;font-family:var(--font-mono);font-size:12px;letter-spacing:.08em;color:var(--mute);text-transform:uppercase}
+.hero-meta span:first-child{color:var(--paper)}
+
+/* ---------- About ---------- */
+.sec{padding-block:clamp(88px,11vw,160px)}
+.about-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.2fr);gap:clamp(32px,6vw,96px)}
+.about-ghost{font-size:clamp(56px,6.6vw,104px)}
+.about-body{display:grid;gap:clamp(40px,5vw,64px);min-width:0}
+.statement{font-size:clamp(24px,3.1vw,44px);font-weight:300;line-height:1.45;letter-spacing:-.025em}
+.statement em{font-style:normal;font-weight:700;color:var(--ember)}
+.about-sub{color:var(--mute);max-width:42em}
+.process{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.process li{display:grid;grid-template-columns:56px minmax(0,1.1fr) minmax(0,2fr);gap:16px 24px;align-items:baseline;padding-block:26px;border-bottom:1px solid var(--line);transition:background .3s}
+.process li:hover{background:linear-gradient(90deg,var(--ink-2),transparent)}
+.process .no{font-family:var(--font-mono);font-size:13px;color:var(--ember)}
+.process h3{font-family:var(--font-display);font-weight:800;font-size:clamp(20px,2vw,26px);letter-spacing:-.02em}
+.process h3 small{display:block;font-family:var(--font-body);font-weight:400;font-size:14px;color:var(--mute);letter-spacing:0}
+.process p{color:var(--mute);font-size:15px}
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tools .lbl{font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;color:var(--mute);text-transform:uppercase;margin-right:8px}
+.chip{font-size:13px;padding:6px 14px;border:1px solid var(--line);border-radius:999px;color:var(--paper)}
+.chip.ai{border-color:color-mix(in srgb,var(--ember) 55%,var(--line))}
+
+/* ---------- Stats ---------- */
+.stats{border-block:1px solid var(--line)}
+.stats .wrap{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.stat{padding-block:clamp(32px,4vw,52px);padding-inline:clamp(0px,2vw,28px);border-left:1px solid var(--line);display:grid;gap:10px}
+.stat:first-child{border-left:0;padding-left:0}
+.stat .k{font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.stat .v{font-family:var(--font-display);font-weight:900;font-size:clamp(38px,5vw,72px);line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.stat .v sup{font-size:.4em;color:var(--ember);vertical-align:top;margin-left:2px}
+.stat .d{font-size:14px;color:var(--mute)}
+
+/* ---------- Manifesto ---------- */
+.manifesto .wrap{display:grid;gap:clamp(48px,7vw,96px)}
+.mf{display:grid;grid-template-columns:120px minmax(0,1fr);gap:24px;align-items:start}
+.mf .tag{font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;color:var(--mute);text-transform:uppercase;padding-top:.9em}
+.mf p{font-size:clamp(30px,5.2vw,76px);font-weight:700;line-height:1.18;letter-spacing:-.045em;color:var(--ghost);transition:color .9s ease}
+.mf.lit p{color:var(--paper)}
+.mf p .hl{transition:color .9s .2s ease}
+.mf.lit p .hl{color:var(--ember)}
+
+/* ---------- Works ---------- */
+.works-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:28px;margin-bottom:clamp(36px,5vw,56px)}
+.works-head .ttl{display:grid;gap:18px}
+.works-ghost{font-size:clamp(72px,13vw,200px)}
+.works-head h2{font-size:clamp(26px,3vw,40px);font-weight:500;letter-spacing:-.03em}
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.filters button{background:none;border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-size:14px;color:var(--mute);transition:all .2s;display:flex;gap:8px;align-items:center}
+.filters button span{font-family:var(--font-mono);font-size:11px;opacity:.7}
+.filters button:hover{color:var(--paper);border-color:var(--mute)}
+.filters button[aria-pressed="true"]{background:var(--paper);border-color:var(--paper);color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(16px,2vw,28px)}
+.card{grid-column:span 2;display:grid;gap:16px;text-align:left;background:none;border:0;padding:0;min-width:0}
+.card.feat{grid-column:span 3}
+.card .thumb{position:relative;aspect-ratio:1/1;max-width:100%;overflow:hidden;border-radius:6px;background:var(--ink-2)}
+.card.feat .thumb{aspect-ratio:5/4}
+.card .thumb img{width:100%;height:100%;object-fit:cover;object-position:right center;transition:transform .8s cubic-bezier(.2,.7,.2,1),filter .4s}
+.card:hover .thumb img{transform:scale(1.045)}
+.card .thumb .view{position:absolute;right:14px;bottom:14px;width:46px;height:46px;border-radius:50%;background:var(--ember);color:var(--ink);display:grid;place-items:center;font-size:20px;transform:scale(0);transition:transform .3s cubic-bezier(.3,1.4,.5,1)}
+.card:hover .thumb .view,.card:focus-visible .thumb .view{transform:scale(1)}
+.card .meta{display:grid;gap:6px}
+.card .row{display:flex;justify-content:space-between;gap:12px;font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;color:var(--mute)}
+.card h3{font-size:clamp(18px,1.6vw,22px);font-weight:700;letter-spacing:-.025em;line-height:1.35}
+.card .role{font-size:14px;color:var(--mute)}
+.card[hidden]{display:none}
+.empty{color:var(--mute)}
+
+/* ---------- Dialog ---------- */
+dialog{width:min(1080px,calc(100% - 32px));max-height:calc(100% - 48px);padding:0;border:1px solid var(--line);border-radius:10px;background:var(--ink-2);color:var(--paper);overflow:auto}
+dialog::backdrop{background:rgba(5,5,6,.78);backdrop-filter:blur(6px)}
+dialog[open]{animation:pop .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.dlg{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
+.dlg-img{background:var(--ink);min-height:100%}
+.dlg-img img{width:100%;height:100%;object-fit:cover;object-position:right center}
+.dlg-body{padding:clamp(24px,3.5vw,44px);display:grid;gap:22px;align-content:start;min-width:0}
+.dlg-body .cat{font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;color:var(--ember);text-transform:uppercase}
+.dlg-body h3{font-size:clamp(24px,2.6vw,34px);font-weight:700;letter-spacing:-.035em;line-height:1.25}
+.dlg-body p{color:#c9c6c0;font-size:15px;line-height:1.85}
+.dlg-body dl{display:grid;grid-template-columns:72px minmax(0,1fr);gap:10px 16px;margin:0;padding-top:20px;border-top:1px solid var(--line);font-size:14px}
+.dlg-body dt{font-family:var(--font-mono);font-size:12px;color:var(--mute);letter-spacing:.06em;padding-top:2px}
+.dlg-body dd{margin:0}
+.dlg-nav{display:flex;justify-content:space-between;gap:8px}
+.dlg-nav button,.x{background:none;border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:13px;color:var(--mute);transition:all .2s}
+.dlg-nav button:hover,.x:hover{color:var(--paper);border-color:var(--paper)}
+.x{position:sticky;top:12px;float:right;margin:12px 12px 0 0;z-index:2;background:var(--ink-2);width:40px;height:40px;padding:0;font-size:18px;line-height:1}
+
+/* ---------- Clients ---------- */
+.clients{background:#000;border-block:1px solid var(--line)}
+.clients-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.4fr);gap:clamp(32px,5vw,80px);align-items:start}
+.clients-ghost{font-size:clamp(56px,6.6vw,110px)}
+.clients h2{font-size:clamp(22px,2.2vw,30px);font-weight:500;letter-spacing:-.03em;margin-top:22px}
+.clients .note{color:var(--mute);font-size:15px;margin-top:14px;max-width:24em}
+.logos{opacity:.9;min-width:0}
+
+/* ---------- Contact ---------- */
+.contact .wrap{display:grid;gap:clamp(32px,4vw,48px)}
+.contact h2{font-size:clamp(34px,6vw,88px);font-weight:300;letter-spacing:-.05em;line-height:1.12}
+.contact h2 strong{font-weight:700}
+.mail{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;padding-top:clamp(24px,3vw,36px);border-top:1px solid var(--line)}
+.mail .addr{font-family:var(--font-display);font-weight:800;font-size:clamp(24px,4vw,52px);letter-spacing:-.03em;user-select:all;overflow-wrap:anywhere;min-width:0}
+.mail .addr:hover{color:var(--ember)}
+.copy{border:1px solid var(--line);background:none;border-radius:999px;padding:10px 18px;font-size:14px;transition:all .2s}
+.copy:hover{border-color:var(--paper)}
+.copy.done{background:var(--ember);border-color:var(--ember);color:var(--ink)}
+
+/* ---------- Footer ---------- */
+.ft{border-top:1px solid var(--line);padding-block:48px calc(36px + env(safe-area-inset-bottom,0px))}
+.ft .wrap{display:grid;gap:40px}
+.ft-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:32px}
+.ft-thanks{font-size:clamp(56px,10vw,150px)}
+.ft-cols{display:flex;flex-wrap:wrap;gap:48px;font-size:14px}
+.ft-cols h4{margin:0 0 12px;font-family:var(--font-mono);font-size:12px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.ft-cols ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.ft-cols a:hover{color:var(--ember)}
+.ft-bottom{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-family:var(--font-mono);font-size:12px;color:var(--mute);letter-spacing:.04em}
+
+.hero-tag{font-family:var(--font-display);font-style:italic;font-weight:500;color:var(--mute);font-size:15px}
+.stat .v.txt{font-size:clamp(24px,2.4vw,34px);line-height:1.15;letter-spacing:-.025em}
+.works-sub{color:var(--mute);max-width:36em}
+.contact .sub{color:var(--mute);font-size:clamp(16px,1.4vw,19px);max-width:34em}
+/* ---------- AI Workflow ---------- */
+.ax{border-top:1px solid var(--line)}
+.ax .wrap{display:grid;gap:clamp(36px,5vw,64px)}
+.ax-head{display:grid;gap:18px;max-width:52em}
+.ax-head h2{font-size:clamp(32px,5vw,72px);font-weight:300;letter-spacing:-.045em;line-height:1.12}
+.ax-head h2 em{font-style:normal;font-weight:700;color:var(--ember)}
+.ax-head p{color:var(--mute);font-size:clamp(15px,1.3vw,18px)}
+.ax-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,1.6vw,20px)}
+.ax-col{border:1px solid var(--line);border-radius:8px;padding:clamp(22px,2.4vw,32px);display:grid;gap:18px;align-content:start;min-width:0}
+.ax-col.me{border-color:var(--ember);background:linear-gradient(160deg,color-mix(in srgb,var(--ember) 10%,var(--ink-2)),var(--ink-2))}
+.ax-col .k{font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.ax-col.me .k{color:var(--ember)}
+.ax-col h3{font-size:clamp(19px,1.7vw,23px);font-weight:700;letter-spacing:-.025em}
+.ax-col ol{list-style:none;margin:0;padding:0;display:grid;gap:12px;font-size:15px;color:#c9c6c0}
+.ax-col li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:6px}
+.ax-col li span{font-family:var(--font-mono);font-size:12px;color:var(--mute);padding-top:3px}
+.ax-foot{display:flex;flex-wrap:wrap;gap:8px 28px;font-family:var(--font-mono);font-size:12px;letter-spacing:.1em;color:var(--mute);text-transform:uppercase}
+@media (max-width:1080px){.ax-cols{grid-template-columns:minmax(0,1fr)}}
+
+/* ---------- Reveal (기본 상태도 보이게, 살짝 떠오르기만) ---------- */
+.rv{transition:transform .9s cubic-bezier(.2,.7,.2,1),opacity .9s}
+.js .rv:not(.in){transform:translateY(24px);opacity:.35}
+
+/* ---------- Responsive ---------- */
+@media (max-width:1080px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .card,.card.feat{grid-column:span 1}
+  .card.feat .thumb{aspect-ratio:1/1}
+  .about-grid,.clients-grid{grid-template-columns:minmax(0,1fr)}
+  .stats .wrap{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stat:nth-child(3){border-left:0;padding-left:0}
+  .stat:nth-child(n+3){border-top:1px solid var(--line)}
+  .dlg{grid-template-columns:minmax(0,1fr)}
+  .dlg-img img{max-height:52vh}
+}
+@media (max-width:720px){
+  .gnb{display:none}
+  .grid{grid-template-columns:minmax(0,1fr)}
+  .process li{grid-template-columns:40px minmax(0,1fr)}
+  .process p{grid-column:2}
+  .mf{grid-template-columns:minmax(0,1fr);gap:10px}
+  .mf .tag{padding-top:0}
+  .stat{padding-inline:0 12px}
+  .stat:nth-child(even){padding-left:16px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+
+<header class="hd" id="hd">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="handgoldking 처음으로">handgoldking<b>.</b></a>
+    <nav class="gnb" aria-label="주요 메뉴">
+      <a href="#about">About</a>
+      <a href="#ai">AI</a>
+      <a href="#works">Works</a>
+      <a href="#clients">Clients</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="hd-cta" href="#contact">프로젝트 문의</a>
+  </div>
+</header>
+
+<main id="top">
+  <!-- Hero -->
+  <section class="hero" aria-label="소개">
+    <canvas id="waves" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <p class="eyebrow">UX Planning · UI/UX Design · Publishing</p>
+      <h1>내일의 <strong class="mark">경험</strong>을<br>만드는 사람</h1>
+      <div class="hero-row">
+        <p class="hero-lead"><b>경험을 끝까지 설계합니다.</b><br>사용자와 서비스가 만나는 모든 접점을, 기획부터 코드까지 한 흐름으로 다시 바라봅니다.</p>
+        <div class="btns">
+          <a class="btn primary" href="#works">작업 보기 <span class="arr">→</span></a>
+          <a class="btn" href="#contact">프로젝트 문의</a>
+        </div>
+      </div>
+      <div class="hero-meta"><span>손금왕 · Handgoldking</span><span>Since 2003</span><span class="hero-tag">Explore the essence, refine the detail.</span></div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="sec" id="about">
+    <div class="wrap about-grid">
+      <div>
+        <p class="eyebrow">Who I Am</p>
+        <p class="ghost about-ghost" aria-hidden="true" style="margin-top:24px">HELLO.</p>
+      </div>
+      <div class="about-body">
+        <p class="statement rv">손금왕은 2003년부터 사용자와 서비스가 만나는 디지털 경험을 <em>설계해온</em> UX 파트너입니다.</p>
+        <p class="about-sub rv">웹사이트, 플랫폼, 모바일 앱, 객실 TV, 관리자 시스템까지. 기획과 디자인, 퍼블리싱을 한 사람이 끝까지 이어 왔고, 이제 그 경험 위에 AI 워크플로우를 연결합니다.</p>
+        <ol class="process" aria-label="하는 일">
+          <li class="rv"><span class="no">01</span><h3>UX Planning<small>UX 기획</small></h3><p>경험의 구조를 설계합니다. 사용자와 업무 흐름을 읽고 정보 구조와 시나리오를 만듭니다.</p></li>
+          <li class="rv"><span class="no">02</span><h3>UI/UX Design<small>UI·UX 디자인</small></h3><p>사용자가 만나는 화면을 디자인합니다. 브랜드의 톤을 일관된 디자인 시스템으로 정리합니다.</p></li>
+          <li class="rv"><span class="no">03</span><h3>Publishing<small>퍼블리싱</small></h3><p>시안 그대로 코드로 구현합니다. 웹 표준, 접근성, 반응형까지 직접 책임집니다.</p></li>
+          <li class="rv"><span class="no">04</span><h3>AI Workflow<small>AI 워크플로우</small></h3><p>기획부터 퍼블리싱까지의 흐름에 AI를 연결합니다. 더 적은 인원으로 더 빠르게 완성합니다.</p></li>
+        </ol>
+        <div class="tools rv">
+          <span class="lbl">Tools</span>
+          <span class="chip">Figma</span><span class="chip">XD</span><span class="chip">Photoshop</span><span class="chip">Illustrator</span><span class="chip">VS Code</span>
+          <span class="chip ai">Cursor AI</span><span class="chip ai">Claude Code</span><span class="chip ai">Midjourney</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats" aria-label="경력 요약">
+    <div class="wrap">
+      <div class="stat"><span class="k">Since 2003</span><span class="v">23<sup>yrs</sup></span><span class="d">업력과 신뢰</span></div>
+      <div class="stat"><span class="k">Clients</span><span class="v">41<sup>+</sup></span><span class="d">공공 · 금융 · 호텔 · 교육 · AI</span></div>
+      <div class="stat"><span class="k">Selected Works</span><span class="v">19</span><span class="d">대표 프로젝트</span></div>
+      <div class="stat"><span class="k">Now</span><span class="v txt">AI Native<br>Workflow</span><span class="d">지금의 변화</span></div>
+    </div>
+  </section>
+
+  <!-- Manifesto -->
+  <section class="sec manifesto" aria-label="일하는 방식">
+    <div class="wrap">
+      <div class="mf"><span class="tag">Range</span><p>다양한 플랫폼의 UX 기획, <span class="hl">UI·UX 디자인</span>을 경험한 전문가입니다.</p></div>
+      <div class="mf"><span class="tag">Process</span><p>UX 기획부터 디자인, 퍼블리싱 구현까지 <span class="hl">통합적인 사고</span>로 접근합니다.</p></div>
+      <div class="mf"><span class="tag">Craft</span><p>본질을 탐구해 기본을 세우고, <span class="hl">디테일</span>을 다듬습니다.</p></div>
+    </div>
+  </section>
+
+  <!-- AI Workflow -->
+  <section class="sec ax" id="ai" aria-labelledby="axTitle">
+    <div class="wrap">
+      <div class="ax-head">
+        <p class="eyebrow">AI Workflow</p>
+        <h2 id="axTitle">AI를 쓰는 것을 넘어, <em>흐름</em>으로 일합니다.</h2>
+        <p>글을 쓰는 AI, 그리는 AI, 코드를 짜는 AI가 따로 있습니다. 중요한 건 이 도구들을 기획에서 퍼블리싱까지 하나의 흐름으로 엮는 일입니다. 속도는 AI가 맡고, 판단과 안목은 사람이 맡습니다.</p>
+      </div>
+      <div class="ax-cols">
+        <div class="ax-col rv">
+          <span class="k">AI를 도구로 쓴다</span>
+          <h3>필요할 때마다, 따로</h3>
+          <ol><li><span>01</span>AI 하나에 묻고 답을 받습니다.</li><li><span>02</span>사람이 매번 결과를 이어 붙입니다.</li><li><span>03</span>결과물의 품질이 그때그때 다릅니다.</li></ol>
+        </div>
+        <div class="ax-col rv">
+          <span class="k">AI와 함께 일한다</span>
+          <h3>하나의 흐름으로, 계속</h3>
+          <ol><li><span>01</span>디자인과 구현이 끊기지 않고 이어집니다.</li><li><span>02</span>사람은 흐름을 설계하고 검수합니다.</li><li><span>03</span>결과가 일관되고, 할수록 빨라집니다.</li></ol>
+        </div>
+        <div class="ax-col me rv">
+          <span class="k">손금왕의 방식</span>
+          <h3>23년의 안목이 이끄는 AI 워크플로우</h3>
+          <ol><li><span>01</span>Figma로 설계하고, Cursor AI·Claude Code로 퍼블리싱합니다.</li><li><span>02</span>실제 납품 프로젝트에서 적은 인원으로 끝까지 완성했습니다.</li><li><span>03</span>AI가 만든 결과도 시안과 표준을 기준으로 직접 검수합니다.</li></ol>
+        </div>
+      </div>
+      <div class="ax-foot"><span>Since 2003</span><span>Figma · Cursor AI · Claude Code · Midjourney</span><span>Proven on client work</span></div>
+    </div>
+  </section>
+
+  <!-- Works -->
+  <section class="sec" id="works" style="padding-top:0">
+    <div class="wrap">
+      <div class="works-head">
+        <div class="ttl">
+          <p class="ghost works-ghost" aria-hidden="true">Project.</p>
+          <p class="eyebrow">Works · 2012 — 2025</p>
+          <h2>직접 만든 결과로 증명합니다.</h2>
+          <p class="works-sub">공공 아카이브부터 금융 플랫폼, 호텔 객실 TV, AI 서비스까지. 기획하고 디자인하고 구현한 대표 작업입니다.</p>
+        </div>
+        <div class="filters" role="group" aria-label="분야 필터" id="filters"></div>
+      </div>
+      <div class="grid" id="grid"></div>
+      <p class="empty" id="empty" hidden>이 분야의 작업이 없습니다.</p>
+    </div>
+  </section>
+
+  <!-- Clients -->
+  <section class="sec clients" id="clients">
+    <div class="wrap clients-grid">
+      <div>
+        <p class="ghost clients-ghost" aria-hidden="true">Client.</p>
+        <p class="eyebrow" style="margin-top:22px">Clients</p>
+        <h2>41곳의 기관·기업과 함께 만들었습니다.</h2>
+        <p class="note">국립중앙과학관, 서민금융진흥원, 우리은행, 엔씨소프트, 호텔신라, 파라다이스시티. 분야는 달라도 사용자가 헤매지 않는 경험이라는 목표는 같았습니다.</p>
+      </div>
+      <img class="logos rv" src="img/clients.png" alt="함께한 41개 클라이언트 로고 — 호텔신라, 엔씨소프트, 네이버, KT, 삼성, 우리은행, NH농협, 국립중앙과학관, 국가기록원, 파라다이스시티 등" loading="lazy" width="1800" height="866">
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="sec contact" id="contact">
+    <div class="wrap">
+      <p class="eyebrow">Contact</p>
+      <h2 class="rv">새로운 프로젝트를 준비하고 있다면,<br><strong>손금왕과 이야기해보세요.</strong></h2>
+      <p class="sub">웹사이트, 플랫폼, 앱, 관리자 시스템, AI 워크플로우까지. 지금 필요한 디지털 경험을 함께 설계합니다.</p>
+      <div class="mail">
+        <a class="addr" href="mailto:handgoldking@naver.com" id="addr">handgoldking@naver.com</a>
+        <button class="copy" type="button" id="copyBtn">주소 복사</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="ft">
+  <div class="wrap">
+    <div class="ft-top">
+      <p class="ghost ft-thanks" aria-hidden="true">Thanks.</p>
+      <div class="ft-cols">
+        <div><h4>Sitemap</h4><ul><li><a href="#about">About</a></li><li><a href="#ai">AI Workflow</a></li><li><a href="#works">Works</a></li><li><a href="#clients">Clients</a></li><li><a href="#contact">Contact</a></li></ul></div>
+        <div><h4>Discipline</h4><ul><li>UX Planning</li><li>UI/UX Design</li><li>Publishing</li><li>AI Workflow</li></ul></div>
+      </div>
+    </div>
+    <div class="ft-bottom"><span>© 2026 손금왕 · Handgoldking</span><span>HANDGOLDKING · UX Partner · since 2003</span></div>
+  </div>
+</footer>
+
+<dialog id="dlg" aria-labelledby="dlgTitle">
+  <button class="x" type="button" id="dlgClose" aria-label="닫기">✕</button>
+  <div class="dlg">
+    <div class="dlg-img"><img id="dlgImg" alt=""></div>
+    <div class="dlg-body">
+      <span class="cat" id="dlgCat"></span>
+      <h3 id="dlgTitle"></h3>
+      <p id="dlgDesc"></p>
+      <dl>
+        <dt>고객사</dt><dd id="dlgClient"></dd>
+        <dt>런칭일</dt><dd id="dlgDate"></dd>
+        <dt>포지션</dt><dd id="dlgRole"></dd>
+      </dl>
+      <div class="dlg-nav"><button type="button" id="dlgPrev">← 이전 작업</button><button type="button" id="dlgNext">다음 작업 →</button></div>
+    </div>
+  </div>
+</dialog>
+
+<script>
+document.documentElement.classList.add('js');
+
+/* ---------- 작업 데이터 (포트폴리오 PDF 기준) ---------- */
+var WORKS = [
+  {t:'중앙과학관 클라우드 이관 사업', c:'중앙과학관', d:'2025.02', r:'기획, UI/UX 디자인, 퍼블리싱, 웹페이지 총괄 PL', k:'public',
+   x:'국립중앙과학관 웹사이트를 클라우드 환경으로 이관하며 데이터 기반 맞춤형 전시 서비스를 제공하고, 전자정부 웹사이트 UI/UX 가이드라인(KRDS)을 준수해 인터랙티브 UX를 강화했습니다. 웹페이지 총괄 PL로서 기획–디자인–퍼블리싱 전 과정을 리드하며 전시·체험 콘텐츠 중심으로 정보 구조를 재설계했고, KRDS 기준 안에서도 과학관다운 인터랙티브한 경험이 살아나도록 UI를 디자인했습니다. AI 과학 체험과 실시간 인터랙션 콘텐츠의 UX 시나리오를 설계하고, 클라우드 이관 환경에 맞춰 퍼블리싱까지 구현했습니다.'},
+  {t:'국가과학유산 디지털아카이빙 웹플랫폼 개발', c:'중앙과학관, 공주대', d:'2024.12', r:'기획, UI/UX 디자인', k:'public',
+   x:'대한민국의 과학유산을 체계적으로 보존하고 공유하기 위한 디지털 아카이빙 플랫폼입니다. 방대한 데이터를 누구나 쉽게 탐색할 수 있도록 사용자 중심의 정보 구조(IA)와 직관적인 내비게이션을 설계하고, 맞춤형 검색과 추천 기능으로 접근성을 높였습니다. 인터랙티브 UX와 반응형 웹 디자인으로 다양한 디바이스에서 일관된 경험을 제공하며, 웹 표준을 준수한 UI 구조를 적용했습니다.'},
+  {t:'AI 자막 플랫폼 스내피 구축', c:'아키아카', d:'2024.06', r:'기획, UI/UX 디자인', k:'ai',
+   x:'스내피(Snappy)는 AI 기반 자막 생성·편집 플랫폼입니다. 음성 인식 AI로 동영상·오디오의 음성을 분석해 자막을 자동 생성하고, 문맥에 맞게 최적화된 자막을 추천합니다. 빠르고 정확한 AI 자동화에 직관적인 UX와 클라우드 기반 편집 기능을 결합해, 누구나 쉽고 효율적으로 자막을 만들고 고칠 수 있도록 설계했습니다.'},
+  {t:'서민금융진흥원 서민금융 종합플랫폼 시스템 구축', c:'서민금융진흥원', d:'2024.06', r:'UI/UX 디자인, 퍼블리싱', k:'edu',
+   x:'금융 신청은 절차가 복잡하고 전문 용어가 많아, 서민금융이 필요한 사용자일수록 중도에 포기하기 쉬운 구조였습니다. 이를 해결하기 위해 조회→신청→인증→확인 절차를 단계별로 보여주는 스텝 UI를 설계해 다음 할 일이 한눈에 보이도록 했습니다. 상품 추천·본인 인증·데이터 시각화 화면을 일관된 디자인 시스템으로 정리하고, 웹 표준·모바일 반응형 퍼블리싱까지 직접 수행했습니다.'},
+  {t:'공주학 아카이브 구축', c:'공주대학교', d:'2023.03', r:'UI/UX 디자인, 퍼블리싱', k:'public',
+   x:'공주 지역의 기록물은 여러 기관에 흩어져 있어, 연구자가 아니면 어디서 무엇을 찾아야 할지 알기 어려웠습니다. 문서·사진·영상 등 기록물 유형별 탐색 구조를 설계하고, 전문 검색어를 모르는 시민도 둘러보기만으로 자료에 닿을 수 있도록 검색·열람 동선을 단순화했습니다. 디자인 의도가 구현에서 흐트러지지 않도록 반응형 퍼블리싱까지 직접 수행했습니다.'},
+  {t:'AI 학습용 데이터 라벨링 SW 카페라벨 구축', c:'비타소프트', d:'2023.12', r:'UI/UX 디자인, 퍼블리싱', k:'ai',
+   x:'데이터 라벨링은 같은 작업을 하루 수백 번 반복하는 일이라, 클릭 한 번과 시선 이동 하나의 비효율이 그대로 시간과 비용이 됩니다. OCR, Bbox, Polygon, 캡셔닝, 비식별화 등 8가지 어노테이션 도구의 작업 화면을 설계하며 자주 쓰는 도구의 배치와 검수 동선 최소화에 집중했습니다. AI 사전 라벨링(Prelabeling)·검수 워크플로우 UI를 디자인하고, 도구가 밀집된 레이아웃의 반응형 퍼블리싱까지 수행했습니다.'},
+  {t:'신라호텔 호텔객실서비스 시스템', c:'파라다이스호텔', d:'2023.06', r:'디자인, 퍼블리싱', k:'hotel',
+   x:'객실 TV는 리모컨 방향키로만 조작하는 환경이고, 투숙객 대부분이 처음 보는 화면이라 학습 없이 바로 쓸 수 있어야 합니다. 방향키 이동 횟수를 기준으로 메뉴 구조와 포커스 이동 규칙을 설계하고, 어느 버튼에 포커스가 있는지 즉시 알 수 있는 시각 규칙을 정의했습니다. 맞춤형 콘텐츠 추천 영역을 포함한 전체 화면을 호텔신라의 품격에 맞는 톤으로 디자인하고, TV 해상도 환경에 맞춰 퍼블리싱했습니다.'},
+  {t:'청담어학원 수학아카이브 매쏠로지 구축', c:'청담어학원', d:'2023.12', r:'퍼블리싱', k:'edu',
+   x:'매쏠로지는 크레버스(CREVERSE)의 수학 교과 브랜드로, 개념 학습부터 유형별 문제 풀이까지 지원하는 온라인 학습 플랫폼입니다. 학습 화면 전반의 퍼블리싱을 맡았습니다. 수식·도형·그래프가 많아 환경에 따라 표현이 어긋나면 학습에 지장이 생기는 만큼, 어떤 디바이스에서도 깨지지 않는 마크업 구조와 시안 그대로의 픽셀 단위 구현으로 완성도를 확보했습니다.'},
+  {t:'AI 융합 불법복제품 판독시스템 구축 사업', c:'비타소프트', d:'2022.12', r:'UI/UX 디자인, 퍼블리싱', k:'ai',
+   x:'불법 복제 의심 물품이나 상표권·디자인권을 위반한 위조품을 사진으로 판별하는 AI 기반 모바일 앱입니다. 촬영→분석→결과 확인으로 이어지는 핵심 플로우를 안내 없이 따라갈 수 있도록 설계하고, AI 판별 결과를 침해 확률과 근거 중심으로 보여줘 비전문가도 결과를 이해하고 신뢰할 수 있는 화면으로 디자인했습니다.'},
+  {t:'AI 의료정보 시스템 나디아 구축', c:'아크릴', d:'2022.12', r:'퍼블리싱', k:'ai',
+   x:'나디아는 의료 데이터를 관리하고 AI 진단·예측을 지원하는 헬스케어 플랫폼으로, 원격 의료와 다국어 환경을 지원합니다. 데이터 입력·분석 화면과 시각화 차트 영역의 퍼블리싱을 담당했습니다. 의료진이 진료 중 빠르게 확인하는 화면인 만큼 수치와 차트가 정확하게 표현되는 마크업에 집중했고, 언어를 바꿔도 텍스트 길이 차이로 레이아웃이 무너지지 않는 구조로 구현했습니다.'},
+  {t:'기록관리시스템 아키비스트 솔루션 구축', c:'알엠소프트', d:'2022.12', r:'UI/UX 디자인, 퍼블리싱', k:'public',
+   x:'아키비스트(Archivist)는 기관의 기록물을 분류·보존하고 검색·활용까지 지원하는 기록관리 솔루션입니다. 분류체계·서고관리·행정정보 등 메뉴가 많고 업무 절차가 복잡한 관리자 도구인 만큼, 방대한 기능을 역할별로 정리한 정보 구조와 내비게이션을 설계하고, 매일 쓰는 실무자가 원하는 기능에 빠르게 닿도록 통합검색·바로가기 중심의 메인 화면을 디자인했습니다.'},
+  {t:'광양 전기자전거 운영 플랫폼 & 모바일 APP', c:'광양시청, 함안군청', d:'2022.09', r:'UI/UX 디자인, 퍼블리싱', k:'public',
+   x:'광양시·함안군의 공공 전기자전거 서비스로, 시민용 대여 앱과 운영자용 관리 플랫폼으로 구성됩니다. 야외에서 걸으며 쓰는 이용자 앱은 지도에서 자전거 위치와 배터리 상태가 한눈에 보이는 시각 규칙, 찾기→대여→반납의 최소 단계 동선으로 설계했습니다. 운영자 플랫폼은 현황 데이터를 모니터링하기 좋은 대시보드 구조로 만들었습니다.'},
+  {t:'양천구 온라인 기록관 구축', c:'양천구청', d:'2022.11', r:'UI/UX 디자인, 퍼블리싱', k:'public',
+   x:'구정 기록물과 지역 자료를 수집·아카이빙해 누구나 온라인으로 열람할 수 있게 만든 지자체 기록관입니다. 주 이용자가 기록물 분류 체계에 익숙하지 않은 일반 구민인 만큼, 공문서식 분류명 대신 주제·시기·유형으로 찾아 들어가는 검색·열람 동선을 설계하고, PC와 모바일 어디서든 똑같이 열람되는 반응형으로 구현했습니다.'},
+  {t:'파르나스 호텔객실서비스 시스템', c:'파라다이스호텔', d:'2022.10', r:'UI/UX 디자인, 퍼블리싱', k:'hotel',
+   x:'그랜드 인터컨티넨탈 서울 파르나스와 파르나스 호텔 제주의 객실 서비스 시스템 개편입니다. 개편은 기존 이용 패턴을 읽는 데서 시작하는 만큼, 이용 빈도가 높은 기능을 전면에 재배치해 원하는 서비스까지의 단계를 줄였습니다. 비즈니스 호텔과 리조트라는 서로 다른 공간의 고객 모두에게 어울리는 톤으로 화면을 다듬고, 전체 화면을 퍼블리싱했습니다.'},
+  {t:'엠닥터 자동차 수리 쇼핑몰 구축', c:'엠닥터', d:'2020.09', r:'퍼블리싱', k:'commerce',
+   x:'자동차 수리 부품을 차종별·부품별로 검색해 구매하는 전문 쇼핑몰입니다. 차종·연식별 호환 정보와 규격표 등 복잡한 데이터가 상품 화면에 밀집되는 만큼, 어떤 화면 크기에서도 정보가 깨지지 않는 마크업 구조로 구현했고, 검색부터 주문·결제까지 이어지는 입력 폼이 데스크톱과 모바일에서 안정적으로 동작하도록 퍼블리싱했습니다.'},
+  {t:'파라다이스시티 호텔객실서비스 시스템 구축', c:'파라다이스호텔', d:'2017.09', r:'퍼블리싱', k:'hotel',
+   x:'인천 영종도 파라다이스시티 호텔의 800여 개 전 객실에 도입된 스마트 TV 객실 서비스로, 호텔 정보·서비스 요청·TV 시청·객실 제어 기능을 제공합니다. 다양한 언어권 투숙객이 이용하는 만큼 언어를 바꿔도 레이아웃이 무너지지 않는 다국어 구조로 구현했고, 800개 객실에 일괄 배포되어 수정이 어려운 환경을 고려해 TV 해상도와 리모컨 조작 기준에서 오류 없이 동작하는 마크업으로 완성했습니다.'},
+  {t:'이넬화장품 쇼핑몰 구축', c:'이넬', d:'2017.03', r:'퍼블리싱', k:'commerce',
+   x:'화장품 브랜드 이넬의 온라인 쇼핑몰입니다. 브랜드 감성이 구매를 좌우하는 커머스인 만큼 시안의 톤과 디테일이 코드에서 흐트러지지 않도록 퍼블리싱했습니다. 장바구니·결제 등 핵심 구매 화면은 표준화된 코드로 안정성을 확보하고, 검색 유입이 중요한 특성을 고려해 SEO 시맨틱 마크업과 웹 접근성 기준을 적용했습니다.'},
+  {t:'영유아 교육 커리큘럼 엔씨 콩콩 시스템 구축', c:'엔씨소프트', d:'2017.11', r:'UI/UX 디자인, 퍼블리싱', k:'edu',
+   x:'엔씨콩콩은 동화·동요·영상 등 멀티미디어 콘텐츠로 아이들이 여러 언어를 배우는 엔씨소프트의 영유아 교육 플랫폼입니다. 주 사용자가 아직 글을 읽지 못하는 영유아인 만큼 아이콘·색상·캐릭터만으로 조작할 수 있는 인터페이스를 설계하고, 작은 손가락도 정확히 누를 수 있는 터치 영역 기준으로 디자인했습니다. CMS에 콘텐츠를 등록하면 바로 화면에 반영되는 템플릿 구조로 퍼블리싱했습니다.'},
+  {t:'우리은행 연수포탈 구축', c:'우리은행', d:'2012.12', r:'UI/UX 디자인, 퍼블리싱', k:'edu',
+   x:'행원의 교육 과정 신청부터 수강, 이수 현황 관리까지 지원하는 사내 학습 관리 시스템입니다. 업무 중 짬을 내 이용하는 만큼 필요한 과정을 빠르게 찾아 이어서 학습하는 흐름이 중요해, 수강 중인 과정과 남은 진도가 첫 화면에서 바로 보이는 대시보드 구조로 설계했습니다. 개인별 학습 이력과 이수 현황 화면을 디자인하고 전체 퍼블리싱까지 수행했습니다.'}
+];
+var CATS = [
+  {k:'all', n:'전체'},
+  {k:'public', n:'공공·아카이브'},
+  {k:'ai', n:'AI 플랫폼'},
+  {k:'edu', n:'금융·교육'},
+  {k:'hotel', n:'호텔 TV'},
+  {k:'commerce', n:'커머스'}
+];
+var CATNAME = {}; CATS.forEach(function(c){CATNAME[c.k]=c.n});
+function pad(n){return (n<10?'0':'')+n}
+
+/* ---------- 작업 카드 렌더 ---------- */
+var grid = document.getElementById('grid');
+WORKS.forEach(function(w,i){
+  var b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'card rv' + (i<2?' feat':'');
+  b.dataset.i = i; b.dataset.k = w.k;
+  b.setAttribute('aria-label', w.t + ' 상세 보기');
+  b.innerHTML =
+    '<div class="thumb"><img src="img/w'+pad(i+1)+'.webp" alt="" loading="'+(i<4?'eager':'lazy')+'"><span class="view" aria-hidden="true">+</span></div>'+
+    '<div class="meta"><div class="row"><span>'+CATNAME[w.k]+'</span><span>'+w.d+'</span></div>'+
+    '<h3>'+w.t+'</h3><p class="role">'+w.r+'</p></div>';
+  b.addEventListener('click', function(){ openWork(i) });
+  grid.appendChild(b);
+});
+
+/* ---------- 필터 ---------- */
+var filters = document.getElementById('filters');
+var current = 'all';
+CATS.forEach(function(c){
+  var n = c.k==='all' ? WORKS.length : WORKS.filter(function(w){return w.k===c.k}).length;
+  var f = document.createElement('button');
+  f.type='button'; f.dataset.k=c.k;
+  f.setAttribute('aria-pressed', c.k==='all'?'true':'false');
+  f.innerHTML = c.n+' <span>'+n+'</span>';
+  f.addEventListener('click', function(){ setFilter(c.k) });
+  filters.appendChild(f);
+});
+function setFilter(k){
+  current = k;
+  filters.querySelectorAll('button').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.k===k?'true':'false') });
+  var shown = 0;
+  grid.querySelectorAll('.card').forEach(function(c){
+    var on = k==='all' || c.dataset.k===k;
+    c.hidden = !on; if(on) shown++;
+    c.classList.toggle('feat', k==='all' && +c.dataset.i<2);
+    c.classList.add('in');
+  });
+  document.getElementById('empty').hidden = shown>0;
+}
+function visibleList(){
+  return WORKS.map(function(w,i){return i}).filter(function(i){return current==='all'||WORKS[i].k===current});
+}
+
+/* ---------- 상세 다이얼로그 ---------- */
+var dlg = document.getElementById('dlg'), openIdx = 0;
+function fill(i){
+  var w = WORKS[i]; openIdx = i;
+  var img = document.getElementById('dlgImg');
+  img.src = 'img/w'+pad(i+1)+'.webp'; img.alt = w.t+' 화면 이미지';
+  document.getElementById('dlgCat').textContent = CATNAME[w.k]+' · '+pad(i+1)+' / '+WORKS.length;
+  document.getElementById('dlgTitle').textContent = w.t;
+  document.getElementById('dlgDesc').textContent = w.x;
+  document.getElementById('dlgClient').textContent = w.c;
+  document.getElementById('dlgDate').textContent = w.d;
+  document.getElementById('dlgRole').textContent = w.r;
+  dlg.scrollTop = 0;
+}
+function openWork(i){ fill(i); if(!dlg.open){ dlg.showModal ? dlg.showModal() : dlg.setAttribute('open','') } }
+function step(d){ var l=visibleList(), p=l.indexOf(openIdx); fill(l[(p+d+l.length)%l.length]) }
+document.getElementById('dlgClose').addEventListener('click', function(){ dlg.close() });
+document.getElementById('dlgPrev').addEventListener('click', function(){ step(-1) });
+document.getElementById('dlgNext').addEventListener('click', function(){ step(1) });
+dlg.addEventListener('click', function(e){ if(e.target===dlg) dlg.close() });
+dlg.addEventListener('keydown', function(e){ if(e.key==='ArrowRight') step(1); if(e.key==='ArrowLeft') step(-1) });
+
+/* ---------- 메일 주소 복사 ---------- */
+var copyBtn = document.getElementById('copyBtn');
+copyBtn.addEventListener('click', function(){
+  var t = 'handgoldking@naver.com';
+  function ok(){ copyBtn.textContent='복사됨'; copyBtn.classList.add('done'); setTimeout(function(){ copyBtn.textContent='주소 복사'; copyBtn.classList.remove('done') },1800) }
+  function fallback(){ var r=document.createRange(); r.selectNodeContents(document.getElementById('addr')); var s=getSelection(); s.removeAllRanges(); s.addRange(r); copyBtn.textContent='선택됨 · Ctrl+C' }
+  try{ navigator.clipboard.writeText(t).then(ok, fallback) }catch(e){ fallback() }
+});
+
+/* ---------- 헤더·메뉴 상태 ---------- */
+var hd = document.getElementById('hd');
+addEventListener('scroll', function(){ hd.classList.toggle('is-stuck', scrollY>8) }, {passive:true});
+var links = document.querySelectorAll('.gnb a');
+if('IntersectionObserver' in window){
+  var secObs = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ links.forEach(function(a){ a.classList.toggle('on', a.getAttribute('href')==='#'+e.target.id) }) } });
+  }, {rootMargin:'-45% 0px -50% 0px'});
+  ['about','ai','works','clients','contact'].forEach(function(id){ secObs.observe(document.getElementById(id)) });
+
+  /* 등장 효과 + 선언문 하이라이트 */
+  var rvObs = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add(e.target.classList.contains('mf')?'lit':'in'); rvObs.unobserve(e.target) } });
+  }, {rootMargin:'0px 0px -12% 0px'});
+  document.querySelectorAll('.rv,.mf').forEach(function(el){ rvObs.observe(el) });
+} else {
+  document.querySelectorAll('.rv').forEach(function(el){ el.classList.add('in') });
+  document.querySelectorAll('.mf').forEach(function(el){ el.classList.add('lit') });
+}
+
+/* ---------- 히어로 물결선 (PDF 표지 모티브) ---------- */
+(function(){
+  var cv = document.getElementById('waves'); if(!cv || !cv.getContext) return;
+  var ctx = cv.getContext('2d'), W=0, H=0, dpr=Math.min(devicePixelRatio||1,2), t=0;
+  var still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var LINES = 26;
+  function size(){ var r=cv.getBoundingClientRect(); W=r.width; H=r.height; cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0) }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<LINES;i++){
+      var p = i/LINES, base = H*(.48+p*.42);
+      ctx.beginPath();
+      for(var x=0;x<=W+20;x+=16){
+        var u = x/W;
+        var y = base
+          + Math.sin(u*5.2 + t*.6 + p*3.1)*H*.05
+          + Math.sin(u*11.0 - t*.4 + p*7.0)*H*.018
+          + Math.sin(u*2.1 + t*.25 + i)*H*.03*(1-p);
+        x===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+      }
+      var a = .05 + .16*Math.sin(p*Math.PI);
+      ctx.strokeStyle = i===Math.round(LINES*.55) ? 'rgba(242,105,46,.55)' : 'rgba(238,236,231,'+a.toFixed(3)+')';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+  }
+  var vis = true;
+  if('IntersectionObserver' in window){ new IntersectionObserver(function(e){ vis=e[0].isIntersecting }).observe(cv) }
+  function loop(){ if(vis){ t+=.012; draw() } requestAnimationFrame(loop) }
+  size(); draw();
+  addEventListener('resize', function(){ size(); draw() });
+  if(!still) requestAnimationFrame(loop);
+})();
+</script>
+
+</body></html>

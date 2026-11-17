@@ -1,0 +1,388 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>공통 컴포넌트 사용 현황</title>
+<style>
+  :root {
+    --ground:#f2f5f8; --surface:#fff; --surface-3:#f8fafc;
+    --ink:#131820; --ink-2:#3f4a5c; --ink-3:#6b7686;
+    --rule:#dbe2ec; --rule-soft:#e9eef4;
+    --accent:#1d4ed8; --accent-2:#153ea8; --accent-wash:#e6edfd;
+    --ok:#0a6b48; --ok-wash:#e7f5ef;
+    --warn:#8a5200; --warn-wash:#fdf1dc;
+    --danger:#a4243b; --danger-wash:#fdecef;
+    --code-bg:#eceff5;
+    --shadow:0 1px 2px rgba(19,24,32,.05), 0 10px 26px -24px rgba(19,24,32,.65);
+    --f-body:"Segoe UI Variable Text","Segoe UI",ui-sans-serif,system-ui,-apple-system,sans-serif;
+    --f-mono:"Cascadia Mono","Cascadia Code",ui-monospace,Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:#0a0d12; --surface:#131820; --surface-3:#161a22;
+      --ink:#eceff6; --ink-2:#adb9cb; --ink-3:#7f8998;
+      --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+      --accent:#5c9bff; --accent-2:#93bcff; --accent-wash:rgba(92,155,255,.13);
+      --ok:#4ec793; --ok-wash:rgba(78,199,147,.12);
+      --warn:#e2a544; --warn-wash:rgba(226,165,68,.13);
+      --danger:#f08096; --danger-wash:rgba(240,128,150,.12);
+      --code-bg:rgba(255,255,255,.05);
+      --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -24px rgba(0,0,0,.95);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#0a0d12; --surface:#131820; --surface-3:#161a22;
+    --ink:#eceff6; --ink-2:#adb9cb; --ink-3:#7f8998;
+    --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+    --accent:#5c9bff; --accent-2:#93bcff; --accent-wash:rgba(92,155,255,.13);
+    --ok:#4ec793; --ok-wash:rgba(78,199,147,.12);
+    --warn:#e2a544; --warn-wash:rgba(226,165,68,.13);
+    --danger:#f08096; --danger-wash:rgba(240,128,150,.12);
+    --code-bg:rgba(255,255,255,.05);
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -24px rgba(0,0,0,.95);
+  }
+
+  *, *::before, *::after { box-sizing:border-box; }
+  body { margin:0; background:var(--ground); color:var(--ink);
+    font-family:var(--f-body); font-size:15px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:1120px; margin:0 auto; padding:40px 22px 90px; }
+
+  code { font-family:var(--f-mono); font-size:.88em; background:var(--code-bg);
+    border-radius:4px; padding:.1em .38em; overflow-wrap:anywhere; }
+  a { color:var(--accent); }
+  a:focus-visible { outline:2px solid var(--accent); outline-offset:2px; border-radius:4px; }
+
+  .eyebrow { font-family:var(--f-mono); font-size:11.5px; letter-spacing:.11em;
+    text-transform:uppercase; color:var(--ink-3); margin:0 0 10px; }
+  h1 { font-size:clamp(27px,4vw,36px); line-height:1.18; letter-spacing:-.022em;
+    margin:0 0 12px; text-wrap:balance; }
+  .lede { margin:0; max-width:68ch; color:var(--ink-2); font-size:16px; }
+
+  .meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+  .chip { display:inline-flex; align-items:baseline; gap:7px; background:var(--surface);
+    border:1px solid var(--rule); border-radius:999px; padding:5px 13px;
+    font-size:12.5px; box-shadow:var(--shadow); }
+  .chip b { font-family:var(--f-mono); font-weight:600; font-size:12px; }
+  .chip span { color:var(--ink-3); }
+
+  section { margin-top:52px; }
+  h2 { font-size:19px; letter-spacing:-.015em; margin:0 0 6px; padding-bottom:9px;
+    border-bottom:1px solid var(--rule); display:flex; flex-wrap:wrap;
+    align-items:baseline; gap:4px 12px; }
+  h2 .n { font-family:var(--f-mono); font-size:12px; color:var(--ink-3); font-weight:500; }
+  h3 { font-size:15px; margin:26px 0 0; }
+  p { margin:12px 0; max-width:82ch; }
+  p.tight { margin-top:8px; color:var(--ink-2); font-size:14px; }
+
+  .toc { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:1px 22px; margin-top:26px; padding:16px 20px; background:var(--surface);
+    border:1px solid var(--rule); border-radius:12px; box-shadow:var(--shadow); }
+  .toc a { color:var(--ink-2); text-decoration:none; font-size:14px; padding:3px 0; display:block; }
+  .toc a:hover { color:var(--accent); text-decoration:underline; text-underline-offset:3px; }
+  .toc a span { font-family:var(--f-mono); font-size:11px; color:var(--ink-3); }
+
+  .tablewrap { overflow-x:auto; border:1px solid var(--rule); border-radius:12px;
+    background:var(--surface); box-shadow:var(--shadow); margin-top:16px; }
+  table { border-collapse:collapse; width:100%; min-width:660px; }
+  th, td { text-align:left; padding:9px 14px; border-bottom:1px solid var(--rule-soft); vertical-align:top; }
+  thead th { font-family:var(--f-mono); font-size:10.5px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--ink-3); font-weight:600; background:var(--surface-3); }
+  tbody tr:last-child td { border-bottom:0; }
+  td.num, th.num { text-align:right; font-family:var(--f-mono); font-variant-numeric:tabular-nums; }
+  td small { display:block; font-size:11.5px; color:var(--ink-3); word-break:keep-all; margin-top:2px; }
+  td.path { font-family:var(--f-mono); font-size:11px; color:var(--ink-3); word-break:break-all; }
+  .route { font-family:var(--f-mono); font-size:11.5px; color:var(--accent-2);
+    text-decoration:none; border-bottom:1px solid color-mix(in srgb, var(--accent-2) 32%, transparent);
+    overflow-wrap:anywhere; }
+  .route:hover { color:var(--accent); border-bottom-color:currentColor; }
+  .route.none { color:var(--ink-3); border:0; font-family:var(--f-body); font-size:12px; }
+
+  .bar { display:block; height:5px; border-radius:3px; background:var(--accent);
+    min-width:2px; margin-top:5px; }
+  .bar.zero { background:var(--danger); }
+  .bar.low { background:var(--warn); }
+
+  .tag { display:inline-block; font-family:var(--f-mono); font-size:10px; font-weight:600;
+    border-radius:5px; padding:2px 7px; white-space:nowrap; }
+  .tag.zero { background:var(--danger-wash); color:var(--danger); }
+  .tag.low { background:var(--warn-wash); color:var(--warn); }
+  .tag.ok { background:var(--ok-wash); color:var(--ok); }
+
+  .note-box { border:1px solid var(--rule); border-left:3px solid var(--accent);
+    border-radius:9px; background:var(--surface); padding:15px 18px;
+    box-shadow:var(--shadow); margin-top:16px; }
+  .note-box.warn { border-left-color:var(--warn); }
+  .note-box h3 { font-size:14px; margin:0 0 6px; }
+  .note-box p { font-size:13.5px; color:var(--ink-2); margin:0; max-width:none; }
+  .note-box p + p { margin-top:8px; }
+
+  footer { margin-top:56px; padding-top:16px; border-top:1px solid var(--rule);
+    font-size:12.5px; color:var(--ink-3); }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">조사 · 2026-09-08</p>
+    <h1>공통 컴포넌트 사용 현황</h1>
+    <p class="lede">
+      <code>src/shared/components/common/</code> 의 <b>28개</b> 컴포넌트가 실제로 얼마나 쓰이는지,
+      그리고 <b>컴포넌트가 있는데도 직접 조립한 곳</b>이 어디인지 조사했습니다.
+      숫자는 import 경로 기준이며 가이드 화면(<code>/front-component</code>)은 뺀 값입니다.
+    </p>
+    <div class="meta">
+      <span class="chip"><span>공통 컴포넌트</span><b>28</b></span>
+      <span class="chip"><span>가이드에만 있음</span><b>3</b></span>
+      <span class="chip"><span>1~2곳만 사용</span><b>6</b></span>
+      <span class="chip"><span>직접 조립 발견</span><b>75+</b></span>
+    </div>
+    <nav class="toc">
+      <a href="#usage">사용 현황 <span>· 28</span></a>
+      <a href="#unused">쓰이지 않는 것 <span>· 3</span></a>
+      <a href="#low">거의 안 쓰이는 것 <span>· 6</span></a>
+      <a href="#panel">Panel 직접 조립 <span>· 36</span></a>
+      <a href="#modal">Modal 직접 조립 <span>· 16</span></a>
+      <a href="#etc">그 밖의 직접 조립</a>
+      <a href="#plan">우선순위 제안</a>
+    </nav>
+  </header>
+
+  <!-- ─────────────── 사용 현황 ─────────────── -->
+  <section id="usage">
+    <h2>사용 현황 <span class="n">import 하는 파일 수</span></h2>
+    <p class="tight">가이드 화면은 모든 컴포넌트를 import 하므로 따로 셌습니다.
+    「가이드만」인 것은 실제 화면에서 한 번도 쓰이지 않았다는 뜻입니다.</p>
+
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="width:180px"><col style="width:78px"><col style="width:78px"><col></colgroup>
+        <thead><tr><th>컴포넌트</th><th class="num">실사용</th><th class="num">가이드</th><th>비중</th></tr></thead>
+        <tbody>
+          <tr><td><code>Panel</code></td><td class="num">119</td><td class="num">3</td><td><span class="bar" style="width:100%"></span></td></tr>
+          <tr><td><code>HelpBanner</code></td><td class="num">93</td><td class="num">4</td><td><span class="bar" style="width:78%"></span></td></tr>
+          <tr><td><code>MainHeader</code></td><td class="num">78</td><td class="num">3</td><td><span class="bar" style="width:66%"></span></td></tr>
+          <tr><td><code>TableListFooter</code></td><td class="num">52</td><td class="num">2</td><td><span class="bar" style="width:44%"></span></td></tr>
+          <tr><td><code>Modal</code></td><td class="num">48</td><td class="num">2</td><td><span class="bar" style="width:40%"></span></td></tr>
+          <tr><td><code>GridStatus</code></td><td class="num">39</td><td class="num">2</td><td><span class="bar" style="width:33%"></span></td></tr>
+          <tr><td><code>SelectSearch</code></td><td class="num">27</td><td class="num">2</td><td><span class="bar" style="width:23%"></span></td></tr>
+          <tr><td><code>MainSubHeader</code></td><td class="num">27</td><td class="num">2</td><td><span class="bar" style="width:23%"></span></td></tr>
+          <tr><td><code>Switch</code></td><td class="num">20</td><td class="num">2</td><td><span class="bar" style="width:17%"></span></td></tr>
+          <tr><td><code>BoxTabs</code></td><td class="num">19</td><td class="num">3</td><td><span class="bar" style="width:16%"></span></td></tr>
+          <tr><td><code>LabelCheckbox</code></td><td class="num">17</td><td class="num">2</td><td><span class="bar" style="width:14%"></span></td></tr>
+          <tr><td><code>Progressbar</code></td><td class="num">11</td><td class="num">3</td><td><span class="bar" style="width:9%"></span></td></tr>
+          <tr><td><code>TitleLine</code></td><td class="num">7</td><td class="num">2</td><td><span class="bar" style="width:6%"></span></td></tr>
+          <tr><td><code>Pagination</code></td><td class="num">7</td><td class="num">2</td><td><span class="bar" style="width:6%"></span><small>대부분 TableListFooter 안에서 쓰임</small></td></tr>
+          <tr><td><code>RaonEditor</code></td><td class="num">6</td><td class="num">2</td><td><span class="bar" style="width:5%"></span></td></tr>
+          <tr><td><code>ProgressbarList</code></td><td class="num">6</td><td class="num">2</td><td><span class="bar" style="width:5%"></span></td></tr>
+          <tr><td><code>TimeLine</code></td><td class="num">4</td><td class="num">2</td><td><span class="bar low" style="width:4%"></span></td></tr>
+          <tr><td><code>ButtonAvatar</code></td><td class="num">4</td><td class="num">2</td><td><span class="bar low" style="width:4%"></span></td></tr>
+          <tr><td><code>RaonUpload</code></td><td class="num">4</td><td class="num">1</td><td><span class="bar low" style="width:4%"></span></td></tr>
+          <tr><td><code>DonutChart</code></td><td class="num">3</td><td class="num">3</td><td><span class="bar low" style="width:3%"></span></td></tr>
+          <tr><td><code>ProgressCircle</code></td><td class="num">2</td><td class="num">3</td><td><span class="bar low" style="width:2%"></span></td></tr>
+          <tr><td><code>Stepper</code></td><td class="num">2</td><td class="num">2</td><td><span class="bar low" style="width:2%"></span></td></tr>
+          <tr><td><code>Card</code></td><td class="num">2</td><td class="num">2</td><td><span class="bar low" style="width:2%"></span></td></tr>
+          <tr><td><code>Slider</code></td><td class="num">1</td><td class="num">2</td><td><span class="bar low" style="width:2%"></span></td></tr>
+          <tr><td><code>LineUnderTabs</code></td><td class="num">1</td><td class="num">2</td><td><span class="bar low" style="width:2%"></span></td></tr>
+          <tr><td><code>Tabs</code></td><td class="num">0</td><td class="num">3</td><td><span class="tag zero">가이드만</span></td></tr>
+          <tr><td><code>SubTabs</code></td><td class="num">0</td><td class="num">2</td><td><span class="tag zero">가이드만</span></td></tr>
+          <tr><td><code>BackdropLoading</code></td><td class="num">0</td><td class="num">2</td><td><span class="tag zero">가이드만</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── 미사용 ─────────────── -->
+  <section id="unused">
+    <h2>실제 화면에서 쓰이지 않는 것 <span class="n">3</span></h2>
+    <p class="tight">가이드 화면에서만 import 합니다. 만들어 두고 실제로는 한 번도 쓰지 않았습니다.</p>
+
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="width:150px"><col><col style="width:200px"></colgroup>
+        <thead><tr><th>컴포넌트</th><th>파일</th><th>대신 쓰이는 것</th></tr></thead>
+        <tbody>
+          <tr><td><code>Tabs</code></td><td class="path">src/shared/components/common/Tabs.tsx</td>
+              <td><code>BoxTabs</code> 19곳<small>검색 없이 탭만 있을 때 쓰라고 만든 것</small></td></tr>
+          <tr><td><code>SubTabs</code></td><td class="path">src/shared/components/common/SubTabs.tsx</td>
+              <td><code>BoxTabs</code> 또는 <code>.tabbar</code> 직접</td></tr>
+          <tr><td><code>BackdropLoading</code></td><td class="path">src/shared/components/common/BackdropLoading.tsx</td>
+              <td>화면마다 <code>is-spinning</code> · <code>empty-box</code> 로 직접 처리</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note-box warn">
+      <h3>어떻게 할지 정해야 합니다</h3>
+      <p><b>지우거나</b>, <b>쓰거나</b> 둘 중 하나입니다. 지금처럼 두면 가이드에는 있는데 실제로는 아무도 안 쓰는
+      상태가 굳어져, 새로 들어온 사람이 <code>Tabs</code> 와 <code>BoxTabs</code> 중 무엇을 써야 할지 알 수 없습니다.</p>
+      <p><code>BackdropLoading</code> 은 로딩 표현이 화면마다 제각각인 상태라 오히려 <b>쓰는 쪽</b>이 맞아 보입니다.</p>
+    </div>
+  </section>
+
+  <!-- ─────────────── 저사용 ─────────────── -->
+  <section id="low">
+    <h2>1~2곳에서만 쓰이는 것 <span class="n">6</span></h2>
+    <p class="tight">공통으로 둘 만한지 다시 볼 대상입니다. 한 화면 전용이면 그 화면 폴더로 옮기는 편이 낫습니다.</p>
+
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="width:150px"><col style="width:60px"><col></colgroup>
+        <thead><tr><th>컴포넌트</th><th class="num">사용</th><th>쓰는 곳</th></tr></thead>
+        <tbody>
+          <tr><td><code>Slider</code></td><td class="num">1</td>
+              <td>유사도 검사 <a class="route" href="http://127.0.0.1:3100/grading/answer-preprocessing/similarity" target="_blank" rel="noreferrer">/grading/answer-preprocessing/similarity</a></td></tr>
+          <tr><td><code>LineUnderTabs</code></td><td class="num">1</td>
+              <td>연합 상세 <span class="route none">/evaluation/unions/{id}</span></td></tr>
+          <tr><td><code>Card</code></td><td class="num">2</td><td>—</td></tr>
+          <tr><td><code>Stepper</code></td><td class="num">2</td><td>내부표준화 위저드</td></tr>
+          <tr><td><code>ProgressCircle</code></td><td class="num">2</td><td>—</td></tr>
+          <tr><td><code>DonutChart</code></td><td class="num">3</td><td>통계·리포트 계열</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── Panel ─────────────── -->
+  <section id="panel">
+    <h2>Panel 을 두고 <code>.ui-panel</code> 을 직접 쓴 곳 <span class="n">36</span></h2>
+    <p class="tight">공통 <code>Panel</code> 이 119곳에서 쓰이는데도, <code>&lt;section className="ui-panel"&gt;</code> 로
+    직접 조립한 자리가 남아 있습니다. 헤더·본문·푸터 구조와 <code>iconType</code> 규격이 적용되지 않습니다.</p>
+
+    <h3>rightwrite 교사 화면 — 가장 집중됨</h3>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="width:170px"><col style="width:60px"><col></colgroup>
+        <thead><tr><th>화면</th><th class="num">개수</th><th>경로</th></tr></thead>
+        <tbody>
+          <tr><td>AI 의심 상세</td><td class="num">27</td><td><span class="route none">/rightwrite/teacher/answers/{answerId}/ai</span></td></tr>
+          <tr><td>웹 인용 상세</td><td class="num">20</td><td><span class="route none">/rightwrite/teacher/answers/{answerId}/web</span></td></tr>
+          <tr><td>동료 유사도 상세</td><td class="num">20</td><td><span class="route none">/rightwrite/teacher/assignments/{id}/peer-similarity/{baseAnswerId}</span></td></tr>
+          <tr><td>과제 개요</td><td class="num">14</td><td><span class="route none">/rightwrite/teacher/assignments/{assignmentId}</span></td></tr>
+          <tr><td>대시보드</td><td class="num">12</td><td><a class="route" href="http://127.0.0.1:3100/rightwrite/teacher" target="_blank" rel="noreferrer">/rightwrite/teacher</a></td></tr>
+          <tr><td>AI 의심 목록</td><td class="num">6</td><td><span class="route none">/rightwrite/teacher/assignments/{id}/ai-suspicion</span></td></tr>
+          <tr><td>동료 유사도 목록</td><td class="num">6</td><td><span class="route none">/rightwrite/teacher/assignments/{id}/peer-similarity</span></td></tr>
+          <tr><td>웹 인용 목록</td><td class="num">6</td><td><span class="route none">/rightwrite/teacher/assignments/{id}/web-citation</span></td></tr>
+          <tr><td>TeacherShell (공통 껍데기)</td><td class="num">6</td><td class="path">rightwrite/teacher/components/TeacherShell.tsx</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><b>117곳이 rightwrite 한 기능에 몰려 있습니다.</b> 이 기능이 다른 흐름으로 개발돼 공통 컴포넌트를 안 탄 것으로 보입니다.</p>
+
+    <h3>ops · tds · aes</h3>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="width:190px"><col style="width:60px"><col></colgroup>
+        <thead><tr><th>화면</th><th class="num">개수</th><th>경로</th></tr></thead>
+        <tbody>
+          <tr><td>AI 문항생성 테스트</td><td class="num">6</td><td><a class="route" href="http://127.0.0.1:3100/test/question-generation" target="_blank" rel="noreferrer">/test/question-generation</a></td></tr>
+          <tr><td>교사 과제 목록</td><td class="num">6</td><td><a class="route" href="http://127.0.0.1:3100/my/assignments" target="_blank" rel="noreferrer">/my/assignments</a></td></tr>
+          <tr><td>역할 목록 · 권한 목록</td><td class="num">10</td><td><span class="route none">/admin/roles — 라우트가 주석 처리됨</span></td></tr>
+          <tr><td>문항 성능테스트</td><td class="num">5</td><td><a class="route" href="http://127.0.0.1:3100/monitoring/question-performance" target="_blank" rel="noreferrer">/monitoring/question-performance</a></td></tr>
+          <tr><td>액터 유형 관리</td><td class="num">10</td><td><span class="route none">라우트 미등록</span></td></tr>
+          <tr><td>내부표준화 목록 (구버전)</td><td class="num">5</td><td><span class="route none">라우트 미등록</span></td></tr>
+          <tr><td>시행 감독 · 학생</td><td class="num">10</td><td><a class="route" href="http://127.0.0.1:3100/examination-proctor" target="_blank" rel="noreferrer">/examination-proctor</a> · <a class="route" href="http://127.0.0.1:3100/examination-student" target="_blank" rel="noreferrer">/examination-student</a></td></tr>
+          <tr><td>평가설계 StepPanel</td><td class="num">4</td><td><span class="route none">/tds/evaluations/{regId}/designs/new</span><small>단계 패널의 공통 껍데기</small></td></tr>
+          <tr><td>사용자 수정 · 액터 신청</td><td class="num">4</td><td><span class="route none">/admin/roles/user-roles/{userId}/edit</span></td></tr>
+          <tr><td>학생 응시 대기</td><td class="num">3</td><td><span class="route none">/my/evaluations/{examId}/waiting</span></td></tr>
+          <tr><td>메뉴 상세 패널</td><td class="num">1</td><td><a class="route" href="http://127.0.0.1:3100/admin/menus" target="_blank" rel="noreferrer">/admin/menus</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── Modal ─────────────── -->
+  <section id="modal">
+    <h2>Modal 을 두고 <code>.ui-modal</code> 을 직접 쓴 곳 <span class="n">16</span></h2>
+    <p class="tight">공통 <code>Modal</code> 은 48곳에서 쓰입니다. 아래 16개 파일은 ESC 닫기·포커스 트랩·스크롤 잠금을
+    각자 구현하거나 아예 빠져 있을 수 있습니다.</p>
+
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="width:230px"><col><col style="width:150px"></colgroup>
+        <thead><tr><th>모달</th><th>파일</th><th>화면</th></tr></thead>
+        <tbody>
+          <tr><td>문항카드 크게 보기</td><td class="path">tds/…/design-all-in-one/QuestionCardPreviewModal.tsx</td><td>평가설계 문항</td></tr>
+          <tr><td>AI 문항생성 · V2</td><td class="path">tds/…/design-all-in-one/AiQuestionGenerateModal.tsx<br>AiQuestionGenerateModalV2.tsx</td><td>평가설계 문항</td></tr>
+          <tr><td>성취기준 · 핵심아이디어 · 지표</td><td class="path">tds/evaluations/pages/evaluation-new/AchievementModal.tsx<br>CoreIdeaModal.tsx · IndicatorSubSelectModal.tsx</td><td>평가 등록</td></tr>
+          <tr><td>표본 답안 확정 내부 모달</td><td class="path">grading/…/components/InternalStandardizationDetailConfirm.tsx</td><td>내부표준화 4단계</td></tr>
+          <tr><td>시드 답안 · 버전 이력</td><td class="path">grading/…/components/SeedAnswerModal.tsx<br>VersionHistoryModal.tsx</td><td>내부표준화</td></tr>
+          <tr><td>역할 추가 · 권한 추가 · 권한 상세</td><td class="path">ops/roles/pages/roles-page/AddRoleModal.tsx<br>AddPermissionModal.tsx · PermissionDetailModal.tsx</td><td>역할 관리</td></tr>
+          <tr><td>액터 유형 추가</td><td class="path">ops/actor-types/…/ActorTypeAddModal.tsx</td><td>액터 유형</td></tr>
+          <tr><td>NEIS 설정</td><td class="path">ops/neis/components/NeisSettingsModal.tsx</td><td>NEIS</td></tr>
+          <tr><td>기출문항 노출 확인</td><td class="path">ops/reference-data/components/PastItemsExposureConfirmModal.tsx</td><td>기출문항</td></tr>
+          <tr><td>연합 교사 배정</td><td class="path">ops/unions/components/UnionTeacherAssignDialog.tsx</td><td>연합 상세</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── 그 밖 ─────────────── -->
+  <section id="etc">
+    <h2>그 밖의 직접 조립</h2>
+
+    <h3>HelpBanner 대신 <code>.tstd-blind-notice</code> — 10개 파일</h3>
+    <p class="tight">안내 배너를 직접 마크업합니다. 내부표준화 6곳, 평가설계 4곳으로 두 기능에 몰려 있습니다.</p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="width:230px"><col></colgroup>
+        <thead><tr><th>기능</th><th>파일</th></tr></thead>
+        <tbody>
+          <tr><td>내부표준화</td><td class="path">DetailRubric · DetailSample · DetailStart · DetailPage · SeniorManagementPage · TeacherPage</td></tr>
+          <tr><td>평가설계 단계</td><td class="path">Step1ManagementPanel · Step2QuestionsPanel · Step4StudentsPanel · Step6ConfirmationPanel</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>GridStatus 대신 <code>.grid-stat</code> — 1곳</h3>
+    <p class="tight"><code>rightwrite/teacher/components/TeacherShell.tsx</code> 가 상태 카드를 직접 조립합니다.
+    <a class="route" href="http://127.0.0.1:3100/rightwrite/teacher" target="_blank" rel="noreferrer">/rightwrite/teacher</a></p>
+
+    <h3>Pagination 단독 사용 — 7곳</h3>
+    <p class="tight">대부분 <code>TableListFooter</code> 안에서 쓰이지만, 목록 푸터가 아닌 자리(카드 리스트 옆,
+    <code>&lt;ul&gt;</code> 아래)에서 단독으로 쓰는 곳이 남아 있습니다. 이건 정상 사용입니다.</p>
+  </section>
+
+  <!-- ─────────────── 제안 ─────────────── -->
+  <section id="plan">
+    <h2>우선순위 제안</h2>
+
+    <div class="note-box">
+      <h3>1. rightwrite 교사 화면 — Panel 117곳</h3>
+      <p>전체 <code>.ui-panel</code> 직접 사용의 <b>대부분</b>이 여기 있습니다. 한 기능이 통째로 공통 컴포넌트를
+      안 타고 있어서, 이 기능만 정리해도 수치가 크게 달라집니다.</p>
+      <p>다만 화면 수가 많고 레이아웃이 다른 기능과 달라, <b>한 화면씩 확인하며 가는 편</b>이 안전합니다.
+      대시보드나 목록 화면 하나로 먼저 해보고 판단하는 것을 권합니다.</p>
+    </div>
+
+    <div class="note-box">
+      <h3>2. HelpBanner — 10개 파일</h3>
+      <p>내부표준화·평가설계 두 기능에 몰려 있고, 배너는 구조가 단순해 치환 위험이 낮습니다.
+      <b>가장 먼저 손대기 좋은 대상</b>입니다.</p>
+    </div>
+
+    <div class="note-box">
+      <h3>3. Modal — 16개 파일</h3>
+      <p>ESC 닫기·포커스 트랩·스크롤 잠금이 파일마다 다르게 구현돼 있을 수 있어, 접근성 관점에서 정리 가치가 큽니다.
+      다만 각 모달의 동작을 확인하며 옮겨야 해 시간이 걸립니다.</p>
+    </div>
+
+    <div class="note-box warn">
+      <h3>4. 미사용 3개 — 결정 필요</h3>
+      <p><code>Tabs</code> · <code>SubTabs</code> 는 <code>BoxTabs</code> 와 역할이 겹칩니다.
+      셋 중 무엇을 언제 쓰는지 가이드에 명시하거나, 안 쓰는 둘을 지워야 합니다.</p>
+      <p><code>BackdropLoading</code> 은 로딩 표현이 화면마다 제각각인 상태라 <b>쓰는 쪽</b>을 권합니다.</p>
+    </div>
+
+    <div class="note-box warn">
+      <h3>덧 — 라우트가 없는 화면</h3>
+      <p>조사 중 <b>라우트가 등록되지 않았거나 주석 처리된</b> 화면이 여럿 나왔습니다.
+      역할 관리(<code>RolesPage</code> 주석 처리), 액터 유형 관리, 내부표준화 목록 구버전입니다.</p>
+      <p>공통화 대상에서 뺄지, 라우트를 살릴지 먼저 정하는 게 좋겠습니다. 안 보이는 화면을 고치는 건 낭비입니다.</p>
+    </div>
+  </section>
+
+  <footer>
+    수치는 <code>import</code> 경로 기준(<code>@/shared/components/common/…</code>)이며 컴포넌트 자기 자신과
+    가이드 화면은 분리해 셌습니다. 직접 조립은 해당 CSS 클래스를 마크업에서 직접 쓴 곳을 센 것으로,
+    파일 단위가 아니라 <b>출현 횟수</b>입니다.
+  </footer>
+</div>
+
+</body></html>

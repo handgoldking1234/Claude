@@ -1,0 +1,719 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>배움평생교육원 랜딩 기획서</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=Nanum+Myeongjo:wght@400;700;800&display=swap">
+
+<style>
+/* ============================================================
+   배움평생교육원 가을 개강 랜딩 — 기획서
+   문서 아이덴티티: 뉴트럴 스펙시트 위에 브랜드 컬러를 '표본'으로 제시
+   ============================================================ */
+
+:root{
+  /* neutrals — 아주 옅은 그린 그레이 바이어스 */
+  --paper:#F4F4F1;
+  --surface:#FAFAF8;
+  --surface-2:#EDEDE8;
+  --ink:#1B1C1A;
+  --ink-2:#41433E;
+  --ink-3:#75776F;
+  --rule:#DDDDD6;
+  --rule-2:#C9C9C0;
+  /* functional accent — 마커·번호·링크에만 */
+  --acc:#B4451D;
+  --acc-soft:#F0E2DA;
+  /* status */
+  --ok:#4E6B45;
+  --warn:#8A6A16;
+
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:"IBM Plex Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;
+  --serif:"Nanum Myeongjo","Apple SD Gothic Neo",serif;
+
+  --measure:70ch;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#141513;
+    --surface:#1C1D1A;
+    --surface-2:#232420;
+    --ink:#E9E9E3;
+    --ink-2:#B9BAB2;
+    --ink-3:#83857C;
+    --rule:#2E2F2A;
+    --rule-2:#3D3E38;
+    --acc:#E4763F;
+    --acc-soft:#33241C;
+    --ok:#8FB183;
+    --warn:#CFA84A;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#141513;
+  --surface:#1C1D1A;
+  --surface-2:#232420;
+  --ink:#E9E9E3;
+  --ink-2:#B9BAB2;
+  --ink-3:#83857C;
+  --rule:#2E2F2A;
+  --rule-2:#3D3E38;
+  --acc:#E4763F;
+  --acc-soft:#33241C;
+  --ok:#8FB183;
+  --warn:#CFA84A;
+}
+
+*,*::before,*::after{box-sizing:border-box;}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-size:16px;line-height:1.75;
+  letter-spacing:-.012em;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,p,ul,ol,figure,table{margin:0;}
+ul,ol{padding:0;list-style:none;}
+a{color:var(--acc);text-decoration:none;border-bottom:1px solid currentColor;}
+a:focus-visible,button:focus-visible{outline:2px solid var(--acc);outline-offset:3px;}
+
+/* ---------- shell ---------- */
+.doc{
+  max-width:1120px;margin:0 auto;padding:0 28px 120px;
+  display:grid;grid-template-columns:186px minmax(0,1fr);gap:0 52px;
+}
+.rail{
+  grid-column:1;position:sticky;top:0;align-self:start;
+  padding-top:56px;font-family:var(--mono);font-size:12px;
+  max-height:100vh;overflow-y:auto;
+}
+.rail p{
+  font-size:10.5px;letter-spacing:.16em;color:var(--ink-3);
+  text-transform:uppercase;margin-bottom:14px;
+}
+.rail a{
+  display:flex;gap:9px;padding:4px 0;color:var(--ink-3);border:0;
+  line-height:1.5;transition:color .15s;
+}
+.rail a:hover{color:var(--acc);}
+.rail a b{color:var(--rule-2);font-weight:500;flex:0 0 18px;}
+.rail a:hover b{color:var(--acc);}
+.main{grid-column:2;min-width:0;}
+
+/* ---------- masthead ---------- */
+.mast{padding:56px 0 40px;border-bottom:2px solid var(--ink);}
+.mast .kicker{
+  font-family:var(--mono);font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--acc);
+}
+.mast h1{
+  font-family:var(--serif);font-weight:800;
+  font-size:clamp(34px,5.4vw,58px);line-height:1.18;letter-spacing:-.03em;
+  margin:18px 0 0;text-wrap:balance;
+}
+.mast .sub{
+  margin-top:18px;font-size:17px;color:var(--ink-2);max-width:var(--measure);
+}
+.meta{
+  margin-top:34px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:1px;background:var(--rule);border:1px solid var(--rule);
+}
+.meta div{background:var(--surface);padding:14px 16px;}
+.meta dt,.meta .k{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-3);
+}
+.meta .v{margin-top:5px;font-size:14.5px;font-weight:500;}
+
+/* ---------- sections ---------- */
+section{padding:64px 0 8px;scroll-margin-top:24px;}
+section + section{border-top:1px solid var(--rule);}
+.h2{display:flex;align-items:baseline;gap:16px;margin-bottom:28px;}
+.h2 .no{
+  font-family:var(--mono);font-size:12px;color:var(--acc);
+  letter-spacing:.06em;padding-top:6px;flex:0 0 auto;
+}
+.h2 h2{
+  font-family:var(--serif);font-weight:700;font-size:clamp(24px,3vw,32px);
+  line-height:1.3;letter-spacing:-.025em;text-wrap:balance;
+}
+h3{
+  font-size:17px;font-weight:600;margin:38px 0 12px;letter-spacing:-.02em;
+  display:flex;align-items:center;gap:10px;
+}
+h3::before{
+  content:"";width:14px;height:1px;background:var(--acc);flex:0 0 14px;
+}
+p{max-width:var(--measure);color:var(--ink-2);}
+p + p{margin-top:14px;}
+.lede{font-size:17.5px;color:var(--ink);}
+strong{font-weight:600;color:var(--ink);}
+code{
+  font-family:var(--mono);font-size:.88em;background:var(--surface-2);
+  padding:1px 6px;border-radius:3px;color:var(--ink);
+}
+
+/* ---------- lists ---------- */
+.bullets{margin-top:14px;max-width:var(--measure);display:grid;gap:9px;}
+.bullets li{position:relative;padding-left:17px;color:var(--ink-2);}
+.bullets li::before{
+  content:"";position:absolute;left:0;top:11px;width:5px;height:5px;
+  background:var(--rule-2);border-radius:50%;
+}
+.steps{margin-top:18px;display:grid;gap:0;border-top:1px solid var(--rule);}
+.steps li{
+  display:grid;grid-template-columns:34px minmax(0,1fr);gap:16px;
+  padding:16px 0;border-bottom:1px solid var(--rule);
+}
+.steps .n{font-family:var(--mono);font-size:12px;color:var(--acc);padding-top:4px;}
+.steps b{display:block;font-weight:600;}
+.steps span{color:var(--ink-2);font-size:15px;}
+
+/* ---------- tables ---------- */
+.tbl-wrap{margin-top:20px;overflow-x:auto;border:1px solid var(--rule);background:var(--surface);}
+table{border-collapse:collapse;width:100%;min-width:600px;font-size:14.5px;}
+thead th{
+  text-align:left;font-family:var(--mono);font-size:10.5px;font-weight:500;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);
+  padding:12px 16px;border-bottom:1px solid var(--rule-2);white-space:nowrap;
+}
+tbody td{padding:13px 16px;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink-2);}
+tbody tr:last-child td{border-bottom:0;}
+tbody td:first-child{color:var(--ink);font-weight:500;white-space:nowrap;}
+td .num,.tabular{font-variant-numeric:tabular-nums;font-family:var(--mono);font-size:13px;}
+
+/* ---------- callout ---------- */
+.note{
+  margin-top:22px;max-width:var(--measure);
+  border-left:2px solid var(--acc);background:var(--surface);
+  padding:16px 20px;font-size:15px;color:var(--ink-2);
+}
+.note b{
+  display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--acc);margin-bottom:6px;
+}
+
+/* ---------- persona cards ---------- */
+.grid3{margin-top:22px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);}
+.grid3 > div{background:var(--surface);padding:22px;}
+.p-tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--acc);}
+.p-name{margin-top:8px;font-family:var(--serif);font-size:20px;font-weight:700;letter-spacing:-.02em;}
+.p-line{margin-top:4px;font-size:13.5px;color:var(--ink-3);}
+.p-body{margin-top:14px;font-size:14.5px;color:var(--ink-2);line-height:1.7;}
+.p-need{
+  margin-top:14px;padding-top:12px;border-top:1px dashed var(--rule-2);
+  font-size:13.5px;color:var(--ink-2);
+}
+.p-need em{font-style:normal;color:var(--ink-3);display:block;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px;}
+
+/* ---------- funnel ---------- */
+.funnel{margin-top:24px;display:grid;gap:8px;}
+.fn{
+  display:grid;grid-template-columns:104px minmax(0,1fr) auto;gap:18px;align-items:center;
+  background:var(--surface);border:1px solid var(--rule);padding:14px 18px;
+}
+.fn .stage{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);}
+.fn .what b{display:block;font-weight:600;font-size:15px;}
+.fn .what span{font-size:13.5px;color:var(--ink-3);}
+.fn .meas{font-family:var(--mono);font-size:12px;color:var(--acc);white-space:nowrap;}
+.fn-bar{height:3px;background:var(--rule);position:relative;margin:0 0 0 0;}
+.fn-bar i{position:absolute;inset:0 auto 0 0;background:var(--acc);}
+
+/* ---------- wireframe ---------- */
+.wire-set{margin-top:24px;display:grid;grid-template-columns:1fr 208px;gap:28px;align-items:start;}
+.wire{
+  background:var(--surface);border:1px solid var(--rule-2);padding:12px;
+  display:grid;gap:7px;
+}
+.wire .blk{
+  background:var(--surface-2);border:1px dashed var(--rule-2);
+  padding:10px 12px;font-family:var(--mono);font-size:10.5px;
+  color:var(--ink-3);letter-spacing:.05em;display:flex;align-items:center;gap:8px;
+  min-height:34px;
+}
+.wire .blk.tall{min-height:96px;align-items:flex-start;}
+.wire .blk.acc{border-color:var(--acc);color:var(--acc);background:var(--acc-soft);}
+.wire .row{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.wire .row.c4{grid-template-columns:repeat(4,1fr);}
+.wire .row.c3{grid-template-columns:repeat(3,1fr);}
+.wire-cap{
+  margin-top:10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-3);
+}
+
+/* ---------- swatches ---------- */
+.sw-grid{margin-top:22px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);}
+.sw{background:var(--surface);padding:0;}
+.sw .chip{height:64px;border-bottom:1px solid var(--rule);box-shadow:inset 0 0 0 1px rgba(128,128,128,.22);}
+@media (max-width:640px){.sw-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+.sw .info{padding:11px 13px;}
+.sw .role{font-size:13px;font-weight:600;}
+.sw .hex{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);letter-spacing:.04em;margin-top:2px;}
+.sw .use{font-size:11.5px;color:var(--ink-3);margin-top:6px;line-height:1.5;}
+
+.type-scale{margin-top:22px;border-top:1px solid var(--rule);}
+.ts-row{
+  display:grid;grid-template-columns:118px minmax(0,1fr);gap:20px;align-items:baseline;
+  padding:14px 0;border-bottom:1px solid var(--rule);
+}
+.ts-row .spec{font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.04em;line-height:1.6;}
+.ts-row .demo{color:var(--ink);overflow:hidden;text-overflow:ellipsis;}
+
+/* ---------- checklist ---------- */
+.chk{margin-top:20px;display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);}
+.chk div{background:var(--surface);padding:12px 16px;display:grid;grid-template-columns:130px minmax(0,1fr) 88px;gap:16px;align-items:center;font-size:14.5px;}
+.chk .tok{font-family:var(--mono);font-size:12px;color:var(--acc);}
+.chk .desc{color:var(--ink-2);}
+.chk .who{font-family:var(--mono);font-size:11px;color:var(--ink-3);text-align:right;letter-spacing:.06em;}
+
+/* ---------- footer ---------- */
+.foot{
+  margin-top:72px;padding-top:26px;border-top:2px solid var(--ink);
+  display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:11px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-3);
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:900px){
+  .doc{grid-template-columns:1fr;gap:0;padding:0 20px 90px;}
+  .rail{display:none;}
+  .main{grid-column:1;}
+  .meta{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .grid3{grid-template-columns:1fr;}
+  .wire-set{grid-template-columns:1fr;}
+  .fn{grid-template-columns:1fr;gap:6px;}
+  .fn .meas{text-align:left;}
+  .chk div{grid-template-columns:1fr;gap:4px;}
+  .chk .who{text-align:left;}
+  section{padding:48px 0 8px;}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important;}
+}
+</style>
+
+<div class="doc">
+
+<!-- ============ 좌측 인덱스 ============ -->
+<nav class="rail" aria-label="문서 목차">
+  <p>Contents</p>
+  <a href="#s1"><b>01</b>배경 · 목표</a>
+  <a href="#s2"><b>02</b>타깃 정의</a>
+  <a href="#s3"><b>03</b>레퍼런스 분석</a>
+  <a href="#s4"><b>04</b>컨셉 — 가을</a>
+  <a href="#s5"><b>05</b>정보구조</a>
+  <a href="#s6"><b>06</b>와이어프레임</a>
+  <a href="#s7"><b>07</b>전환 설계</a>
+  <a href="#s8"><b>08</b>디자인 가이드</a>
+  <a href="#s9"><b>09</b>인터랙션 명세</a>
+  <a href="#s10"><b>10</b>개발 요구사항</a>
+  <a href="#s11"><b>11</b>콘텐츠 체크리스트</a>
+  <a href="#s12"><b>12</b>일정 · 다음 단계</a>
+</nav>
+
+<main class="main">
+
+<!-- ============ 표지 ============ -->
+<header class="mast">
+  <p class="kicker">Landing Page Plan · Autumn Enrollment</p>
+  <h1>배움평생교육원<br>가을 개강 랜딩페이지 기획서</h1>
+  <p class="sub">학점은행제 자격증·학위 과정의 가을학기 모집을 위한 단일 페이지 프로모션 랜딩. 상담 신청 전환을 유일한 목표로 삼고, 계절 캠페인의 마감 압박을 시각 언어로 번역한다.</p>
+  <div class="meta">
+    <div><p class="k">문서 버전</p><p class="v">v1.0</p></div>
+    <div><p class="k">작성일</p><p class="v">2026. 08. 28.</p></div>
+    <div><p class="k">산출물</p><p class="v">index.html (단일 파일)</p></div>
+    <div><p class="k">상태</p><p class="v">시안 완료 · 검토 대기</p></div>
+  </div>
+</header>
+
+<!-- ============ 01 ============ -->
+<section id="s1">
+  <div class="h2"><span class="no">01</span><h2>배경과 목표</h2></div>
+  <p class="lede">학점은행제 시장은 과정과 가격이 기관별로 크게 다르지 않다. 결정은 정보 비교가 아니라 <strong>“지금 시작해도 되는가”에 대한 안심</strong>에서 일어난다. 이 페이지의 역할은 과정을 설명하는 것이 아니라, 그 안심을 만들어 상담 신청 버튼까지 데려가는 것이다.</p>
+
+  <h3>배경</h3>
+  <ul class="bullets">
+    <li>학점은행제는 학기 단위(3·9월 중심)로 모집이 열려, 개강 시점을 놓치면 다음 학기까지 대기해야 한다 → 계절 캠페인의 명분이 자연스럽게 존재한다.</li>
+    <li>주 검색 유입은 “사회복지사 2급 취득 방법”, “보육교사 자격증 온라인” 등 <strong>정보 탐색 키워드</strong>다. 방문자는 아직 기관을 정하지 않은 상태로 들어온다.</li>
+    <li>경쟁 랜딩은 대부분 할인율과 순위 배지를 전면에 세운다. 같은 문법으로 싸우면 규모가 큰 쪽이 이긴다.</li>
+  </ul>
+
+  <h3>목표</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>구분</th><th>내용</th><th>측정 지표</th><th>목표</th></tr></thead>
+      <tbody>
+        <tr><td>주 목표</td><td>무료 상담 신청 접수</td><td>폼 제출 수 / 세션</td><td class="num">0.0%</td></tr>
+        <tr><td>보조 목표</td><td>전화 상담 연결 (모바일)</td><td>tel: 링크 클릭</td><td class="num">0.0%</td></tr>
+        <tr><td>참여 지표</td><td>과정 탭 탐색</td><td>탭 클릭 세션 비율</td><td class="num">00%</td></tr>
+        <tr><td>이탈 방어</td><td>히어로 이탈</td><td>첫 화면 이탈률</td><td class="num">00% 이하</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">
+    <b>Placeholder</b>
+    목표 수치는 실측 데이터 확보 전 자리표시자다. 1차 배포 후 2주간의 기준선을 잡은 뒤 확정한다.
+  </div>
+</section>
+
+<!-- ============ 02 ============ -->
+<section id="s2">
+  <div class="h2"><span class="no">02</span><h2>타깃 정의</h2></div>
+  <p>세 집단 모두 “자격증을 따고 싶다”가 아니라 <strong>“지금 내 상황에서 가능한가”</strong>를 확인하러 온다. 카피와 폼은 이 질문에 답하는 방향으로 설계한다.</p>
+
+  <div class="grid3">
+    <div>
+      <p class="p-tag">Primary</p>
+      <p class="p-name">복귀 준비형</p>
+      <p class="p-line">30대 후반–40대 · 경력 단절 이후</p>
+      <p class="p-body">아이가 어느 정도 자라 다시 일을 찾는 중. 사회복지사·보육교사처럼 채용 수요가 꾸준한 자격을 본다. 학습 자체보다 <strong>실습을 어떻게 하는지</strong>가 가장 큰 장벽.</p>
+      <p class="p-need"><em>결정을 막는 것</em>실습기관을 혼자 구해야 하나? 기간이 얼마나 걸리나?</p>
+    </div>
+    <div>
+      <p class="p-tag">Secondary</p>
+      <p class="p-name">병행 직장인형</p>
+      <p class="p-line">30–40대 · 재직 중</p>
+      <p class="p-body">현직을 유지하면서 이직·부업 대비로 자격을 준비한다. 시간 확보가 유일한 조건이라 과제량과 시험 방식에 민감하다.</p>
+      <p class="p-need"><em>결정을 막는 것</em>퇴근 후에 정말 따라갈 수 있나? 못 들으면 어떻게 되나?</p>
+    </div>
+    <div>
+      <p class="p-tag">Tertiary</p>
+      <p class="p-name">학위 병행형</p>
+      <p class="p-line">20대 후반–30대 초반</p>
+      <p class="p-body">학사 학위와 자격증을 동시에 노린다. 비용보다 <strong>총 소요 학기</strong>를 기준으로 기관을 비교한다.</p>
+      <p class="p-need"><em>결정을 막는 것</em>내 기존 학점이 인정되나? 몇 학기가 줄어드나?</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>설계 시사점</b>
+    세 집단의 질문이 모두 “개인별 계산”을 요구한다. 따라서 페이지의 CTA는 “수강신청”이 아니라 <strong>“내 조건으로 계산받기 = 무료 상담”</strong>이어야 한다. 결제 허들을 페이지 밖으로 밀어낸다.
+  </div>
+</section>
+
+<!-- ============ 03 ============ -->
+<section id="s3">
+  <div class="h2"><span class="no">03</span><h2>레퍼런스 분석</h2></div>
+  <p>참고 페이지(원격평생교육원 프로모션 랜딩)의 구조를 해체해, 가져올 것과 버릴 것을 명시한다.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>레퍼런스 요소</th><th>의도</th><th>판단</th><th>우리의 처리</th></tr></thead>
+      <tbody>
+        <tr><td>카운트다운</td><td>마감 압박</td><td>채택</td><td>학기제라는 실제 근거가 있어 정당하다. “마감 후 다음 학기” 문구를 함께 노출해 허위 긴급성을 피한다.</td></tr>
+        <tr><td>순위·수상 배지 나열</td><td>권위 확보</td><td>축소</td><td>검증 가능한 항목(인가 연수, 이수율)만 남기고 수상 이력 나열은 제외.</td></tr>
+        <tr><td>과정별 탭</td><td>탐색 분기</td><td>채택</td><td>4개 과정으로 압축. 탭마다 학점·기간·실습·진로를 같은 표 구조로 비교 가능하게.</td></tr>
+        <tr><td>할인율 대문짝</td><td>가격 소구</td><td>변형</td><td>“최대 00% 할인” 대신 <strong>과목당 실단가</strong>를 노출. 비교 가능한 숫자가 더 강하다.</td></tr>
+        <tr><td>상담 폼 2종</td><td>즉시/예약</td><td>채택</td><td>탭으로 분리. 즉시 상담은 필드 3개로 최소화.</td></tr>
+        <tr><td>후기 다수 나열</td><td>사회적 증거</td><td>축소</td><td>3개만. 대신 각 후기가 서로 다른 장벽(시간·실습·학점)을 해소하도록 배치.</td></tr>
+        <tr><td>탭·배너 다중 프로모션</td><td>노출 극대화</td><td>제외</td><td>시선 분산. 단일 CTA 원칙을 우선한다.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 04 ============ -->
+<section id="s4">
+  <div class="h2"><span class="no">04</span><h2>컨셉 — 왜 가을인가</h2></div>
+  <p class="lede">“가을”은 장식이 아니라 <strong>모집 논리의 시각화</strong>다. 9월 학기가 열리고, 접수는 곧 닫히며, 지금 시작하면 해가 바뀌기 전에 첫 학기를 마친다. 이 시간 감각을 색과 움직임으로 옮긴다.</p>
+
+  <h3>컨셉 문장</h3>
+  <p class="lede" style="font-family:var(--serif);font-size:22px;line-height:1.6;margin-top:14px;color:var(--ink)">“이 가을, 배움으로 완성하는 나의 두 번째 커리어”</p>
+  <p style="margin-top:12px">‘두 번째 커리어’는 세 타깃을 모두 포괄한다 — 복귀, 전환, 확장. ‘완성’은 자격증 취득이라는 종착점을 가리키면서 계절의 결실 이미지와 겹친다.</p>
+
+  <h3>톤 &amp; 매너</h3>
+  <ul class="bullets">
+    <li><strong>따뜻하되 들뜨지 않게.</strong> 성인 학습자 대상이므로 청춘·캠퍼스 톤을 배제한다. 채도를 한 단계 낮춘 오렌지·골드로 신뢰감을 유지한다.</li>
+    <li><strong>과장 금지.</strong> 느낌표와 붉은 경고색을 쓰지 않는다. 긴급성은 카운트다운 하나로 충분하다.</li>
+    <li><strong>여백 우선.</strong> 정보 밀도가 높은 경쟁 페이지와의 첫 번째 차이점은 “읽을 수 있다”는 인상이다.</li>
+    <li><strong>움직임은 배경에만.</strong> 낙엽 애니메이션은 히어로 배경에 한정하고, 콘텐츠 영역은 정지 상태를 유지한다.</li>
+  </ul>
+</section>
+
+<!-- ============ 05 ============ -->
+<section id="s5">
+  <div class="h2"><span class="no">05</span><h2>정보구조 · 섹션 흐름</h2></div>
+  <p>원페이지 11개 섹션. 각 섹션은 방문자의 질문 하나에 답하고, 답이 끝나면 CTA로 되돌린다.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>#</th><th>섹션</th><th>답하는 질문</th><th>핵심 요소</th><th>CTA</th></tr></thead>
+      <tbody>
+        <tr><td>00</td><td>상단 유틸 · 헤더</td><td>여기가 어디지?</td><td>로고, 6개 앵커 메뉴, 캠페인 고지</td><td>상담신청(고정)</td></tr>
+        <tr><td>01</td><td>히어로</td><td>내게 맞는 곳인가?</td><td>컨셉 문장, 과목당 단가, 마감 카운트다운 카드</td><td>1분 무료 상담 / 과정 보기</td></tr>
+        <tr><td>02</td><td>신뢰 지표</td><td>믿을 만한가?</td><td>4개 수치 (수강생·인가연수·이수율·과정수)</td><td>—</td></tr>
+        <tr><td>03</td><td>과정 안내</td><td>어떤 과정이 있나?</td><td>4개 탭 · 학점/기간/실습/진로 · 과정별 특별가</td><td>이 과정 상담받기</td></tr>
+        <tr><td>04</td><td>차별점</td><td>왜 여기인가?</td><td>인가·전담매니저·학습량·가을혜택 4카드</td><td>—</td></tr>
+        <tr><td>05</td><td>학습 시스템</td><td>병행 가능한가?</td><td>이어보기·알림·진행률 + 대시보드 목업</td><td>—</td></tr>
+        <tr><td>06</td><td>혜택 패키지</td><td>얼마나 드나?</td><td>기본 / 올케어 / 학위 3플랜</td><td>플랜별 상담 신청</td></tr>
+        <tr><td>07</td><td>수강 후기</td><td>실제로 됐나?</td><td>장벽별 후기 3건</td><td>—</td></tr>
+        <tr><td>08</td><td>자주 묻는 질문</td><td>남은 걱정은?</td><td>학력·병행·기간·환불·상담부담 5문항</td><td>—</td></tr>
+        <tr><td>09</td><td>상담 신청</td><td>어떻게 시작하나?</td><td>빠른 상담 / 예약 상담 2탭 폼</td><td>제출</td></tr>
+        <tr><td>10</td><td>푸터</td><td>실체가 있나?</td><td>인증, 사업자 정보, 대표번호, 약관</td><td>전화</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>배치 논리</h3>
+  <ol class="steps">
+    <li><span class="n">01</span><div><b>관심 → 신뢰</b><span>히어로 직후 어두운 지표 바를 배치해 톤을 끊는다. 밝은 화면이 이어지면 광고처럼 읽히고, 한 번 눌러주면 “기관”으로 읽힌다.</span></div></li>
+    <li><span class="n">02</span><div><b>신뢰 → 탐색</b><span>과정 탭을 신뢰 지표 바로 다음에 두어, 관심 있는 과정을 찾는 순간 이탈 확률이 가장 낮은 지점에서 첫 CTA를 만나게 한다.</span></div></li>
+    <li><span class="n">03</span><div><b>탐색 → 안심</b><span>차별점·학습 시스템·후기는 “못 따라갈까 봐”라는 단일 불안을 세 각도에서 해소한다.</span></div></li>
+    <li><span class="n">04</span><div><b>안심 → 행동</b><span>FAQ 마지막 문항을 “상담만 받아봐도 되나요?”로 두어, 바로 아래 폼의 심리적 비용을 0으로 만든다.</span></div></li>
+  </ol>
+</section>
+
+<!-- ============ 06 ============ -->
+<section id="s6">
+  <div class="h2"><span class="no">06</span><h2>와이어프레임</h2></div>
+  <p>블록 단위 배치. 실제 시안은 <code>index.html</code>에 구현되어 있다.</p>
+
+  <div class="wire-set">
+    <div>
+      <div class="wire" role="img" aria-label="데스크탑 와이어프레임: 헤더, 2단 히어로, 지표 바, 과정 탭, 카드 4열, 학습 시스템 2단, 플랜 3열, 후기 3열, FAQ, 상담폼, 푸터">
+        <div class="blk">HEADER — 로고 / GNB 6 / 상담신청</div>
+        <div class="row">
+          <div class="blk tall">HERO COPY — 컨셉 문장 · 단가 · CTA 2</div>
+          <div class="blk tall acc">COUNTDOWN CARD — 마감 타이머 · 혜택 4 · CTA</div>
+        </div>
+        <div class="row c4">
+          <div class="blk">지표</div><div class="blk">지표</div><div class="blk">지표</div><div class="blk">지표</div>
+        </div>
+        <div class="blk">COURSE TABS — 4</div>
+        <div class="row">
+          <div class="blk tall">과정 상세 — 학점 / 기간 / 실습 / 진로</div>
+          <div class="blk tall acc">과정별 특별가 · CTA</div>
+        </div>
+        <div class="row c4">
+          <div class="blk tall">차별 01</div><div class="blk tall">02</div><div class="blk tall">03</div><div class="blk tall">04</div>
+        </div>
+        <div class="row">
+          <div class="blk tall">학습 시스템 3항목</div>
+          <div class="blk tall">대시보드 목업</div>
+        </div>
+        <div class="row c3">
+          <div class="blk tall">기본</div><div class="blk tall acc">올케어</div><div class="blk tall">학위</div>
+        </div>
+        <div class="row c3">
+          <div class="blk tall">후기</div><div class="blk tall">후기</div><div class="blk tall">후기</div>
+        </div>
+        <div class="blk tall">FAQ — 아코디언 5</div>
+        <div class="blk tall acc">상담 폼 — 2탭</div>
+        <div class="blk">FOOTER</div>
+      </div>
+      <p class="wire-cap">Desktop · 1180px container</p>
+    </div>
+
+    <div>
+      <div class="wire" role="img" aria-label="모바일 와이어프레임: 단일 컬럼과 하단 고정 CTA">
+        <div class="blk">HEADER + ☰</div>
+        <div class="blk tall">HERO COPY</div>
+        <div class="blk tall acc">COUNTDOWN</div>
+        <div class="row"><div class="blk">지표</div><div class="blk">지표</div></div>
+        <div class="row"><div class="blk">지표</div><div class="blk">지표</div></div>
+        <div class="blk">TABS (가로 스크롤)</div>
+        <div class="blk tall">과정 상세</div>
+        <div class="blk tall acc">특별가 · CTA</div>
+        <div class="blk tall">차별 01–04 세로</div>
+        <div class="blk tall">학습 시스템</div>
+        <div class="blk tall">플랜 3 세로</div>
+        <div class="blk tall">후기 3 세로</div>
+        <div class="blk tall">FAQ</div>
+        <div class="blk tall acc">상담 폼</div>
+        <div class="blk">FOOTER</div>
+        <div class="blk acc">STICKY — 전화 / 상담신청</div>
+      </div>
+      <p class="wire-cap">Mobile · 390px</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 07 ============ -->
+<section id="s7">
+  <div class="h2"><span class="no">07</span><h2>전환 설계</h2></div>
+
+  <h3>퍼널</h3>
+  <div class="funnel">
+    <div class="fn"><span class="stage">Arrive</span><span class="what"><b>검색 유입 · 광고 클릭</b><span>정보 탐색 키워드 중심, 기관 미결정 상태</span></span><span class="meas">기준 100</span></div>
+    <div class="fn"><span class="stage">Engage</span><span class="what"><b>히어로 통과 → 과정 탭 조작</b><span>첫 3초 안에 “내 과정이 여기 있다” 확인</span></span><span class="meas">목표 00%</span></div>
+    <div class="fn"><span class="stage">Assure</span><span class="what"><b>학습 시스템 · 후기 · FAQ 열람</b><span>“병행 가능” “실습 지원됨” 확인</span></span><span class="meas">목표 00%</span></div>
+    <div class="fn"><span class="stage">Act</span><span class="what"><b>상담 폼 제출 / 전화 연결</b><span>필수 입력 3개, 결제 요구 없음</span></span><span class="meas">목표 0.0%</span></div>
+  </div>
+
+  <h3>CTA 배치 원칙</h3>
+  <ul class="bullets">
+    <li>CTA 문구는 전 구간 <strong>“상담”</strong>으로 통일한다. “수강신청”, “결제”, “등록” 등 비용을 연상시키는 동사는 페이지 어디에도 쓰지 않는다.</li>
+    <li>스크롤 어느 지점에서 멈춰도 한 화면 안에 CTA가 하나는 보이도록 배치한다 — 헤더 고정, 섹션 내 CTA, 모바일 하단 고정 바.</li>
+    <li>한 화면에 CTA가 <strong>둘 이상 경쟁하지 않게</strong> 한다. 히어로의 보조 버튼(‘과정 먼저 둘러보기’)만 예외이며 시각 위계를 명확히 낮춘다.</li>
+    <li>과정 탭 안의 CTA는 선택한 과정명을 폼으로 넘긴다 — 재입력을 없애 이탈을 줄인다.</li>
+  </ul>
+
+  <h3>폼 이탈 방어</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>이탈 요인</th><th>대응</th></tr></thead>
+      <tbody>
+        <tr><td>필드가 많다</td><td>빠른 상담은 이름·연락처 2개만 필수. 관심 과정·상담 내용은 선택.</td></tr>
+        <tr><td>전화가 부담된다</td><td>“상담 후 결정하셔도 됩니다” 문구를 폼 상·하단에 반복. 예약 상담 탭으로 시간 선택권 제공.</td></tr>
+        <tr><td>개인정보 우려</td><td>수집 항목·목적·보유기간을 동의 체크박스 안에 그대로 노출. 별도 팝업으로 숨기지 않는다.</td></tr>
+        <tr><td>지금 안 해도 된다</td><td>카운트다운과 “마감 후 다음 학기(00월)” 문구를 폼 근처가 아닌 히어로에만 배치해 압박이 중복되지 않게 한다.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 08 ============ -->
+<section id="s8">
+  <div class="h2"><span class="no">08</span><h2>디자인 가이드</h2></div>
+
+  <h3>컬러 토큰</h3>
+  <p>가을을 밝은 쪽에서 해석한다. 단풍의 붉은 계열은 강조에만 쓰고, 바탕은 크림·베이지로 열어 두어 정보 밀도가 높은 경쟁 페이지와 대비를 만든다.</p>
+  <div class="sw-grid">
+    <div class="sw"><div class="chip" style="background:#FFFBF4"></div><div class="info"><p class="role">Cream</p><p class="hex">#FFFBF4</p><p class="use">기본 배경</p></div></div>
+    <div class="sw"><div class="chip" style="background:#F8F0E3"></div><div class="info"><p class="role">Sand</p><p class="hex">#F8F0E3</p><p class="use">교차 섹션 배경</p></div></div>
+    <div class="sw"><div class="chip" style="background:#E4622B"></div><div class="info"><p class="role">Orange</p><p class="hex">#E4622B</p><p class="use">주 CTA · 활성 탭</p></div></div>
+    <div class="sw"><div class="chip" style="background:#C24619"></div><div class="info"><p class="role">Orange Deep</p><p class="hex">#C24619</p><p class="use">hover · 강조 텍스트</p></div></div>
+    <div class="sw"><div class="chip" style="background:#DFA01E"></div><div class="info"><p class="role">Gold</p><p class="hex">#DFA01E</p><p class="use">지표 수치 · 별점</p></div></div>
+    <div class="sw"><div class="chip" style="background:#A63A1B"></div><div class="info"><p class="role">Maple</p><p class="hex">#A63A1B</p><p class="use">가격 · 숫자 강조</p></div></div>
+    <div class="sw"><div class="chip" style="background:#2B211A"></div><div class="info"><p class="role">Bark</p><p class="hex">#2B211A</p><p class="use">본문 · 다크 섹션</p></div></div>
+    <div class="sw"><div class="chip" style="background:#E7D9C4"></div><div class="info"><p class="role">Line</p><p class="hex">#E7D9C4</p><p class="use">보더 · 구분선</p></div></div>
+  </div>
+  <div class="note">
+    <b>금지</b>
+    순수 검정(#000)과 순수 회색은 쓰지 않는다. 모든 무채색은 Bark 계열에서 파생한 웜 그레이를 사용한다. 경고·에러도 붉은색 대신 Maple을 쓴다.
+  </div>
+
+  <h3>타이포그래피</h3>
+  <p>본문 서체는 Pretendard 한 종으로 통일하고, 위계는 굵기와 크기로만 만든다. 장식 서체를 더하지 않는 것이 이 페이지의 절제 지점이다.</p>
+  <div class="type-scale">
+    <div class="ts-row"><span class="spec">Display<br>clamp 34–60px / 800 / -.045em</span><span class="demo" style="font-size:30px;font-weight:800;letter-spacing:-.045em;line-height:1.2">이 가을, 배움으로</span></div>
+    <div class="ts-row"><span class="spec">Section<br>clamp 28–44px / 800 / -.035em</span><span class="demo" style="font-size:24px;font-weight:800;letter-spacing:-.035em">가을학기 인기 과정 안내</span></div>
+    <div class="ts-row"><span class="spec">Card title<br>20px / 800 / -.03em</span><span class="demo" style="font-size:19px;font-weight:800;letter-spacing:-.03em">1:1 전담 학습매니저</span></div>
+    <div class="ts-row"><span class="spec">Body<br>16px / 400 / 1.75</span><span class="demo" style="font-size:16px">전담 학습매니저가 신청부터 자격증 취득까지 함께합니다.</span></div>
+    <div class="ts-row"><span class="spec">Caption<br>13–14px / 600 / ink-3</span><span class="demo" style="font-size:13.5px;font-weight:600;color:var(--ink-3)">사회복지사 2급 · 00개월 수료</span></div>
+    <div class="ts-row"><span class="spec">Eyebrow<br>13px / 700 / .08em / upper</span><span class="demo" style="font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--acc)">AUTUMN BENEFIT</span></div>
+  </div>
+
+  <h3>레이아웃 · 컴포넌트 규칙</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>항목</th><th>값</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr><td>컨테이너</td><td class="tabular">max 1180px / padding 24px</td><td>모바일 18px</td></tr>
+        <tr><td>섹션 상하 여백</td><td class="tabular">110 / 84 / 64px</td><td>desktop / tablet / mobile</td></tr>
+        <tr><td>라운드</td><td class="tabular">10 · 16 · 26px</td><td>버튼은 999px(pill)</td></tr>
+        <tr><td>그림자</td><td class="tabular">rgba(76,48,28,.06–.16)</td><td>검정 대신 브라운 기반</td></tr>
+        <tr><td>브레이크포인트</td><td class="tabular">1024px / 640px</td><td>1024 이하 GNB → 햄버거</td></tr>
+        <tr><td>버튼 높이</td><td class="tabular">44 / 56 / 64px</td><td>small / default / large</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 09 ============ -->
+<section id="s9">
+  <div class="h2"><span class="no">09</span><h2>인터랙션 명세</h2></div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>요소</th><th>동작</th><th>조건 · 값</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr><td>과정 탭</td><td>클릭 시 패널 교체</td><td>fade-up 0.35s</td><td>URL 해시 미변경. 첫 탭 기본 활성</td></tr>
+        <tr><td>카운트다운</td><td>1초 간격 갱신</td><td>일 / 시 / 분 / 초</td><td>마감 시각 도달 시 00으로 고정, 문구 교체 필요</td></tr>
+        <tr><td>낙엽 배경</td><td>무한 낙하 · 회전</td><td>14개 / 11–23s / 랜덤 지연</td><td>히어로 한정, <code>pointer-events:none</code></td></tr>
+        <tr><td>헤더</td><td>스크롤 10px 초과 시 그림자</td><td>sticky top:0</td><td>배경 blur 12px</td></tr>
+        <tr><td>FAQ</td><td>아코디언 열림/닫힘</td><td>native <code>&lt;details&gt;</code></td><td>다중 열림 허용. 1번 문항 기본 open</td></tr>
+        <tr><td>상담 폼 탭</td><td>빠른 / 예약 전환</td><td>패널 교체</td><td>입력값 유지</td></tr>
+        <tr><td>모바일 고정 CTA</td><td>하단 고정 노출</td><td>≤ 640px</td><td>body 하단 패딩 74px 확보</td></tr>
+        <tr><td>모션 감소</td><td>애니메이션 전면 정지</td><td><code>prefers-reduced-motion</code></td><td>낙엽·전환 포함</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 10 ============ -->
+<section id="s10">
+  <div class="h2"><span class="no">10</span><h2>개발 요구사항</h2></div>
+  <p>현재 산출물은 <strong>마크업과 최소 스크립트만 포함한 퍼블리싱 결과물</strong>이다. 아래 항목은 개발 단계에서 연결한다.</p>
+
+  <h3>폼 · 데이터</h3>
+  <ul class="bullets">
+    <li>제출 엔드포인트 연결. 성공 시 완료 화면 또는 인라인 메시지, 실패 시 사유와 재시도 안내를 같은 자리에 노출한다.</li>
+    <li>유효성: 이름 1자 이상, 휴대폰 숫자 10–11자리, 필수 동의 체크. 오류는 필드 하단에 텍스트로 표시하고 <code>aria-describedby</code>로 연결한다.</li>
+    <li>중복 제출 방지(제출 중 버튼 비활성), 스팸 방지 수단 적용.</li>
+    <li>과정 탭에서 넘어온 CTA는 <code>관심 과정</code> select를 자동 선택한다.</li>
+    <li>개인정보 수집·이용 동의 내역과 시각을 함께 저장한다.</li>
+  </ul>
+
+  <h3>추적 이벤트</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>이벤트</th><th>발생 지점</th><th>파라미터</th></tr></thead>
+      <tbody>
+        <tr><td>view_hero</td><td>히어로 노출</td><td>—</td></tr>
+        <tr><td>click_cta</td><td>모든 상담 버튼</td><td>위치(hero / course / plan / sticky), 과정명</td></tr>
+        <tr><td>select_course</td><td>과정 탭 클릭</td><td>과정명</td></tr>
+        <tr><td>open_faq</td><td>FAQ 펼침</td><td>문항 번호</td></tr>
+        <tr><td>submit_form</td><td>폼 제출 성공</td><td>유형(quick / reserve), 과정명</td></tr>
+        <tr><td>click_tel</td><td>전화 링크</td><td>위치</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>SEO · 접근성 · 성능</h3>
+  <ul class="bullets">
+    <li>title / description / OG 이미지 설정. 구조화 데이터는 <code>EducationalOrganization</code> + <code>Course</code> 적용 검토.</li>
+    <li>제목 위계 <code>h1 → h2 → h3</code> 유지. 탭은 <code>role="tab"</code>/<code>aria-selected</code>, 폼 라벨은 <code>for</code>로 연결.</li>
+    <li>본문 대비비 4.5:1 이상. 오렌지 위 흰 텍스트는 크기 17px·700 이상에서만 사용.</li>
+    <li>키보드만으로 전 CTA와 탭에 도달 가능해야 하며, 포커스 링을 제거하지 않는다.</li>
+    <li>웹폰트는 <code>display=swap</code>. 히어로 영역은 이미지 없이 CSS로 구성되어 LCP 부담이 낮다.</li>
+  </ul>
+</section>
+
+<!-- ============ 11 ============ -->
+<section id="s11">
+  <div class="h2"><span class="no">11</span><h2>콘텐츠 체크리스트</h2></div>
+  <p>시안의 모든 수치는 <code>00</code> 형태의 자리표시자다. 배포 전 아래 항목을 실제 값으로 교체한다.</p>
+  <div class="chk">
+    <div><span class="tok">개강일 · 마감</span><span class="desc">히어로 배지, 카운트다운 기준 시각, “다음 학기 00월” 문구</span><span class="who">운영</span></div>
+    <div><span class="tok">과목당 단가</span><span class="desc">히어로 특별가, 정가, 과정별 4개 단가</span><span class="who">운영</span></div>
+    <div><span class="tok">신뢰 지표 4종</span><span class="desc">누적 수강생, 인가 연수, 이수율, 운영 과정 수 — 근거 출처 명시 필요</span><span class="who">운영</span></div>
+    <div><span class="tok">과정 상세</span><span class="desc">과정별 이수 학점, 최단 기간, 실습 시간, 진로</span><span class="who">교무</span></div>
+    <div><span class="tok">플랜 가격</span><span class="desc">기본 / 올케어 / 학위 3종 금액과 포함 항목</span><span class="who">운영</span></div>
+    <div><span class="tok">수강 후기</span><span class="desc">예시 문구 3건 → 실제 후기로 교체, 게재 동의 확인</span><span class="who">마케팅</span></div>
+    <div><span class="tok">FAQ 수치</span><span class="desc">취득 소요 기간 범위, 환불 규정 링크</span><span class="who">교무</span></div>
+    <div><span class="tok">사업자 정보</span><span class="desc">대표자, 등록번호, 주소, 통신판매업 신고번호, 대표전화, 운영시간</span><span class="who">경영지원</span></div>
+    <div><span class="tok">인증 배지</span><span class="desc">교육부 평가인정 연수, 원격교육시설 신고번호 등 실제 보유 항목만</span><span class="who">경영지원</span></div>
+    <div><span class="tok">약관 링크</span><span class="desc">이용약관, 개인정보처리방침, 환불규정 URL</span><span class="who">경영지원</span></div>
+  </div>
+  <div class="note">
+    <b>주의</b>
+    수강생 수·이수율·순위 표현은 근거 없이 게시할 경우 표시광고법 위반 소지가 있다. 출처(정보공시 등)를 함께 표기하거나, 확인되지 않은 항목은 섹션에서 제거한다.
+  </div>
+</section>
+
+<!-- ============ 12 ============ -->
+<section id="s12">
+  <div class="h2"><span class="no">12</span><h2>일정 · 다음 단계</h2></div>
+  <ol class="steps">
+    <li><span class="n">01</span><div><b>기획 확정</b><span>본 문서 검토, 섹션 순서와 CTA 문구 확정. — 완료 대기</span></div></li>
+    <li><span class="n">02</span><div><b>콘텐츠 수급</b><span>11장 체크리스트의 실제 값 취합. 후기 게재 동의 포함.</span></div></li>
+    <li><span class="n">03</span><div><b>디자인 확정</b><span>히어로 시안 변형 비교(선택), 최종 컬러·카피 확정.</span></div></li>
+    <li><span class="n">04</span><div><b>퍼블리싱 반영</b><span>확정 콘텐츠로 <code>index.html</code> 교체. 반응형·접근성 재검수.</span></div></li>
+    <li><span class="n">05</span><div><b>개발 연동</b><span>폼 엔드포인트, 유효성, 추적 이벤트, SEO 메타 적용.</span></div></li>
+    <li><span class="n">06</span><div><b>배포 · 측정</b><span>2주 기준선 수집 후 목표 수치 확정, 히어로 카피 A/B 검토.</span></div></li>
+  </ol>
+
+  <div class="note">
+    <b>열린 결정</b>
+    ① 과정 상세 서브페이지를 별도로 둘 것인가, 원페이지 유지인가. ② 카운트다운의 기준을 실제 개강일로 할 것인가, 상시 롤링으로 할 것인가. ③ 후기 섹션을 실제 후기 확보 전까지 노출할 것인가.
+  </div>
+</section>
+
+<footer class="foot">
+  <span>배움평생교육원 · 가을 개강 랜딩 기획서</span>
+  <span>v1.0 · 2026.08.28</span>
+</footer>
+
+</main>
+</div>
+
+</body></html>

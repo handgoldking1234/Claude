@@ -1,0 +1,614 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>글쓰기 튜터 UI 통일</title>
+<style>
+  :root {
+    --ground:#f2f5f8; --surface:#fff; --surface-2:#e8edf4; --surface-3:#f8fafc;
+    --ink:#131820; --ink-2:#3f4a5c; --ink-3:#6b7686;
+    --rule:#dbe2ec; --rule-soft:#e9eef4;
+    --accent:#1d4ed8; --accent-2:#153ea8; --accent-wash:#e6edfd;
+    --new-c:#0a6b48; --new-wash:#e1f4ec;
+    --warn:#8a5200; --warn-wash:#fdf1dc;
+    --code-bg:#eceff5;
+    --shadow:0 1px 2px rgba(19,24,32,.05), 0 10px 26px -24px rgba(19,24,32,.65);
+    --f-body:"Segoe UI Variable Text","Segoe UI",ui-sans-serif,system-ui,-apple-system,sans-serif;
+    --f-mono:"Cascadia Mono","Cascadia Code",ui-monospace,Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:#0a0d12; --surface:#131820; --surface-2:#1b2029; --surface-3:#161a22;
+      --ink:#eceff6; --ink-2:#adb9cb; --ink-3:#7f8998;
+      --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+      --accent:#5c9bff; --accent-2:#93bcff; --accent-wash:rgba(92,155,255,.13);
+      --new-c:#4ec793; --new-wash:rgba(78,199,147,.13);
+      --warn:#e2a544; --warn-wash:rgba(226,165,68,.13);
+      --code-bg:rgba(255,255,255,.05);
+      --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -24px rgba(0,0,0,.95);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#0a0d12; --surface:#131820; --surface-2:#1b2029; --surface-3:#161a22;
+    --ink:#eceff6; --ink-2:#adb9cb; --ink-3:#7f8998;
+    --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+    --accent:#5c9bff; --accent-2:#93bcff; --accent-wash:rgba(92,155,255,.13);
+    --new-c:#4ec793; --new-wash:rgba(78,199,147,.13);
+    --warn:#e2a544; --warn-wash:rgba(226,165,68,.13);
+    --code-bg:rgba(255,255,255,.05);
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -24px rgba(0,0,0,.95);
+  }
+
+  *, *::before, *::after { box-sizing:border-box; }
+  body { margin:0; background:var(--ground); color:var(--ink);
+    font-family:var(--f-body); font-size:15px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:1080px; margin:0 auto; padding:40px 22px 90px; }
+
+  code { font-family:var(--f-mono); font-size:.88em; background:var(--code-bg);
+    border-radius:4px; padding:.1em .38em; overflow-wrap:anywhere; }
+  a { color:var(--accent); }
+  a:focus-visible { outline:2px solid var(--accent); outline-offset:2px; border-radius:4px; }
+
+  .eyebrow { font-family:var(--f-mono); font-size:11.5px; letter-spacing:.11em;
+    text-transform:uppercase; color:var(--ink-3); margin:0 0 10px; }
+  h1 { font-size:clamp(27px,4vw,36px); line-height:1.18; letter-spacing:-.022em;
+    margin:0 0 12px; text-wrap:balance; }
+  .lede { margin:0; max-width:66ch; color:var(--ink-2); font-size:16px; }
+
+  .meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+  .chip { display:inline-flex; align-items:baseline; gap:7px; background:var(--surface);
+    border:1px solid var(--rule); border-radius:999px; padding:5px 13px;
+    font-size:12.5px; box-shadow:var(--shadow); }
+  .chip b { font-family:var(--f-mono); font-weight:600; font-size:12px; }
+  .chip span { color:var(--ink-3); }
+
+  section { margin-top:46px; }
+  h2 { font-size:19px; letter-spacing:-.015em; margin:0 0 14px; padding-bottom:9px;
+    border-bottom:1px solid var(--rule); display:flex; flex-wrap:wrap;
+    align-items:baseline; gap:4px 12px; }
+  h2 .n { font-family:var(--f-mono); font-size:12px; color:var(--ink-3); font-weight:500; }
+  h3 { font-size:15px; margin:0 0 7px; }
+  p { margin:0 0 12px; max-width:78ch; }
+  p:last-child { margin-bottom:0; }
+
+  .toc { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    gap:1px 22px; margin-top:26px; padding:16px 20px; background:var(--surface);
+    border:1px solid var(--rule); border-radius:12px; box-shadow:var(--shadow); }
+  .toc a { color:var(--ink-2); text-decoration:none; font-size:14px; padding:3px 0; display:block; }
+  .toc a:hover { color:var(--accent); text-decoration:underline; text-underline-offset:3px; }
+  .toc a span { font-family:var(--f-mono); font-size:11px; color:var(--ink-3); }
+
+  .tablewrap { overflow-x:auto; border:1px solid var(--rule); border-radius:12px;
+    background:var(--surface); box-shadow:var(--shadow); }
+  table { border-collapse:collapse; width:100%; min-width:720px; }
+  colgroup .c-scr { width:21%; }
+  colgroup .c-url { width:26%; }
+  th, td { text-align:left; padding:11px 16px; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; }
+  thead th { font-family:var(--f-mono); font-size:10.5px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--ink-3); font-weight:600; background:var(--surface-3); }
+  tbody tr:last-child td { border-bottom:0; }
+  td.scr { font-weight:600; }
+  td.url { font-family:var(--f-mono); font-size:12px; color:var(--accent-2); word-break:break-all; }
+  td.chg { font-size:13px; color:var(--ink-2); }
+  td.chg b { color:var(--ink); }
+  td.chg ul { margin:0; padding-left:16px; }
+  td.chg li { margin-bottom:3px; }
+  td.chg li:last-child { margin-bottom:0; }
+  td.sha { font-family:var(--f-mono); font-size:12px; color:var(--ink-3);
+    font-variant-numeric:tabular-nums; white-space:nowrap; }
+
+  .note { border:1px solid var(--rule); border-left:3px solid var(--accent);
+    border-radius:9px; background:var(--surface); padding:15px 18px;
+    box-shadow:var(--shadow); margin-bottom:12px; }
+  .note:last-child { margin-bottom:0; }
+  .note.warn { border-left-color:var(--warn); }
+  .note p { font-size:14px; color:var(--ink-2); }
+
+  footer { margin-top:52px; padding-top:16px; border-top:1px solid var(--rule);
+    font-size:12.5px; color:var(--ink-3); }
+
+  @media (max-width:640px) {
+    table { min-width:620px; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">작업 이력 · 2026-09-09</p>
+    <h1>글쓰기 튜터 UI 통일</h1>
+    <p class="lede">
+      학생 앱이 자체 팔레트로 카드를 그려 관리자 화면과 <b>두 벌의 UI</b>처럼 보이던 것을
+      공통 토큰·컴포넌트로 맞췄습니다. 헤더·아이콘 규격·읽기 서체까지 함께 정리했고,
+      그 과정에서 드러난 클래스 이름 충돌도 해결했습니다.
+    </p>
+    <div class="meta">
+      <span class="chip"><span>브랜치</span><b>feature/front-goldking-new</b></span>
+      <span class="chip"><span>커밋</span><b>37a9b3d8</b></span>
+      <span class="chip"><span>변경</span><b>22 files · +619 −289</b></span>
+      <span class="chip"><span>검증</span><b>tsc ✓ · vite build ✓</b></span>
+    </div>
+    <nav class="toc">
+      <a href="#prev">이전 작업 <span>· d7e8b553</span></a>
+      <a href="#shell">껍데기 통일 <span>· 토큰 교체</span></a>
+      <a href="#panel">공통 컴포넌트 <span>· 4곳</span></a>
+      <a href="#icon">아이콘 규격 <span>· 5곳</span></a>
+      <a href="#header">헤더 <span>· 5건</span></a>
+      <a href="#type">읽기 서체 <span>· 지문·문항</span></a>
+      <a href="#collide">클래스 충돌 <span>· 2건</span></a>
+      <a href="#etc">그 밖에 <span>· 3건</span></a>
+      <a href="#todo">남은 것</a>
+    </nav>
+  </header>
+
+  <!-- ─────────────── 이전 작업 ─────────────── -->
+  <section id="prev">
+    <h2>이전 작업 <span class="n">d7e8b553 · 같은 브랜치</span></h2>
+    <p>
+      바로 앞 커밋에서 <b>필터바를 공통 컴포넌트(.ui-filters)로 전환</b>했습니다.
+      목록 화면 23개와 공통 스타일 4개 파일이 바뀌었습니다(29 files · +712 −273).
+      이번 작업은 그때 만든 클래스와 토큰을 글쓰기 튜터 화면에 이어서 적용한 것입니다.
+    </p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col></colgroup>
+        <thead><tr><th>커밋</th><th>범위</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">d7e8b553</td>
+            <td class="url">목록 화면 23개<br>공통 스타일 4개</td>
+            <td class="chg"><ul>
+              <li><code>.ui-filters</code> · <code>-slot</code> · <code>-group</code> ·
+                  <code>__wide</code> · <code>-break</code> · <code>--fill</code> 도입</li>
+              <li>토큰 <code>--ui-filters-columns</code> · <code>--ui-filters-gap</code></li>
+              <li>패널 여백 토큰화 <code>--ui-panel-pad-x/-y/-edge-y</code> (768 이하 축소)</li>
+              <li>검색 입력 18곳 · 패널 액션 <code>:has()</code> · 상태 카드 440px 대응</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">37a9b3d8<br><b>이번</b></td>
+            <td class="url">글쓰기 튜터<br>학생 · 교사</td>
+            <td class="chg"><ul>
+              <li>앞 커밋의 <code>.ui-filters</code> 를 교사 필터바에 적용</li>
+              <li><code>--ui-panel-pad-*</code> 토큰이 학생 화면 패널에도 걸리게 됨</li>
+              <li>상태 카드 규칙에 <b>홀수 개 처리</b> 추가</li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note warn">
+      <p>
+        <b>이전 커밋에서 넘어온 확인 사항</b> — <code>src/features/front-progress.rows.ts(756,10)</code>
+        의 <code>TS6133: 'inProgress' is declared but its value is never read</code> 는
+        원격 커밋 <code>e50c3e22</code>에서 들어온 것으로 <b>제 작업이 아닙니다.</b>
+        <code>vite build</code> 는 타입체크를 하지 않아 통과하지만 그대로 남아 있습니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─────────────── 껍데기 통일 ─────────────── -->
+  <section id="shell">
+    <h2>껍데기 통일 <span class="n">--color-* → --ui-*</span></h2>
+    <p>
+      학생 앱은 <code>.rw-student</code> 스코프에 자체 토큰 세트를 두고 교사 앱과 격리돼 있습니다.
+      문제는 그 팔레트로 <b>카드까지</b> 그렸다는 점입니다. 같은 화면 안에서 값이 갈렸습니다.
+    </p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col></colgroup>
+        <thead><tr><th>항목</th><th>학생 팔레트</th><th>공통(.ui-panel)</th></tr></thead>
+        <tbody>
+          <tr><td class="scr">테두리</td><td class="url">--color-border <b>#d1d5db</b></td><td class="chg">--ui-border <b>#e5e7eb</b></td></tr>
+          <tr><td class="scr">모서리</td><td class="url">--radius-md <b>8px</b></td><td class="chg">--ui-box-radius <b>16px</b></td></tr>
+          <tr><td class="scr">그림자</td><td class="url">--shadow-card</td><td class="chg">0 1px 3px rgba(16,36,43,.035)</td></tr>
+          <tr><td class="scr">라벨색</td><td class="url">--gray-600 #4b5563</td><td class="chg">--ui-text-muted #64748b</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      모서리 <b>8px vs 16px</b> 가 가장 크게 보였습니다. 위 패널은 둥글고 아래 카드는 각져
+      한 화면에 두 벌의 UI가 섞인 것처럼 읽혔습니다.
+      아래 7곳의 껍데기를 공통 값으로 맞췄습니다.
+    </p>
+    <div class="note">
+      <p>
+        평가(설계) 정보 · 문항카드 목록 · 제목 헤더 · 지문 · 문항 블록 ·
+        과제 카드(목록) · 빈 상태/오류 상태
+      </p>
+    </div>
+  </section>
+
+  <!-- ─────────────── 공통 컴포넌트 ─────────────── -->
+  <section id="panel">
+    <h2>공통 컴포넌트 적용 <span class="n">4곳</span></h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col></colgroup>
+        <thead><tr><th>화면</th><th>주소 · 파일</th><th>작업 내역</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">평가(설계) 정보</td>
+            <td class="url"><a href="http://127.0.0.1:3100/rightwrite/student">/rightwrite/student</a> 하위<br>ExamInfoBar.tsx · .css</td>
+            <td class="chg"><ul>
+              <li><code>Panel</code>(아이콘 · 제목 · 설명 · <code>headerLine</code>) + 항목별 카드 4칸</li>
+              <li><b>아이콘 + 세로 구분선으로 4칸을 나누던 방식을 버렸습니다.</b>
+                  좁아져 2열로 접히면 구분선이 어디까지가 한 칸인지 알려주지 못해,
+                  <code>nth-child(odd)</code> 로 선을 지우는 예외까지 있었습니다.
+                  칸 자체를 카드로 만들면 그 예외가 필요 없습니다</li>
+              <li>시행기간의 <code>&lt;br&gt;</code> 제거 · <code>word-break: keep-all</code> 로
+                  <code>~</code> 앞뒤에서만 접힘</li>
+              <li>640 이하 간격·좌우 여백 8px (상태 카드와 같은 처리)</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">문항카드 목록<br>(좌측)</td>
+            <td class="url">ExamLayout.tsx · .css</td>
+            <td class="chg"><ul>
+              <li><code>ui-panel ui-panel__header-line</code> 구조로 전환</li>
+              <li>제목의 <b>네거티브 마진</b>(<code>margin: 0 calc(-1 * var(--space-4))</code>)이
+                  사라졌습니다 — 카드 패딩을 뚫고 구분선을 끝까지 늘리려던 꼼수인데,
+                  패널 헤더는 원래 그렇게 동작합니다</li>
+              <li>남긴 것은 <code>position: sticky</code> 와 제목 크기뿐</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">내 과제 목록</td>
+            <td class="url"><a href="http://127.0.0.1:3100/rightwrite/student">/rightwrite/student</a><br>LandingPage.tsx · .css</td>
+            <td class="chg"><ul>
+              <li><code>Panel</code> + 건수 배지(<code>badge badge-dot badge-role</code>).
+                  데이터가 있을 때만 표시 — 로딩 중 <code>0건</code>이 스치면 잘못 읽힙니다</li>
+              <li><b><code>&lt;li&gt;</code>를 카드로 올렸습니다.</b> 기존에는 카드 전체가
+                  <code>&lt;button&gt;</code>이라 안에 액션 버튼을 넣을 수 없었습니다(버튼 중첩은
+                  HTML 규격 위반이고 실제로 클릭이 서로 먹힙니다).
+                  정보 영역과 버튼이 형제가 됩니다</li>
+              <li>버튼 라벨을 상태별로 — 시작 전 <code>작성하기</code> ·
+                  진행 중 <code>이어서 작성</code> · 완료 <code>답안 확인</code></li>
+              <li>상태 배지를 <b>첫 줄 맨 앞</b>으로. 제목 옆에 두면 제목 길이(40자 이상)에 따라
+                  배지 위치가 카드마다 달라져 눈이 매번 다른 자리를 찾습니다</li>
+              <li>폭 통일 — <code>narrow</code>(896px) 제거해 작성 화면과 같은 1280px</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">필터바<br>(교사)</td>
+            <td class="url"><a href="http://127.0.0.1:3100/rightwrite/teacher">/rightwrite/teacher</a> 하위<br>ReportFilterBar.tsx</td>
+            <td class="chg"><ul>
+              <li><code>.ui-filters</code> · <code>-group</code> · <code>-slot</code> ·
+                  <code>__wide</code> 적용</li>
+              <li>버튼 3개(초기화 · 조회 · 엑셀)를 한 묶음으로 —
+                  형제로 흩어져 있어 <b>엑셀만 다음 줄로 떨어졌습니다</b></li>
+              <li>반 셀렉트가 내용 폭이던 것도 함께 100%로</li>
+              <li>학생간 유사도 · 참고출처 · AI 생성 의심도 <b>세 화면이 공유</b>합니다</li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── 아이콘 ─────────────── -->
+  <section id="icon">
+    <h2>아이콘 규격 통일 <span class="n">5곳</span></h2>
+    <p>
+      규격을 <code>.ui-panel__header-icon</code> 배지 하나로 맞췄습니다 —
+      <b>38px · 모서리 11px · type-info · 안쪽 아이콘 18px</b>.
+    </p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col></colgroup>
+        <thead><tr><th>위치</th><th>이전</th><th>이후</th></tr></thead>
+        <tbody>
+          <tr><td class="scr">평가(설계) 정보</td><td class="url">배지 type-info</td><td class="chg">그대로 (기준)</td></tr>
+          <tr><td class="scr">제목 헤더</td><td class="url">배지 <b>type-primary</b></td><td class="chg">배지 type-info — <b>색부터 달랐습니다</b></td></tr>
+          <tr><td class="scr">문항카드 목록</td><td class="url">맨아이콘 15px</td><td class="chg">배지 type-info</td></tr>
+          <tr><td class="scr">지문</td><td class="url">맨아이콘 17px</td><td class="chg">배지 type-info</td></tr>
+          <tr><td class="scr">문항 4개(메타)</td><td class="url">맨아이콘 13px</td><td class="chg"><b>제거</b> — 13px 줄에 38px 배지가 들어갈 자리가 아닙니다</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      <p>
+        <b>글자로 그리던 기호를 아이콘으로 바꿨습니다.</b>
+        접기 화살표 <code>∧</code> 와 재작성 <code>✏</code> 는 <b>문자</b>라서,
+        서체마다 이 자리를 어떻게 그리는지가 달라 짧은 막대처럼 보이거나 다른 모양으로 대체됩니다.
+        <code>IconChevronDown</code> · <code>IconRefreshCw</code> 로 교체했습니다.
+      </p>
+    </div>
+    <div class="note">
+      <p>
+        <b>회전 기준도 뒤집었습니다.</b> <code>∧</code>는 위를 가리키는 글자라 접힘에서 180도로
+        돌려 아래를 보게 했는데, <code>IconChevronDown</code>은 처음부터 아래를 가리킵니다.
+        이제 <b>닫힘 = 아래(펼치기) / 열림 = 위(접기)</b> 로 관례와 맞습니다.
+        "이전 답안 다시보기"는 기존에 반대로 동작하고 있었습니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─────────────── 헤더 ─────────────── -->
+  <section id="header">
+    <h2>헤더 <span class="n">5건 · StudentShell · report.css · _00-base-header.scss</span></h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col></colgroup>
+        <thead><tr><th>항목</th><th>변경</th><th>이유</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">배경색</td>
+            <td class="url">그라데이션 → <code>--blue-600</code></td>
+            <td class="chg">
+              <code>#3b82f6 → #60a5fa</code> 라 왼쪽 끝조차 교사 헤더보다 밝고 오른쪽으로 갈수록
+              더 밝아졌습니다. 학생/교사를 오갈 때 헤더 색이 바뀌어 보였습니다
+            </td>
+          </tr>
+          <tr>
+            <td class="scr">로고 → 뒤로가기</td>
+            <td class="url">반짝임 배지 → <code>IconChevronLeft</code> 버튼</td>
+            <td class="chg">
+              반짝임 로고는 <b>아무 동작도 하지 않는 장식</b>이었고, 학생 화면은 좌측 메뉴가 없어
+              되돌아갈 길이 없었습니다. 교사의 <code>.app-header__back</code> 과 같은 값
+            </td>
+          </tr>
+          <tr>
+            <td class="scr">브랜드 제목</td>
+            <td class="url">27px(교사) · 17px(학생) → <code>--ui-fs-xl</code> <b>20px</b></td>
+            <td class="chg">
+              27px 는 페이지 제목(<code>.users-title</code>)급이라 헤더가 본문보다 무거워
+              위계가 뒤집혔고, 17px 는 <b>타입 스케일에 없는 값</b>이라 패널 제목(16px)과
+              1px 차이로 눌려 보였습니다
+            </td>
+          </tr>
+          <tr>
+            <td class="scr">모바일 칩</td>
+            <td class="url">640 이하 아이콘만 + 드롭다운</td>
+            <td class="chg">
+              hover · 클릭 · 키보드 포커스 세 경로로 열리고 바깥 클릭 시 닫힙니다.
+              <code>변경</code> 버튼은 토글 버튼 <b>밖</b>에 뒀습니다(버튼 중첩 방지)
+            </td>
+          </tr>
+          <tr>
+            <td class="scr">아이콘 버튼 배경</td>
+            <td class="url">흰 배경 제거 → 호버에서만</td>
+            <td class="chg">
+              알림 · 로그아웃(<code>.header-icon-btn</code>)과 좁은 폭의 계정 전환
+              (<code>.active-role-switcher__button</code>) <b>두 규칙을 함께</b> 바꿨습니다.
+              한쪽만 고치면 어긋납니다. <b>전역이라 모든 화면에 적용됩니다</b>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note warn">
+      <p>
+        <b>확인 필요</b> — 학생 헤더의 <code>변경</code> 버튼은 <b>아무 일도 하지 않습니다.</b>
+        학생 식별을 JWT로 일원화하면서 <code>clearStudent</code> 가 빈 함수(<code>noop</code>)가
+        됐고, 남은 동작은 이미 있는 화면으로 <code>navigate</code> 하는 것뿐입니다
+        (<code>studentStore.ts:41</code>). 뒤로가기 버튼과 브랜드 링크가 그 역할을 대신합니다.
+        <b>지울지 결정이 필요합니다.</b>
+      </p>
+    </div>
+  </section>
+
+  <!-- ─────────────── 읽기 서체 ─────────────── -->
+  <section id="type">
+    <h2>읽기 서체 <span class="n">지문 · 문항</span></h2>
+    <p>
+      시험 지문의 관례를 따라 명조를 적용했습니다. 다만 <b>화면에서 한글 명조는 조건이 붙습니다.</b>
+    </p>
+    <div class="note warn">
+      <p>
+        <b>먼저 마루 부리로 시도했다가 되돌렸습니다.</b> 15px에서 글자가 깨져 보였는데,
+        원인은 <b>가로획 굵기</b>입니다. 15px 이하에서 한글 명조의 가로획은 1px 미만이 되고,
+        Windows 렌더링이 이를 회색으로 흐리거나 지워버립니다.
+        거기에 답안 <b>입력창까지</b> 명조로 바꾼 것(커서 옆 얇은 획은 더 거슬립니다)과,
+        마루 부리가 굵기마다 패밀리가 따로라(<code>MaruBuriBold</code>) 가짜 볼드가 덧씌워진 것이
+        겹쳤습니다.
+      </p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col></colgroup>
+        <thead><tr><th>결정</th><th>값</th><th>이유</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">서체</td>
+            <td class="url">Noto Serif KR 400·700<br><code>--font-reading</code></td>
+            <td class="chg">
+              <b>화면용 힌팅</b>이 들어 있어 작은 크기에서도 가로획이 버팁니다.
+              마루 부리는 인쇄·제목용 성격이라 뒤로 뺐습니다.
+              700을 함께 받은 건 <b>가짜 볼드를 막기 위해서</b>입니다
+            </td>
+          </tr>
+          <tr>
+            <td class="scr">크기 16px</td>
+            <td class="url">지문 · 문항 질문</td>
+            <td class="chg"><b>선택이 아니라 조건입니다.</b> 15px 이하는 위 문제가 그대로 재현됩니다</td>
+          </tr>
+          <tr>
+            <td class="scr">적용 범위</td>
+            <td class="url">지문 · 문항 <b>만</b></td>
+            <td class="chg">
+              답안 · 입력창은 고딕으로 남겨
+              <b>출제자의 글 = 명조 / 학생의 글 = 고딕</b> 이 형태로 드러나게 했습니다.
+              읽을 때와 쓸 때 서체가 같아야 줄 리듬도 유지됩니다
+            </td>
+          </tr>
+          <tr>
+            <td class="scr">줄 길이</td>
+            <td class="url">지문 <code>max-width: 42em</code></td>
+            <td class="chg">
+              한글 적정 줄 길이는 35~45자인데 <b>60자를 넘고 있었습니다</b>.
+              글자 크기보다 읽기 속도에 더 크게 작용합니다
+            </td>
+          </tr>
+          <tr>
+            <td class="scr">줄간격</td>
+            <td class="url">지문 1.6 · 문항 1.8</td>
+            <td class="chg">
+              줄 길이를 제한해서 좁은 줄간격이 가능해졌습니다.
+              <b>둘은 한 쌍입니다</b> — <code>max-width</code> 를 빼면 1.6은 답답해집니다
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      <p>
+        <b>지문은 <code>white-space: pre-wrap</code></b> 이라 문단 구분이 원문의 빈 줄입니다.
+        CSS로 문단 간격만 따로 벌릴 수 없어, 줄간격을 줄이면 문단 사이도 함께 줄어듭니다
+        (1.9→1.6 에서 30.4px → 25.6px). 문단 경계가 약하다고 느끼면 1.7 정도가 절충안입니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─────────────── 클래스 충돌 ─────────────── -->
+  <section id="collide">
+    <h2>클래스 이름 충돌 <span class="n">2건 · 원인 규명</span></h2>
+    <p>
+      빈 상태 카드를 고쳤는데 화면이 바뀌지 않는 문제가 있었습니다.
+      소스와 컴파일 결과를 확인해도 값은 정상이었습니다. 원인은 <b>같은 클래스 이름이 두 파일에</b>
+      있었던 것입니다.
+    </p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col></colgroup>
+        <thead><tr><th>클래스</th><th>정의 위치</th><th>처리</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr"><code>.empty-state</code></td>
+            <td class="url">student/components/EmptyState.css<br>teacher/components/EmptyState.css</td>
+            <td class="chg"><ul>
+              <li>둘 다 클래스 하나짜리(<b>0-1-0</b>)라 명시도로 못 가르고,
+                  <b>번들에서 나중에 온 쪽이 이깁니다</b></li>
+              <li>교사용이 뒤에 놓여 학생 화면에도 교사용 값이 적용됐습니다</li>
+              <li>두 파일의 값을 공통 토큰으로 통일 — 어느 쪽이 이기든 같아 보입니다</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr"><code>.error-state</code></td>
+            <td class="url">student · teacher 양쪽</td>
+            <td class="chg"><ul>
+              <li>같은 사정. 교사 쪽에는 <b>테두리 자체가 없었습니다</b></li>
+              <li>둘은 같은 자리에 번갈아 나오는데(목록이 비면 Empty, 실패하면 Error)
+                  한쪽만 카드였습니다</li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      <p>
+        압축된 번들에서 <code>.empty-state{…}</code> 규칙이 <b>1개로 병합</b>된 것을 확인했습니다.
+        값이 완전히 같아졌다는 뜻입니다.
+      </p>
+    </div>
+    <div class="note warn">
+      <p>
+        <b>같은 충돌이 하나 더 있습니다</b> — <code>.spinner</code> 도 학생·교사 양쪽에 있습니다.
+        지금 문제가 되진 않지만 한쪽을 고치면 다른 쪽에 영향이 갑니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─────────────── 그 밖에 ─────────────── -->
+  <section id="etc">
+    <h2>그 밖에 <span class="n">3건 · 공통 스타일</span></h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col></colgroup>
+        <thead><tr><th>대상</th><th>주소 · 파일</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">상태 카드<br>(GridStatus)</td>
+            <td class="url"><a href="http://127.0.0.1:3100/evaluation/proctor">/evaluation/proctor</a><br>grid-status.scss</td>
+            <td class="chg"><ul>
+              <li>768 이하 2열에서 개수가 <b>홀수면 마지막 하나가 한 줄</b>을 통째로 씁니다</li>
+              <li>필터바에 쓴 <code>:last-child:nth-child(odd)</code> 와 같은 선택자.
+                  카드 수가 <code>items</code> 길이로 정해져 화면마다 다르므로
+                  <b>CSS가 알아서 맞춥니다</b></li>
+              <li><code>GridStatus</code> 를 쓰는 모든 화면에 함께 적용</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">실시간 응시 카드</td>
+            <td class="url"><a href="http://127.0.0.1:3100/my/evaluations">/my/evaluations</a><br>_09-page-components.scss</td>
+            <td class="chg"><ul>
+              <li>호버 시 그림자 + <code>translateY(-1px)</code> —
+                  담당 과제 목록(<code>.teacher-assignment-card</code>)과 같은 값</li>
+              <li>탭 셋(응시 대기 · 진행 중 · 완료)이 같은 카드를 다시 그려 <b>규칙 한 곳</b>이면 끝</li>
+              <li>스켈레톤은 제외 — 로딩 자리표시자가 반응하면 누를 수 있는 것처럼 보입니다</li>
+              <li><code>:focus-within</code> 추가(부상은 호버에서만 — 포커스는 스크롤 중에도 걸립니다)</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">본문 여백</td>
+            <td class="url">StudentShell.css</td>
+            <td class="chg"><ul>
+              <li>1024 이하 좌우 <b>15px</b> — 관리자 <code>.users-layout</code> 과 같은 값</li>
+              <li>헤더에도 같은 값을 줬습니다. 본문만 줄이면 로고와 카드의 시작선이 어긋납니다</li>
+              <li><code>.student-page</code> 의 배경 제거 — 셸이 끝나는 지점에서 색이 끊겨 보였습니다</li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── 남은 것 ─────────────── -->
+  <section id="todo">
+    <h2>남은 것 · 확인 필요</h2>
+
+    <div class="note warn">
+      <p>
+        <b>1. 아직 손대지 않은 학생 화면 3개</b> — 학생 앱은 4단계 흐름인데 목록·작성만 정리했습니다.
+        셋 다 <code>StudentShell</code> · <code>ExamLayout</code> · <code>ExamPages.css</code> 를
+        공유해 <b>공통 부분은 이미 따라와 있고</b>, 각 화면 고유 블록만 남았습니다.
+      </p>
+      <p>
+        인용 표기 <code>.../cite</code> · 글쓰기 피드백 <code>.../feedback</code> ·
+        리포트 <code>.../report</code><br>
+        (<code>.exam-actions</code> · <code>.citation-status</code> · <code>.fb-*</code> ·
+        <code>.cite-habit</code> 등)
+      </p>
+    </div>
+
+    <div class="note">
+      <p>
+        <b>2. <code>변경</code> 버튼</b> — 아무 동작도 하지 않습니다(위 헤더 절 참고).
+        지우면 <code>handleChange</code> · <code>clearStudent</code> 사용처 ·
+        <code>.student-chip__change</code> CSS가 함께 정리됩니다.
+      </p>
+    </div>
+
+    <div class="note">
+      <p>
+        <b>3. 지문 줄 길이 · 줄간격</b> — <code>max-width: 42em</code> 과
+        <code>line-height: 1.6</code> 은 한 쌍입니다. 오른쪽에 생기는 빈 자리가 걸리면
+        <code>50em</code> + <code>1.7</code> 이 절충안입니다. 실제 지문을 읽어보고
+        <b>답답한지 허전한지</b>로 판단하시면 됩니다.
+      </p>
+    </div>
+
+    <div class="note">
+      <p>
+        <b>4. 남은 글자 아이콘</b> — <code>FeedbackBlock.tsx:602</code> 의
+        "글쓰기 개선 제안" 제목에 <code>✏</code> 가 하나 남아 있습니다.
+        이 컴포넌트를 세 화면이 공유하므로 모두에 보입니다.
+        그 자리는 <code>IconLightbulb</code> 가 어울립니다.
+      </p>
+    </div>
+
+    <div class="note">
+      <p>
+        <b>5. <code>SparkleIcon</code></b> — 뒤로가기 버튼으로 교체하면서 쓰는 곳이 없어졌지만
+        <code>student/components/icons.tsx:64</code> 에 정의만 남아 있습니다.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <code>feature/front-goldking-new</code> · <code>3f9e2371..37a9b3d8</code> · 푸시 완료 ·
+    <code>tsc --noEmit</code> · <code>vite build</code> 통과 ·
+    직전 커밋 <code>d7e8b553</code>(필터바 공통화)에 이어지는 작업
+  </footer>
+
+</div>
+
+</body></html>

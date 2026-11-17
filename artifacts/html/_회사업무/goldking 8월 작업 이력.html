@@ -1,0 +1,477 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>goldking 8월 작업 이력</title>
+<style>
+  :root {
+    --ground:      #f5f7fa;
+    --surface:     #ffffff;
+    --surface-2:   #eef2f7;
+    --ink:         #131820;
+    --ink-2:       #3d495f;
+    --ink-3:       #6b7687;
+    --rule:        #dbe1eb;
+    --rule-soft:   #e8ecf3;
+    --accent:      #2d76f7;
+    --accent-2:    #2549b7;
+    --accent-wash: #e8f0fe;
+    --brand:       #0f766e;
+    --brand-wash:  #e5f3f1;
+    --ui:          #b45309;
+    --ui-wash:     #fdf3e5;
+    --code-bg:     #eef2f8;
+    --shadow:      0 1px 2px rgba(19,24,32,.05), 0 10px 30px -24px rgba(19,24,32,.6);
+
+    --font-body: "Segoe UI Variable Text", "Segoe UI", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-mono: "Cascadia Mono", "Cascadia Code", ui-monospace, Consolas, "Liberation Mono", monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #0e1117;
+      --surface:     #161a21;
+      --surface-2:   #1d222b;
+      --ink:         #eef1f7;
+      --ink-2:       #b4c1d7;
+      --ink-3:       #8590a3;
+      --rule:        rgba(255,255,255,.11);
+      --rule-soft:   rgba(255,255,255,.06);
+      --accent:      #4aa8ff;
+      --accent-2:    #8ab7ff;
+      --accent-wash: rgba(74,168,255,.12);
+      --brand:       #4ec9b5;
+      --brand-wash:  rgba(78,201,181,.12);
+      --ui:          #f0a63f;
+      --ui-wash:     rgba(240,166,63,.12);
+      --code-bg:     rgba(255,255,255,.045);
+      --shadow:      0 1px 2px rgba(0,0,0,.45), 0 10px 30px -24px rgba(0,0,0,.95);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:      #0e1117;
+    --surface:     #161a21;
+    --surface-2:   #1d222b;
+    --ink:         #eef1f7;
+    --ink-2:       #b4c1d7;
+    --ink-3:       #8590a3;
+    --rule:        rgba(255,255,255,.11);
+    --rule-soft:   rgba(255,255,255,.06);
+    --accent:      #4aa8ff;
+    --accent-2:    #8ab7ff;
+    --accent-wash: rgba(74,168,255,.12);
+    --brand:       #4ec9b5;
+    --brand-wash:  rgba(78,201,181,.12);
+    --ui:          #f0a63f;
+    --ui-wash:     rgba(240,166,63,.12);
+    --code-bg:     rgba(255,255,255,.045);
+    --shadow:      0 1px 2px rgba(0,0,0,.45), 0 10px 30px -24px rgba(0,0,0,.95);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0; background: var(--ground); color: var(--ink);
+    font-family: var(--font-body); font-size: 15px; line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page { max-width: 1080px; margin: 0 auto; padding: 48px 24px 88px; display: flex; flex-direction: column; gap: 46px; }
+
+  .masthead { display: flex; flex-direction: column; gap: 14px; border-bottom: 2px solid var(--ink); padding-bottom: 26px; }
+  .kicker { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+  h1 { margin: 0; font-size: clamp(28px, 4.6vw, 38px); line-height: 1.14; letter-spacing: -.022em; font-weight: 700; text-wrap: balance; }
+  .standfirst { margin: 0; max-width: 66ch; color: var(--ink-2); }
+
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); gap: 12px; }
+  .stat {
+    border: 1px solid var(--rule); border-radius: 10px; background: var(--surface);
+    padding: 13px 16px; display: flex; flex-direction: column; gap: 2px; box-shadow: var(--shadow);
+  }
+  .stat__num { font-size: 25px; font-weight: 700; letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.15; }
+  .stat__label { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-3); }
+
+  section { display: flex; flex-direction: column; gap: 18px; scroll-margin-top: 16px; }
+  h2 { margin: 0; font-size: 21px; letter-spacing: -.015em; font-weight: 700; padding-bottom: 9px; border-bottom: 1px solid var(--rule); }
+  h3 { margin: 0; font-size: 15.5px; font-weight: 700; }
+  p { margin: 0; }
+  .lead { max-width: 68ch; color: var(--ink-2); font-size: 14.5px; }
+
+  code { font-family: var(--font-mono); font-size: .86em; background: var(--code-bg); padding: .1em .38em; border-radius: 4px; word-break: break-word; }
+
+  .toc { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1px 24px;
+         padding: 16px 20px; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; box-shadow: var(--shadow); }
+  .toc a { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-2); text-decoration: none; padding: 5px 0; display: block; }
+  .toc a:hover { color: var(--accent); }
+  .toc a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+  /* 타임라인 — 실제 날짜 순서가 있는 구간이라 날짜를 축으로 쓴다 */
+  .timeline { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 20px; }
+  .tl { display: grid; grid-template-columns: 84px 1fr; gap: 18px; align-items: start; }
+  .tl__date {
+    font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--accent);
+    padding-top: 3px; font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .tl__body { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .tl__body p { font-size: 14.5px; color: var(--ink-2); max-width: 64ch; }
+  .tl__count { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-3); }
+
+  .topics { display: flex; flex-direction: column; gap: 14px; }
+  .topic { border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); box-shadow: var(--shadow); overflow: hidden; }
+  .topic__head {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px;
+    padding: 13px 18px; border-bottom: 1px solid var(--rule-soft); background: var(--surface-2);
+  }
+  .topic__count { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-3); }
+  .topic__body { padding: 13px 18px 16px; display: flex; flex-direction: column; gap: 9px; }
+  .topic__lede { font-size: 14px; color: var(--ink-2); }
+  .items { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; font-size: 14px; color: var(--ink-2); }
+  .items b { color: var(--ink); font-weight: 650; }
+
+  .tag {
+    display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 99px;
+    font-family: var(--font-mono); font-size: 10.5px; font-weight: 700; letter-spacing: .03em; white-space: nowrap;
+  }
+  .tag--brand { color: var(--brand); background: var(--brand-wash); }
+  .tag--ui    { color: var(--ui);    background: var(--ui-wash); }
+  .tag--fix   { color: var(--accent-2); background: var(--accent-wash); }
+
+  .table-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; min-width: 520px; }
+  th, td { text-align: left; padding: 10px 15px; border-bottom: 1px solid var(--rule-soft); vertical-align: top; }
+  thead th { font-family: var(--font-mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase;
+             color: var(--ink-3); font-weight: 600; background: var(--surface-2); border-bottom: 1px solid var(--rule); white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.mono { font-family: var(--font-mono); font-size: 12px; white-space: nowrap; }
+  td.num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+
+  .note { display: flex; flex-direction: column; gap: 5px; border-left: 3px solid var(--accent);
+          background: var(--accent-wash); border-radius: 0 7px 7px 0; padding: 12px 15px; font-size: 14px; }
+  .note__label { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .09em; text-transform: uppercase; font-weight: 700; color: var(--ink-2); }
+
+  footer { border-top: 1px solid var(--rule); padding-top: 20px; font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); line-height: 1.75; }
+
+  @media (max-width: 680px) {
+    .page { padding: 34px 16px 64px; gap: 34px; }
+    .tl { grid-template-columns: 1fr; gap: 4px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="kicker">dfe-front · feature/front-goldking · 2026년 8월</div>
+    <h1>goldking 8월 작업 이력</h1>
+    <p class="standfirst">
+      8월 7일부터 20일까지 2주간의 작업. 한 줄로 요약하면
+      <b>화면마다 제각각이던 마크업을 공통 컴포넌트·규격으로 수렴시키는 작업</b>이었다.
+      브랜드 컬러 전환에서 시작해 버튼·라벨·모달·패널·테이블 순으로 내려갔고, 셀렉트 개편으로 마무리했다.
+    </p>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><span class="stat__num">56</span><span class="stat__label">커밋</span></div>
+    <div class="stat"><span class="stat__num">14일</span><span class="stat__label">08-07 → 08-20</span></div>
+    <div class="stat"><span class="stat__num">7</span><span class="stat__label">작업 주제</span></div>
+    <div class="stat"><span class="stat__num">11</span><span class="stat__label">셀렉트 개편 화면</span></div>
+  </div>
+
+  <nav class="toc" aria-label="목차">
+    <a href="#flow">2주 흐름</a>
+    <a href="#brand">브랜드 컬러 전환</a>
+    <a href="#buttons">버튼 · 아이콘</a>
+    <a href="#labels">라벨 · 폼 마크업</a>
+    <a href="#modals">모달 구조</a>
+    <a href="#panels">패널 · 타이틀 아이콘</a>
+    <a href="#tables">테이블 · 카드 · 배너</a>
+    <a href="#select">셀렉트 개편</a>
+    <a href="#open">남은 것</a>
+  </nav>
+
+  <!-- ============================================================ -->
+  <section id="flow">
+    <h2>2주 흐름</h2>
+    <p class="lead">
+      순서에 이유가 있었다. 색상 체계가 정리돼야 버튼·라벨 규격을 잡을 수 있고,
+      규격이 잡혀야 공통 컴포넌트로 옮길 수 있다. 실제로 그 순서로 진행됐다.
+    </p>
+
+    <ol class="timeline">
+      <li class="tl">
+        <span class="tl__date">08-07</span>
+        <div class="tl__body">
+          <h3>브랜드 컬러 teal → primary blue</h3>
+          <span class="tl__count">9커밋</span>
+          <p>청록 계열을 블루로 전면 전환. 관리자 모달·라벨 마크업 통일과 로그인 화면 정리가 함께 진행됐다.</p>
+        </div>
+      </li>
+      <li class="tl">
+        <span class="tl__date">08-10</span>
+        <div class="tl__body">
+          <h3>화면을 공통 컴포넌트로 전환</h3>
+          <span class="tl__count">10커밋</span>
+          <p>연합 상세 · API 성능 기록 · 메뉴 관리 헤더를 <code>MainHeader</code> · <code>GridStatus</code> · <code>Panel</code> · <code>Modal</code> 패턴으로 개편.</p>
+        </div>
+      </li>
+      <li class="tl">
+        <span class="tl__date">08-11 ~ 12</span>
+        <div class="tl__body">
+          <h3>버튼 규격 통일</h3>
+          <span class="tl__count">11커밋</span>
+          <p>아이콘 크기 · 버튼 클래스 · <code>btn-shadow</code> 적용을 공통 규격으로 수렴. teal 잔여분도 이때 정리됐다.</p>
+        </div>
+      </li>
+      <li class="tl">
+        <span class="tl__date">08-13 ~ 14</span>
+        <div class="tl__body">
+          <h3>라벨 · 선택 컨트롤 · 배너 톤</h3>
+          <span class="tl__count">22커밋</span>
+          <p>가장 밀도 높은 구간. 라벨 마크업, 라디오·체크박스 간격, 패널 헤더 아이콘, 배너·카드 색상 규칙을 한 번에 정리.</p>
+        </div>
+      </li>
+      <li class="tl">
+        <span class="tl__date">08-18</span>
+        <div class="tl__body">
+          <h3>목록 테이블 정리</h3>
+          <span class="tl__count">2커밋</span>
+          <p>열 폭·정렬을 내용에 맞게 조정. 플랫폼 사용 통계 필터 라벨·카드 색상도 함께.</p>
+        </div>
+      </li>
+      <li class="tl">
+        <span class="tl__date">08-20</span>
+        <div class="tl__body">
+          <h3>셀렉트 개편 · 남은 패널·페이징</h3>
+          <span class="tl__count">2커밋</span>
+          <p>긴 목록 셀렉트를 검색 가능 셀렉트로 교체하고, 미처 통일되지 않았던 패널 헤더와 페이징을 마저 맞췄다.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="brand">
+    <h2>브랜드 컬러 전환</h2>
+    <div class="topics">
+      <article class="topic">
+        <div class="topic__head"><h3>teal / ok → primary blue</h3><span class="tag tag--brand">08-07 ~ 08-12</span><span class="topic__count">6커밋</span></div>
+        <div class="topic__body">
+          <ul class="items">
+            <li>Switch <code>teal</code> 클래스 제거, 버튼 teal → primary</li>
+            <li>teal/ok <b>하드코딩 색상</b>을 primary blue 토큰 참조로 정리</li>
+            <li>슬라이더 · 버튼의 <code>ok</code> 색상 primary 전환</li>
+            <li><code>--ok-soft</code> 토큰 자체를 블루 톤으로 변경</li>
+            <li>관리자 모달 · 라벨 마크업 통일과 함께 teal → blue 정리</li>
+            <li>버튼 아이콘 규격 통일과 함께 <b>마지막 잔여분</b> 전환 (08-11)</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="buttons">
+    <h2>버튼 · 아이콘</h2>
+    <div class="topics">
+      <article class="topic">
+        <div class="topic__head"><h3>규격 통일</h3><span class="tag tag--ui">08-11 ~ 08-12</span></div>
+        <div class="topic__body">
+          <ul class="items">
+            <li><b>버튼 아이콘 규격 통일</b> — 아이콘 크기를 <code>size={15}</code>로 수렴 (현재 코드 기준 <b>228곳</b>)</li>
+            <li><b>버튼 클래스를 공통 변형으로 통일</b> + <code>btn-shadow</code> 적용 정리</li>
+            <li>삭제 확인 버튼 · 조회 버튼 스타일 · 문구 통일</li>
+            <li><code>btn-outline-danger btn-up</code> 조합에 <code>btn-shadow</code> 보강</li>
+            <li>과제 응시 버튼 클래스 통일 및 내 평가 액션 아이콘 추가</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="topic">
+        <div class="topic__head"><h3>아이콘 추가 · 정렬 수정</h3><span class="tag tag--fix">08-12 ~ 08-13</span></div>
+        <div class="topic__body">
+          <ul class="items">
+            <li>성취기준 선택 모달 · 노출 지연 변경 확인 모달 저장 버튼에 <code>IconSave</code> 추가</li>
+            <li>유사도 검사 플래그 해제 버튼 아이콘을 <code>IconX</code>로 교체</li>
+            <li>아이콘 전용 버튼에 <b>헤더와 동일한 스타일 툴팁</b> 적용</li>
+            <li>브레드크럼 홈 아이콘 · 헤더 알림 팝오버 버튼 아이콘 <b>세로 정렬</b> 수정</li>
+            <li>메뉴 Actor 접근 권한 툴바 버튼 깨짐 수정</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="labels">
+    <h2>라벨 · 폼 마크업</h2>
+    <div class="topics">
+      <article class="topic">
+        <div class="topic__head"><h3>라벨 규격</h3><span class="tag tag--ui">08-07 ~ 08-18</span></div>
+        <div class="topic__body">
+          <ul class="items">
+            <li>등록/수정 폼 <b>필수 라벨</b>을 <code>form-label required</code>로 통일</li>
+            <li><code>ResourceForm</code>의 <code>&lt;legend&gt;</code>를 <code>&lt;label&gt;</code>로 통일</li>
+            <li>필터바 <b>조회 조건 · 범위 라벨</b>을 <code>span + font-bold</code>로 통일</li>
+            <li>알림 목록 유형 셀렉트의 <b><code>'유형:'</code> 라벨 제거</b></li>
+            <li>메인화면 구성의 <b>'대상 역할' 라벨</b>을 필터바 스타일로 통일</li>
+            <li>플랫폼 사용 통계 <b>필터 라벨 · 카드 색상</b> 정리</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="topic">
+        <div class="topic__head"><h3>선택 컨트롤</h3><span class="tag tag--ui">08-10 ~ 08-13</span></div>
+        <div class="topic__body">
+          <ul class="items">
+            <li>라디오 · 체크박스 <b>선택 그룹 간격과 마크업 통일</b>, 남은 그룹 간격을 <code>gap-2</code>로 수렴</li>
+            <li>NEIS 동기화 대상 칩을 <b>라디오 칩과 같은 알약 형태</b>로 변경</li>
+            <li>알림관리 셀렉트 박스에 <code>form-select</code> 클래스 적용</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="modals">
+    <h2>모달 구조</h2>
+    <div class="topics">
+      <article class="topic">
+        <div class="topic__head"><h3>공통 Modal 패턴으로 전환</h3><span class="tag tag--ui">08-07 ~ 08-20</span></div>
+        <div class="topic__body">
+          <ul class="items">
+            <li><b>관리자 모달 · 라벨 마크업</b>을 공통 <code>Modal</code> · <code>form-field</code> 패턴으로 통일</li>
+            <li>모달 헤더 <b>설명이 길 때 아이콘이 윗줄로 밀려나는</b> 레이아웃 깨짐 수정</li>
+            <li>전처리 완료 확정 모달 아이콘 · 안내 배너 톤 통일</li>
+            <li>학교 추가 · 교사 추가 모달 — <code>maxWidth</code> 조정 후 <b>원래 폭(640px)으로 원복</b>, 설명 문구를 실제 맥락으로 교체</li>
+            <li><b>업무 배정 추가/수정 모달</b>을 공통 <code>Modal</code>로 전환 — 아이콘 헤더, <code>IconX</code>/<code>IconSave</code> 푸터, 입력 높이 38→36px 정렬 <span class="topic__count">(08-20)</span></li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="panels">
+    <h2>패널 · 타이틀 아이콘</h2>
+    <div class="topics">
+      <article class="topic">
+        <div class="topic__head"><h3>화면을 공통 컴포넌트로</h3><span class="tag tag--ui">08-10 ~ 08-13</span></div>
+        <div class="topic__body">
+          <p class="topic__lede">화면마다 직접 조립하던 헤더 · 필터바 · 요약카드를 공통 컴포넌트로 옮겼다.</p>
+          <ul class="items">
+            <li><b>연합 상세</b> — <code>MainSubHeader</code> · <code>GridStatus</code> · <code>Panel</code> · <code>Modal</code> 패턴으로 개편</li>
+            <li><b>API 성능 기록</b> — 공통 필터바 · <code>GridStatus</code> · <code>Panel</code></li>
+            <li><b>메뉴 관리 헤더</b> — <code>MainHeader</code> · <code>HelpBanner</code> · <code>GridStatus</code></li>
+            <li><b>채점현황</b> — 공통 <code>Panel</code> · <code>GridStatus</code></li>
+            <li><b>기출문항게시판</b> — 조회 범위를 공통 <code>Panel</code>로, 필터 패널을 자료공유와 동일한 한 줄 구조로</li>
+            <li><b>조회 조건 토글</b> — 공통 <code>BoxTabs</code>로 통일, 선택 강조를 블루로 변경</li>
+            <li>도움말 콘텐츠 <b>검색바 폭</b>이 패널을 채우지 않던 문제, 자문위원 위촉종료 <b>검색창 구조</b>를 공통 패턴으로</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="topic">
+        <div class="topic__head"><h3>타이틀 아이콘</h3><span class="tag tag--ui">08-13 · 08-20</span></div>
+        <div class="topic__body">
+          <ul class="items">
+            <li>리포트 생성 · 통계 조회 <b>패널 헤더에 아이콘 추가</b></li>
+            <li>기본 <b>통계 카드에 아이콘 추가</b></li>
+            <li><b>메뉴 트리</b> 제목 앞 아이콘 배지 — 헤더가 <code>space-between</code>이라 아이콘+텍스트를 래퍼로 묶어 좌/우 2분할 유지 <span class="topic__count">(08-20)</span></li>
+            <li><b>코드분류</b> 제목 앞 배지 — 형제 패널의 <code>IconInfo</code>/<code>IconList</code>와 겹치지 않게 <code>IconStorage</code> <span class="topic__count">(08-20)</span></li>
+            <li><b>내 보유 권한</b>을 <code>Panel</code>로 감싸 아래 패널과 구조 일치 <span class="topic__count">(08-20)</span></li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="tables">
+    <h2>테이블 · 카드 · 배너</h2>
+    <div class="topics">
+      <article class="topic">
+        <div class="topic__head"><h3>테이블</h3><span class="tag tag--fix">08-10 ~ 08-20</span></div>
+        <div class="topic__body">
+          <ul class="items">
+            <li><b>목록 테이블 열 폭 · 정렬을 내용에 맞게 정리</b> — 8월 중 가장 넓은 범위의 표 정리 (08-18)</li>
+            <li>공통코드 <b>하위 코드값 테이블의 셀 내용 겹침</b> 수정</li>
+            <li><b>학교정보 관리 페이징</b> — 동작하지 않던 자체 pager를 공통 <code>Pagination</code>으로 교체하고 실제 페이징 연결 <span class="topic__count">(08-20)</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="topic">
+        <div class="topic__head"><h3>카드 · 배너 · 색상 규칙</h3><span class="tag tag--fix">08-10 ~ 08-13</span></div>
+        <div class="topic__body">
+          <ul class="items">
+            <li><b>통계 카드 색상을 내용 의미에 맞는 규칙으로 통일</b></li>
+            <li>템플릿 카드의 <b>태그 줄을 제목 라인에 맞춤</b></li>
+            <li>중복채점 일관성 카드에서 <b>긴 설명이 원 아래로 떨어지던</b> 문제</li>
+            <li>경고 배너의 <b>보더가 배경보다 과하게 진하던</b> 문제</li>
+            <li>안내 배너와 기간 구분자의 <b>세로 정렬 어긋남</b></li>
+            <li>SVG 파비콘 추가</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="select">
+    <h2>셀렉트 개편 <span class="topic__count">08-20 · 2커밋 · 20파일</span></h2>
+    <p class="lead">
+      학교 목록처럼 100개 넘게 스크롤되던 셀렉트를 검색 가능 셀렉트(<code>SelectSearch</code>)로 교체했다.
+      화면 11곳, 셀렉트 12개.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>구분</th><th class="num">개수</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr><td>학교 셀렉트</td><td class="num">8</td><td>필터 4 · 폼 4</td></tr>
+          <tr><td>교과 셀렉트</td><td class="num">3</td><td><code>optgroup</code>을 <code>description</code>으로 이관해 검색 대상 확대</td></tr>
+          <tr><td>대상 평가 / 과목 필터</td><td class="num">2</td><td>—</td></tr>
+          <tr><td>공통 컴포넌트 보강</td><td class="num">2</td><td><code>ariaLabel</code> prop · <code>--filter</code> 폭 modifier</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      <span class="note__label">원칙</span>
+      <p>
+        <b>기존 동작을 바꾸지 않는 것.</b> 상태 타입(<code>number | ''</code>) · 필터 조건 · 검증 로직은 어느 파일도 건드리지 않았고,
+        <code>(비활성)</code> 접미사 · <code>전체 학교 (N개교)</code> 개수 표기 · <code>학교 #{id}</code> fallback 같은 기존 표기를 모두 살렸다.
+      </p>
+    </div>
+    <div class="note">
+      <span class="note__label">작업 중 드러난 것</span>
+      <p>
+        페이지마다 폼 컨트롤 규격이 다르다 — 전역 <b>36px</b>, 평가설계 <b>44px</b>, 연합 모달 <b>42px</b>, 사용자 등록 <b>38px</b>.
+        <code>SelectSearch</code>는 기본값이 36px 하나뿐이라 스코프별로 맞춰줘야 했다.
+        <b>새 화면에 넣을 때는 옆 컨트롤 높이를 먼저 확인할 것.</b>
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="open">
+    <h2>남은 것</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>항목</th><th>성격</th></tr></thead>
+        <tbody>
+          <tr><td>미사용 import 5건 (<code>tsc -b</code> 오류)</td><td>기존 문제. <code>IconChevronLeft/Right</code> · <code>IconExtract/X</code> · <code>IconUser</code></td></tr>
+          <tr><td><code>UserActorApplySection</code></td><td>어느 화면에도 렌더링되지 않는 죽은 코드</td></tr>
+          <tr><td>라이트라이트 리포트 필터바</td><td>개발 중이라 미착수. 자체 디자인 시스템(<code>.filter-bar</code>)을 쓴다</td></tr>
+          <tr><td>학교 목록 <code>size=100</code> 하드코딩</td><td><b>백엔드 협의 사안</b> — 학교가 100개를 넘으면 조용히 잘린다</td></tr>
+          <tr><td>다크모드 머지</td><td>완성본이 아니라 철회함. 구조 분석은 별도 핸드북에 정리</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    근거: <code>git log --author --since=2026-08-01</code> 56커밋 전수 · feature/front-goldking<br>
+    분류는 커밋 메시지 기준이며, 한 커밋이 여러 주제에 걸친 경우 대표 주제에 넣었다.
+  </footer>
+
+</div>
+
+</body></html>

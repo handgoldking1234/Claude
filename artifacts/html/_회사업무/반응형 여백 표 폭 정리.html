@@ -1,0 +1,520 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>반응형 여백 · 표 폭 정리</title>
+<style>
+  :root {
+    --ground:#f2f5f8; --surface:#fff; --surface-2:#e8edf4; --surface-3:#f8fafc;
+    --ink:#131820; --ink-2:#3f4a5c; --ink-3:#6b7686;
+    --rule:#dbe2ec; --rule-soft:#e9eef4;
+    --accent:#1d4ed8; --accent-2:#153ea8; --accent-wash:#e6edfd;
+    --new-c:#0a6b48; --new-wash:#e1f4ec;
+    --warn:#8a5200; --warn-wash:#fdf1dc;
+    --code-bg:#eceff5;
+    --shadow:0 1px 2px rgba(19,24,32,.05), 0 10px 26px -24px rgba(19,24,32,.65);
+    --f-body:"Segoe UI Variable Text","Segoe UI",ui-sans-serif,system-ui,-apple-system,sans-serif;
+    --f-mono:"Cascadia Mono","Cascadia Code",ui-monospace,Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:#0a0d12; --surface:#131820; --surface-2:#1b2029; --surface-3:#161a22;
+      --ink:#eceff6; --ink-2:#adb9cb; --ink-3:#7f8998;
+      --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+      --accent:#5c9bff; --accent-2:#93bcff; --accent-wash:rgba(92,155,255,.13);
+      --new-c:#4ec793; --new-wash:rgba(78,199,147,.13);
+      --warn:#e2a544; --warn-wash:rgba(226,165,68,.13);
+      --code-bg:rgba(255,255,255,.05);
+      --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -24px rgba(0,0,0,.95);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#0a0d12; --surface:#131820; --surface-2:#1b2029; --surface-3:#161a22;
+    --ink:#eceff6; --ink-2:#adb9cb; --ink-3:#7f8998;
+    --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+    --accent:#5c9bff; --accent-2:#93bcff; --accent-wash:rgba(92,155,255,.13);
+    --new-c:#4ec793; --new-wash:rgba(78,199,147,.13);
+    --warn:#e2a544; --warn-wash:rgba(226,165,68,.13);
+    --code-bg:rgba(255,255,255,.05);
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -24px rgba(0,0,0,.95);
+  }
+
+  *, *::before, *::after { box-sizing:border-box; }
+  body { margin:0; background:var(--ground); color:var(--ink);
+    font-family:var(--f-body); font-size:15px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:1080px; margin:0 auto; padding:40px 22px 90px; }
+
+  code { font-family:var(--f-mono); font-size:.88em; background:var(--code-bg);
+    border-radius:4px; padding:.1em .38em; overflow-wrap:anywhere; }
+  a { color:var(--accent); }
+  a:focus-visible { outline:2px solid var(--accent); outline-offset:2px; border-radius:4px; }
+
+  .eyebrow { font-family:var(--f-mono); font-size:11.5px; letter-spacing:.11em;
+    text-transform:uppercase; color:var(--ink-3); margin:0 0 10px; }
+  h1 { font-size:clamp(27px,4vw,36px); line-height:1.18; letter-spacing:-.022em;
+    margin:0 0 12px; text-wrap:balance; }
+  .lede { margin:0; max-width:66ch; color:var(--ink-2); font-size:16px; }
+
+  .meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+  .chip { display:inline-flex; align-items:baseline; gap:7px; background:var(--surface);
+    border:1px solid var(--rule); border-radius:999px; padding:5px 13px;
+    font-size:12.5px; box-shadow:var(--shadow); }
+  .chip b { font-family:var(--f-mono); font-weight:600; font-size:12px; }
+  .chip span { color:var(--ink-3); }
+
+  section { margin-top:46px; }
+  h2 { font-size:19px; letter-spacing:-.015em; margin:0 0 14px; padding-bottom:9px;
+    border-bottom:1px solid var(--rule); display:flex; flex-wrap:wrap;
+    align-items:baseline; gap:4px 12px; }
+  h2 .n { font-family:var(--f-mono); font-size:12px; color:var(--ink-3); font-weight:500; }
+  h3 { font-size:15px; margin:0 0 7px; }
+  p { margin:0 0 12px; max-width:78ch; }
+  p:last-child { margin-bottom:0; }
+
+  .toc { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    gap:1px 22px; margin-top:26px; padding:16px 20px; background:var(--surface);
+    border:1px solid var(--rule); border-radius:12px; box-shadow:var(--shadow); }
+  .toc a { color:var(--ink-2); text-decoration:none; font-size:14px; padding:3px 0; display:block; }
+  .toc a:hover { color:var(--accent); text-decoration:underline; text-underline-offset:3px; }
+  .toc a span { font-family:var(--f-mono); font-size:11px; color:var(--ink-3); }
+
+  .tablewrap { overflow-x:auto; border:1px solid var(--rule); border-radius:12px;
+    background:var(--surface); box-shadow:var(--shadow); }
+  table { border-collapse:collapse; width:100%; min-width:720px; }
+  colgroup .c-scr { width:21%; }
+  colgroup .c-url { width:26%; }
+  th, td { text-align:left; padding:11px 16px; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; }
+  thead th { font-family:var(--f-mono); font-size:10.5px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--ink-3); font-weight:600; background:var(--surface-3); }
+  tbody tr:last-child td { border-bottom:0; }
+  td.scr { font-weight:600; }
+  td.url { font-family:var(--f-mono); font-size:12px; color:var(--accent-2); word-break:break-all; }
+  td.chg { font-size:13px; color:var(--ink-2); }
+  td.chg b { color:var(--ink); }
+  td.chg ul { margin:0; padding-left:16px; }
+  td.chg li { margin-bottom:3px; }
+  td.chg li:last-child { margin-bottom:0; }
+  td.sha { font-family:var(--f-mono); font-size:12px; color:var(--ink-3);
+    font-variant-numeric:tabular-nums; white-space:nowrap; }
+
+  .note { border:1px solid var(--rule); border-left:3px solid var(--accent);
+    border-radius:9px; background:var(--surface); padding:15px 18px;
+    box-shadow:var(--shadow); margin-bottom:12px; }
+  .note:last-child { margin-bottom:0; }
+  .note.warn { border-left-color:var(--warn); }
+  .note p { font-size:14px; color:var(--ink-2); }
+
+  footer { margin-top:52px; padding-top:16px; border-top:1px solid var(--rule);
+    font-size:12.5px; color:var(--ink-3); }
+
+  @media (max-width:640px) {
+    table { min-width:620px; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">작업 이력 · 2026-09-10</p>
+    <h1>반응형 여백 · 표 폭 정리</h1>
+    <p class="lede">
+      좁은 폭에서 요소가 겹치거나 글자가 한 글자씩 끊기던 곳을 정리했습니다.
+      증상은 제각각이었지만 원인은 <b>고정 px</b>과 <b>접힘을 막는 설정</b> 둘로 모입니다.
+    </p>
+    <div class="meta">
+      <span class="chip"><span>브랜치</span><b>feature/front-goldking-new</b></span>
+      <span class="chip"><span>커밋</span><b>eb57c514</b></span>
+      <span class="chip"><span>변경</span><b>55 files · +616 −170</b></span>
+      <span class="chip"><span>검증</span><b>tsc ✓ · build ✓ · 839/844</b></span>
+    </div>
+    <nav class="toc">
+      <a href="#token">여백 토큰 <span>· :root 로</span></a>
+      <a href="#fold">접히지 못하던 곳 <span>· 4종</span></a>
+      <a href="#break">글자가 끊기던 곳 <span>· 5종</span></a>
+      <a href="#table">표 colgroup <span>· 12개</span></a>
+      <a href="#pager">페이지네이션</a>
+      <a href="#screens">화면별 확인 <span>· 링크</span></a>
+      <a href="#todo">남은 것 <span>· 44개 표</span></a>
+    </nav>
+  </header>
+
+  <!-- ─────────────── 여백 토큰 ─────────────── -->
+  <section id="token">
+    <h2>여백 토큰을 <code>:root</code> 로 <span class="n">_tokens.scss</span></h2>
+    <p>
+      <code>--ui-panel-pad-x/-y/-edge-y</code> 가 <code>.ui-panel</code> 안에만 선언돼 있어
+      <b>패널이 아닌 컴포넌트는 쓸 수 없었습니다.</b> 스텝퍼처럼 패널과 나란히 놓이는 박스도
+      같은 값을 써야 시작선이 맞으므로 <code>:root</code> 로 올렸습니다.
+    </p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col></colgroup>
+        <thead><tr><th>구간</th><th>좌우</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr><td class="scr">기본</td><td class="url">24px</td><td class="chg">변화 없음</td></tr>
+          <tr><td class="scr">≤768px</td><td class="url"><b>12px</b></td><td class="chg">8px 에서 한 단계 늘렸습니다 — 768 에서 바로 8px 로 가면 헤더 아이콘 배지(38px)가 테두리에 붙어 제목이 패널 밖으로 밀려난 것처럼 보입니다</td></tr>
+          <tr><td class="scr">≤440px</td><td class="url"><b>10px</b></td><td class="chg">눈금(8/12) 사이 값. 상태 카드와 맞췄습니다</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      <p>
+        <b>토큰을 따르게 만든 곳</b> — <code>.panel-inner</code> · <code>.panel-sm</code> ·
+        <code>.eval-step-panel2</code>(평가설계 단계) · <code>.tstd-stepper</code>.
+        모두 18px 또는 30px 을 박아 두고 있어 좁은 폭에서 자기만 넓게 남았습니다.
+        <code>.panel-inner</code> 처럼 값이 다른 곳은 토큰을 재선언해 단계만 물려받습니다.
+      </p>
+    </div>
+    <div class="note">
+      <p>
+        <b>필터바 좌우 여백</b> — <code>p-2 px-4</code> 관용구가 <b>20개 파일 23곳</b>에
+        흩어져 있었습니다. <code>.px-4</code> 자리를 대신하는 <code>.ui-filters-box</code> 로 바꿔,
+        넓은 화면 16px 는 그대로 두고 좁은 폭에서만 토큰을 따르게 했습니다.
+        세로는 화면마다 <code>p-2</code>/<code>p-4</code> 로 다르게 쓰고 있어 건드리지 않았습니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─────────────── 접힘 ─────────────── -->
+  <section id="fold">
+    <h2>접히지 못하던 곳 <span class="n">4종</span></h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col></colgroup>
+        <thead><tr><th>대상</th><th>원인과 처리</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">열 병합<br><code>.grid-column-2/3</code></td>
+            <td class="chg">
+              768 이하에서 그리드는 1열이 되는데 <code>grid-column: span 2</code> 가 남아
+              <b>브라우저가 없던 2번째 열을 암시적으로 만듭니다.</b> 병합되지 않은 형제는
+              반쪽만 쓰고 오른쪽이 빕니다. 접힐 때 병합도 함께 풉니다
+            </td>
+          </tr>
+          <tr>
+            <td class="scr">폼 2열<br><code>.form-grid-2</code></td>
+            <td class="chg">
+              어느 폭에서나 2열 고정이었습니다. 640 이하 1열로 접습니다.
+              항목이 홀수면 마지막 하나가 반 칸만 차지해 오른쪽이 비기도 했습니다
+            </td>
+          </tr>
+          <tr>
+            <td class="scr">분류게시판</td>
+            <td class="chg">
+              열 정의가 <b>인라인 <code>style</code></b> 이라 어떤 미디어쿼리로도 접을 수 없었습니다.
+              공통 <code>.grid-menu-contents-layout</code> 에 <code>column-280</code> 변형을 더해
+              그 접힘 규칙을 물려받게 했습니다
+            </td>
+          </tr>
+          <tr>
+            <td class="scr"><code>flex-wrap</code> 누락</td>
+            <td class="chg">
+              StepPanel 헤더 · Step6 하단 · 학생목록/학급선택 헤더 · 수행지시어 필터에
+              <code>flex-wrap</code> 이 없어 줄바꿈 자체가 불가능했습니다.
+              넘친 만큼 가로 스크롤이 생기거나 글자가 눌렸습니다
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── 글자 끊김 ─────────────── -->
+  <section id="break">
+    <h2>글자가 끊기던 곳 <span class="n">5종</span></h2>
+    <div class="note">
+      <p>
+        <b>한글은 기본값(<code>word-break: normal</code>)에서 음절 사이가 모두 줄바꿈 기회입니다.</b>
+        그래서 min-content 가 <b>한 글자 폭</b>이 되고, 그 값을 하한으로 쓰는
+        <code>min-width: min-content</code> 가 제 역할을 못 합니다.
+        옆 요소가 자리를 다 가져가면 글자가 세로로 쌓입니다.
+      </p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col></colgroup>
+        <thead><tr><th>대상</th><th>처리</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">패널 제목</td>
+            <td class="chg">
+              <code>word-break: keep-all</code> 로 낱말이 안 끊기게. 다만 <code>채점자 배정</code> 처럼
+              <b>띄어쓰기가 있으면 keep-all 로도 막을 수 없어</b>(공백도 줄바꿈 기회) 제목 줄은
+              <code>nowrap</code> 으로 둡니다. StepPanel 이 제목을 <code>&lt;span&gt;</code> 으로 감싸
+              기존 <code>&gt; div</code> 규칙에서 새어 나가고 있어 <code>&gt; span</code> 도 함께 잡았습니다
+            </td>
+          </tr>
+          <tr>
+            <td class="scr">TitleLine</td>
+            <td class="chg">
+              제목 <code>nowrap</code> + 축소 금지. 640 이하에서는 설명이 제목 아래로 내려갑니다.
+              <code>order</code> 로 구분선을 설명보다 앞에 세워 첫 줄이
+              <code>채점 정책 ──────</code> 로 마감되게 했습니다 — 그냥 두면 구분선이 셋째 줄에 홀로 남습니다
+            </td>
+          </tr>
+          <tr>
+            <td class="scr">안내 배너</td>
+            <td class="chg">
+              본문에 <code>flex-basis: 0</code>. <b>flex 줄바꿈은 축소하기 전 크기로 판단</b>하는데
+              <code>auto</code> 면 그 기준이 문장 전체 폭이라, 글이 길어지는 순간 본문이 통째로
+              아이콘 아래로 내려갔습니다. 본문을 감싸는 태그가 <code>__info</code>·<code>p</code>·<code>span</code>
+              으로 제각각이라 셋 다 잡되 <code>footer</code>(버튼)는 접히도록 남겼습니다
+            </td>
+          </tr>
+          <tr>
+            <td class="scr">상태 카드</td>
+            <td class="chg">
+              <code>flex-wrap: nowrap</code> + 글자 블록 <code>min-width: 0</code>.
+              둘을 같이 걸어야 <b>줄어들 수 있는 글자</b>와 <b>줄어들지 않는 아이콘</b>이 성립합니다.
+              라벨은 <code>keep-all</code> 로 낱말 중간에서 끊지 않습니다
+            </td>
+          </tr>
+          <tr>
+            <td class="scr">학급 이름 · 카드 제목</td>
+            <td class="chg">
+              <code>2학년 1반</code> 이 <code>2학/년 1/반</code> 으로 끊기던 것,
+              담당과제 카드 제목의 <code>nowrap</code>+말줄임 3종 세트를 걷어내고
+              <code>keep-all</code> + <code>overflow-wrap: anywhere</code> 로
+              (공백 없는 긴 값만 강제로 끊습니다)
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── 표 ─────────────── -->
+  <section id="table">
+    <h2>표 colgroup <span class="n">12개 · px 최소폭</span></h2>
+    <p>
+      <code>%</code> 는 표가 좁아지면 같은 비율로 줄어들어 날짜·수험번호처럼 끊을 수 없는 값이
+      뭉개집니다. px 합계를 <code>minWidth</code> 로 걸면 그보다 좁아질 때
+      <b>뭉개는 대신 감싼 박스가 가로 스크롤</b>합니다.
+    </p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col></colgroup>
+        <thead><tr><th>표</th><th>합계</th><th>기준</th></tr></thead>
+        <tbody>
+          <tr><td class="scr">공통코드 상세</td><td class="url">1260px</td><td class="chg">11열. 설명이 가장 길고 번호·순서·사용은 짧습니다</td></tr>
+          <tr><td class="scr">감독현황 학생</td><td class="url">1020px</td><td class="chg">조치 버튼이 세로로 쌓여 그 열은 좁게</td></tr>
+          <tr><td class="scr">사용자 목록</td><td class="url">1030px</td><td class="chg">보유 역할에 배지가 여러 개 붙습니다</td></tr>
+          <tr><td class="scr">평가설계 문항</td><td class="url">990px</td><td class="chg">% 에서 전환. 관리 열이 읽기전용본보다 20px 넓습니다</td></tr>
+          <tr><td class="scr">읽기전용 문항</td><td class="url">970px</td><td class="chg">위 표의 쌍둥이. 비율을 그대로 옮겼습니다</td></tr>
+          <tr><td class="scr">사용 이벤트</td><td class="url">950px</td><td class="chg">머리글이 <code>발/생/시/각</code> 으로 쌓이던 표</td></tr>
+          <tr><td class="scr">권한 신청</td><td class="url">950px</td><td class="chg">대상 평가가 가장 넓습니다</td></tr>
+          <tr><td class="scr">NEIS 이력</td><td class="url">960px</td><td class="chg">기존 minWidth 를 존중해 합계를 맞췄습니다</td></tr>
+          <tr><td class="scr">자문위원 해촉</td><td class="url">960px</td><td class="chg">목록이 비면 400px 로 낮추는 기존 처리를 그대로 뒀습니다</td></tr>
+          <tr><td class="scr">해촉 이력</td><td class="url">960px</td><td class="chg">평가명·사유가 문장에 가깝습니다</td></tr>
+          <tr><td class="scr">평가설계 학생</td><td class="url">670px</td><td class="chg">수험번호 <code>2026-633716-0001</code> 한 줄이 기준</td></tr>
+          <tr><td class="scr">채점현황 채점자</td><td class="url">660px</td><td class="chg">% 에서 전환</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note warn">
+      <p>
+        <b><code>colSpan</code> 불일치 2건을 찾아 고쳤습니다.</b>
+        열을 주석 처리하면서 값만 남아 <b>유령 열</b>이 생겼습니다 — 빈 상태 셀이 없는 열까지
+        뻗으면서 머리글 회색 띠가 중간에서 끊기고 오른쪽에 흰 영역이 남습니다.
+        평가설계 학생배정(7→6) · 표본 답안 확정(7→6).
+        전체 표를 훑어 다른 불일치는 없음을 확인했습니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─────────────── 페이지네이션 ─────────────── -->
+  <section id="pager">
+    <h2>페이지네이션 <span class="n">Pagination.tsx · 공통</span></h2>
+    <p>
+      640px 이하에서 버튼 창을 <b>8개 → 3개</b>로 줄이고,
+      <code>.box &gt; .users-footer</code> 의 좌우 여백을 20px → 8px 로 줄여 자리를 더 확보했습니다.
+    </p>
+    <div class="note">
+      <p>
+        <b>CSS 로는 가릴 수 없습니다.</b> 항목 배열이 페이지 수와 현재 위치에 따라 매번 달라져
+        몇 번째가 가운데인지 CSS 가 알 수 없고, 말줄임표가 엉뚱한 자리에 남습니다.
+        버튼 목록을 만드는 JS 단계에서 줄여야 말줄임표가 제자리에 붙습니다.
+      </p>
+    </div>
+    <div class="note warn">
+      <p>
+        <b>여백은 <code>.box &gt; .users-footer</code>(0-2-0)에 걸어야 했습니다.</b>
+        처음에 <code>.users-footer</code>(0-1-0)에 넣었더니 적용되지 않았습니다.
+        기본값도 12px 이 아니라 <b>20px</b> 이었습니다. 가려져 동작하지 않던 쪽 선언은 지웠습니다
+      </p>
+    </div>
+  </section>
+
+  <!-- ─────────────── 화면별 ─────────────── -->
+  <section id="screens">
+    <h2>화면별 확인 <span class="n">링크를 눌러 확인 · 모바일은 폭을 줄여서</span></h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col></colgroup>
+        <thead><tr><th>화면</th><th>주소</th><th>무엇을 볼지</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">평가설계<br>STEP 1~6</td>
+            <td class="url"><a href="http://127.0.0.1:3100/tds/evaluations/632689/designs/633708">/tds/evaluations/632689/designs/633708</a></td>
+            <td class="chg"><ul>
+              <li><code>STEP 4</code> 가 <code>STEP / 4</code> 로 끊기지 않음</li>
+              <li>제목 <code>채점자 배정</code> 한 줄 유지, 상태 배지는 아랫줄로</li>
+              <li><code>채점 정책</code> 설명이 제목 아래 한 줄로</li>
+              <li>STEP 4 — 학급/학생 목록 라벨, 검색바 100%, <b>빈 목록의 유령 열 사라짐</b></li>
+              <li>STEP 5 — 후보 교사 검색 필터 1열, 우측 빈 공간 사라짐</li>
+              <li>STEP 6 — 버튼이 위, 안내문이 아래 한 줄</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">감독 현황</td>
+            <td class="url"><a href="http://127.0.0.1:3100/evaluation/proctor">/evaluation/proctor</a></td>
+            <td class="chg"><ul>
+              <li>학생 현황 표 열 폭·가운데 정렬</li>
+              <li>보안 열의 배지와 위반 카운트가 위아래로</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">담당 과제 목록</td>
+            <td class="url"><a href="http://127.0.0.1:3100/my/assignments">/my/assignments</a></td>
+            <td class="chg"><ul>
+              <li>검색+새로고침 한 묶음 · 좌우 여백이 다른 화면과 같음</li>
+              <li>카드 제목이 잘리지 않고 접힘</li>
+              <li><code>튜터 결과 확인</code> 공통 버튼</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">실시간 응시</td>
+            <td class="url"><a href="http://127.0.0.1:3100/my/evaluations">/my/evaluations</a></td>
+            <td class="chg"><ul><li>카드 호버 시 그림자 + 부상(스켈레톤 제외)</li></ul></td>
+          </tr>
+          <tr>
+            <td class="scr">자료실 · 커뮤니티</td>
+            <td class="url"><a href="http://127.0.0.1:3100/community/share">/community/share</a></td>
+            <td class="chg"><ul>
+              <li>기간이 <b>테두리 하나</b>로 묶인 데이트피커</li>
+              <li>범위·정렬 셀렉트 반 칸씩</li>
+              <li>필터 박스 여백이 다른 화면과 같음</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">성적 산출</td>
+            <td class="url"><a href="http://127.0.0.1:3100/evaluation-result/grade-processing/calculate">…/grade-processing/calculate</a></td>
+            <td class="chg"><ul><li><b>640 이하에서 아이콘이 다시 보입니다</b> — 1열로 펴는 대신 2열 유지</li></ul></td>
+          </tr>
+          <tr>
+            <td class="scr">성적 확정</td>
+            <td class="url"><a href="http://127.0.0.1:3100/evaluation-result/grade-processing/confirm">…/grade-processing/confirm</a></td>
+            <td class="chg"><ul><li>상태 배지가 한 줄 전체 + 가운데</li></ul></td>
+          </tr>
+          <tr>
+            <td class="scr">성적 열람</td>
+            <td class="url"><a href="http://127.0.0.1:3100/evaluation-result/result-inquiry/score">…/result-inquiry/score</a></td>
+            <td class="chg"><ul><li>세로 구분선 없이 가운데 정렬로 쌓임</li></ul></td>
+          </tr>
+          <tr>
+            <td class="scr">NEIS 내보내기</td>
+            <td class="url"><a href="http://127.0.0.1:3100/evaluation-result/grade-processing/neis-export">…/neis-export</a></td>
+            <td class="chg"><ul><li>스텝퍼 좌우 여백이 아래 패널과 같음</li></ul></td>
+          </tr>
+          <tr>
+            <td class="scr">분류게시판</td>
+            <td class="url"><a href="http://127.0.0.1:3100/reference/category">/reference/category</a></td>
+            <td class="chg"><ul><li>768 이하 위아래로 쌓임</li></ul></td>
+          </tr>
+          <tr>
+            <td class="scr">내부표준화 상세</td>
+            <td class="url"><a href="http://127.0.0.1:3100/grading/internal-standardization/633715">/grading/internal-standardization/633715</a></td>
+            <td class="chg"><ul>
+              <li>AI 채점 버튼이 <b>왼쪽부터</b>, 표본 추출은 오른쪽 끝</li>
+              <li>표본 답안 표의 유령 열 사라짐</li>
+              <li>안내문 아이콘 옆에 글자가 붙어 있음</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">통계 조회 · 사용 통계</td>
+            <td class="url"><a href="http://127.0.0.1:3100/report/statistics">/report/statistics</a><br><a href="http://127.0.0.1:3100/support/statistics">/support/statistics</a></td>
+            <td class="chg"><ul>
+              <li>필터 박스 좌우 여백</li>
+              <li>사용 이벤트 표 머리글이 세로로 쌓이지 않음</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">알림센터 · 메뉴관리</td>
+            <td class="url"><a href="http://127.0.0.1:3100/notifications">/notifications</a><br><a href="http://127.0.0.1:3100/admin/menus">/admin/menus</a></td>
+            <td class="chg"><ul>
+              <li>알림 유형 필터 100%</li>
+              <li>접근 권한 패널 설명이 구분선에 닿지 않음</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">전역</td>
+            <td class="url">아무 화면</td>
+            <td class="chg"><ul>
+              <li>목록이 많은 화면에서 <b>페이지네이션이 한 줄에</b> 들어감</li>
+              <li>사이드바를 접고 메뉴를 클릭하면 툴팁이 사라짐</li>
+              <li>햄버거·헤더 아이콘은 평상시 배경 없이 호버에만 색</li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── 남은 것 ─────────────── -->
+  <section id="todo">
+    <h2>남은 것 · 확인 필요</h2>
+
+    <div class="note warn">
+      <p>
+        <b>1. colgroup 없는 표 44개</b> — 전체 점검에서 38개 파일 56개 표를 찾았고
+        이번에 12개를 넣었습니다. 열이 많을수록 증상이 심합니다.
+      </p>
+      <p>
+        <b>11열</b> 내부표준화 상세(연습, 표 4개) ·
+        <b>9열</b> 내부표준화 상세(확정, 표 3개) ·
+        <b>8열</b> 선임관리(표 5개) · 본채점 조정 · 내부표준화 목록 ·
+        <b>7열</b> 답안 수집 · 채점교사 · 역할 관리 —
+        나머지는 3~6열입니다.
+      </p>
+      <p>
+        기계적으로 넣으면 오히려 어색해집니다. 열마다 들어가는 값(날짜·배지·버튼·이름)이 달라
+        <b>최소 폭을 표별로 판단</b>해야 합니다. 화면을 보시며 지목해 주시면 그 순서로 넣겠습니다.
+      </p>
+    </div>
+
+    <div class="note warn">
+      <p>
+        <b>2. 이전부터 깨져 있던 테스트 5개</b> — 이번 작업 전에도 실패하던 것으로,
+        제 변경과 무관함을 기준선 비교로 확인했습니다.<br>
+        <code>front-progress.rows</code> 2 · <code>InternalStandardizationDetailSample.aiReason</code> 2 ·
+        <code>designAllInOneModel</code> 1
+      </p>
+      <p>
+        같은 맥락으로 <code>front-progress.rows.ts(756,10)</code> 의
+        <code>TS6133: 'inProgress' is declared but its value is never read</code> 도
+        원격 커밋에서 들어온 채 남아 있습니다.
+      </p>
+    </div>
+
+    <div class="note">
+      <p>
+        <b>3. <code>p-2</code> 만 쓰는 필터바 7곳</b> — 좌우가 이미 8px 라 모바일에서 문제가 없어
+        그대로 뒀습니다. 넓은 화면 기준을 16px 로 통일하려면 함께 바꿀 수 있습니다.
+      </p>
+    </div>
+
+    <div class="note">
+      <p>
+        <b>4. 담당 과제 카드의 <code>평가설계</code> 버튼</b> — 옆의 주 버튼만 공통
+        <code>.btn</code> 으로 바꿔서 높이가 42px 대 36px 로 어긋날 수 있습니다.
+        같이 맞출지 확인이 필요합니다.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <code>feature/front-goldking-new</code> · <code>f238dc2a..eb57c514</code> · 푸시 완료 ·
+    <code>tsc --noEmit</code> ✓ · <code>vite build</code> ✓ · 테스트 839/844(기준선과 동일)
+  </footer>
+
+</div>
+
+</body></html>

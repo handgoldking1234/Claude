@@ -1,0 +1,418 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>웹툰보드</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="로그라인부터 콘티, 컷 편집, 말풍선, 연재처 규격 내보내기까지. 웹툰 한 화를 한 자리에서 만드는 작업실.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;500;700&family=Nanum+Pen+Script&display=swap">
+<style>
+/* 레이아웃: 웹툰 한 화처럼 세로로 내려가는 컷(칸) — 칸 사이 여백(거터)과 말풍선이 설명을 맡아요 */
+:root{
+  --paper:#f6f7f4;      /* 원고 바탕 */
+  --panel:#ffffff;      /* 컷 안쪽 */
+  --ink:#141815;        /* 펜 선 · 본문 */
+  --ink-2:#5c645e;      /* 보조 글 */
+  --rule:#d9ddd7;       /* 칸 테두리 */
+  --green:#16a34a;      /* 웹툰보드 초록 — 시작 버튼 */
+  --green-ink:#ffffff;
+  --pencil:#3d6fd1;     /* 콘티 파란 연필 메모 */
+  --balloon:#ffffff;
+  --shadow:0 1px 0 rgba(20,24,21,.06),0 12px 32px -18px rgba(20,24,21,.28);
+  --f-display:"Black Han Sans","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --f-pen:"Nanum Pen Script","Apple SD Gothic Neo",cursive;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0f1311;--panel:#171c19;--ink:#eef1ee;--ink-2:#a3aca6;--rule:#2a312d;--green:#22c55e;--green-ink:#06210f;--pencil:#7ea4f0;--balloon:#1d2420;
+  --shadow:0 1px 0 rgba(0,0,0,.4),0 14px 36px -18px rgba(0,0,0,.7);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0f1311;--panel:#171c19;--ink:#eef1ee;--ink-2:#a3aca6;--rule:#2a312d;--green:#22c55e;--green-ink:#06210f;--pencil:#7ea4f0;--balloon:#1d2420;
+  --shadow:0 1px 0 rgba(0,0,0,.4),0 14px 36px -18px rgba(0,0,0,.7);color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:inherit}
+img{display:block;max-width:100%;height:auto}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+:focus-visible{outline:3px solid var(--pencil);outline-offset:3px;border-radius:6px}
+
+/* 상단 */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule)}
+.top .wrap{display:flex;align-items:center;gap:16px;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;text-decoration:none;font-size:17px}
+.logo i{width:30px;height:30px;border-radius:50%;background:var(--green);display:grid;place-items:center}
+.logo svg{width:16px;height:16px;stroke:var(--green-ink)}
+.top nav{margin-left:auto;display:flex;gap:4px;align-items:center}
+.top nav a.lk{text-decoration:none;color:var(--ink-2);font-size:14px;padding:6px 10px;border-radius:8px}
+.top nav a.lk:hover{color:var(--ink)}
+@media (max-width:640px){.top nav a.lk{display:none}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:700 15px/1 var(--f-body);text-decoration:none;border-radius:999px;padding:14px 22px;border:1.5px solid var(--ink);color:var(--ink);background:transparent;transition:transform .15s ease,background .15s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn.go{background:var(--green);border-color:var(--green);color:var(--green-ink)}
+.btn.sm{padding:9px 16px;font-size:14px}
+.btn small{font-weight:500;opacity:.8;font-size:13px}
+
+/* 첫 화면 */
+.hero{padding-block:64px 40px}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px;align-items:center}
+.eyebrow{font-size:13px;letter-spacing:.08em;color:var(--ink-2);font-weight:700}
+.hero h1{font-family:var(--f-display);font-weight:400;font-size:clamp(40px,5.6vw,68px);line-height:1.12;letter-spacing:-.01em;margin-top:14px}
+.hero h1 em{font-style:normal;color:var(--green)}
+.hero .lead{margin-top:20px;font-size:18px;color:var(--ink-2);max-width:30em}
+.ctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.fine{margin-top:14px;font-size:13px;color:var(--ink-2)}
+.shot{position:relative;background:var(--panel);border:2px solid var(--ink);border-radius:4px;box-shadow:var(--shadow);overflow:hidden}
+.shot img{width:100%}
+.memo{position:absolute;font-family:var(--f-pen);color:var(--pencil);font-size:26px;line-height:1.05;white-space:nowrap;pointer-events:none}
+.hero .stage{position:relative;padding:18px 0 34px}
+.hero .memo.m1{right:-6px;bottom:-4px;transform:rotate(-3deg)}
+.hero .memo.m1::before{content:"";position:absolute;left:-46px;top:-20px;width:40px;height:26px;border-left:2px solid var(--pencil);border-top:2px solid var(--pencil);border-radius:14px 0 0 0;transform:rotate(-8deg)}
+@media (max-width:880px){.hero .wrap{grid-template-columns:1fr;gap:32px}.hero{padding-block:40px 24px}}
+
+/* 거터 표시 — 웹툰 칸 사이 여백 */
+.gutter{height:56px;display:flex;align-items:center;justify-content:center}
+.gutter span{width:1px;height:100%;background:repeating-linear-gradient(var(--rule) 0 6px,transparent 6px 12px)}
+
+/* 섹션 머리 */
+.sec{padding-block:56px}
+.sec-h{display:grid;gap:10px;margin-bottom:36px;max-width:40em}
+.sec-h h2{font-family:var(--f-display);font-weight:400;font-size:clamp(30px,3.6vw,42px);line-height:1.2}
+.sec-h p{color:var(--ink-2)}
+
+/* 이렇게 써요 — 4컷 */
+.cuts{display:grid;gap:56px;counter-reset:cut}
+.cut{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:40px;align-items:center}
+.cut:nth-child(even){grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
+.cut:nth-child(even) .shot{order:2}
+.cut .txt{display:grid;gap:14px;min-width:0}
+.cut .no{font-family:var(--f-display);font-size:15px;display:inline-flex;align-items:center;gap:10px;color:var(--ink-2)}
+.cut .no b{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);font-weight:400;font-size:15px}
+.cut h3{font-family:var(--f-display);font-weight:400;font-size:28px;line-height:1.25}
+.balloon{position:relative;background:var(--balloon);border:2px solid var(--ink);border-radius:26px;padding:16px 20px;font-size:16px}
+.balloon::after{content:"";position:absolute;left:34px;bottom:-14px;width:22px;height:22px;background:var(--balloon);border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:skewX(-28deg) rotate(45deg)}
+.cut ul{margin:6px 0 0;padding:0;list-style:none;display:grid;gap:6px;color:var(--ink-2);font-size:15px}
+.cut li{position:relative;padding-left:16px}
+.cut li::before{content:"";position:absolute;left:0;top:.72em;width:6px;height:6px;border-radius:50%;background:var(--green)}
+.cut code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13.5px;background:var(--panel);border:1px solid var(--rule);border-radius:5px;padding:1px 6px}
+.txt .memo{position:static;white-space:normal;}
+.cut .memo{position:static;font-size:24px;transform:rotate(-2deg);transform-origin:left}
+@media (max-width:880px){.cut,.cut:nth-child(even){grid-template-columns:1fr;gap:20px}.cut:nth-child(even) .shot{order:0}}
+
+/* 다른 점 — 비교 */
+.cmp-wrap{overflow-x:auto;border:2px solid var(--ink);border-radius:4px;background:var(--panel)}
+table.cmp{width:100%;border-collapse:collapse;min-width:620px;font-size:15px}
+.cmp th,.cmp td{padding:16px 18px;text-align:left;vertical-align:top;border-bottom:1px solid var(--rule)}
+.cmp thead th{font-size:13px;letter-spacing:.06em;color:var(--ink-2);font-weight:700;background:color-mix(in srgb,var(--paper) 60%,var(--panel))}
+.cmp thead th.us{color:var(--green)}
+.cmp tbody th{font-weight:700;width:22%}
+.cmp td.them{color:var(--ink-2);width:34%}
+.cmp td.us{font-weight:500}
+.cmp tr:last-child th,.cmp tr:last-child td{border-bottom:0}
+.cmp td.us::before{content:"";display:inline-block;width:14px;height:8px;border-left:2.5px solid var(--green);border-bottom:2.5px solid var(--green);transform:rotate(-45deg) translateY(-3px);margin-right:10px}
+
+.feat{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center;margin-top:56px}
+.feat .txt{display:grid;gap:14px;min-width:0}
+.feat h3{font-family:var(--f-display);font-weight:400;font-size:28px;line-height:1.25}
+.feat p{color:var(--ink-2)}
+@media (max-width:880px){.feat{grid-template-columns:1fr;gap:20px}}
+
+/* 이런 분께 */
+.who{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:2px solid var(--ink);border-radius:4px;background:var(--panel)}
+.who div{padding:22px 20px;display:grid;gap:6px;border-right:1px solid var(--rule);min-width:0}
+.who div:last-child{border-right:0}
+.who b{font-size:17px}
+.who span{color:var(--ink-2);font-size:14.5px}
+@media (max-width:880px){.who{grid-template-columns:repeat(2,minmax(0,1fr))}.who div:nth-child(2){border-right:0}.who div:nth-child(-n+2){border-bottom:1px solid var(--rule)}}
+@media (max-width:480px){.who{grid-template-columns:1fr}.who div{border-right:0;border-bottom:1px solid var(--rule)}.who div:last-child{border-bottom:0}}
+
+/* 요금 */
+.plans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;max-width:880px}
+.plan{border:2px solid var(--ink);border-radius:4px;background:var(--panel);padding:26px 24px;display:grid;gap:14px;align-content:start}
+.plan.soon{border-style:dashed;border-color:var(--rule)}
+.plan h3{font-size:18px;display:flex;align-items:center;gap:10px}
+.plan .tag{font-size:12px;font-weight:700;border-radius:999px;padding:3px 9px;background:var(--green);color:var(--green-ink)}
+.plan.soon .tag{background:transparent;color:var(--ink-2);border:1px solid var(--rule)}
+.plan .price{font-family:var(--f-display);font-size:38px;line-height:1}
+.plan .price small{font-family:var(--f-body);font-size:14px;color:var(--ink-2);margin-left:6px}
+.plan ul{margin:0;padding:0;list-style:none;display:grid;gap:8px;font-size:15px}
+.plan li{display:flex;gap:10px}
+.plan li::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--green);margin-top:.72em}
+.plan.soon li::before{background:var(--rule)}
+.plan .note{font-size:13px;color:var(--ink-2)}
+@media (max-width:640px){.plans{grid-template-columns:1fr}}
+
+/* 자주 묻는 질문 */
+.faq{max-width:780px;display:grid;border-top:2px solid var(--ink)}
+.faq details{border-bottom:1px solid var(--rule)}
+.faq summary{cursor:pointer;list-style:none;padding:18px 36px 18px 0;font-weight:700;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";position:absolute;right:6px;top:26px;width:9px;height:9px;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:rotate(45deg);transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(225deg);top:30px}
+.faq details p{padding:0 0 20px;color:var(--ink-2);max-width:62ch}
+
+/* 마지막 칸 */
+.end{padding-block:72px}
+.end .box{border:2px solid var(--ink);border-radius:4px;background:var(--ink);color:var(--paper);padding:48px 40px;display:grid;gap:18px;justify-items:start}
+.end h2{font-family:var(--f-display);font-weight:400;font-size:clamp(30px,4vw,46px);line-height:1.18}
+.end p{opacity:.75}
+.end .btn{border-color:var(--paper);color:var(--paper)}
+.end .btn.go{background:var(--green);border-color:var(--green);color:var(--green-ink)}
+@media (max-width:640px){.end .box{padding:32px 22px}}
+
+footer{border-top:1px solid var(--rule);padding-block:28px 40px;color:var(--ink-2);font-size:13px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="웹툰보드 처음으로"><i><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg></i>웹툰보드</a>
+    <nav aria-label="소개 메뉴">
+      <a class="lk" href="#how">사용법</a>
+      <a class="lk" href="#diff">다른 점</a>
+      <a class="lk" href="#price">요금</a>
+      <a class="lk" href="#faq">자주 묻는 질문</a>
+      <a class="btn go sm" href="https://toon.iux.kr" data-start>바로 시작</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">웹툰 한 화 작업실</p>
+        <h1>기획에서 컷까지,<br>한 화를 <em>한 자리에서</em>.</h1>
+        <p class="lead">로그라인과 인물 정리, 회차 콘티, 컷 편집과 말풍선, 연재처 규격 내보내기까지 이어서 해요. 가입 없이 지금 바로 시작할 수 있어요.</p>
+        <div class="ctas">
+          <a class="btn go" href="https://toon.iux.kr" data-start>바로 시작하기 <small>가입 없이</small></a>
+          <a class="btn" href="https://toon.iux.kr/?sample=1" data-start>예시 컷으로 둘러보기</a>
+        </div>
+        <p class="fine">글 AI 월 30회 · AI 이미지 10장 무료 · 편집과 내보내기는 AI 없이도 무료</p>
+      </div>
+      <div class="stage">
+        <figure class="shot" style="margin:0"><img src="img/ed.webp" width="1800" height="1125" alt="웹툰보드 편집 화면. 왼쪽에 회차 목록, 가운데에 세로로 이어지는 컷, 오른쪽에 디자인·보정·내보내기 설정이 있어요."></figure>
+        <span class="memo m1">실제 편집 화면이에요</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="gutter" aria-hidden="true"><span></span></div>
+
+  <section class="sec" id="how">
+    <div class="wrap">
+      <div class="sec-h">
+        <p class="eyebrow">이렇게 써요</p>
+        <h2>네 칸이면 한 화가 나와요</h2>
+        <p>순서대로 해도 되고, 이미 그린 컷이 있으면 3번부터 시작해도 돼요.</p>
+      </div>
+
+      <div class="cuts">
+        <article class="cut">
+          <figure class="shot" style="margin:0"><img src="img/plan.webp" width="1800" height="1320" loading="lazy" alt="작품 기획 창. 로그라인을 누가·무엇을 원하는데·무엇이 막고·실패하면 잃는 것 칸으로 나눠 채우는 화면이에요."></figure>
+          <div class="txt">
+            <span class="no"><b>1</b>작품 기획</span>
+            <h3>이야기부터 정리해요</h3>
+            <p class="balloon">로그라인, 세계관, 인물, 관계도, 줄거리를 칸 채우듯 적어요. 막히면 AI가 빈칸에 초안을 넣어 줘요.</p>
+            <ul>
+              <li>로그라인은 누가 · 원하는 것 · 장애물 · 대가로 나눠서</li>
+              <li>3막이나 기승전결로 줄거리를 회차 구간에 나눠 배치</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="cut">
+          <figure class="shot" style="margin:0"><img src="img/wk.webp" width="1800" height="1320" loading="lazy" alt="콘티·AI 창. 1화 시놉시스 아래에 패키지 만들기 버튼과 콘티, 캐릭터·배경, 이미지, 대사 단계가 보여요."></figure>
+          <div class="txt">
+            <span class="no"><b>2</b>콘티 · AI</span>
+            <h3>회차 패키지를 한 번에</h3>
+            <p class="balloon">회차 시놉시스를 읽고 콘티, 컷별 이미지 프롬프트, 말풍선 대사를 한 번에 만들어요.</p>
+            <ul>
+              <li>기획에 적은 인물 말투와 호칭을 대사에 반영</li>
+              <li>다른 AI에서 쓴 콘티도 붙여 넣어 이어서 작업</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="cut">
+          <figure class="shot" style="margin:0"><img src="img/cut.webp" width="1200" height="1231" loading="lazy" alt="컷 편집 화면. 컷 위에 내레이션 박스가 얹혀 있고, 아래쪽 도구 막대에 말풍선·도형·브러시 도구가 있어요."></figure>
+          <div class="txt">
+            <span class="no"><b>3</b>컷 편집</span>
+            <h3>컷을 놓고 말풍선을 얹어요</h3>
+            <p class="balloon">직접 그린 그림을 올리거나 AI로 그린 다음, 말풍선과 내레이션, 효과, 보정을 컷마다 얹어요.</p>
+            <ul>
+              <li>캐릭터 시트를 만들어 두면 컷을 그릴 때 참고 그림으로 함께 보내요</li>
+              <li>세로 스크롤 미리보기로 독자 화면 그대로 확인</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="cut">
+          <figure class="shot" style="margin:0"><img src="img/export.webp" width="1800" height="1125" loading="lazy" alt="내보내기 설정. 파일 이름 규칙 미리보기에 현상_ep01_c01.jpg, 현상_ep01_c02.jpg가 순서대로 보여요."></figure>
+          <div class="txt">
+            <span class="no"><b>4</b>내보내기</span>
+            <h3>연재처 규격으로 바로</h3>
+            <p class="balloon">컷을 연재처 규격에 맞춰 자르고, 파일 이름까지 순서대로 붙여서 내보내요.</p>
+            <ul>
+              <li><code>현상_ep01_c01.jpg</code>처럼 작품 제목 · 회차 · 컷 번호로 자동 이름</li>
+              <li>표지 · 썸네일, SNS 공유용 이미지도 함께</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <div class="gutter" aria-hidden="true"><span></span></div>
+
+  <section class="sec" id="diff">
+    <div class="wrap">
+      <div class="sec-h">
+        <p class="eyebrow">다른 점</p>
+        <h2>그림만 그려 주는 AI와는 달라요</h2>
+        <p>예쁜 그림 한 장보다, 한 화를 끝까지 완성하는 데 필요한 것들을 모았어요.</p>
+      </div>
+      <div class="cmp-wrap" role="region" aria-label="일반 AI 그림 도구와 웹툰보드 비교" tabindex="0">
+        <table class="cmp">
+          <thead><tr><th scope="col">할 일</th><th scope="col">일반 AI 그림 도구</th><th scope="col" class="us">웹툰보드</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">이야기 기획</th><td class="them">따로 문서에 정리</td><td class="us">로그라인부터 회차 시놉시스까지 한 곳에</td></tr>
+            <tr><th scope="row">같은 인물 유지</th><td class="them">컷마다 생김새를 다시 설명</td><td class="us">캐릭터 시트를 참고 그림으로 함께 보내요</td></tr>
+            <tr><th scope="row">콘티 · 대사</th><td class="them">프롬프트를 직접 쪼개서 입력</td><td class="us">시놉시스에서 콘티 · 프롬프트 · 대사를 한 번에</td></tr>
+            <tr><th scope="row">말풍선 · 식자</th><td class="them">다른 편집 프로그램으로 옮겨서</td><td class="us">편집기 안에서 바로</td></tr>
+            <tr><th scope="row">연재처 업로드</th><td class="them">직접 자르고 이름 바꾸기</td><td class="us">규격 분할과 파일 이름 자동</td></tr>
+            <tr><th scope="row">시작하기</th><td class="them">가입하고 크레딧 충전</td><td class="us">가입 없이 바로 · 내 그림만으로도 무료</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="feat">
+        <figure class="shot" style="margin:0"><img src="img/rel.webp" width="1800" height="1320" loading="lazy" alt="관계도 화면. 해원, 서린, 명월, 이토 네 인물이 원형으로 놓이고 친구·사제·적대 관계선으로 이어져 있어요."></figure>
+        <div class="txt">
+          <p class="eyebrow">인물 관계도</p>
+          <h3>누가 누구를 뭐라고 부르는지까지</h3>
+          <p>관계와 호칭을 적어 두면 대사 AI가 존댓말과 반말을 맞춰 써요. 원형, 주인공 중심, 그룹별 등 여섯 가지 보기로 정리할 수 있어요.</p>
+          <span class="memo" style="position:static;font-size:24px">"선생님"이라고 부르는 사이 → 대사도 존댓말</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="gutter" aria-hidden="true"><span></span></div>
+
+  <section class="sec" id="who">
+    <div class="wrap">
+      <div class="sec-h">
+        <p class="eyebrow">이런 분께</p>
+        <h2>혼자서 한 화를 끝내야 하는 사람에게</h2>
+      </div>
+      <div class="who">
+        <div><b>1인 작가</b><span>기획부터 업로드 파일까지 혼자 챙겨야 할 때</span></div>
+        <div><b>웹툰 지망생</b><span>공모전 원고와 기획서를 같이 준비할 때</span></div>
+        <div><b>콘티가 막힐 때</b><span>시놉시스는 있는데 컷 나누기가 어려울 때</span></div>
+        <div><b>수업 · 동아리</b><span>설치 없이 브라우저에서 바로 써야 할 때</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="gutter" aria-hidden="true"><span></span></div>
+
+  <section class="sec" id="price">
+    <div class="wrap">
+      <div class="sec-h">
+        <p class="eyebrow">요금</p>
+        <h2>지금은 무료로 써 보세요</h2>
+        <p>AI를 쓰지 않는 기능은 횟수 제한이 없어요.</p>
+      </div>
+      <div class="plans">
+        <div class="plan">
+          <h3>무료 <span class="tag">지금 이용 가능</span></h3>
+          <p class="price">0원</p>
+          <ul>
+            <li>컷 편집 · 말풍선 · 보정 · 내보내기</li>
+            <li>작품 기획 · 관계도 · 콘티 직접 쓰기</li>
+            <li>글 AI 월 30회 (기획 채우기 · 콘티 · 대사)</li>
+            <li>AI 이미지 10장 (가입 선물)</li>
+          </ul>
+        </div>
+        <div class="plan soon">
+          <h3>프로 <span class="tag">준비 중</span></h3>
+          <p class="price">곧 공개</p>
+          <ul>
+            <li>글 AI와 AI 이미지를 매달 넉넉하게</li>
+            <li>고해상도 이미지</li>
+            <li>여러 기기에서 작품 이어서 작업</li>
+          </ul>
+          <p class="note">편집기 안 「내 계정」에서 출시 알림을 신청할 수 있어요.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="gutter" aria-hidden="true"><span></span></div>
+
+  <section class="sec" id="faq">
+    <div class="wrap">
+      <div class="sec-h">
+        <p class="eyebrow">자주 묻는 질문</p>
+        <h2>시작하기 전에</h2>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>가입 안 해도 정말 바로 쓸 수 있나요?</summary>
+          <p>네. 「바로 시작하기」를 누르면 편집기가 열리고 작품은 지금 쓰는 브라우저에 저장돼요. 다른 기기에서 이어서 하려면 로그인하면 돼요.</p>
+        </details>
+        <details>
+          <summary>AI를 안 쓰고 제 그림만으로 작업해도 되나요?</summary>
+          <p>네. 그림을 올려서 컷을 나누고 말풍선을 얹고 내보내는 기능은 AI 없이 모두 무료예요. AI는 필요할 때만 버튼을 눌러 써요.</p>
+        </details>
+        <details>
+          <summary>AI로 만든 그림과 글의 저작권은요?</summary>
+          <p>작품은 작가의 것이에요. 다만 AI 결과물은 사람이 얼마나 고치고 구성했는지가 중요해서, 기획 · 콘티 · 수정 과정을 남겨 두는 게 좋아요. 웹툰보드는 기획 내용과 프롬프트 기록이 작품 안에 남아요.</p>
+        </details>
+        <details>
+          <summary>어떤 AI를 쓰나요?</summary>
+          <p>기획 · 콘티 · 대사 같은 글은 Claude, 그림은 Google의 나노바나나 2를 기본으로 써요.</p>
+        </details>
+        <details>
+          <summary>폰에서도 되나요?</summary>
+          <p>열리고 편집도 돼요. 컷을 많이 다루는 작업은 PC나 태블릿처럼 큰 화면이 편해요.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="end">
+    <div class="wrap">
+      <div class="box">
+        <h2>오늘 1화 첫 컷부터 놓아 보세요</h2>
+        <p>가입도 설치도 없이, 브라우저에서 바로 열려요.</p>
+        <div class="ctas" style="margin-top:6px">
+          <a class="btn go" href="https://toon.iux.kr" data-start>바로 시작하기</a>
+          <a class="btn" href="https://toon.iux.kr/?sample=1" data-start>예시 컷으로 둘러보기</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>웹툰보드 · toon.iux.kr</span>
+    <span>IUX</span>
+  </div>
+</footer>
+
+<script>
+/* 한 번 시작한 사람은 다음 방문 때 바로 편집기로 보내기 위한 표시 (사이트에 붙일 때 사용) */
+document.querySelectorAll('[data-start]').forEach(function(a){
+  a.addEventListener('click',function(){try{localStorage.setItem('wb-started','1')}catch(e){}});
+});
+</script>
+
+</body></html>

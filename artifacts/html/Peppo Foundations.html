@@ -1,0 +1,930 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>Peppo Foundations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    --ground: #FBFBFD;
+    --surface: #FFFFFF;
+    --surface-sunk: #F4F4F9;
+    --ink: #14141C;
+    --ink-muted: #6B6F80;
+    --ink-faint: #9296A6;
+    --hairline: #E6E7F0;
+    --accent: #4A4FD9;
+    --accent-soft: #EEEFFC;
+    --warn: #B4541A;
+    --warn-soft: #FBF0E8;
+
+    --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --body: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #101018;
+      --surface: #191926;
+      --surface-sunk: #14141F;
+      --ink: #EDEDF5;
+      --ink-muted: #9296AA;
+      --ink-faint: #6B6F82;
+      --hairline: #2A2A3A;
+      --accent: #8B90F5;
+      --accent-soft: #1E1E38;
+      --warn: #E39A6B;
+      --warn-soft: #2A2018;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #101018;
+    --surface: #191926;
+    --surface-sunk: #14141F;
+    --ink: #EDEDF5;
+    --ink-muted: #9296AA;
+    --ink-faint: #6B6F82;
+    --hairline: #2A2A3A;
+    --accent: #8B90F5;
+    --accent-soft: #1E1E38;
+    --warn: #E39A6B;
+    --warn-soft: #2A2018;
+  }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1020px;
+    margin: 0 auto;
+    padding: 56px 28px 96px;
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+  }
+
+  /* ---------- masthead ---------- */
+
+  .masthead {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .masthead h1 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2.1rem, 5vw, 3.1rem);
+    line-height: 1.04;
+    letter-spacing: -0.028em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .lede {
+    max-width: 62ch;
+    color: var(--ink-muted);
+    margin: 0;
+    font-size: 16px;
+  }
+
+  .meta-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 28px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+    padding-top: 6px;
+  }
+
+  .meta-strip b {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* ---------- section frame ---------- */
+
+  .section {
+    display: grid;
+    grid-template-columns: 172px minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+  }
+
+  .section-rail {
+    position: sticky;
+    top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .section-rail h2 {
+    font-family: var(--display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 0;
+    line-height: 1.25;
+  }
+
+  .rail-count {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.03em;
+  }
+
+  .section-body {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    min-width: 0;
+  }
+
+  .note {
+    margin: 0;
+    color: var(--ink-muted);
+    max-width: 64ch;
+    font-size: 14.5px;
+  }
+
+  /* ---------- swatches ---------- */
+
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(124px, 1fr));
+    gap: 14px;
+  }
+
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .swatch-chip {
+    height: 62px;
+    border-radius: 8px;
+    border: 1px solid var(--hairline);
+  }
+
+  .swatch-name {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .swatch-hex {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    margin-top: -6px;
+  }
+
+  /* ---------- tables ---------- */
+
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    background: var(--surface);
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 12.5px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  thead th {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-align: left;
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--hairline);
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--hairline);
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  td.tok, td.css {
+    font-family: var(--mono);
+    font-size: 11.5px;
+  }
+
+  td.css { color: var(--accent); }
+
+  .dot {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    border-radius: 3px;
+    border: 1px solid var(--hairline);
+    vertical-align: -2px;
+    margin-right: 9px;
+  }
+
+  /* ---------- type specimens ---------- */
+
+  .specimen {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 20px;
+    align-items: baseline;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .specimen:last-child { border-bottom: none; }
+
+  .specimen-key {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    line-height: 1.5;
+  }
+
+  .specimen-key b {
+    display: block;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .specimen-sample {
+    font-family: "Inter", var(--body);
+    color: var(--ink);
+    min-width: 0;
+  }
+
+  .sp-title  { font-size: 19px;   font-weight: 700; line-height: 1.3; }
+  .sp-label  { font-size: 12px;   font-weight: 500; line-height: 1.3; }
+  .sp-body   { font-size: 12.5px; font-weight: 400; line-height: 1.4; }
+  .sp-button { font-size: 13px;   font-weight: 700; line-height: 1.2; }
+
+  /* ---------- scales ---------- */
+
+  .scale-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .scale-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .scale-bar {
+    height: 13px;
+    border-radius: 3px;
+    background: var(--accent);
+    flex: none;
+  }
+
+  .scale-label {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--ink-muted);
+  }
+
+  .radius-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+
+  .radius-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .radius-box {
+    width: 62px;
+    height: 62px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+  }
+
+  /* ---------- component previews ---------- */
+
+  .pattern {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 236px;
+    gap: 0;
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+
+  .pattern-stage {
+    /* the system is light-only today - the stage is pinned to its real ground */
+    background: #F4F6FC;
+    padding: 26px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  .pattern-spec {
+    padding: 18px 20px;
+    border-left: 1px solid var(--hairline);
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    background: var(--surface);
+  }
+
+  .pattern-spec h3 {
+    font-family: var(--display);
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0 0 3px;
+    letter-spacing: -0.005em;
+  }
+
+  .spec-line {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-muted);
+    line-height: 1.45;
+  }
+
+  .spec-line b {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* live demo primitives - fixed to the system's own token values */
+  .demo { font-family: "Inter", var(--body); }
+
+  .demo-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #6166ED;
+    color: #FFFFFF;
+    border-radius: 10px;
+    padding: 12px 0;
+    width: 240px;
+    font-size: 13px;
+    font-weight: 700;
+    border: none;
+  }
+
+  .demo-btn.secondary {
+    background: #FFFFFF;
+    color: #33353F;
+    border: 1px solid #E3E5ED;
+    font-weight: 500;
+    font-size: 12.5px;
+  }
+
+  .demo-gdot {
+    width: 14px; height: 14px;
+    border-radius: 999px;
+    background: #4285F4;
+    flex: none;
+  }
+
+  .demo-field {
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .demo-field-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #262933;
+  }
+
+  .demo-input {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #FFFFFF;
+    border: 1px solid #E3E5ED;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 12.5px;
+    color: #9499A5;
+  }
+
+  .demo-card {
+    background: #FFFFFF;
+    border-radius: 24px;
+    box-shadow: 0 12px 32px rgba(26, 38, 102, 0.15);
+    padding: 22px;
+    width: 236px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .demo-card-title {
+    font-size: 19px;
+    font-weight: 700;
+    color: #17171F;
+    text-align: center;
+  }
+
+  .demo-card-sub {
+    font-size: 12.5px;
+    color: #9499A5;
+    text-align: center;
+  }
+
+  .demo-check-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #595E6B;
+  }
+
+  .demo-check {
+    width: 14px; height: 14px;
+    border-radius: 4px;
+    border: 1.2px solid #E3E5ED;
+    background: #FFF;
+    flex: none;
+  }
+
+  .demo-link {
+    font-size: 12px;
+    font-weight: 500;
+    color: #6166ED;
+  }
+
+  .gradient-strip {
+    height: 108px;
+    border-radius: 10px;
+    border: 1px solid var(--hairline);
+    background: linear-gradient(135deg, #BFD9FA 0%, #5278F2 35%, #8C6EED 65%, #C7DEFA 100%);
+  }
+
+  /* ---------- open items ---------- */
+
+  .open-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .open-item {
+    display: grid;
+    grid-template-columns: 82px minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+    padding: 14px 16px;
+    border: 1px solid var(--hairline);
+    border-radius: 9px;
+    background: var(--surface);
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: 4px;
+    text-align: center;
+    background: var(--accent-soft);
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .tag.blocked {
+    background: var(--warn-soft);
+    color: var(--warn);
+  }
+
+  .open-item p { margin: 0; font-size: 14px; }
+  .open-item p b { font-weight: 600; }
+  .open-item .sub {
+    color: var(--ink-muted);
+    font-size: 13px;
+    margin-top: 3px;
+  }
+
+  .drift {
+    font-family: var(--mono);
+    font-size: 11.5px;
+  }
+
+  a { color: var(--accent); }
+  a:focus-visible,
+  .demo-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 900px) {
+    .section { grid-template-columns: 1fr; gap: 16px; }
+    .section-rail { position: static; flex-direction: row; align-items: baseline; gap: 10px; }
+    .pattern { grid-template-columns: 1fr; }
+    .pattern-spec { border-left: none; border-top: 1px solid var(--hairline); }
+    .specimen { grid-template-columns: 1fr; gap: 8px; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="eyebrow">Design system · v0.1</div>
+    <h1>Peppo Foundations</h1>
+    <p class="lede">
+      Every token, style and interface pattern currently defined in the Peppo Figma file — extracted
+      from the sign-in screen and rebuilt as variables. This is the reference for what exists today,
+      and an honest record of what doesn't yet.
+    </p>
+    <div class="meta-strip">
+      <span>File <b>Untitled</b></span>
+      <span>Pages <b>Examples · Foundations · Components</b></span>
+      <span>Typeface <b>Inter</b></span>
+      <span>Mode <b>Light only</b></span>
+    </div>
+  </header>
+
+  <!-- COLOR PRIMITIVES -->
+  <section class="section">
+    <div class="section-rail">
+      <h2>Primitives</h2>
+      <span class="rail-count">10 color variables</span>
+    </div>
+    <div class="section-body">
+      <p class="note">
+        Raw values with no meaning attached. Scopes are empty so they stay out of every property
+        picker — designers reach for the semantic layer below, never these.
+      </p>
+      <div class="swatch-grid">
+        <div class="swatch"><div class="swatch-chip" style="background:#6166ED"></div><span class="swatch-name">indigo/500</span><span class="swatch-hex">#6166ED</span></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#4F54D6"></div><span class="swatch-name">indigo/600</span><span class="swatch-hex">#4F54D6</span></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#8C6EED"></div><span class="swatch-name">purple/400</span><span class="swatch-hex">#8C6EED</span></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#BFD6FA"></div><span class="swatch-name">blue/200</span><span class="swatch-hex">#BFD6FA</span></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#FFFFFF"></div><span class="swatch-name">white</span><span class="swatch-hex">#FFFFFF</span></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#F7F7F9"></div><span class="swatch-name">gray/50</span><span class="swatch-hex">#F7F7F9</span></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#E3E5ED"></div><span class="swatch-name">gray/200</span><span class="swatch-hex">#E3E5ED</span></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#94999F"></div><span class="swatch-name">gray/400</span><span class="swatch-hex">#94999F</span></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#59616B"></div><span class="swatch-name">gray/700</span><span class="swatch-hex">#59616B</span></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#17171F"></div><span class="swatch-name">gray/900</span><span class="swatch-hex">#17171F</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEMANTIC COLOR -->
+  <section class="section">
+    <div class="section-rail">
+      <h2>Semantic color</h2>
+      <span class="rail-count">7 tokens · Light mode</span>
+    </div>
+    <div class="section-body">
+      <p class="note">
+        The layer components bind to. Each one aliases a primitive rather than repeating its value,
+        so a brand change edits ten swatches and nothing else. Every token carries WEB code syntax
+        for Dev Mode.
+      </p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Token</th><th>Aliases</th><th>Value</th><th>CSS</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="tok"><span class="dot" style="background:#FFFFFF"></span>color/bg/surface</td><td class="tok">white</td><td class="tok">#FFFFFF</td><td class="css">var(--color-bg-surface)</td></tr>
+            <tr><td class="tok"><span class="dot" style="background:#6166ED"></span>color/bg/accent</td><td class="tok">indigo/500</td><td class="tok">#6166ED</td><td class="css">var(--color-bg-accent)</td></tr>
+            <tr><td class="tok"><span class="dot" style="background:#17171F"></span>color/text/primary</td><td class="tok">gray/900</td><td class="tok">#17171F</td><td class="css">var(--color-text-primary)</td></tr>
+            <tr><td class="tok"><span class="dot" style="background:#94999F"></span>color/text/secondary</td><td class="tok">gray/400</td><td class="tok">#94999F</td><td class="css">var(--color-text-secondary)</td></tr>
+            <tr><td class="tok"><span class="dot" style="background:#FFFFFF"></span>color/text/onAccent</td><td class="tok">white</td><td class="tok">#FFFFFF</td><td class="css">var(--color-text-on-accent)</td></tr>
+            <tr><td class="tok"><span class="dot" style="background:#6166ED"></span>color/text/link</td><td class="tok">indigo/500</td><td class="tok">#6166ED</td><td class="css">var(--color-text-link)</td></tr>
+            <tr><td class="tok"><span class="dot" style="background:#E3E5ED"></span>color/border/default</td><td class="tok">gray/200</td><td class="tok">#E3E5ED</td><td class="css">var(--color-border-default)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- TYPOGRAPHY -->
+  <section class="section">
+    <div class="section-rail">
+      <h2>Typography</h2>
+      <span class="rail-count">4 text styles · Inter</span>
+    </div>
+    <div class="section-body">
+      <p class="note">
+        One family, four roles. Weight and size carry the hierarchy — there is no display face and
+        no second family to maintain.
+      </p>
+      <div>
+        <div class="specimen">
+          <div class="specimen-key"><b>Heading/Title</b>Bold · 19px · 130%</div>
+          <div class="specimen-sample sp-title">Login</div>
+        </div>
+        <div class="specimen">
+          <div class="specimen-key"><b>Body/Label</b>Medium · 12px · 130%</div>
+          <div class="specimen-sample sp-label">Email</div>
+        </div>
+        <div class="specimen">
+          <div class="specimen-key"><b>Body/Regular</b>Regular · 12.5px · 140%</div>
+          <div class="specimen-sample sp-body">We missed you! Please enter your details.</div>
+        </div>
+        <div class="specimen">
+          <div class="specimen-key"><b>Body/Button</b>Bold · 13px · 120%</div>
+          <div class="specimen-sample sp-button">Sign in</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPACING -->
+  <section class="section">
+    <div class="section-rail">
+      <h2>Spacing</h2>
+      <span class="rail-count">8 steps · 4–36px</span>
+    </div>
+    <div class="section-body">
+      <p class="note">
+        A 4px base with a widening top end. Scoped to <span class="drift">GAP</span> only, so the
+        scale governs auto-layout gaps and padding and never leaks into other numeric fields.
+      </p>
+      <div class="scale-list">
+        <div class="scale-row"><div class="scale-bar" style="width:4px"></div><span class="scale-label">spacing/xs · 4</span></div>
+        <div class="scale-row"><div class="scale-bar" style="width:8px"></div><span class="scale-label">spacing/sm · 8</span></div>
+        <div class="scale-row"><div class="scale-bar" style="width:12px"></div><span class="scale-label">spacing/md · 12</span></div>
+        <div class="scale-row"><div class="scale-bar" style="width:16px"></div><span class="scale-label">spacing/lg · 16</span></div>
+        <div class="scale-row"><div class="scale-bar" style="width:20px"></div><span class="scale-label">spacing/xl · 20</span></div>
+        <div class="scale-row"><div class="scale-bar" style="width:24px"></div><span class="scale-label">spacing/2xl · 24</span></div>
+        <div class="scale-row"><div class="scale-bar" style="width:32px"></div><span class="scale-label">spacing/3xl · 32</span></div>
+        <div class="scale-row"><div class="scale-bar" style="width:36px"></div><span class="scale-label">spacing/4xl · 36</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RADIUS + ELEVATION -->
+  <section class="section">
+    <div class="section-rail">
+      <h2>Radius &amp; elevation</h2>
+      <span class="rail-count">5 steps · 1 shadow</span>
+    </div>
+    <div class="section-body">
+      <div class="radius-row">
+        <div class="radius-item"><div class="radius-box" style="border-radius:4px"></div><span class="scale-label">sm · 4</span></div>
+        <div class="radius-item"><div class="radius-box" style="border-radius:10px"></div><span class="scale-label">md · 10</span></div>
+        <div class="radius-item"><div class="radius-box" style="border-radius:16px"></div><span class="scale-label">lg · 16</span></div>
+        <div class="radius-item"><div class="radius-box" style="border-radius:24px"></div><span class="scale-label">xl · 24</span></div>
+        <div class="radius-item"><div class="radius-box" style="border-radius:999px"></div><span class="scale-label">full · 999</span></div>
+      </div>
+      <p class="note">
+        <b>md</b> is the control radius — inputs and buttons. <b>xl</b> is reserved for the card
+        surface. There is exactly one elevation style,
+        <span class="drift">Elevation/Card</span>: <span class="drift">0 12px 32px rgba(26,38,102,0.15)</span>.
+      </p>
+    </div>
+  </section>
+
+  <!-- BACKDROP -->
+  <section class="section">
+    <div class="section-rail">
+      <h2>Backdrop</h2>
+      <span class="rail-count">1 gradient</span>
+    </div>
+    <div class="section-body">
+      <div class="gradient-strip"></div>
+      <p class="note">
+        The signature of the sign-in screen: a four-stop diagonal running pale blue → indigo →
+        violet → pale blue, so the light corners fall opposite each other and the card lands on the
+        saturated middle. Not yet a variable — gradients can't be stored as a Figma color variable,
+        so this lives as a style candidate.
+      </p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Stop</th><th>Position</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td class="tok"><span class="dot" style="background:#BFD9FA"></span>Pale blue</td><td class="tok">0%</td><td class="tok">#BFD9FA</td></tr>
+            <tr><td class="tok"><span class="dot" style="background:#5278F2"></span>Indigo</td><td class="tok">35%</td><td class="tok">#5278F2</td></tr>
+            <tr><td class="tok"><span class="dot" style="background:#8C6EED"></span>Violet</td><td class="tok">65%</td><td class="tok">#8C6EED</td></tr>
+            <tr><td class="tok"><span class="dot" style="background:#C7DEFA"></span>Pale blue</td><td class="tok">100%</td><td class="tok">#C7DEFA</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- PATTERNS -->
+  <section class="section">
+    <div class="section-rail">
+      <h2>Interface patterns</h2>
+      <span class="rail-count">6 · built, not componentized</span>
+    </div>
+    <div class="section-body">
+      <p class="note">
+        These exist on the sign-in screen as auto-layout frames with the geometry below. None are
+        Figma components yet — that's the next step, and the specs here are what those components
+        should be built to.
+      </p>
+
+      <div class="pattern">
+        <div class="pattern-stage">
+          <div class="demo demo-card">
+            <div class="demo-card-title">Login</div>
+            <div class="demo-card-sub">We missed you!</div>
+          </div>
+        </div>
+        <div class="pattern-spec">
+          <h3>Card</h3>
+          <div class="spec-line">fill <b>bg/surface</b></div>
+          <div class="spec-line">radius <b>xl · 24</b></div>
+          <div class="spec-line">padding <b>36 / 32</b></div>
+          <div class="spec-line">gap <b>xl · 20</b></div>
+          <div class="spec-line">shadow <b>Elevation/Card</b></div>
+          <div class="spec-line">width <b>452 fixed</b></div>
+        </div>
+      </div>
+
+      <div class="pattern">
+        <div class="pattern-stage">
+          <div class="demo demo-field">
+            <div class="demo-field-label">Email</div>
+            <div class="demo-input">Enter your Email</div>
+          </div>
+        </div>
+        <div class="pattern-spec">
+          <h3>Input field</h3>
+          <div class="spec-line">label <b>Body/Label</b></div>
+          <div class="spec-line">gap <b>6</b> label → field</div>
+          <div class="spec-line">border <b>1px border/default</b></div>
+          <div class="spec-line">radius <b>md · 10</b></div>
+          <div class="spec-line">padding <b>14 / 12</b></div>
+          <div class="spec-line">placeholder <b>text/secondary</b></div>
+        </div>
+      </div>
+
+      <div class="pattern">
+        <div class="pattern-stage">
+          <button class="demo demo-btn">Sign in</button>
+        </div>
+        <div class="pattern-spec">
+          <h3>Button · primary</h3>
+          <div class="spec-line">fill <b>bg/accent</b></div>
+          <div class="spec-line">text <b>text/onAccent</b></div>
+          <div class="spec-line">type <b>Body/Button</b></div>
+          <div class="spec-line">radius <b>md · 10</b></div>
+          <div class="spec-line">padding <b>12 vertical</b></div>
+          <div class="spec-line">width <b>fill</b></div>
+        </div>
+      </div>
+
+      <div class="pattern">
+        <div class="pattern-stage">
+          <button class="demo demo-btn secondary"><span class="demo-gdot"></span>Sign in with google</button>
+        </div>
+        <div class="pattern-spec">
+          <h3>Button · secondary</h3>
+          <div class="spec-line">fill <b>bg/surface</b></div>
+          <div class="spec-line">border <b>1px border/default</b></div>
+          <div class="spec-line">radius <b>md · 10</b></div>
+          <div class="spec-line">gap <b>sm · 8</b> icon → label</div>
+          <div class="spec-line">icon <b>14 × 14</b></div>
+        </div>
+      </div>
+
+      <div class="pattern">
+        <div class="pattern-stage">
+          <div class="demo demo-check-row"><span class="demo-check"></span>Remember me</div>
+        </div>
+        <div class="pattern-spec">
+          <h3>Checkbox</h3>
+          <div class="spec-line">box <b>14 × 14</b></div>
+          <div class="spec-line">radius <b>sm · 4</b></div>
+          <div class="spec-line">border <b>1.2px border/default</b></div>
+          <div class="spec-line">gap <b>6</b> box → label</div>
+          <div class="spec-line">states <b>unchecked only</b></div>
+        </div>
+      </div>
+
+      <div class="pattern">
+        <div class="pattern-stage">
+          <span class="demo demo-link">Forgot password?</span>
+        </div>
+        <div class="pattern-spec">
+          <h3>Text link</h3>
+          <div class="spec-line">color <b>text/link</b></div>
+          <div class="spec-line">size <b>12</b></div>
+          <div class="spec-line">weight <b>Medium</b> inline</div>
+          <div class="spec-line">weight <b>Bold</b> as call to action</div>
+          <div class="spec-line">states <b>default only</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPEN ITEMS -->
+  <section class="section">
+    <div class="section-rail">
+      <h2>Open items</h2>
+      <span class="rail-count">4 outstanding</span>
+    </div>
+    <div class="section-body">
+      <ul class="open-list">
+        <li class="open-item">
+          <span class="tag">Drift</span>
+          <div>
+            <p><b>The sign-in screen predates the tokens.</b></p>
+            <p class="sub">
+              It was drawn first and the variables were derived from it afterwards, so its fills are
+              still hardcoded and four of them land a shade off the token they should bind to:
+              labels <span class="drift">#262933</span> vs <span class="drift">gray/900</span>,
+              body <span class="drift">#171721</span> vs <span class="drift">gray/900</span>,
+              placeholders <span class="drift">#9499A5</span> vs <span class="drift">gray/400</span>,
+              and secondary text <span class="drift">#595E6B</span> vs <span class="drift">gray/700</span>.
+              Binding the screen to variables closes all four.
+            </p>
+          </div>
+        </li>
+        <li class="open-item">
+          <span class="tag">Next</span>
+          <div>
+            <p><b>The Components page is still empty.</b></p>
+            <p class="sub">
+              Six patterns above are ready to be built as real components with variant sets —
+              Button (primary / secondary × default / hover / disabled), Input (default / focus /
+              error / filled), Checkbox (checked / unchecked), Card, Text link.
+            </p>
+          </div>
+        </li>
+        <li class="open-item">
+          <span class="tag">Gap</span>
+          <div>
+            <p><b>Only one color mode exists.</b></p>
+            <p class="sub">
+              The Color collection has a single Light mode. A Dark mode is one column away — every
+              semantic token already aliases a primitive, so dark is a matter of re-pointing seven
+              aliases, not redefining values.
+            </p>
+          </div>
+        </li>
+        <li class="open-item">
+          <span class="tag blocked">Blocked</span>
+          <div>
+            <p><b>The plan caps the file at three pages.</b></p>
+            <p class="sub">
+              Figma's Starter plan allows three pages per file, which is why Cover and per-component
+              pages were folded into Examples · Foundations · Components. A component-per-page
+              structure needs a Professional Full seat.
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+</div>
+
+</body></html>

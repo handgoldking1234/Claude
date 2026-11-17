@@ -1,0 +1,429 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>토스트 알림 정리</title>
+<style>
+  :root {
+    --ground:#f6f5f3; --surface:#fff; --surface-2:#eceae6; --surface-3:#faf9f7;
+    --ink:#17171a; --ink-2:#464a52; --ink-3:#767b84;
+    --rule:#dedbd5; --rule-soft:#eae7e2;
+    --accent:#7a4bd0; --accent-2:#5b32a8; --accent-wash:#f0e9fc;
+    --ok:#15803d; --ok-wash:#dcfce7;
+    --warn:#a16207; --warn-wash:#fef3c7;
+    --err:#b91c1c; --err-wash:#fef2f2;
+    --code-bg:#eeece8;
+    --shadow:0 1px 2px rgba(23,23,26,.05), 0 12px 28px -26px rgba(23,23,26,.7);
+    --f-body:"Segoe UI Variable Text","Segoe UI",ui-sans-serif,system-ui,-apple-system,sans-serif;
+    --f-mono:"Cascadia Mono","Cascadia Code",ui-monospace,Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:#111013; --surface:#1a191d; --surface-2:#232227; --surface-3:#1e1d21;
+      --ink:#f1eff2; --ink-2:#b9b6bf; --ink-3:#8a8792;
+      --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+      --accent:#b393f5; --accent-2:#cbb4ff; --accent-wash:rgba(179,147,245,.14);
+      --ok:#4ade80; --ok-wash:rgba(74,222,128,.13);
+      --warn:#eab308; --warn-wash:rgba(234,179,8,.13);
+      --err:#f87171; --err-wash:rgba(248,113,113,.13);
+      --code-bg:rgba(255,255,255,.05);
+      --shadow:0 1px 2px rgba(0,0,0,.55), 0 12px 28px -26px rgba(0,0,0,.95);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#111013; --surface:#1a191d; --surface-2:#232227; --surface-3:#1e1d21;
+    --ink:#f1eff2; --ink-2:#b9b6bf; --ink-3:#8a8792;
+    --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+    --accent:#b393f5; --accent-2:#cbb4ff; --accent-wash:rgba(179,147,245,.14);
+    --ok:#4ade80; --ok-wash:rgba(74,222,128,.13);
+    --warn:#eab308; --warn-wash:rgba(234,179,8,.13);
+    --err:#f87171; --err-wash:rgba(248,113,113,.13);
+    --code-bg:rgba(255,255,255,.05);
+    --shadow:0 1px 2px rgba(0,0,0,.55), 0 12px 28px -26px rgba(0,0,0,.95);
+  }
+
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--ground); color:var(--ink);
+         font-family:var(--f-body); font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+  .page { max-width:1120px; margin:0 auto; padding:42px 22px 84px; display:flex; flex-direction:column; gap:36px; }
+
+  .masthead { display:flex; flex-direction:column; gap:11px; padding-bottom:20px; border-bottom:2px solid var(--ink); }
+  .kicker { font-family:var(--f-mono); font-size:12px; letter-spacing:.11em; text-transform:uppercase; color:var(--accent); }
+  h1 { margin:0; font-size:clamp(26px,4.2vw,34px); line-height:1.15; letter-spacing:-.022em; font-weight:700; }
+  .standfirst { margin:0; max-width:68ch; color:var(--ink-2); }
+  .meta { display:flex; flex-wrap:wrap; gap:5px 18px; font-family:var(--f-mono); font-size:12px; color:var(--ink-3); }
+  .meta b { color:var(--ink-2); font-weight:500; }
+
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(118px,1fr)); gap:10px; }
+  .stat { border:1px solid var(--rule); border-radius:9px; background:var(--surface); padding:11px 14px;
+          display:flex; flex-direction:column; box-shadow:var(--shadow); }
+  .stat__num { font-size:23px; font-weight:700; letter-spacing:-.02em; font-variant-numeric:tabular-nums; line-height:1.2; }
+  .stat__label { font-family:var(--f-mono); font-size:11px; color:var(--ink-3); }
+
+  section { display:flex; flex-direction:column; gap:13px; scroll-margin-top:16px; }
+  h2 { margin:0; font-size:19px; letter-spacing:-.015em; font-weight:700; padding-bottom:8px; border-bottom:1px solid var(--rule);
+       display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  h2 .n { font-family:var(--f-mono); font-size:12px; color:var(--ink-3); font-weight:500; }
+  p { margin:0; }
+  .lead { max-width:74ch; color:var(--ink-2); font-size:14.5px; }
+
+  code { font-family:var(--f-mono); font-size:.85em; background:var(--code-bg); padding:.1em .36em; border-radius:4px; word-break:break-word; }
+
+  .toc { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1px 22px;
+         padding:14px 18px; background:var(--surface); border:1px solid var(--rule); border-radius:10px; box-shadow:var(--shadow); }
+  .toc a { color:var(--ink-2); text-decoration:none; font-size:14px; padding:3px 0; display:block; }
+  .toc a:hover { color:var(--accent); text-decoration:underline; text-underline-offset:3px; }
+  .toc a span { font-family:var(--f-mono); font-size:11px; color:var(--ink-3); }
+
+  /* 토스트 견본 */
+  .samples { display:flex; flex-direction:column; gap:8px; align-items:center;
+             padding:22px; border:1px solid var(--rule); border-radius:11px; background:var(--surface-3); }
+  .toastbox { min-width:300px; max-width:520px; width:100%; border-radius:8px; padding:12px 16px;
+              display:flex; align-items:center; gap:12px; font-size:14px; font-weight:500; line-height:1.5;
+              box-shadow:0 4px 16px rgba(0,0,0,.10); }
+  .toastbox span { flex:1; }
+  .toastbox em { font-style:normal; opacity:.7; font-size:15px; }
+  .t-ok { background:var(--ok-wash); color:var(--ok); border:1px solid var(--ok); }
+  .t-warn { background:var(--warn-wash); color:var(--warn); border:1px solid var(--warn); }
+  .t-err { background:var(--err-wash); color:var(--err); border:1px solid #fecaca; }
+  .samples__cap { font-family:var(--f-mono); font-size:11.5px; color:var(--ink-3); margin-top:4px; }
+
+  .tablewrap { border:1px solid var(--rule); border-radius:10px; background:var(--surface); box-shadow:var(--shadow); overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; font-size:13.5px; min-width:660px; }
+  colgroup .c-a { width:22%; }
+  colgroup .c-b { width:26%; }
+  thead th { text-align:left; font-size:11px; font-family:var(--f-mono); letter-spacing:.05em; text-transform:uppercase;
+             color:var(--ink-3); font-weight:600; padding:10px 14px; background:var(--surface-2); white-space:nowrap; }
+  td { padding:11px 14px; border-top:1px solid var(--rule-soft); vertical-align:top; }
+  tbody tr:nth-child(even) { background:var(--surface-3); }
+  td.k { font-weight:600; }
+  td.u { font-family:var(--f-mono); font-size:12px; color:var(--accent-2); word-break:break-all; }
+  td.v { color:var(--ink-2); }
+  td.v b { color:var(--ink); }
+  td.v s { color:var(--ink-3); }
+
+  .card { border:1px solid var(--rule); border-radius:10px; background:var(--surface); box-shadow:var(--shadow); padding:17px 20px; }
+  .card h3 { margin:0 0 8px; font-size:15px; font-weight:600; }
+  .card ul { margin:0; padding-left:18px; color:var(--ink-2); font-size:14px; }
+  .card li { margin-bottom:5px; }
+  .card li:last-child { margin-bottom:0; }
+  .card p { color:var(--ink-2); font-size:14px; }
+  .grid2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:12px; }
+
+  pre { margin:8px 0 0; padding:11px 13px; border-radius:7px; background:var(--code-bg); overflow-x:auto;
+        font-family:var(--f-mono); font-size:12.5px; line-height:1.6; color:var(--ink); }
+  pre .del { color:var(--ink-3); }
+  pre .add { color:var(--accent-2); font-weight:600; }
+  pre .cm { color:var(--ink-3); }
+
+  .flag { border-left:3px solid var(--warn); background:var(--warn-wash); border-radius:0 8px 8px 0;
+          padding:14px 18px; color:var(--ink-2); font-size:14px; }
+  .flag b { color:var(--ink); }
+
+  footer { border-top:1px solid var(--rule); padding-top:17px; color:var(--ink-3); font-size:13px; }
+  footer code { background:none; padding:0; }
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="kicker">dfe-front · 퍼블 작업 공유 · 4편</div>
+    <h1>토스트 알림 정리</h1>
+    <p class="standfirst">
+      같은 동작 하나에 토스트가 두 개 뜨고, 성공 안내가 빨간 오류로 보이고,
+      권한 알림만 혼자 우측에 떠 있었습니다. 원인을 하나씩 짚어 공통 규격으로 맞췄습니다.
+    </p>
+    <div class="meta">
+      <span><b>작업일</b> 2026-08-31</span>
+      <span><b>브랜치</b> feature/front-goldking-new</span>
+      <span><b>커밋</b> 906a5c77</span>
+      <span><b>변경</b> 27 파일 · +292 −123</span>
+      <span><b>검증</b> tsc 통과 · 테스트 674/675</span>
+    </div>
+  </header>
+
+  <div class="samples">
+    <div class="toastbox t-ok"><span>게시글이 등록되었습니다.</span><em>✕</em></div>
+    <div class="toastbox t-warn"><span>제목을 입력해 주세요.</span><em>✕</em></div>
+    <div class="toastbox t-err"><span>게시글을 등록하지 못했습니다.</span><em>✕</em></div>
+    <p class="samples__cap">success · warn · error — 상단 중앙, 8px 간격으로 세로 정렬</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><span class="stat__num">3</span><span class="stat__label">별개 원인</span></div>
+    <div class="stat"><span class="stat__num">51</span><span class="stat__label">중복 방지 분기</span></div>
+    <div class="stat"><span class="stat__num">27</span><span class="stat__label">변경 파일</span></div>
+    <div class="stat"><span class="stat__num">41</span><span class="stat__label">영향 화면</span></div>
+    <div class="stat"><span class="stat__num">1</span><span class="stat__label">권한 확인 요청</span></div>
+  </div>
+
+  <nav class="toc">
+    <a href="#rule">색 구분 기준</a>
+    <a href="#c1">① 토스트가 두 개 <span>· 51곳</span></a>
+    <a href="#c2">② 같은 자리에 겹침 <span>· 전 화면</span></a>
+    <a href="#c3">③ 안내가 빨갛게 <span>· 5곳</span></a>
+    <a href="#c4">④ 알릴 필요 없는 알림 <span>· 2곳</span></a>
+    <a href="#keep">건드리지 않은 것</a>
+    <a href="#todo">넘길 내용</a>
+  </nav>
+
+  <!-- 색 기준 -->
+  <section id="rule">
+    <h2>색 구분 기준</h2>
+    <p class="lead">
+      토스트 타입은 <b>작업의 종류</b>(수정·삭제)가 아니라 <b>결과</b>를 나타냅니다.
+      삭제가 성공하면 초록입니다 — 삭제라서 빨간 게 아닙니다.
+    </p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-a"><col class="c-b"><col></colgroup>
+        <thead><tr><th>타입</th><th>언제</th><th>예시</th></tr></thead>
+        <tbody>
+          <tr><td class="k" style="color:var(--ok)">success 초록</td><td class="v">요청한 작업이 <b>완료됨</b></td>
+              <td class="v">등록·수정·삭제·복사·다운로드 완료</td></tr>
+          <tr><td class="k" style="color:var(--warn)">warn 노랑</td><td class="v">사용자가 <b>뭔가 채우거나 고쳐야 함</b></td>
+              <td class="v">제목을 입력해 주세요 · 권한이 없습니다</td></tr>
+          <tr><td class="k" style="color:var(--err)">error 빨강</td><td class="v"><b>시스템이 실패함</b></td>
+              <td class="v">저장하지 못했습니다 · 불러오지 못했습니다</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3>호출 방법 — 두 번째 인자를 꼭 넘기세요</h3>
+      <pre>const { toast, show, dismiss } = useToast();
+
+<span class="cm">{/* 화면 상단 고정이므로 페이지에 한 번만 렌더한다 */}</span>
+&lt;ToastBanner toast={toast} onDismiss={dismiss} /&gt;
+
+show('평가가 저장되었습니다.', <span class="add">'success'</span>);
+show('저장에 실패했습니다.', <span class="add">'error'</span>);
+show('입력값을 확인해 주세요.', <span class="add">'warn'</span>);</pre>
+      <p style="margin-top:10px">
+        <b><code>useToast</code>의 기본 타입은 <code>'error'</code>입니다.</b>
+        타입을 빼먹으면 성공 메시지도 빨갛게 뜹니다. 이것이 ③번 원인이었습니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- ① -->
+  <section id="c1">
+    <h2>① 토스트가 두 개 뜬다 <span class="n">51곳 / 23개 파일</span></h2>
+    <p class="lead">
+      권한 오류(403)가 나면 <b>앱 전역 알림</b>과 <b>페이지의 <code>catch</code> 토스트</b>가
+      서로의 존재를 모른 채 각자 뜹니다. 전역 알림은 어느 화면에서든 동작하는 안전망이므로,
+      페이지 쪽에서 겹쳐 띄우지 않도록 했습니다.
+    </p>
+    <pre>  } catch (error) {
+<span class="add">+   /* 403 은 전역 권한 토스트가 이미 안내하므로 겹쳐 띄우지 않는다 */</span>
+<span class="add">+   if (!isForbiddenError(error)) {</span>
+      showToast(toUserMessage(error, '댓글을 등록하지 못했습니다.'));
+<span class="add">+   }</span>
+  } finally {</pre>
+
+    <div class="card" style="margin-top:2px">
+      <h3>판정 기준이 어긋나 있었습니다</h3>
+      <p style="margin-bottom:8px">분기를 넣었는데도 계속 두 개가 떴습니다. 두 곳이 403을 다르게 판단하고 있었기 때문입니다.</p>
+      <div class="tablewrap" style="box-shadow:none">
+        <table style="min-width:0">
+          <thead><tr><th></th><th>판정 조건</th></tr></thead>
+          <tbody>
+            <tr><td class="k">전역 알림 <code>http.ts</code></td>
+                <td class="v"><b>HTTP 403</b> 또는 <code>OPS-4030</code> 또는 <code>COS-4030</code></td></tr>
+            <tr><td class="k">페이지 <code>apiTypes.ts</code></td>
+                <td class="v"><code>OPS-4030</code> <b>만</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:10px">
+        자료공유가 그 차이를 드러냈습니다 — 응답 상태는 403인데 업무 코드는 <code>OPS-4040</code>(NotFound)였습니다.
+        <code>isForbiddenError</code>를 전역 알림과 같은 조건으로 맞췄습니다.
+        <code>httpStatus</code>는 원래 오류 객체에 붙어 있던 값이라 새로 만든 것이 없습니다.
+      </p>
+    </div>
+
+    <p class="lead" style="margin-top:2px">
+      적용 화면 — 커뮤니티 상세 5 · 서비스 요청 4 · 알림 발송 4 · 알림센터 4 · 평가 목록 4 ·
+      메뉴 관리 3 · 분류게시판 3 · 연합 상세 3 · 핵심아이디어 3 · 자료공유 3화면 각 2 ·
+      파일 관리 2 · 성취기준 2 · 명령어 2 · 나머지 각 1
+    </p>
+  </section>
+
+  <!-- ② -->
+  <section id="c2">
+    <h2>② 두 토스트가 같은 자리에 겹친다 <span class="n">공통 컴포넌트 1파일</span></h2>
+    <p class="lead">
+      <code>ToastBanner</code>는 페이지마다 별도 인스턴스로 렌더되는데, 각자 <code>position: fixed</code>로
+      같은 좌표를 잡습니다. 성공 토스트와 권한 토스트가 동시에 뜨면 정확히 포개졌습니다.
+    </p>
+    <pre><span class="add">+ const STACK_ID = 'dfe-toast-stack';</span>
+<span class="add">+ function getToastStack() { … position:fixed, flex-column, gap:8px, pointerEvents:none … }</span>
+
+  &lt;div role="alert" style={{
+<span class="del">-   position: 'fixed', top: '24px', left: '50%',</span>
+<span class="del">-   transform: 'translateX(-50%)', zIndex: 9999,</span>
+<span class="add">+   pointerEvents: 'auto',</span>
+    minWidth: '320px', …
+
+<span class="del">- return ( … );</span>
+<span class="add">+ return stack ? createPortal(banner, stack) : banner;</span></pre>
+    <div class="grid2" style="margin-top:2px">
+      <div class="card">
+        <h3>호출부는 그대로입니다</h3>
+        <p><code>&lt;ToastBanner toast={toast} onDismiss={dismiss} /&gt;</code> 사용법이 바뀌지 않았습니다.
+           <b>41개 파일 중 고친 것은 컴포넌트 1개뿐</b>입니다.</p>
+      </div>
+      <div class="card">
+        <h3>부수 효과</h3>
+        <ul>
+          <li>토스트 2개 이상이면 8px 간격으로 세로 정렬</li>
+          <li>컨테이너는 <code>pointerEvents: none</code> — 토스트가 없을 때 뒤쪽 클릭을 막지 않음</li>
+          <li><code>document</code>가 없는 환경(테스트 등)에서는 기존처럼 인라인 렌더</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ③ -->
+  <section id="c3">
+    <h2>③ 입력 안내가 빨갛게 뜬다 <span class="n">커뮤니티 3화면 · 5곳</span></h2>
+    <p class="lead">
+      <code>useToast</code>의 기본 타입이 <code>'error'</code>라, 타입 없이 부르면 안내 문구도 오류처럼 보입니다.
+    </p>
+    <pre><span class="del">- showToast('제목을 입력해 주세요.');</span>
+<span class="add">+ showToast('제목을 입력해 주세요.', 'warn');</span></pre>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-a"><col class="c-b"><col></colgroup>
+        <thead><tr><th>화면</th><th>경로</th><th>문구</th></tr></thead>
+        <tbody>
+          <tr><td class="k">커뮤니티 등록</td><td class="u">/community/board/new</td><td class="v">제목 · 본문을 입력해 주세요</td></tr>
+          <tr><td class="k">커뮤니티 수정</td><td class="u">/community/board/{id}/edit</td><td class="v">제목 · 본문을 입력해 주세요</td></tr>
+          <tr><td class="k">커뮤니티 상세</td><td class="u">/community/board/{id}</td><td class="v">댓글을 입력해 주세요</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3>전 화면 조사 결과</h3>
+      <p>
+        토스트를 쓰는 <b>48개 파일</b>을 훑었습니다. 타입이 잘못된 곳은 이 5곳뿐이고,
+        삭제 완료 토스트 15곳은 예외 없이 전부 <code>success</code>로 일관돼 있었습니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- ④ -->
+  <section id="c4">
+    <h2>④ 알릴 필요 없는 알림 <span class="n">공통코드 참조 조회 2곳</span></h2>
+    <p class="lead">
+      선임채점관(ACT-06) 계정에서 커뮤니티 진입 시
+      <code>Function permission required: OPS_CODE_GROUP_VIEW</code> 라는 영문 오류가 떴습니다.
+      <b>사용자가 한 동작이 아니라</b> 카테고리를 한글 라벨로 보여주려는 배경 조회였습니다.
+    </p>
+    <pre>  http&lt;CodeGroupDto[]&gt;(
+    `${'{'}BASE{'}'}/code-groups?…`,
+    { signal },
+<span class="add">+   /* 라벨 표시용 참조 조회 — 권한이 없어도 화면은 기본값으로 동작하므로</span>
+<span class="add">+      전역 권한 토스트를 띄우지 않는다 */</span>
+<span class="add">+   { suppressForbiddenEvent: true },</span>
+  )</pre>
+    <div class="grid2" style="margin-top:2px">
+      <div class="card">
+        <h3>화면은 원래 정상이었습니다</h3>
+        <p>
+          <code>useCommonCodeOptions</code>는 조회 실패 시 기본 카테고리로 대체합니다.
+          <b>이 대체 동작은 원래 있던 것이고 손대지 않았습니다.</b>
+          사용자가 조치할 수 없는 영문 알림만 없앴습니다.
+        </p>
+      </div>
+      <div class="card">
+        <h3>백엔드 영향 없음</h3>
+        <p style="margin-bottom:8px"><code>suppressForbiddenEvent</code>는 <code>fetch</code>에 들어가지 않는 <b>브라우저 안에서만 쓰는 플래그</b>입니다.</p>
+        <ul>
+          <li>요청 URL·헤더·메서드 <b>동일</b></li>
+          <li>서버 403 응답 <b>동일</b></li>
+          <li>오류 <code>throw</code>와 호출부 <code>.catch</code> <b>그대로</b></li>
+          <li>브라우저 토스트만 생략</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 유지 -->
+  <section id="keep">
+    <h2>건드리지 않은 것</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3>권한 신청 2화면의 전용 토스트</h3>
+        <p style="margin-bottom:8px">
+          <code>/permissions/requests/new</code> · <code>/permissions/requests/{id}/review</code> 는
+          공통 <code>useToast</code>가 아니라 각 파일이 만든 로컬 함수와 <code>.permission-toast</code> 전용 CSS를 씁니다.
+        </p>
+        <ul>
+          <li>타입 인자가 없어 <b>항상 초록</b> — 실패해도 성공처럼 보입니다</li>
+          <li>지속시간 2800·3000ms, <b>닫기 버튼 없음</b></li>
+          <li>호출부 5곳과 렌더 마크업을 함께 바꿔야 해 이번 범위에서 제외</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>전용 CSS를 가진 다른 알림</h3>
+        <p>
+          <code>window.alert</code>를 쓰는 11개 파일(루브릭 편집, 학생 응시 등)도 그대로입니다.
+          브라우저 기본 대화상자라 성격이 다르고, 흐름을 막는 것이 의도일 수 있습니다.
+        </p>
+      </div>
+      <div class="card">
+        <h3>조회 위주 <code>catch</code> 3곳</h3>
+        <p>
+          분류게시판 · 서비스 요청 검토 · 평가설계 상태. 조회 API는 403이 날 일이 거의 없어 후순위로 뒀습니다.
+        </p>
+      </div>
+      <div class="card">
+        <h3>실패하는 테스트 1건</h3>
+        <p>
+          <code>FrontProgress.navigation.test.ts</code> — 원격에서 받아온 <code>FrontProgress.tsx</code>가
+          <code>target="_blank"</code>를 쓰는데 테스트가 그것을 금지합니다. 이번 작업과 무관하며 그대로 뒀습니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 넘길 내용 -->
+  <section id="todo">
+    <h2>백엔드·권한 담당에게 넘길 내용</h2>
+    <div class="flag">
+      <b>선임채점관(ACT-06)에 <code>OPS_CODE_GROUP_VIEW</code> 조회 권한이 없습니다.</b>
+      커뮤니티·자료공유 6화면이 카테고리를 서버에서 못 읽어 프론트 기본값으로 표시됩니다.
+    </div>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-a"><col></colgroup>
+        <tbody>
+          <tr><td class="k">엔드포인트</td>
+              <td class="v"><code>GET /ops/v1/code-groups?groupCodePrefix={code}&amp;isActive=true</code><br>
+                            <code>GET /ops/v1/codes?codeGroupId={id}&amp;isActive=true</code></td></tr>
+          <tr><td class="k">그룹코드</td>
+              <td class="v"><code>community_post_category</code> — 사용팁 / 건의사항 / 자유토론 / 기타<br>
+                            <code>community_resource_category</code> — 평가자료 / 교수학습자료 / 서식 / 기타</td></tr>
+          <tr><td class="k">영향 화면</td>
+              <td class="v">/community/board · /community/board/{id} · /community/board/new ·
+                            /community/board/{id}/edit · /community/share · /community/share/new</td></tr>
+          <tr><td class="k">정해야 할 것</td>
+              <td class="v">
+                <b>①</b> 선임채점관도 카테고리를 봐야 한다면 → 해당 역할에 조회 권한 부여<br>
+                <b>②</b> 기본값으로 충분하다면 → 현행 유지. 단, <b>관리자가 공통코드에서 카테고리를 바꿔도
+                권한 없는 역할에게는 반영되지 않습니다</b>
+              </td></tr>
+          <tr><td class="k">확인 부탁</td>
+              <td class="v">ACT-06 에서만 나는지, <b>교사 계정에서도 나는지</b>.
+                            교사도 안 된다면 커뮤니티 전체가 기본값으로만 동작한다는 뜻이라 우선순위가 올라갑니다</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <code>feature/front-goldking-new</code> · <code>906a5c77</code> · 2026-08-31 ·
+    확인은 <code>npm run dev</code> → <code>http://127.0.0.1:3100</code><br>
+    이전 편: 버튼·표 규격 정비(1편) · 패널 헤더 구조 통일(2편) · 목록 건수 표기 통일(3편)
+  </footer>
+
+</div>
+
+</body></html>

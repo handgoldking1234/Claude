@@ -1,0 +1,829 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>명월사진관 넋 도감</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+<style>
+/* Layout: 유리건판 보관함처럼, 위에 구분 탭, 아래에 넋 대장(표). 좁은 화면에서는 한 장씩 카드로 */
+:root{
+  --bg:#f3eee4; --paper:#fbf8f2; --fg:#2b241c; --muted:#6f6355; --line:#d9cfbf;
+  --sepia:#8a6a43; --red:#a8321f;
+  --g-good:#3f6b52; --g-vil:#a8321f; --g-guest:#5d5a7a; --g-yokai:#7a5a1f; --g-god:#2f5d7a;
+  --chip:#ece4d6;
+  --f-display:"Gowun Batang","Nanum Myeongjo",serif;
+  --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17130f; --paper:#201b16; --fg:#ece3d4; --muted:#a89a87; --line:#3a3128;
+  --sepia:#c9a679; --red:#e2735e;
+  --g-good:#7fbf98; --g-vil:#e2735e; --g-guest:#a9a6d6; --g-yokai:#d6b067; --g-god:#7fb3d6;
+  --chip:#2b241d; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17130f; --paper:#201b16; --fg:#ece3d4; --muted:#a89a87; --line:#3a3128;
+  --sepia:#c9a679; --red:#e2735e;
+  --g-good:#7fbf98; --g-vil:#e2735e; --g-guest:#a9a6d6; --g-yokai:#d6b067; --g-god:#7fb3d6;
+  --chip:#2b241d; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.6}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:20px;padding-block:28px 48px}
+header{display:grid;gap:8px;margin-bottom:22px}
+.eyebrow{font-size:12px;letter-spacing:.14em;color:var(--sepia);font-weight:600}
+h1{font-family:var(--f-display);font-size:clamp(28px,4vw,40px);margin:0;line-height:1.2;text-wrap:balance}
+.lede{color:var(--muted);margin:0;max-width:68ch}
+.rules{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.rules span{font-size:12.5px;background:var(--chip);border:1px solid var(--line);padding:3px 10px;border-radius:99px;color:var(--muted)}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 14px}
+.tabs button{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--paper);color:var(--fg);padding:7px 14px;border-radius:6px;cursor:pointer;display:flex;gap:8px;align-items:center}
+.tabs button .dot{width:9px;height:9px;border-radius:50%}
+.tabs button .n{color:var(--muted);font-variant-numeric:tabular-nums;font-size:12.5px}
+.tabs button[aria-pressed="true"]{border-color:var(--fg);box-shadow:inset 0 0 0 1px var(--fg)}
+.tabs button:focus-visible,.search:focus-visible{outline:2px solid var(--sepia);outline-offset:2px}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.search{font:inherit;padding:8px 12px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--fg);min-width:0;width:min(320px,100%)}
+.legend{font-size:12.5px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap}
+.legend b{font-weight:600}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--paper)}
+table{border-collapse:collapse;width:100%;min-width:1500px}
+th,td{text-align:left;vertical-align:top;padding:12px 14px;border-bottom:1px solid var(--line)}
+th{font-size:12px;letter-spacing:.08em;color:var(--muted);font-weight:600;background:var(--chip);position:sticky;top:0}
+tr:last-child td{border-bottom:0}
+td.name{width:11%}
+td.name strong{font-family:var(--f-display);font-size:17px;display:block;line-height:1.35}
+td.name .epl{display:block;font-size:12px;color:var(--muted);margin-top:2px;font-variant-numeric:tabular-nums}
+td.name .plate{display:block;font-size:12px;color:var(--sepia);font-variant-numeric:tabular-nums}
+td.kind{width:9%}
+.grp{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:2px 8px;border-radius:4px;border:1px solid currentColor;white-space:nowrap}
+.kind small{display:block;color:var(--muted);font-size:12.5px;margin-top:6px;line-height:1.45}
+td.rel{width:12%;font-size:14px}
+td.story{width:20%;font-size:14px}
+td.fix{width:15%;font-size:14px}
+td.hor{width:17%;font-size:14px;border-left:3px solid var(--red)}
+td.hum{width:16%;font-size:14px;border-left:3px solid var(--g-yokai)}
+.jump{display:flex;gap:14px;flex-wrap:wrap;font-size:14px}
+.jump a{color:var(--sepia);text-underline-offset:3px}
+.lex{margin-top:56px;padding-top:28px;border-top:2px solid var(--line)}
+.lex h2{font-family:var(--f-display);font-size:clamp(24px,3.4vw,32px);margin:0;line-height:1.25}
+.lex-head{display:grid;gap:8px}
+.v{font-size:11.5px;padding:2px 8px;border-radius:99px;white-space:nowrap;display:inline-block;font-weight:600}
+.v-in{background:var(--chip);color:var(--muted)}
+.v-now{background:var(--red);color:var(--paper)}
+.v-later{background:transparent;color:var(--g-god);border:1px solid var(--g-god)}
+table.lt{min-width:1400px}
+.lt td.ln{width:12%}
+.lt td.ln strong{font-family:var(--f-display);font-size:17px;display:block;line-height:1.35}
+.lt td.ln .src{display:block;font-size:12px;color:var(--sepia);margin-top:2px}
+.lt td.lk{width:15%;font-size:14px}
+.lt td.lk .cat{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:4px;border:1px solid currentColor;margin-bottom:6px}
+.lt td.ls{width:22%;font-size:14px}
+.lt td.lf{width:15%;font-size:14px}
+.lt td.lu{width:22%;font-size:14px}
+.lt td.lw{width:14%;font-size:14px}
+.lt td.lw .v{margin-bottom:6px}
+.lnote{color:var(--muted);font-size:13px;margin-top:12px;max-width:80ch}
+
+.pickbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:3;display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--bg);padding-block:10px;margin:14px 0 10px;border-bottom:1px solid var(--line)}
+.pickbar button{font:inherit;font-size:14px;border:1px solid var(--fg);background:var(--fg);color:var(--bg);padding:6px 14px;border-radius:6px;cursor:pointer}
+.pickbar button#pickclear{background:transparent;color:var(--fg);border-color:var(--line)}
+.pickbar button:focus-visible{outline:2px solid var(--sepia);outline-offset:2px}
+#pickn{font-weight:600;font-variant-numeric:tabular-nums}
+.pickmsg{color:var(--muted);font-size:13px}
+.picktext{width:100%;min-height:90px;font:inherit;font-size:13px;padding:10px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--fg);margin-bottom:12px}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+.cc{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:16px;display:grid;gap:10px;align-content:start;min-width:0}
+.cc.on{border-color:var(--red);box-shadow:inset 0 0 0 1px var(--red)}
+.cc label.top{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.cc input{margin-top:5px;width:18px;height:18px;accent-color:var(--red);flex:none}
+.cc .ct{font-family:var(--f-display);font-size:19px;line-height:1.3;font-weight:700}
+.cc .cid{font-size:12px;color:var(--sepia);font-variant-numeric:tabular-nums;display:block;font-family:var(--f-body);font-weight:600;letter-spacing:.06em}
+.cc .meta{display:flex;flex-wrap:wrap;gap:6px}
+.cc .meta span{font-size:12px;padding:2px 8px;border-radius:4px;background:var(--chip);color:var(--muted)}
+.cc .meta span.kind{border:1px solid currentColor;background:transparent;font-weight:600}
+.cc dl{margin:0;display:grid;gap:8px}
+.cc dt{font-size:11.5px;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.cc dd{margin:0;font-size:14px}
+.cc dd.hor{border-left:3px solid var(--red);padding-left:8px}
+.cc dd.hum{border-left:3px solid var(--g-yokai);padding-left:8px}
+@media (max-width:420px){.cgrid{grid-template-columns:1fr}}
+
+@media (max-width:720px){td.hor,td.hum{border-left:0}}
+td.hor::before{color:var(--red)!important}
+.st{font-size:11.5px;padding:2px 8px;border-radius:99px;white-space:nowrap;display:inline-block}
+.st.done{background:var(--chip);color:var(--muted)}
+.st.new{background:var(--red);color:var(--paper)}
+.grp-row td{background:var(--bg);font-family:var(--f-display);font-size:16px;font-weight:700;padding-block:10px}
+.grp-row td span{font-family:var(--f-body);font-weight:400;font-size:13px;color:var(--muted);margin-left:10px}
+.empty{padding:28px;text-align:center;color:var(--muted)}
+footer{margin-top:22px;color:var(--muted);font-size:13px;display:grid;gap:4px;max-width:80ch}
+/* phone: 표를 카드로 */
+@media (max-width:720px){
+  .tbl-wrap{border:0;background:transparent;overflow:visible}
+  table{min-width:0}
+  thead{display:none}
+  table,tbody,tr,td{display:block;width:100%!important}
+  tr{background:var(--paper);border:1px solid var(--line);border-radius:8px;margin-bottom:12px;padding:6px 0}
+  tr.grp-row{background:transparent;border:0;padding:0;margin:18px 0 8px}
+  tr.grp-row td{background:transparent;padding:0 2px}
+  td{border:0;padding:6px 14px}
+  td[data-l]::before{content:attr(data-l);display:block;font-size:11.5px;letter-spacing:.08em;color:var(--muted);font-weight:600}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+<header id="top-dogam">
+  <div class="eyebrow">明月寫眞館 · 넋 도감</div>
+  <h1>명월사진관 넋 도감</h1>
+  <p class="lede">사진관에 드나드는 모든 넋과 요괴, 신을 편 가르기로 묶었어요. 대본에 이미 나오는 넋과, 아래 「에피소드 후보」에서 고를 수 있는 넋을 한 표에 모았어요. 이름 아래에 숏드라마 60화의 등장 회차와 후보 번호를 적었어요.</p>
+  <nav class="jump"><a href="#top-dogam">우리 작품 넋 도감</a><a href="#lexicon">한국 귀신·요괴 사전</a><a href="#cands">에피소드 후보 고르기</a></nav>
+  <div class="rules">
+    <span>원귀: 진짜 이름 + 한 → 해원</span>
+    <span>묶인 넋: 부적을 떼고 이름 → 구출</span>
+    <span>악귀: 창씨명 + 산 손 혼자 → 봉인</span>
+    <span>요괴: 민속의 약점 · 징조 없음 · 금줄 무시</span>
+    <span>신: 자리를 돌려주고 굿</span>
+  </div>
+</header>
+
+<div class="tabs" id="tabs" role="group" aria-label="구분"></div>
+<div class="tools">
+  <input class="search" id="q" type="search" placeholder="이름이나 사연으로 찾기" aria-label="찾기">
+  <div class="legend"><span><b class="st new">후보</b> 아래 「에피소드 후보」에서 고를 수 있는 것</span><span><b class="st done">대본</b> 이미 대본에 있음</span></div>
+</div>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>이름</th><th>구분 · 분류</th><th>관계</th><th>사연 · 스토리</th><th>풀거나 막는 법</th><th>무서운 장면</th><th>웃음 포인트</th></tr></thead>
+<tbody id="tb"></tbody>
+</table>
+</div>
+
+<section id="lexicon" class="lex">
+  <div class="lex-head">
+    <div class="eyebrow">韓國 鬼神 · 妖怪 辭典</div>
+    <h2>한국 귀신·요괴 사전</h2>
+    <p class="lede">우리나라에 전해지는 귀신과 요괴, 신령을 모았어요. 어떤 존재인지, 어떻게 전해지는지, 명월사진관에서 어떻게 쓸지, 숏드라마 60화 중 어디에 넣을지를 함께 적었어요.</p>
+    <div class="rules">
+      <span><b class="v v-in">대본</b> 이미 대본에 있음</span>
+      <span><b class="v v-now">이번에 넣음</b> 이번에 숏드라마 60화에 새로 넣음 (대본에 ✚ 표시)</span>
+      <span><b class="v v-later">시즌 2</b> 아껴 두기</span>
+    </div>
+  </div>
+  <div class="tabs" id="ltabs" role="group" aria-label="사전 구분"></div>
+  <div class="tools"><input class="search" id="lq" type="search" placeholder="귀신 이름이나 전승으로 찾기" aria-label="사전 찾기"></div>
+  <div class="tbl-wrap">
+  <table class="lt">
+  <thead><tr><th>이름</th><th>어떤 귀신인가</th><th>전해지는 이야기</th><th>특징 · 약점</th><th>명월사진관 스토리</th><th>넣을 자리</th></tr></thead>
+  <tbody id="ltb"></tbody>
+  </table>
+  </div>
+  <p class="lnote">출처 표시: 「문헌」은 삼국유사, 수이전, 용재총화 같은 옛 기록에 남은 것, 「무속·민간」은 굿과 입말로 전해진 것, 「근현대」는 20세기 이후의 괴담이에요. 근현대 괴담은 오래된 전승이 아니라는 점을 작품 안에서도 구분해 쓰는 게 좋아요.</p>
+</section>
+
+<section id="cands" class="lex">
+  <div class="lex-head">
+    <div class="eyebrow">追加 候補 · 골라 담기</div>
+    <h2>에피소드 후보</h2>
+    <p class="lede">총 회차는 신경 쓰지 않고, 명월사진관 규칙(건판, 이름과 한, 줄탁동시, 이름을 지우는 자들)에 맞춰 넣을 수 있는 귀신 에피소드를 모았어요. 마음에 드는 걸 체크한 뒤 「고른 것 복사」를 눌러 대화창에 붙여 주시면 그걸로 대본을 짤게요.</p>
+  </div>
+  <div class="pickbar">
+    <span id="pickn">0개 고름</span>
+    <button type="button" id="pickcopy">고른 것 복사</button>
+    <button type="button" id="pickclear">모두 해제</button>
+    <span id="pickmsg" class="pickmsg" role="status"></span>
+  </div>
+  <textarea id="picktext" class="picktext" readonly hidden aria-label="고른 후보"></textarea>
+  <div class="cgrid" id="cgrid"></div>
+</section>
+
+<footer>
+  <div>분류 규칙은 오디오 드라마 시즌 1 대본과 숏드라마 60화를 따랐어요. 사람 빌런(도경삼, 도정환, 권혁무, 용역)은 넋이 아니라서 빼고, 구로다는 혼이 주인공이라 빌런 귀신에 넣었어요.</div>
+  <div>지귀, 어둑시니, 두억시니, 몽달귀신, 손님마마는 널리 알려진 민속 전승이에요. 그슨새는 제주 지역 전승이라 기록마다 내용이 조금씩 달라요. 이누가미(犬神)와 시키가미(式神)는 일본 민간신앙과 음양도의 용어예요.</div>
+</footer>
+</div>
+
+<script>
+const G={
+ good:{label:"착한 귀신",sub:"편이 되어 주는 넋",c:"--g-good"},
+ vil:{label:"빌런 귀신",sub:"구로다와 그 부하들",c:"--g-vil"},
+ guest:{label:"그냥 귀신",sub:"사진관을 찾아오는 손님",c:"--g-guest"},
+ yokai:{label:"요괴",sub:"사람의 넋이 아닌 것",c:"--g-yokai"},
+ god:{label:"신",sub:"자리를 지키는 것",c:"--g-god"}
+};
+const D=[
+// 착한 귀신
+{g:"good",ep:"1·15·39·51·52·59·60화",n:"윤은희",p:"번호 없는 건판 · 진짜 이름 명월",k:"원귀 (특별한 한 장)",
+ r:"시우의 정인. 솔이가 태어난 빗자루의 주인. 엄 실장이 「아가씨」라 부름",
+ s:"1944년 혼례 날, 성지 습격에서 만신을 감싸 안고 총에 맞아 죽음. 시우가 혼례 사진을 찍으려고 들고 온 사진기로 그녀를 봉인함. 시우가 붙여 준 이름 「명월」이 사진관 간판이 됨. 82년 동안 암실 제단 위에서 잠들어 있고, 시우는 기억 없이도 「손님이 아닙니다」라며 아무도 못 만지게 함.",
+ f:"최종화. 깨어나 죽은 손을 하나의 산 손 위에 얹어 줄탁동시. 시우 옆에 서서 82년 만에 혼례 사진을 완성하고 함께 떠남",h:"특징: 사진 속 신부. 82년 내내 눈을 감고 있다가, 하나가 시우 곁에 설 때마다 유리 속 신부의 고개가 한 칸씩 하나 쪽으로 돌아가 있음. 촛불이 꺼진 암실에서 건판 속 신부만 눈을 뜨고 하나를 봄.",u:"살아 있을 때의 회상: 시우가 사진 찍을 때마다 「또 표정이 왜 그래요」 하며 빗자루로 엉덩이를 툭 침. 그 빗자루가 지금의 솔이라, 솔이가 「언니 손버릇 나한테 그대로 남았어」",st:"done"},
+{g:"good",ep:"1·39·52화",n:"만신",p:"시우의 어머니 · 목소리만",k:"무당의 넋 (이미 떠남)",
+ r:"시우의 어머니. 엄 실장의 주인. 하나 외가의 먼 조상(만신의 여동생 집안)",
+ s:"1940년 창씨개명이 시작되자 방울과 명두를 녹여 넣은 사진기를 설계함. 4년 동안 원혼과 악귀를 봉인했고, 모든 걸 미리 알아 장부에 「손님 徐하나」를, 원판 대장 108번에 「寫眞師」를 적어 둠. 그날 밤 구로다의 의식에서 넋들의 진짜 이름을 불러 사진관으로 이끈 뒤 죽음.",
+ f:"이미 떠난 넋. 흰 것이 토해 낸 목소리 「이건 하늘의 뜻입니다」와 1944년 회상으로만 나옴",h:"특징: 모든 걸 미리 앎. 하나의 이름이 82년 전 붓글씨로 이미 적혀 있다는 것 자체가 공포. 1944년 장면에서 만신이 정면을 보며 「오셨구나」라고 말해, 2026년의 하나를 보고 있는 것처럼 연출",u:"회상: 장부에 하나 이름을 적으며 「이 아이 성질 좀 있겠구나」. 2026년의 하나가 「누가 성질 있대요」",st:"done"},
+{g:"good",ep:"24~30·47·48화",n:"한옥분",p:"하나의 외할머니",k:"묶인 넋 (창귀) → 해원",
+ r:"하나의 외할머니. 엄마 서정희의 어머니. 박만복의 신어머니",
+ s:"3년 전 밤, 「따님 일로 잠깐 나와 주시겠습니까」라는 전화에 불려 나갔다가 계단에서 밀려 죽음. 구로다의 붉은 부적에 묶여 창귀가 되어 가족을 「잠깐 나와 봐」로 불러냄. 실이 끊긴 잠깐 동안 제정신으로 돌아와 「도망쳐라」를 외치고 다시 끌려감.",
+ f:"만복의 신이 돌아와 울린 방울로 붉은 실이 타 끊어짐. 엄마가 처음 셔터를 눌러 「꽃분아」로 해원. 떠나며 「108번에 그자 이름이 있다」는 단서를 남김",h:"특징: 가족 목소리로 부름. 음성 메시지 끝말이 재생할 때마다 바뀜(「할미 춥다」). 목이 사람보다 조금 길게 돌아가는 소리 끄드득. 문고리가 천천히 돌아가는 장면",u:"해원 후: 「아이고 만복이 너 살쪘다」. 떠나기 직전 엄마에게 「김치 냉장고 맨 아래 칸 보쌈김치 버리지 마라」",st:"done"},
+{g:"good",ep:"4·8~20화",n:"미경",p:"第十二號 · 서류 이름 최분례",k:"원귀 · 처녀 물귀신 (원한 깊음, 익사)",
+ r:"최영호의 누나. 흙을 부으라 명령한 감독관은 도경삼의 토건 회사 大道組 사람. 같은 웅덩이에 82년 뒤 투안이 묶임",
+ s:"1944년 열일곱에 당재 방공호 공사장에 근로 동원됨. 썩은 버팀목을 두고 공기를 재촉하던 날, 흙이 무너져 여덟 살 동생이 빠지자 뛰어들어 밀어 올림. 자신도 살아서 버팀목을 붙잡고 살려 달라 외쳤지만, 大道組 감독관은 「터 무너진다, 흙 부어」라 명령함. 빗물이 허리까지 찬 구덩이에 흙이 쏟아져 진흙탕이 되었고, 미경은 그 흙탕물에 입과 코가 막혀 익사함. 그래서 물귀신이 됨. 메운 자리는 비만 오면 물이 고여 「처녀 웅덩이」로 불렸고, 시신은 82년 동안 물 밴 진흙 속에 남음. 명부엔 「작업장 이탈, 도주」로 적혀 가족의 배급이 끊기고 아버지가 징용으로 끌려감. 어머니는 「도망간 년 어미」 소리를 들으며 죽는 날까지 딸의 밥을 떠 놓음. 그래서 미경의 머리카락은 둘로 움직임. 빠진 사람의 발목은 감아 끌어올리고(아무도 자기처럼 묻히지 않게), 죽음을 서류 한 줄로 지우는 자의 목은 감아 조름.",
+ f:"해원 조건이 둘. 하나가 시굴 트렌치에서 붉은 댕기와 손뼈를 찾아내고 명부를 「작업 중 매몰 사망」으로 정정해 누명을 벗김. 그리고 동생 영호의 「미경 누나」. 82년 만의 다른 말 「…나 도망 안 갔소」, 떠나며 「엄니한테 나 도망 안 갔다고 말해 주련」",h:"특징: 젖은 머리카락. 욕조 물속에서 발목을 감아 올라오는 머리카락, 지하철 검은 유리 속 옆자리, 등 뒤 마룻바닥의 젖은 맨발 자국 하나. 렌즈 속 「흙 부어」 한마디와 삽질 소리, 차오르는 흙탕물, 마지막까지 물 위를 더듬다 가라앉는 머리카락. 「개인 부주의」라 쓴 현장소장이 목에 머리카락이 여러 겹 감긴 채 발견됨",u:"해원 후 땋은 머리에 붉은 댕기를 매고 영호에게: 「아직도 겁 많은 눈이네」. 영호가 아흔 살 얼굴로 「누나가 맨날 놀려서 그래요」",st:"done"},
+// 빌런 귀신
+{g:"vil",ep:"1·22·23·40·49·56~60화",n:"구로다",p:"黑田 · 이름 없는 혼",k:"음양사의 혼 · 우두머리",
+ r:"도경삼, 도정환으로 몸을 갈아탄 주인. 다음 그릇으로 하나를 노림. 개 그림자, 까마귀, 악귀의 주인",
+ s:"1944년 조선총독부 촉탁 민속 조사관이자 음양사. 성지의 신과 만신을 노리다, 시우가 스스로를 108번 건판에 봉인할 때 이름까지 갇힘. 이름이 없어 저승에 못 가고, 남의 이름으로 82년을 삶. 대도건설 산재로 이름 없는 죽음을 만들어 명부에 이름을 모으고, 재개발로 사진관을 헐어 108번을 노림.",
+ f:"108번이 해원될 때 그의 이름도 저승으로 감. 「네 이름이 뭐야」 「구로다다」 「그건 성이잖아」 「…내 이름이 뭐였지?」 끝내 이름 없이 흩어짐",h:"특징: 정중함과 그림자. 존댓말로 웃으며 위협함. 사람 몸인데 그림자만 네 발로 일어섬. 손녀를 보는 눈이 얼굴이 아니라 몸을 훑음. 「다 컸구나, 하나야」",u:"웃음 없음. 단 한 번, 이름을 잃은 걸 깨닫는 최종화에서 「…내 이름이 뭐였지?」가 처절하게 우스꽝스러운 비극이 됨",st:"done"},
+{g:"vil",ep:"44~46화",n:"가네모토 순사",p:"金本 · 본명 김덕수",k:"악귀 · 勿開 상자",
+ r:"구로다가 이름을 준 첫 부하. 엄마의 수선집을 덮침",
+ s:"1944년 마을 사람들을 곤봉으로 다스리던 조선인 순사. 스스로 구로다 편에 서서 창씨명을 받음. 2026년 勿開 상자에서 풀려나 야간 공사장 비계에서 사람을 떨어뜨리고, 「무당 년 딸」이라며 엄마를 노림.",
+ f:"본명은 듣지 않음(「그 이름은 내가 버렸다」). 하나가 「가네모토 순사」를 부르며 산 손 혼자 셔터를 눌러 봉인. 대가로 코피와 첫 흰머리",h:"특징: 곤봉과 군홧발. 정전된 공사장에 「딱, 딱」 곤봉으로 비계를 두드리는 소리가 다가옴. 어둠 속에서 들리는 1944년식 호통 「거기 서라!」",u:"엄 실장이 1944년에 이 자를 기억함: 「저자는 순사 시험에 세 번 떨어졌습니다」. 순사가 발끈해 「네 번이다!」",st:"done"},
+{g:"vil",ep:"44·55화",n:"마쓰야마",p:"松山 · 밀정",k:"악귀 · 勿開 상자",
+ r:"구로다의 귀. 철거 날 주민들 사이에 숨어듦",
+ s:"독립운동가와 이웃을 밀고하던 밀정. 죽어서도 사람 귀에 대고 속삭여 서로 의심하고 배신하게 만듦. 철거 날 「저 집이 버텨서 우리 보상이 늦는다」는 말을 퍼뜨려 주민들을 갈라놓음.",
+ f:"구로다의 명부에서 찾은 창씨명을 부르고, 하나·엄마·만복의 산 손 셋이 함께 눌러 봉인",h:"특징: 귓속말. 화면에는 아무도 없는데 인물 귀에 대고 속삭이는 소리만 들림. 그 뒤로 친한 사람끼리 서로를 의심하는 눈빛. 하나가 시우를 의심하는 순간이 가장 무서움",u:"만복의 귀에 「저 도깨비가 네 과자를 먹었다」고 속삭임. 만복과 솔이가 진지하게 싸움. 사실 먹은 건 흰 것",st:"done"},
+{g:"vil",ep:"44·55화",n:"아라이",p:"新井 · 모집책",k:"악귀 · 勿開 상자",
+ r:"처녀 넋들이 가장 두려워하는 악귀. 미경과 같은 시절의 동원 처녀들을 끌고 간 자",
+ s:"「공장 일자리가 있다」며 처녀들을 속여 끌고 간 모집책. 다정한 아주머니 얼굴로 나타나 젊은 여자를 꾀어냄. 2026년엔 「좋은 알바 있어」라는 문자로 같은 짓을 되풀이함.",
+ f:"명부의 창씨명으로 산 손 여럿이 함께 봉인. 그녀가 데려간 처녀들의 넋이 사진관 선반에서 일제히 울어 위치를 알려 줌",h:"특징: 다정함. 「좋은 알바 있어」 문자, 웃는 아주머니 얼굴, 따뜻한 보리차. 마시는 순간 컵 바닥에 1944년 처녀들의 얼굴이 비침",u:"솔이에게 「아가씨 좋은 일자리 있어」 했다가 솔이가 「저 82년째 무급인데요?」. 엄 실장: 「…숙식 제공이다」",st:"done"},
+{g:"vil",ep:"50화",n:"두억시니",p:"가위귀신",k:"악귀 · 이름 없는 앞잡이",
+ r:"구로다가 하나의 몸에 들어가기 전에 보내는 앞잡이",
+ s:"잠든 사람의 가슴과 머리를 짓누르는 사납고 모진 귀신. 밤마다 하나의 가슴 위에 앉아 영혼을 느슨하게 만들어 둠. 하나의 몽유병과 108번 건판으로 걸어가는 밤이 이것 때문. 명부 어디에도 이름이 없음.",
+ f:"가위에 눌린 채 렌즈로 그 얼굴을 직접 봐야 정체와 이름이 드러남. 그 이름으로 봉인",h:"특징: 가위눌림. 천장 시점으로 잠든 하나를 내려다보는 컷, 가슴 위에 무언가 웅크린 실루엣. 숨이 막히는 하나의 눈만 움직임. 매일 밤 조금씩 더 무거워짐",u:"가위에서 깬 하나가 비명을 지르자, 문 앞에서 밤새 서 있던 시우가 문을 벌컥. 「지키는 것이 제 일입니다」 하나: 「그러니까 왜 문 앞에 서 있냐고요!」",st:"done"},
+{g:"vil",ep:"29·54화 · 후보 R",n:"지귀",p:"志鬼 · 불귀신",k:"원귀 · 부적에 묶인 무기",
+ r:"구로다의 방화범. 만복 어머니 신당 화재의 진짜 범인",
+ s:"신라 때 선덕여왕을 사모하다 마음의 불이 몸 밖으로 번져 탑까지 태웠다는 불귀신. 구로다가 부적을 박아 방화에 부림. 「누전」으로 처리된 만복 어머니 신당 화재와 철거 날 사진관의 불이 모두 지귀.",
+ f:"지귀 주문을 쓴 부적으로 불을 막고, 부적을 뗀 뒤 그가 사모한 이가 부르던 이름으로 해원. 「나는 그저 한 번 보고 싶었을 뿐」",h:"특징: 사모의 불. 불이 사람 모양으로 일어서 「보고 싶다」를 되뇜. 불길 속 얼굴이 우는 것처럼 일렁임. 신당 화재 회상에서 불이 문틈으로 손가락처럼 기어 들어옴",u:"해원 직전 불이 사그라들며 수줍게 「저… 혹시 선덕여왕님 사진도 찍어 주십니까」. 시우: 「손님이 오셔야 찍어 드립니다」",st:"done"},
+// 그냥 귀신
+{g:"guest",ep:"13·17~21화",n:"투안",p:"응우옌 반 뚜언 · 23",k:"묶인 넋 · 진짜 물귀신",
+ r:"구로다가 부적을 박은 피해자. 미경이 묻힌 바로 그 웅덩이에서 죽음. 최도원 형사의 수첩에 이름이 남음",
+ s:"대도건설 하청 이주노동자. 터파기 웅덩이에서 죽었지만 보고서엔 「작업자 1명, 개인 부주의」로만 적힘. 82년 전 미경의 「도주」와 같은 회사, 같은 자리, 같은 서류 한 줄. 구로다의 부적에 묶여 같은 웅덩이에서 사람의 발목을 끌어내리는 진짜 물귀신이 됨. 고향의 엄마는 매일 밤 영상 통화를 걺.",
+ f:"섬광으로 부적을 드러내고 미경이 뜯어냄. 엄마 목소리 「뚜언아」를 따라 불러 해원. 「엄마한테 전화해야 하는데」 「저 밥 먹었다고 해 주세요」",h:"특징: 물에 불은 하얀 두 손. 웅덩이 밑에서 솟구쳐 휠체어 바퀴를 붙잡음. 등의 젖지 않은 붉은 부적. 매일 밤 걸려 오는 받는 사람 없는 영상 통화",u:"웃음은 넣지 않음. 실제 피해자가 있는 이야기라 끝까지 단정하게. 대신 최도원이 수첩에 이름을 적는 장면으로 따뜻하게 마무리",st:"done"},
+{g:"guest",ep:"31화",n:"달걀귀신",p:"수장고 第三十七號",k:"원귀",
+ r:"아직 살아 있는 동생이 사진 한 장을 갖고 있음",
+ s:"평생 사진 한 장 남기지 못하고 죽은 여인. 가족이 얼굴을 잊어 얼굴을 잃고 달걀처럼 매끈해짐.",
+ f:"동생의 사진으로 얼굴이 돌아오고, 새로 찍어 해원",h:"특징: 얼굴 없음. 문간에 선 여인이 천천히 돌아보는데 눈코입이 없음. 숨소리도 발소리도 없는 정적",u:"솔이: 「언니, 얼굴 없는 분한테 증명사진은 어떻게 찍어요?」 엄 실장: 「…솔아」",st:"done"},
+{g:"guest",ep:"32화 · 후보 O",n:"손각시",p:"수장고 第五十一號",k:"원귀",
+ r:"몽달귀신의 짝. 시우의 가슴을 처음 아프게 한 손님",
+ s:"혼례 하루 전에 죽은 처녀. 「족두리를 써 보고 싶어요」만 되풀이함. 그녀가 웃으며 떠날 때 시우가 이유도 모른 채 가슴에 손을 얹음(은희의 그림자).",
+ f:"솔이가 소품 창고의 옛 족두리를 씌워 줌",h:"특징: 유리를 긁는 손톱. 혼례복 차림으로 거울 속에만 나타나 「족두리…」를 속삭임. 거울을 볼 때마다 한 걸음씩 가까워짐",u:"족두리를 써 보고 신이 나서 거울 앞에서 한 바퀴, 두 바퀴, 세 바퀴. 솔이: 「언니, 이제 가셔도 돼요」 「한 바퀴만 더」",st:"done"},
+{g:"guest",ep:"32화",n:"막동이",p:"수장고 第六十八號 · 객귀",k:"원귀",
+ r:"사할린 징용 피해자",
+ s:"사할린 탄광에 끌려가 돌아오지 못한 사내. 「어매, 나 돌아왔소」만 되풀이함.",
+ f:"하나가 사할린 한인 명부와 면사무소 기록에서 아명 「막동아」를 찾아냄",h:"특징: 탄광의 어둠과 곡괭이 소리. 사진관 바닥에서 석탄 가루가 배어 나옴. 얼굴이 검댕으로 지워져 있음",u:"「어매, 나 돌아왔소」를 엄 실장에게 해서 엄 실장이 당황. 「…저는 어매가 아닙니다」",st:"done"},
+{g:"guest",ep:"32화",n:"복동이",p:"수장고 第七十三號",k:"원귀",
+ r:"엄마가 정신대로 끌려가 돌아오지 못함",
+ s:"어른들이 다 끌려간 마을에서 홀로 엄마를 찾다 겨울에 죽은 일곱 살 아이. 「엄마 어디 있어요?」",
+ f:"하나가 렌즈에서 들은 대로 엄마 대신 「우리 복동이」를 불러 줌. 「아끼는 마음으로 부르면 그것도 진짜 이름」 규칙이 여기서 생김",h:"특징: 아이 웃음과 콩콩 발소리. 아무도 없는 2층에서 숨바꼭질하는 소리. 「엄마 어디 있어요?」가 점점 가까워짐",u:"솔이와 숨바꼭질을 하다 솔이가 이김. 「도깨비는 반칙이야!」",st:"done"},
+{g:"guest",ep:"32·51화 · 후보 O",n:"몽달귀신",p:"총각귀신 · 감초",k:"원귀",
+ r:"손각시를 찾아다니는 짝. 엉뚱하게 솔이에게 청혼함",
+ s:"장가를 못 가고 죽은 총각. 신부만 보면 따라붙음. 손각시가 떠난 직후 사진관에 들이닥치고, 번호 없는 건판 속 신부(은희)에게 손을 뻗었다가 시우가 처음으로 손님에게 화를 냄.",
+ f:"손각시와 영혼결혼식을 올려 주면 둘 다 풀림. 최종화 혼례 사진의 작은 거울",h:"특징: 신부를 노림. 번호 없는 건판 속 신부를 향해 손을 뻗는 순간 촛불이 일제히 꺼짐. 시우가 처음으로 화를 내는 무서운 얼굴",u:"솔이에게 무릎 꿇고 청혼. 솔이가 빗자루로 쫓아냄. 「저 연애 안 해요, 82년째 일만 해요!」",st:"done"},
+// 요괴
+{g:"yokai",ep:"전 회",n:"솔이",p:"도깨비 · 아군",k:"요괴 · 사진관 식구",
+ r:"은희의 빗자루에서 태어남. 시우를 「오빠」, 엄 실장을 「실장님」, 하나를 「언니」라 부름",
+ s:"1944년 그날 밤, 은희가 쓰던 짚 빗자루에서 태어난 도깨비. 82년 동안 사진관을 쓸며 살아옴. 메밀묵에 사족을 못 쓰고 씨름이 특기. 대놓고 웃기는 감초.",
+ f:"최종화에서 은희가 「넌 내가 아니야. 82년을 산 건 너야」라고 말하고 떠남. 솔이는 사진관에 남음",h:"특징: 싸울 때의 도깨비. 웃던 얼굴이 순간 사나워지며 손바닥에 푸른 도깨비불. 지붕 위를 거꾸로 매달려 달림",u:"이 작품 최고의 감초. 「몰카 아니에요, 저희 카메라는 다 대놓고 커요」 「형사님 할머니뻘이에요」 「LED라서요」. 메밀묵 앞에선 체면이 없음. 용역 깡패들과 씨름 한판",st:"done"},
+{g:"yokai",ep:"35~40화, 이후 식구",n:"흰 것",p:"장산범 · 사진관 第百二號",k:"요괴 · 빌런에서 식구로",
+ r:"당산신의 짐승. 구로다의 부적에 묶였다가 식구가 됨",
+ s:"성지에서 산신을 모시던 하얀 짐승. 1944년 성지 습격 때 구로다가 가슴에 부적을 박았고, 그날 밤 부적을 단 채 사진관에 봉인됨. 요괴라 징조 없이 빠져나가 사람 목소리로 「잠깐 나와 봐」를 흉내 내 실종 사건을 일으킴.",
+ f:"메밀묵으로 꾀어내 하나가 맨손으로 부적을 뜯음. 82년 동안 들은 목소리를 토해 내고 식구가 됨. 철거 날 아빠 목소리를 흉내 내 하나를 구함",h:"특징: 목소리 흉내. 문밖에서 옆에 서 있는 사람의 목소리가 들림. 「하나 씨는 어느 쪽이 진짜인지 아십니까?」 천장에 거꾸로 매달린 하얀 털",u:"식구가 된 뒤 엄 실장 목소리로 「…비키거라」. 암호를 엿듣고 「…메밀묵」이라 대답해 「땡!」. 경찰 사이렌과 최도원 목소리로 용역을 쫓아냄",st:"done"},
+{g:"yokai",ep:"33화",n:"야광귀",p:"수장고 第八十號 · 감초",k:"요괴",
+ r:"솔이의 앙숙",
+ s:"섣달그믐 밤 아이들 신발을 훔쳐 가는 요괴. 징조 없이 나와 솔이의 운동화부터 훔침.",
+ f:"문간에 체를 걸면 구멍을 세다가 날이 샘. 엄 실장까지 같이 세다 「구렁이 버릇이다」",h:"특징: 사라지는 신발. 현관에 신발이 한 짝씩 없어지는 소리 툭, 툭. 어둠 속에서 킁킁 냄새 맡는 소리",u:"체 구멍을 세다 날 샘. 엄 실장도 옆에서 「스물셋, 스물넷…」 세다 「구렁이 버릇이다」. 야광귀: 「또 날 샜다!」",st:"done"},
+{g:"yokai",ep:"44화 · 후보 Q",n:"어둑시니",p:"어둠귀신",k:"요괴",
+ r:"구로다와 상관없음. 악귀가 일으킨 정전이 깨움",
+ s:"어둠 속에서 쳐다볼수록 커지는 귀신. 도시가 정전되자 불 꺼진 아파트마다 피어나, 사람들이 겁먹을수록 건물 키만큼 자람.",
+ f:"무서워하지 않고 내려다보기. 솔이가 「안 무서워!」를 외칠수록 커지고, 엄 실장이 무심하게 「…작구나」 하자 쪼그라듦",h:"특징: 볼수록 커짐. 겁먹은 사람의 시선을 따라 아파트 창문마다 그림자가 한 층씩 차오름. 카메라가 올려다볼수록 화면을 다 덮음",u:"솔이가 「안 무서워! 하나도 안 무서워!」 외칠수록 목소리가 떨려서 더 커짐. 엄 실장이 찻잔을 들고 내려다보며 「…작구나」 한마디에 쪼그라듦",st:"done"},
+{g:"yokai",ep:"49화 · 후보 P",n:"그슨새",p:"도롱이 귀신 · 제주 전승",k:"요괴",
+ r:"구로다와 상관없음. 비 냄새를 따라 모임",
+ s:"비 오는 날 도롱이를 쓰고 나타나 사람을 홀린다는 제주의 귀신. 비 오는 장면마다 배경에 늘어서 불안을 주는 공포 장치. 정류장에서 하나를 기다리는 도정환 뒤에도 서 있음.",
+ f:"비가 그치면 사라짐. 젖은 도롱이를 불에 말리면 힘을 잃음",h:"특징: 빗속의 도롱이들. 비 오는 장면 배경마다 도롱이를 쓴 사람 모양이 하나씩 늘어나 있음. 눈치챈 시청자만 소름",u:"비가 그치자 도롱이들이 우산 없이 허둥지둥 흩어짐. 솔이: 「쟤네도 우산은 없나 봐」",st:"done"},
+{g:"yokai",ep:"22·23·29·38·56~60화",n:"개 그림자",p:"이누가미 (犬神)",k:"일본 요괴 · 빌런",
+ r:"구로다 힘의 본체. 주인을 따라 몸을 옮겨 다님",
+ s:"일본 민간신앙에서 개의 원한으로 만드는 저주의 영. 1944년 섬광에 한 번 타서 그림자로만 남음. 붉은 실 끝에 매여 창귀를 끌고, 직접 사람을 덮침. 숙주의 그림자에 귀와 주둥이가 드러남.",
+ f:"섬광에 탐. 솔이가 은희의 빗자루로 하나의 그림자에서 쓸어냄. 마지막엔 몸을 잃고 108번 건판에 매달려 낑낑대다 흩어짐",h:"특징: 주인 없는 그림자. 아무것도 없는데 바닥에 개 그림자만 미끄러져 옴. 사람 그림자의 머리 위로 뾰족한 귀가 솟음",u:"웃음 없음. 최종화에 몸을 잃고 낑낑대는 작은 개가 되어 동정과 공포가 섞임",st:"done"},
+{g:"yokai",ep:"1·4·13·15·19·40·42화",n:"까마귀",p:"시키가미 (式神)",k:"일본 식신 · 빌런",
+ r:"구로다의 눈과 손",
+ s:"음양사가 부리는 심부름꾼 영. 까마귀가 본 것을 구로다가 그대로 봄. 하나가 건판을 꺼낸 순간부터 크레인 위에서 지켜봄. 부적을 나르고 붉은 실 끝을 물고 있음.",
+ f:"부적이 뜯기면 떨어짐. 마지막 화의 하늘에는 까마귀 대신 까치가 날아감",h:"특징: 지켜보는 눈. 크레인, 펜스, 간판 위에 늘 같은 자리. 까마귀 눈동자에 둥근 안경 빛이 비침. 펜스 위에 일곱 마리가 일렬로",u:"부적이 뜯기는 순간 펜스에서 툭 떨어져 바닥을 데굴. 솔이: 「쟤 방금 기절했어?」",st:"done"},
+// 신
+{g:"god",ep:"전 회",n:"한시우",p:"108번 건판",k:"신 · 사진관을 지키는 신",
+ r:"은희의 정인. 만신의 아들. 사진관 「사장님」, 하나의 「작가님」",
+ s:"1944년 그날 밤, 죽어 가며 스스로를 108번 건판에 봉인해 사진관을 지키는 신이 됨. 이름과 기억을 잃고 낙관 「明月 韓」으로 성만 앎. 그림자가 없고 사진관 밖으로 못 나감. 죽은 손이라 혼자서는 셔터로 풀지 못함.",
+ f:"최종화. 엄 실장이 이름을 전하고, 하나가 「한시우 씨」라 부르자 기억이 돌아와 「…명월아」. 은희와 혼례 사진을 완성하고 떠남",h:"특징: 그림자 없는 사진사. 붉은 암실 등 아래 온몸이 누렇게 바랜 청년. 오래 기다린 사람의 눈으로 처음 보는 사람을 봄. 렌즈 너머 남의 죽음을 대신 겪게 하는 사진기",u:"1944년식 진지함. 「산재가 무엇입니까」 「카톡이 무엇입니까」. 하나 방문 앞에 밤새 꼿꼿이 서서 「지키는 것이 제 일입니다」",st:"done"},
+{g:"god",ep:"전 회 · 후보 D·N",n:"엄 실장",p:"업구렁이",k:"신 · 업신 (집안을 지키는 가신)",
+ r:"만신 집안의 수호신. 시우를 「도련님」이라 부름. 끝에는 하나를 모심",
+ s:"만신 집안을 대대로 지켜 온 업구렁이. 「사진관으로 가 시우를 지켜라」는 마지막 명을 받고 82년 동안 그날 밤을 혼자 기억하며 침묵함. 평소엔 철벽같이 점잖은데 가끔 무너지는 반전 감초. 철거 날 본모습으로 사진관을 똬리로 감아 버팀.",
+ f:"최종화에서 「도련님의 이름은 한시우입니다」 「줄탁동시입니다」. 떠난 뒤엔 「이제 아가씨를 모시겠습니다」",h:"특징: 뱀의 눈. 평소엔 점잖다가 순간 눈동자가 세로로 갈라짐. 철거 날 몸이 부풀어 거대한 업구렁이로 사진관을 감음",u:"반전 감초. 「…자가다」 2G 폴더폰 독수리 타법 「하 나 씨 . 엄 실 장 입 니 다 .」 분홍 꽃무늬 앞치마로 묵을 쑤며 「묵이 눈치를 봅니다」. 구렁이가 되어서도 「조끼 구기지 마라」",st:"done"},
+{g:"god",ep:"38(회상)·60화",n:"당산신",p:"성지의 신",k:"신 · 자리를 잃은 신",
+ r:"흰 것의 주인. 1944년 구로다가 노린 신",
+ s:"수천 년 동안 성지의 당산나무에 깃들어 마을을 지켜 온 신. 1944년 습격으로 당산나무가 베이면서 자리를 잃고 사라짐. 그 짐승이던 흰 것만 홀로 남음.",
+ f:"자리를 돌려주고 굿. 엔딩에서 성지 터에 새 당산나무를 심고 만복이 굿을 올리면 흰 것이 그 앞에 엎드림",h:"특징: 베어진 나무. 1944년 회상에서 당산나무가 베일 때 나무 속에서 사람 비명 같은 소리가 남. 그루터기에서 붉은 수액이 흐름",u:"엔딩에서 새로 심은 묘목 앞에 흰 것이 엎드리자, 솔이: 「너 원래 저기 사는 애였어? 그럼 이사 가?」 흰 것이 고개를 저으며 솔이 다리에 붙음",st:"done"},
+{g:"god",ep:"후보 G · 시즌 2",n:"손님마마",p:"호구별성 · 역신",k:"신 · 가장 오래된 재앙",
+ r:"구로다조차 두려워하는 존재. 성지가 수천 년 지켜 온 진짜 이유",
+ s:"옛날 천연두를 「손님」 「마마」라 부르며 모신 병의 신. 성지 맨 밑 청동기 돌 제단 아래 수천 년 눌려 있다가, 대도건설이 제단 아래까지 파헤치자 깨어남. 사람들이 열병에 걸리고 붉은 반점이 번짐. 엄 실장: 「…진짜 손님이 오셨습니다」.",
+ f:"봉인도 해원도 안 됨. 쫓지 않고 극진히 대접해 돌려보내는 마마배송굿. 신이 돌아온 만복, 엄마, 동네 할머니들이 함께 올림. 잠깐 구로다와 손잡는 회차도 가능",h:"특징: 진짜 「손님」. 붉은 반점이 사람들 몸에 꽃처럼 번짐. 사진관 문 종이 저절로 울리고 아무도 없는데 장부 넘어가는 소리. 엄 실장: 「…진짜 손님이 오셨습니다」",u:"마마배송굿에서 동네 할머니들이 진지하게 「손님, 이거 잡숫고 가세요」 떡을 쌓음. 만복은 굿하다 허리를 삐끗. 「신은 돌아왔는데 허리가 안 돌아와」",st:"new"},
+// ── 이번에 대본에 넣은 것 ──
+{g:"guest",ep:"41·53·55화 · 후보 T",n:"산재 넋들",p:"아랑 모티프 · 작업복의 넋",k:"원귀 · 이름이 지워진 노동자들",
+ r:"대도건설 산재 열한 건의 피해자. 최도원 형사 앞에만 나타남",
+ s:"대도건설 현장에서 혼자 일하다 죽고, 보고서에 「작업자 1명」으로만 남은 사람들. 구로다가 일부러 만든 무주고혼이라 이름을 불러 줄 사람이 없음. 밀양의 아랑이 담 큰 사또 앞에 나타났듯, 귀신을 믿지 않던 최도원 앞에 밤마다 말없이 줄지어 섬.",
+ f:"최도원이 피하지 않고 이름을 하나하나 수첩에 적음. 넋들이 가리킨 금고에서 명부가 나와 압수수색의 결정적 증거가 됨. 55화에서 유족과 동네 사람들이 이름을 불러 해원",
+ h:"새벽 경찰서, 최도원 책상 앞에 젖은 사람, 불탄 사람, 떨어진 사람이 말없이 서 있음. 텅 빈 회장실에서 넋 하나가 벽 쪽 그림을 손가락으로 가리킴",
+ u:"최도원: 「순서대로 한 분씩요. 번호표 드릴게요」",st:"done"},
+{g:"guest",ep:"41·55화",n:"무주고혼",p:"제사 지내 줄 이 없는 넋",k:"떠도는 넋",
+ r:"구로다가 명부에 모으는 이름들. 산재 넋들의 다른 이름",
+ s:"자손도, 기억해 줄 사람도 없는 외로운 넋. 엄 실장의 설명대로 구로다는 일부러 이름 없는 죽음을 만들어 무주고혼을 거두고, 그 이름을 명부에 모음.",
+ f:"이름을 몰라도 아끼는 마음으로 불러 주면 됨. 55화 동네 할머니 「우리 동네 사람이라고 불러 주면 되지」 「당재 양반!」 「골목집 새댁!」",
+ h:"철거 날 사진관 구석에 끝까지 남아 있는, 얼굴이 흐린 넋들",
+ u:"할머니들이 즉석에서 붙이는 별명이 하나같이 정겨워서 넋들이 웃음",st:"done"},
+{g:"guest",ep:"48화 · 후보 U",n:"수비 (잡귀잡신)",p:"굿판 끝 뒷전의 손님",k:"떠도는 넋",
+ r:"만복의 굿판에 몰려드는 이름 없는 떠돌이 넋들",
+ s:"굿의 맨 마지막 「뒷전」은 대접받지 못한 잡귀에게 남은 음식을 나눠 주는 순서. 신이 돌아온 만복의 첫 굿이 끝나자 서울의 떠돌이 잡귀가 다 몰려듦.",
+ f:"남은 음식을 다 나눠 주면 흩어짐",
+ h:"굿판 바깥 어둠 속에서 수백 개의 손이 상을 향해 뻗어 옴",
+ u:"솔이가 아껴 둔 메밀묵까지 뺏김. 「그건 내 거야!」 만복 「뒷전엔 원래 다 퍼 주는 거야」",st:"done"},
+{g:"yokai",ep:"54화",n:"불가사리",p:"쇠를 먹는 괴물",k:"요괴 · 뜻밖의 편",
+ r:"구로다와 상관없음. 철거 날 성지 터에서 깨어남",
+ s:"고려 말 송도에 나타나 온 나라의 쇠붙이를 먹고 집채만큼 커졌다는 괴물. 성지 맨 아래에서 잠들어 있다가 철거의 굉음에 깨어나, 포클레인 삽날과 절단기, 철근을 먹어 치움.",
+ f:"쇠를 못 먹게 하면 작아짐. 다 먹고 나면 배불러 다시 땅속으로 돌아감",
+ h:"갈라진 땅에서 기어 나와 포클레인 삽날을 와작 씹는 소리. 용역의 쇠파이프까지 빼앗아 삼킴",
+ u:"솔이 「저거 우리 편이야?」 구렁이 엄 실장 「배고픈 편입니다」. 철거가 멈춘 이유가 공식적으로 「장비 고장」으로 처리됨",st:"done"},
+{g:"god",ep:"41·60화 · 후보 K",n:"저승사자",p:"강림차사 · 명부의 사자",k:"신 · 저승의 일꾼",
+ r:"엄 실장의 오랜 찻잔 친구. 82년째 구로다를 데려가지 못함",
+ s:"검은 갓에 도포 차림으로 명부에 이름이 오른 넋을 데려감. 이름이 없는 구로다는 명부에서 찾을 수 없어, 해마다 사진관 앞에 와서 엄 실장과 차만 마시고 돌아감. 「이름이 있어야 저승에 간다」는 이 작품 규칙을 저승 쪽에서 보여 주는 인물.",
+ f:"최종화에서 108번 건판에서 풀려난 구로다의 이름이 명부의 빈칸에 스며들자 「…이제야 찾았군」. 이름만 데려가고 그림자는 남겨 흩어지게 함",
+ h:"그가 명부를 넘기면, 거기 이름이 적힌 사람이 그 자리에서 숨을 멈춤. 발밑에만 서리가 낌",
+ u:"「올해도 그자 이름이 안 뜨는군」 「82년째십니다」. 솔이 「아저씨, 또 오셨어요?」",st:"done"},
+{g:"god",ep:"60화 · 후보 L",n:"바리데기",p:"바리공주 · 무조신",k:"신 · 죽은 이의 길을 여는 신",
+ r:"만신이 모시던 무당들의 조상신. 만신이 말한 「하늘」",
+ s:"딸이라는 이유로 버려진 일곱째 공주가 병든 부모를 위해 저승까지 다녀와, 죽은 넋을 저승으로 이끄는 신이 됨. 오구굿에서 망자를 보낼 때 부르는 이야기.",
+ f:"최종화에서 시우와 은희가 떠나는 빛의 길 끝에 방울을 든 여인의 실루엣으로 잠깐 서서 둘을 맞음",
+ h:"빛 속에 선 여인의 얼굴이 끝내 보이지 않음",
+ u:"웃음 없음. 가장 고요한 장면으로 둠",st:"done"},
+{g:"god",ep:"50화 · 후보 S",n:"측신",p:"뒷간 신",k:"신 · 성질 고약한 가신",
+ r:"사진관 화장실을 82년 지켜 온 여신. 엄 실장도 쩔쩔맴",
+ s:"뒷간을 지키는 머리 긴 여신. 갑자기 들어가면 놀라 해를 입힌다고 해서 옛사람들은 헛기침을 세 번 하고 들어갔음.",
+ f:"헛기침 세 번. 새 수건과 향을 올려 달램",
+ h:"화장실 거울 속, 등 돌린 채 머리를 빗는 여자",
+ u:"하나의 비명 「안에 머리 긴 여자가!」 엄 실장 「들어가실 땐 헛기침 세 번입니다」. 그날 밤 시우까지 화장실 앞에서 「흠, 흠, 흠」",st:"done"},
+{g:"god",ep:"54화",n:"해치",p:"처마 끝의 작은 장식",k:"신수 · 불을 삼키는 짐승",
+ r:"만신이 사진관 처마에 달아 둔 수호물. 지귀의 맞수",
+ s:"옳고 그름을 가리고 불을 다스리는 상상의 짐승. 광화문 앞 해치상처럼 화재를 막으려 세웠음. 만신은 1940년 사진관을 지을 때 처마 끝에 작은 해치를 달아 둠.",
+ f:"철거 날 지귀의 불이 처마로 번지자 입을 벌려 불을 삼킴",
+ h:"돌로 된 작은 해치의 눈이 불빛 속에서 처음으로 움직임",
+ u:"엄 실장 「마님께서 달아 두신 겁니다」. 솔이 「82년 동안 저기 있었어요? 저 매일 빗자루로 쳤는데」",st:"done"},
+{g:"god",ep:"5화 복선 · 후보 G",n:"처용 탈",p:"사진관 문 위의 낡은 탈",k:"수호물 · 역신을 막는 얼굴",
+ r:"손님마마(역신)를 막을 마지막 방패",
+ s:"신라 처용이 아내를 범한 역신 앞에서 노래하고 춤추며 물러나자, 역신이 감복해 「당신 얼굴만 보아도 그 집에 들지 않겠다」고 맹세했다는 이야기. 그 뒤로 사람들은 처용의 얼굴을 문에 붙였음. 사진관 유리문 위에도 낡은 처용 탈이 걸려 있음.",
+ f:"시즌 1에서는 배경에만 깔아 둠. 손님마마 사건에서 마지막 방패가 됨",
+ h:"바람도 없는데 탈이 혼자 덜컹거리는 밤이 있음",
+ u:"하나가 처음 왔을 때 「인테리어 특이하네요」. 엄 실장 「…인테리어가 아닙니다」",st:"done"},
+// ── 에피소드 후보 ──
+{g:"vil",ep:"후보 I",n:"금돼지",p:"최치원 설화의 금빛 돼지",k:"요괴 · 욕심을 먹는 것",
+ r:"구로다가 땅값을 올리려 풀어 놓은 요괴",
+ s:"108만 호 발표 뒤 「금돼지 꿈을 꾸면 분양에 당첨된다」는 소문이 돌고, 꿈에 나타난 금돼지는 사람들의 욕심을 먹고 커짐. 사람들이 집을 몇 채씩 사들이는 사이 재개발 구역의 땅값이 치솟음.",
+ f:"설화처럼 사슴가죽에 약함. 하나 배낭의 사슴가죽 주머니가 처음 쓰임",
+ h:"모델하우스 밤샘 줄의 사람들 그림자가 하나씩 돼지 모양으로 바뀜",
+ u:"최도원이 금돼지 꿈을 꾸고 몰래 청약 넣었다 들킴. 「경찰도 집은 필요해요」",st:"new"},
+{g:"guest",ep:"후보 B",n:"장화와 홍련",p:"수장고 第二十一號·二十二號",k:"원귀 · 누명 쓴 자매",
+ r:"재산을 노린 후처와 친일 면장에게 누명을 쓴 지주 집안의 두 딸",
+ s:"1942년 「정절을 잃었다」는 누명에 언니가 연못에 몸을 던지고 동생이 따라감. 그 연못 자리가 지금은 아파트 단지의 인공 연못. 밤마다 붉은 연꽃이 피고, 그 집안 후손이 사는 동에서만 사고가 남.",
+ f:"족보와 면 기록에서 누명을 벗기고, 두 자매를 한 장에 나란히 다시 찍어 줌",
+ h:"엘리베이터 거울 속, 젖은 두 소녀가 뒤에 나란히 서 있음",
+ u:"관리소장이 매일 「연꽃 심은 적 없는데요」. 단톡방 공지 「연못에 연꽃 심으신 분?」",st:"new"},
+{g:"guest",ep:"후보 C",n:"손돌",p:"사진관 第九十四號",k:"원귀 · 처형된 뱃사공",
+ r:"억울하게 죽은 노동자의 원형. 투안과 이어지는 넋",
+ s:"1943년 강화 앞바다 뱃사공. 일본군 수송선의 물길잡이로 끌려가 「그 물목은 위험하다」고 막다가 첩자로 몰려 처형됨. 수송선은 그 물목에서 좌초. 음력 10월 20일 무렵의 매서운 바람 「손돌바람」이 불 때마다 해상 공사 현장 무전에 「저기로 가면 안 돼」가 섞임.",
+ f:"현장 노동자가 그의 경고를 듣고 사고를 피함. 「당신 말이 맞았소」 한마디에 해원",
+ h:"안개 속에서 떠내려 와 배를 이끄는 바가지 하나",
+ u:"배멀미하는 엄 실장. 「실장님 뱀이잖아요」 「땅 뱀이다」",st:"new"},
+{g:"guest",ep:"후보 J",n:"아기장수 우투리",p:"성지의 가장 오래된 넋",k:"원귀 · 성지의 기원",
+ r:"성지가 수천 년 제사를 지낸 이유",
+ s:"아주 먼 옛날 겨드랑이에 날개 달린 아기장수가 태어나자, 역적이 될까 두려워한 사람들이 아기를 죽였고, 아기를 태우러 온 용마가 울다 죽은 자리가 바로 성지. 성지는 그 원한을 달래던 곳.",
+ f:"하나가 발굴한 뼈를 제단에 다시 모시고 만복이 큰굿을 올림",
+ h:"발굴 현장에서 나온 아주 작은 아기 뼈와 날개 모양 뼈. 밤마다 들리는 말 울음",
+ u:"솔이 「날개 달린 아기? 천사네!」 만복 「서양 거 갖다 붙이지 마」",st:"new"},
+{g:"guest",ep:"후보 H",n:"홍콩할매",p:"1990년대 학교 괴담",k:"근현대 괴담 · 오해받은 넋",
+ r:"하나가 초등학생 때 무서워하던 괴담의 주인공",
+ s:"아이들이 괴담으로 부풀린 사이, 실제로는 재개발 철거 때 집과 고양이를 함께 잃은 할머니가 30년 넘게 고양이만 찾아 헤매고 있었음.",
+ f:"흰 것이 고양이 울음을 흉내 내 이끌고, 고양이와 함께 찍은 사진으로 보냄",
+ h:"학교 복도 끝 「얘야, 우리 나비 못 봤니」. 고양이 눈으로 번뜩이는 얼굴",
+ u:"하나가 어릴 때 외운 대처법 「홍콩, 홍콩, 홍콩」. 할머니 「…홍콩은 왜?」",st:"new"},
+{g:"yokai",ep:"후보 A",n:"구미호",p:"수장고 第九號",k:"요괴 · 사람이 되고 싶은 여우",
+ r:"1944년 구로다가 여우구슬을 노려 사냥했고, 만신이 먼저 숨겨 줌",
+ s:"「사람으로 찍힌 사진 한 장」이면 사람이 될 수 있다며 사진관을 찾아옴. 렌즈로 보니 사람이 되려는 이유는, 1944년 끌려간 사냥꾼의 딸을 대신 키우겠다던 약속. 그 딸은 지금 아흔 살 할머니로 살아 있음.",
+ f:"사람이 되는 대신 할머니 곁에서 마지막 사진을 함께 찍고, 여우구슬을 하나에게 맡기고 떠남",
+ h:"웃으며 하나의 배를 손가락으로 톡. 「여기 맛있겠다」. 거울에만 비치는 꼬리 아홉",
+ u:"솔이와 「누가 더 오래 살았나」 기싸움. 82년 대 천 년에 솔이 완패",st:"new"},
+{g:"yokai",ep:"후보 D",n:"강철이",p:"승천 못 한 이무기",k:"요괴 · 엄 실장의 형",
+ r:"엄 실장과 함께 용이 되려던 옛 형제",
+ s:"엄 실장은 승천 대신 만신 집안의 업이 되기를 택했고, 형은 승천에 실패해 가뭄과 우박을 부르는 강철이가 됨. 「사람 집 구렁이로 주저앉았다」고 동생을 원망하며 찾아옴.",
+ f:"엄 실장이 82년 동안 지킨 사람들의 사진을 보여 주자, 형이 처음으로 비를 내리고 떠남",
+ h:"한여름 서울에 쏟아지는 우박, 갈라진 한강 바닥, 구름 속의 거대한 비늘",
+ u:"근엄한 엄 실장이 처음으로 「형님」. 솔이 「실장님한테 형이 있었어요?!」",st:"new"},
+{g:"yokai",ep:"후보 E",n:"영노",p:"탈놀이의 괴물",k:"요괴 · 갑질하는 자만 먹는 것",
+ r:"구로다와 상관없음. 대도건설 임원들을 노림",
+ s:"양반 아흔아홉을 먹고 하나만 더 먹으면 하늘에 오른다는 탈놀이의 괴물. 이번엔 갑질하는 자만 골라 먹어 대도건설 임원들이 차례로 사라짐. 백 번째로 노리는 건 권혁무 실장.",
+ f:"먹지 말고 「찍으라」고 설득함. 갑질 장면이 사진으로 남아 최도원의 증거가 됨",
+ h:"회의실 테이블 밑에서 올라오는 탈 쓴 얼굴. 의자에 넥타이만 남음",
+ u:"임원들이 「저 사실 을이에요」 「저는 병입니다」. 솔이 「그럼 하청은 정이에요?」",st:"new"},
+{g:"god",ep:"후보 F",n:"삼신할머니",p:"출산의 신",k:"신 · 하나를 점지한 신",
+ r:"82년 전 만신과 약속하고 하나를 점지함. 하나 외가와 아는 사이",
+ s:"「출생아 역대 최저」 뉴스에 일감이 끊겨 재개발 동네 경로당에서 화투를 침. 하나를 보자마자 「아이고, 내가 점지한 애네」. 만신이 장부에 이름을 적을 때, 그 아이를 언제 어느 집에 보낼지 삼신과 약속했다는 비밀이 드러남.",
+ f:"장부의 하나 이름 옆에 붉은 점 하나를 찍어 줌. 「다 컸으면 네 일은 네가 해라」",
+ h:"하나의 어릴 적 사진마다 같은 할머니가 작게 서 있었음",
+ u:"「요즘은 점지를 해도 안 낳아」 「집값이 30억인데 누가 낳아」",st:"new"},
+{g:"god",ep:"후보 M",n:"장승 부부",p:"천하대장군·지하여장군",k:"신 · 마을을 잃은 수호신",
+ r:"재개발로 뽑혀 고물상에 버려진 마을 장승",
+ s:"지킬 마을이 없어진 장승 부부가 「우리는 어디 서 있어야 하나」 하고 밤마다 고물상 주인 꿈에 나옴. 하나와 솔이가 사진관 골목 어귀로 옮겨 세움.",
+ f:"철거 날 골목 어귀에서 잡귀와 용역 한쪽을 막아 줌",
+ h:"고물상 CCTV에 밤마다 조금씩 걸어 나오는 장승. 얼굴 방향이 매일 바뀜",
+ u:"82년 만의 부부싸움 「당신이 똑바로 안 서 있어서 마을이 헐렸잖소」",st:"new"},
+{g:"god",ep:"후보 N",n:"성주신",p:"집을 지키는 가장 높은 가신",k:"신 · 떠나는 집의 신",
+ r:"사진관의 성주는 1944년에 떠났고, 82년 동안 엄 실장이 대신 지킴",
+ s:"철거를 앞둔 동네의 집마다 성주신들이 보따리를 싸서 줄지어 떠나는 밤. 하나만 그 행렬을 봄. 마지막에 사진관 차례가 오자, 그 집 성주가 이미 오래전에 떠났다는 사실이 드러남.",
+ f:"엄 실장이 처음으로 사진관이 헐리는 걸 받아들임. 「집은 떠나도 식구는 남습니다」",
+ h:"새벽 골목, 보따리를 인 작은 노인들이 소리 없이 끝없이 걸어 나감. 빈집 창이 하나씩 꺼짐",
+ u:"성주들이 엄 실장에게 「자네 아직 안 갔나」 「업이 성주 노릇까지 하느라 고생 많네」",st:"new"}
+];
+const tb=document.getElementById('tb'),tabs=document.getElementById('tabs'),q=document.getElementById('q');
+let cur='all';
+function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function mkTabs(){
+  const list=[['all','전체',D.length,'--muted']].concat(Object.entries(G).map(([k,v])=>[k,v.label,D.filter(d=>d.g===k).length,v.c]));
+  list.push(['cand','후보만',D.filter(d=>d.st==='new').length,'--red']);
+  tabs.innerHTML=list.map(([k,l,n,c])=>`<button type="button" data-k="${k}" aria-pressed="${k===cur}"><span class="dot" style="background:var(${c})"></span>${l}<span class="n">${n}</span></button>`).join('');
+}
+function render(){
+  const t=q.value.trim();
+  const GO=Object.keys(G);
+  const rows=D.map((d,i)=>[d,i]).filter(([d])=>(cur==='all'||(cur==='cand'?d.st==='new':d.g===cur))&&(!t||[d.n,d.p,d.k,d.r,d.s,d.f,d.h,d.u,d.ep].join(' ').includes(t))).sort((x,y)=>(GO.indexOf(x[0].g)-GO.indexOf(y[0].g))||((x[0].st==='new')-(y[0].st==='new'))||(x[1]-y[1])).map(x=>x[0]);
+  if(!rows.length){tb.innerHTML='<tr><td colspan="7" class="empty">찾는 넋이 없어요. 다른 말로 찾아보세요.</td></tr>';return}
+  let h='',last='';
+  rows.forEach(d=>{
+    if(d.g!==last){const g=G[d.g];h+=`<tr class="grp-row"><td colspan="7" style="color:var(${g.c})">${g.label}<span>${g.sub}</span></td></tr>`;last=d.g}
+    const g=G[d.g];
+    h+=`<tr>
+<td class="name" data-l="이름"><strong>${esc(d.n)}</strong><span class="plate">${esc(d.p)}</span><span class="epl">${esc(d.ep||'')}</span><span class="st ${d.st}" style="margin-top:6px">${d.st==='new'?'후보':'대본'}</span></td>
+<td class="kind" data-l="구분 · 분류"><span class="grp" style="color:var(${g.c})">${g.label}</span><small>${esc(d.k)}</small></td>
+<td class="rel" data-l="관계">${esc(d.r)}</td>
+<td class="story" data-l="사연 · 스토리">${esc(d.s)}</td>
+<td class="fix" data-l="풀거나 막는 법">${esc(d.f)}</td>
+<td class="hor" data-l="무서운 장면">${esc(d.h)}</td>
+<td class="hum" data-l="웃음 포인트">${esc(d.u)}</td></tr>`;
+  });
+  tb.innerHTML=h;
+}
+tabs.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;cur=b.dataset.k;mkTabs();render();try{localStorage.setItem('dogam-tab',cur)}catch(_){}});
+q.addEventListener('input',render);
+try{const s=localStorage.getItem('dogam-tab');if(s&&(s==='all'||s==='cand'||G[s]))cur=s}catch(_){}
+mkTabs();render();
+const LG={
+ won:{label:"원귀",sub:"억울하게 죽은 사람의 넋",c:"--g-guest"},
+ jab:{label:"떠도는 넋·잡귀",sub:"갈 곳 없이 떠도는 넋",c:"--g-good"},
+ yo:{label:"요괴",sub:"사람의 넋이 아닌 것",c:"--g-yokai"},
+ sin:{label:"신·신령",sub:"모시고 대접하는 존재",c:"--g-god"},
+ hero:{label:"귀신을 다룬 사람",sub:"귀신을 부리거나 물리친 전설",c:"--sepia"},
+ mod:{label:"근현대 괴담",sub:"20세기 이후의 이야기",c:"--g-vil"}
+};
+const L=[
+// 원귀
+{g:"won",n:"처녀귀신 (손각시·손말명)",src:"무속·민간",k:"혼인하지 못하고 죽은 처녀의 넋. 가장 한이 깊은 귀신으로 여겨짐",
+ s:"시집 못 간 한 때문에 이승을 떠나지 못하고 젊은 남자나 혼인하는 집을 해친다고 믿었음. 그래서 사람이 많이 밟는 길가에 묻거나, 총각귀신과 짝지어 넋을 혼인시키는 사혼(死婚)을 치러 주기도 함",
+ f:"흰 소복, 풀어 헤친 긴 머리. 영혼결혼식이나 굿으로 한을 풀어 줌",
+ u:"수장고 51번 손각시. 족두리를 써 보고 떠남. 혼례를 못 치르고 죽은 은희의 거울이 되는 손님",w:"in",wt:"32화 몽타주"},
+{g:"won",n:"몽달귀신 (총각귀신)",src:"무속·민간",k:"장가를 못 가고 죽은 총각의 넋",
+ s:"처녀귀신과 짝을 이루는 귀신. 혼인 못 한 한으로 처녀에게 들러붙는다고 하며, 처녀귀신과 영혼결혼을 시켜 함께 보내기도 함",
+ f:"신부만 보면 따라붙음. 혼례로 풀림",
+ u:"손각시를 찾아 사진관에 들이닥쳤다가 엉뚱하게 솔이에게 청혼하는 감초. 은희의 건판에 손을 뻗어 시우가 처음 화를 냄. 손각시와 영혼결혼식을 올려 함께 보냄",w:"now",wt:"32화 몽타주 뒤에 이어 붙이고, 51화에서 은희 건판에 손을 뻗음"},
+{g:"won",n:"물귀신 (수살귀)",src:"무속·민간",k:"물에 빠져 죽은 넋",
+ s:"물에서 죽은 넋은 다른 사람을 물에 끌어들여 자기 자리를 대신하게 해야 저승에 갈 수 있다고 믿었음. 남을 함께 끌어들이는 걸 「물귀신 작전」이라 부르는 말이 여기서 나옴. 수살막이 장승을 세워 막기도 함",
+ f:"젖은 몸, 발목을 잡아끄는 손. 넋건지기굿으로 물에서 넋을 건져 올려 보냄",
+ u:"미경(산 채로 흙탕물에 잠긴 처녀)과 투안(부적에 묶인 진짜 물귀신). 물귀신 속설을 뒤집어, 미경은 남을 끌어들이지 않고 오히려 끌어올림",w:"in",wt:"8~21화"},
+{g:"won",n:"아랑",src:"무속·민간 (밀양 아랑 전설)",k:"억울하게 죽은 사또의 딸. 원님 앞에 나타나 원한을 호소하는 원귀",
+ s:"밀양 부사의 딸 아랑이 유모와 통인의 흉계로 죽임을 당하고 대숲에 버려짐. 아랑의 넋이 새로 부임하는 사또마다 찾아가 억울함을 호소했지만 다들 놀라 죽었고, 담이 큰 사또가 마침내 사연을 듣고 범인을 잡아 원한을 풀어 줌. 밀양 영남루 아래 아랑각이 있음",
+ f:"억울함을 들어 줄 사람 앞에만 나타남. 범인이 밝혀지고 시신이 수습되면 풀림",
+ u:"최도원 형사가 현대의 「담 큰 사또」가 됨. 산재로 죽은 넋들이 최도원 앞에만 나타나기 시작하고, 귀신을 믿지 않던 그가 피하지 않고 듣기로 함. 대도건설 압수수색의 결정적 증언이 넋들에게서 나옴",w:"now",wt:"41화 (최도원이 처음 넋을 봄), 53화 압수수색"},
+{g:"won",n:"장화와 홍련",src:"문헌 (고전소설 「장화홍련전」)",k:"계모의 모함으로 죽은 두 자매의 원귀",
+ s:"평안도 철산의 배좌수 딸 장화가 계모의 누명을 쓰고 연못에 빠져 죽고, 동생 홍련도 언니를 따라 같은 연못에 몸을 던짐. 자매의 넋이 새 부사 앞에 나타나 억울함을 밝혀 원한을 풂",
+ f:"연못, 물. 누명이 벗겨져야 풀림",
+ u:"미경과 같은 결의 이야기라 시즌 1에서는 겹침. 시즌 2에서 「누명」을 다루는 별도 손님 에피소드로 아껴 둠",w:"later",wt:"시즌 2"},
+{g:"won",n:"손돌",src:"무속·민간 (강화 손돌목 전설)",k:"억울하게 처형된 뱃사공의 원귀. 해마다 찬바람으로 돌아옴",
+ s:"고려 때 왕을 태우고 강화 앞바다 험한 물목을 건너던 뱃사공 손돌이, 일부러 위험한 길로 간다는 의심을 받아 처형됨. 죽기 전 바가지를 띄워 그 길을 따라가라 했고, 왕은 무사히 건넌 뒤 후회함. 그가 죽은 음력 10월 20일 무렵 부는 매서운 바람을 「손돌바람」이라 부름",
+ f:"해마다 같은 날 찬바람으로 돌아옴. 무덤에 제사를 지내 달램",
+ u:"「일을 제대로 하려다 의심받아 죽은 노동자」의 원형. 투안과 산재 넋들의 이야기와 이어짐. 손돌바람이 부는 날 웅덩이 장면을 찍으면 실제 계절감이 맞음",w:"later",wt:"시즌 2 (현재 이야기의 10월 하순 장면 배경으로만 사용 가능)"},
+{g:"won",n:"창귀",src:"문헌·민간",k:"범에게 물려 죽은 뒤 그 범의 종이 된 넋",
+ s:"범에게 죽은 사람의 넋은 범을 떠나지 못하고 앞장서서 길을 안내하거나 다음 사람을 불러낸다고 믿었음. 「창귀 같은 놈」은 나쁜 사람의 앞잡이를 뜻하는 말이 됨",
+ f:"가족 목소리로 부름. 범과 이어진 끈을 끊어야 풂",
+ u:"외할머니 한옥분. 구로다(범)의 붉은 부적에 묶여 가족을 「잠깐 나와 봐」로 불러냄",w:"in",wt:"24~30화, 47~48화"},
+{g:"won",n:"영산 (영산귀)",src:"무속",k:"사고, 전쟁, 살해로 갑자기 비명에 간 넋",
+ s:"무속에서 제명에 죽지 못한 넋을 영산이라 부르며 따로 위로하는 굿을 올림. 피를 흘리며 죽은 넋이라 원한이 세다고 여김",
+ f:"죽은 그 순간에 멈춰 있음. 진오귀굿, 씻김굿으로 위로함",
+ u:"사진관 손님 대부분이 영산이에요. 엄 실장이 「영산은 죽던 순간에 멈춰 계십니다」라고 규칙을 설명하는 장면에 이 말을 씀",w:"now",wt:"11화 규칙 설명 대사"},
+// 떠도는 넋
+{g:"jab",n:"객귀",src:"무속·민간",k:"집을 떠나 객지에서 죽은 넋",
+ s:"고향에 돌아오지 못하고 객지에서 죽은 넋이 떠돌며 사람에게 붙어 병을 일으킨다고 믿었음. 아픈 사람에게 바가지에 밥을 담아 칼로 위협하며 쫓아내는 「객귀물림」을 했음",
+ f:"고향과 집을 그리워함. 밥을 대접해 내보냄",
+ u:"사할린 징용 객귀 막동이. 「어매, 나 돌아왔소」",w:"in",wt:"32화 몽타주"},
+{g:"jab",n:"무주고혼",src:"무속·민간",k:"제사를 지내 줄 사람이 없는 외로운 넋",
+ s:"자손이 없거나 객사해 아무도 기억하지 않는 넋. 명절과 굿에서 따로 상을 차려 대접함",
+ f:"이름을 불러 줄 사람이 없어 떠돎",
+ u:"구로다가 산재로 일부러 만들어 명부에 모으는 넋들. 55화에서 동네 사람들과 최도원의 유족 명단이 이들의 이름을 불러 줌",w:"now",wt:"41화 엄 실장 대사 「무주고혼을 만들어 이름을 거두는 겁니다」, 55화"},
+{g:"jab",n:"수비 (잡귀잡신)",src:"무속",k:"굿판 끝에 몰려드는 떠돌이 잡귀",
+ s:"굿의 맨 마지막 「뒷전」은 이름 없이 떠도는 잡귀들에게 남은 음식을 나눠 주며 풀어 먹이는 순서. 대접받지 못한 잡귀가 굿을 망칠까 봐 마지막까지 챙김",
+ f:"배고픔. 음식을 나눠 주면 흩어짐",
+ u:"신이 돌아온 만복의 첫 굿(48화)에서 뒷전에 잡귀들이 우르르 몰려들어 떡을 집어 감. 솔이가 자기 메밀묵까지 뺏겨 울상인 감초 장면",w:"now",wt:"48화 할머니 해원 굿의 끝"},
+// 요괴
+{g:"yo",n:"도깨비",src:"문헌·무속·민간",k:"사람을 홀리기도 돕기도 하는 장난꾸러기 정령",
+ s:"빗자루, 절굿공이, 부지깽이처럼 오래 쓴 물건에 사람의 손때가 묻어 생겨난다고 함. 메밀묵을 좋아하고 씨름을 즐기며, 도깨비불을 띄움. 사람에게 「김서방」이라 불리기도 하고 은혜를 갚기도 함",
+ f:"메밀묵, 씨름. 말머리나 왼발로 씨름을 걸면 진다는 이야기도 있음",
+ u:"솔이. 은희가 쓰던 짚 빗자루에서 1944년 그날 밤 태어남",w:"in",wt:"전 회"},
+{g:"yo",n:"구미호",src:"문헌·민간",k:"천 년을 산 꼬리 아홉 달린 여우",
+ s:"사람으로 둔갑해 사람의 간을 빼먹으며, 사람 간 천 개를 먹거나 사람과 맺어지면 사람이 된다는 이야기가 있음. 입에 여우구슬을 품고 그 기운으로 사람을 홀림",
+ f:"둔갑해도 꼬리를 숨기지 못함. 여우구슬을 빼앗기면 힘을 잃음",
+ u:"너무 유명해서 시즌 1에서는 아낌. 시즌 2에 「사람이 되고 싶어 사진을 찍으러 온 여우」 손님으로 쓰면 이 작품다운 비틀기가 됨",w:"later",wt:"시즌 2"},
+{g:"yo",n:"불가사리",src:"문헌·민간 (송도 말년 불가사리 전설)",k:"쇠를 먹고 자라는 괴물",
+ s:"고려 말 한 사람이 밥알로 빚은 작은 짐승이 바늘을 먹더니 온 나라의 쇠붙이를 먹고 집채만큼 커졌다는 이야기. 죽일 수 없다는 뜻의 「불가살이」에서 이름이 왔다고도 함",
+ f:"쇠를 먹을수록 커짐. 불에도 안 죽고, 쇠를 못 먹게 해야 함",
+ u:"철거 날 성지 터에서 깨어나 포클레인과 절단기, 철근을 먹어 치우는 괴물. 무서운데 덕분에 철거가 멈추는 감초. 솔이 「저거 우리 편이야?」 엄 실장 「배고픈 편입니다」",w:"now",wt:"54화 철거 날"},
+{g:"yo",n:"이무기·강철이",src:"문헌·민간",k:"용이 되지 못한 큰 뱀",
+ s:"천 년을 수행하면 여의주를 얻어 용이 된다는 큰 뱀. 승천에 실패한 이무기 「강철이」가 지나가는 곳은 가뭄과 우박이 든다고 해서 「강철이 간 데는 가을도 봄」이라는 속담이 생김",
+ f:"여의주. 승천 실패의 원한으로 재앙을 부름",
+ u:"엄 실장(업구렁이)의 옛 형제. 오래전 승천을 다투다 떨어진 강철이가 엄 실장을 찾아옴. 근엄한 엄 실장이 처음으로 「형님」이라 부르는 장면은 감초이자 반전",w:"later",wt:"시즌 2"},
+{g:"yo",n:"어둑시니",src:"무속·민간",k:"어둠 속에서 쳐다볼수록 커지는 귀신",
+ s:"밤길에서 마주친 사람이 겁먹고 올려다볼수록 점점 커져 덮친다고 함. 무시하고 내려다보면 작아져 사라진다고 전해짐",
+ f:"무서워하지 않기. 사진기도 신칼도 안 통함",
+ u:"악귀가 일으킨 정전에 불 꺼진 아파트마다 피어남. 솔이가 「안 무서워!」 외칠수록 커지고, 엄 실장이 찻잔을 든 채 「…작구나」 하자 쪼그라듦",w:"now",wt:"44화 정전"},
+{g:"yo",n:"두억시니",src:"민간 (표준국어대사전: 모질고 사악한 귀신)",k:"사납고 모진 귀신",
+ s:"사람을 짓누르고 해치는 사나운 귀신으로 알려짐. 잠든 사람을 누르는 가위눌림과 엮어 이야기되기도 함",
+ f:"이름이 잘 알려지지 않음. 정체를 보아야 다룰 수 있음",
+ u:"勿開 상자의 악귀 가운데 하나. 밤마다 하나의 가슴 위에 앉아 몸을 느슨하게 만들어 구로다가 들어올 길을 냄. 가위눌린 채 렌즈로 얼굴을 봐야 봉인할 수 있음",w:"now",wt:"50화 몽유병의 밤"},
+{g:"yo",n:"그슨새",src:"제주 지역 전승 (기록이 적음)",k:"비 오는 날 도롱이를 쓰고 나타나는 귀신",
+ s:"제주에서 비 오는 날 도롱이 차림으로 나타나 사람을 홀리고 해친다고 전해짐. 기록마다 내용이 달라, 근래에 알려진 부분도 섞여 있음",
+ f:"비가 그치면 사라짐",
+ u:"비 오는 장면 배경마다 도롱이 그림자가 하나씩 늘어나는 공포 장치. 눈치챈 시청자만 소름",w:"now",wt:"49화 빗속 정류장 (이후 비 오는 장면마다)"},
+{g:"yo",n:"영노",src:"민간 (경남 오광대 탈놀이)",k:"양반을 잡아먹는 탈놀이의 괴물",
+ s:"하늘에서 쫓겨난 괴물로, 양반 아흔아홉을 잡아먹었고 하나만 더 먹으면 하늘로 올라간다며 양반을 쫓아다님. 양반이 자기는 양반이 아니라고 발뺌하는 장면이 웃음 포인트",
+ f:"양반만 먹음. 「나는 양반이 아니다」라고 우기면 헷갈림",
+ u:"갑질하는 자만 골라 먹는 괴물로 비틀어 시즌 2 대도건설 임원 연쇄 실종 사건으로 씀. 「저는 갑이 아닙니다」 하고 발뺌하는 임원이 감초",w:"later",wt:"시즌 2"},
+{g:"yo",n:"야광귀",src:"민간 (설날 풍속)",k:"설날 밤 아이들 신발을 훔쳐 가는 귀신",
+ s:"설날 밤 내려와 발에 맞는 신을 신고 가 버리면 그 신의 주인이 한 해 동안 운이 나쁘다고 믿었음. 그래서 신발을 감추고 문에 체를 걸어 두면, 야광귀가 체 구멍을 세다가 날이 샌다고 함",
+ f:"체 구멍을 세느라 날이 샘",
+ u:"수장고 80번. 엄 실장도 체 구멍을 같이 세다 「구렁이 버릇이다」",w:"in",wt:"33화"},
+{g:"yo",n:"장산범",src:"근현대 (2010년대 인터넷 괴담)",k:"사람 목소리를 흉내 내는 흰 털의 짐승",
+ s:"부산 장산 일대에서 목격담이 퍼진 현대 괴담. 하얀 털, 사람이나 동물 소리를 흉내 내 사람을 꾀어낸다는 이야기가 인터넷에서 크게 퍼짐. 오래된 민간 전승은 아님",
+ f:"흉내는 귀를 속이지만 눈은 못 속임",
+ u:"흰 것. 작품에서는 「장산범이라 불리는 것」으로만 부르고, 본래 정체는 당산신의 짐승으로 설정함",w:"in",wt:"35~40화, 이후 식구"},
+// 신·신령
+{g:"sin",n:"저승사자 (강림차사)",src:"무속 (제주 「차사본풀이」 등)",k:"죽은 이의 넋을 명부에 따라 저승으로 데려가는 사자",
+ s:"검은 갓에 도포 차림으로, 저승 명부에 이름이 오른 사람을 데려감. 제주 신화의 강림도령은 염라대왕을 붙잡아 올 만큼 용맹해 저승차사가 됨. 사자를 대접하는 「사자상」을 차려 데려가는 길을 순하게 해 달라 빌기도 함",
+ f:"명부에 이름이 있어야만 데려갈 수 있음",
+ u:"82년 동안 해마다 구로다를 데려가려 오지만, 이름이 없어 명부에서 못 찾고 허탕 치는 저승사자. 엄 실장과는 오랜 찻잔 친구. 최종화에 구로다의 이름이 풀리자 마침내 명부에 이름이 떠오르고 「이제야 찾았군」",w:"now",wt:"41화 첫 등장(엄 실장과 차 마심), 60화 구로다를 데려감"},
+{g:"sin",n:"바리데기 (바리공주)",src:"무속 (서사무가 「바리공주」)",k:"죽은 이를 저승으로 인도하는 무당들의 조상신",
+ s:"딸이라는 이유로 버려진 일곱째 공주가, 병든 부모를 살리려 저승까지 가서 약수를 구해 옴. 그 뒤 죽은 넋을 저승으로 이끄는 신이 됨. 망자를 보내는 오구굿에서 부르는 노래",
+ f:"죽은 이의 길을 엶",
+ u:"만신이 모시던 신. 최종화에서 시우와 은희가 떠나는 빛의 길 끝에, 방울을 든 여인의 실루엣으로 아주 잠깐 나옴. 만신 「이건 하늘의 뜻입니다」의 「하늘」",w:"now",wt:"60화 혼례 사진 뒤의 빛"},
+{g:"sin",n:"업 (업구렁이)",src:"무속·민간 (가신 신앙)",k:"집안의 재물과 복을 지키는 가신",
+ s:"집에 사는 구렁이, 두꺼비, 족제비를 업이라 부르며 모심. 업이 나가면 집이 망한다고 여겨 절대 해치지 않음",
+ f:"집과 집안 사람을 지킴. 집을 떠나면 그 집의 복도 떠남",
+ u:"엄 실장. 만신 집안의 업으로 82년 동안 시우와 사진관을 지킴. 끝에 하나를 모심",w:"in",wt:"전 회"},
+{g:"sin",n:"측신 (뒷간귀신)",src:"무속·민간 (가신 신앙)",k:"뒷간(변소)을 지키는 성질 고약한 여신",
+ s:"머리카락이 길고 성질이 사나워, 갑자기 들어가면 놀라 사람에게 해를 입힌다고 믿었음. 그래서 뒷간에 들어가기 전 헛기침을 세 번 해서 알렸음",
+ f:"헛기침 세 번. 놀라게 하면 탈이 남",
+ u:"사진관 화장실의 감초. 하나가 처음 화장실에 갔다가 비명을 지르고, 엄 실장이 진지하게 「들어가실 땐 헛기침 세 번입니다」. 이후 시우까지 헛기침을 하고 들어가는 반복 개그",w:"now",wt:"50화 합숙 첫날"},
+{g:"sin",n:"삼신할머니",src:"무속·민간",k:"아이를 점지하고 키워 주는 출산의 신",
+ s:"아이를 점지하고 태어난 아이를 열다섯 살 무렵까지 돌본다고 믿음. 아기 엉덩이의 몽고반점을 삼신할머니가 빨리 나가라고 때린 자국이라 말하기도 함",
+ f:"정성으로 모심. 삼신상에 미역국과 밥을 올림",
+ u:"2화의 「출생아 수 역대 최저」 뉴스와 이어지는 풍자 감초. 일감이 없어 재개발 동네 경로당에서 화투를 치는 삼신할머니가 「요즘은 점지를 해도 안 낳아」. 하나 외가와 아는 사이",w:"later",wt:"시즌 2"},
+{g:"sin",n:"당산신·서낭신",src:"무속·민간 (마을 신앙)",k:"마을 어귀의 나무나 돌무더기에 깃들어 마을을 지키는 신",
+ s:"마을 입구의 큰 나무(당산나무)나 돌무더기(서낭당)에 신이 깃들어 마을을 지킨다고 믿고 해마다 당산제를 지냄. 지나는 사람은 돌을 하나 얹거나 침을 뱉어 액을 막음",
+ f:"자리를 지켜 줘야 함. 나무가 베이면 신도 떠남",
+ u:"1944년 당산나무가 베이며 자리를 잃은 성지의 신. 흰 것의 주인. 엔딩에 성지 터에 새 당산나무를 심자 흰 것이 그 앞에 엎드림",w:"now",wt:"60화 엔딩"},
+{g:"sin",n:"손님마마 (호구별성)",src:"무속",k:"천연두를 옮기는 역신. 「손님」이라 높여 부름",
+ s:"천연두를 「손님」 「마마」라 부르며, 쫓지 않고 극진히 대접해 돌려보냈음. 그 굿이 마마배송굿. 함부로 대하면 더 크게 앓는다고 믿음",
+ f:"봉인도 해원도 안 됨. 대접해서 배웅함",
+ u:"성지 맨 밑 돌제단 아래 눌려 있던 진짜 「손님」. 깨어나면 사진관이 82년 동안 「손님」이라 불러 온 말이 뒤집힘. 이야기가 커서 회차가 많이 필요함",w:"later",wt:"시즌 2 메인 사건"},
+{g:"sin",n:"해치 (해태)",src:"문헌·민간",k:"옳고 그름을 가리고 불을 막는 신령한 짐승",
+ s:"시비와 선악을 가리는 상상의 짐승으로, 불을 다스린다 하여 궁궐 앞에 세웠음. 광화문 앞 해치상이 유명함",
+ f:"불을 삼킴",
+ u:"불귀신 지귀와 맞서는 짐승. 철거 날 불이 번지자 광화문 해치상이 아니라, 사진관 처마의 작은 해치 장식이 불을 삼킴. 엄 실장 「마님께서 달아 두신 겁니다」",w:"now",wt:"54화 철거 날의 불"},
+// 귀신을 다룬 사람
+{g:"hero",n:"처용",src:"문헌 (삼국유사)",k:"역신을 춤과 노래로 물리친 사람",
+ s:"신라 헌강왕 때 처용이 밤늦게 돌아와 보니 역신이 아내를 범하고 있었음. 처용이 노래하고 춤추며 물러나자 역신이 감복해 「앞으로 당신 얼굴만 보아도 그 집에 들지 않겠다」고 맹세함. 그 뒤 사람들이 처용의 얼굴을 문에 붙여 역신을 막음",
+ f:"처용 탈과 그림이 역신을 막음",
+ u:"사진관 문 위에 걸린 낡은 처용 탈. 손님마마 사건에서 이 탈이 마지막 방패가 됨. 시즌 1에서는 문 위의 탈을 배경에 깔아 두기만 함",w:"now",wt:"5화 사진관 첫 등장 장면 배경 (복선만)"},
+{g:"hero",n:"비형랑과 길달",src:"문헌 (삼국유사)",k:"귀신을 부린 신라 사람과, 그가 부리다 도망친 귀신",
+ s:"진지왕의 넋과 도화녀 사이에서 태어난 비형랑이 밤마다 귀신들과 놀며 그들을 부려 하룻밤에 다리를 놓음. 귀신 길달이 일을 하다 여우로 변해 달아나자 비형랑이 귀신들을 시켜 잡아 죽임. 그 뒤 사람들이 「비형랑의 집」이라는 글을 붙여 잡귀를 쫓음",
+ f:"글로 쓴 이름 하나가 잡귀를 막음",
+ u:"「이름을 써 붙이면 귀신이 못 들어온다」는 이 작품 규칙의 옛 뿌리. 만신이 장부에 이름을 적고, 금줄에 이름을 건 이유로 엄 실장이 한 번 이야기해 줌",w:"now",wt:"45화 악귀 규칙 설명"},
+{g:"hero",n:"지귀",src:"문헌 (수이전, 대동운부군옥 인용)",k:"사모의 불에 타 불귀신이 된 신라 사람",
+ s:"선덕여왕을 사모하던 지귀가 탑 아래서 여왕을 기다리다 잠든 사이, 여왕이 팔찌를 가슴에 두고 감. 깨어난 지귀의 마음속 불이 몸 밖으로 번져 탑까지 태우고 불귀신이 됨. 여왕이 지은 주문을 써 붙여 화재를 막았다고 함",
+ f:"주문을 쓴 부적. 사모하던 이가 부르던 이름",
+ u:"구로다가 부적을 박아 부리는 방화범. 「누전」이라던 만복 어머니 신당 화재의 진범이자 철거 날의 불. 해원하며 「그저 한 번 보고 싶었을 뿐」",w:"now",wt:"29화 신당 화재 진범 암시, 54화 철거 날의 불"},
+// 근현대 괴담
+{g:"mod",n:"달걀귀신",src:"근현대 (민간 괴담)",k:"얼굴에 눈코입이 없는 귀신",
+ s:"달걀처럼 매끈한 얼굴로 나타나는 귀신 이야기가 근대 이후 널리 퍼짐",
+ f:"얼굴이 없음",
+ u:"수장고 37번. 가족이 얼굴을 잊어 얼굴을 잃었다는 이 작품만의 이유를 붙임",w:"in",wt:"31화"},
+{g:"mod",n:"홍콩할매귀신",src:"근현대 (1980~90년대 학교 괴담)",k:"고양이 얼굴의 할머니 귀신",
+ s:"홍콩 여행길에 고양이와 함께 사고로 죽어 반은 사람, 반은 고양이 얼굴이 됐다는 할머니가 아이들을 쫓아온다는 괴담. 한때 전국 초등학교에 퍼짐",
+ f:"질문에 답을 못 하면 해친다는 이야기가 붙음",
+ u:"하나가 초등학생 때 무서워하던 괴담이 진짜 손님으로 옴. 알고 보니 그냥 고양이를 잃어버린 할머니. 솔이 「저 할머니 그냥 고양이 찾는 거래요」",w:"later",wt:"시즌 2 감초 회차"}
+];
+
+(function(){
+const tb=document.getElementById('ltb'),tabs=document.getElementById('ltabs'),q=document.getElementById('lq');
+let cur='all';
+const VL={in:'대본',now:'이번에 넣음',later:'시즌 2'};
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function mk(){
+  const list=[['all','전체',L.length,'--muted']].concat(Object.entries(LG).map(([k,v])=>[k,v.label,L.filter(d=>d.g===k).length,v.c]));
+  list.push(['now','이번에 넣은 것만',L.filter(d=>d.w==='now').length,'--red']);
+  tabs.innerHTML=list.map(([k,l,n,c])=>`<button type="button" data-k="${k}" aria-pressed="${k===cur}"><span class="dot" style="background:var(${c})"></span>${l}<span class="n">${n}</span></button>`).join('');
+}
+function render(){
+  const t=q.value.trim();
+  const rows=L.filter(d=>(cur==='all'||(cur==='now'?d.w==='now':d.g===cur))&&(!t||[d.n,d.src,d.k,d.s,d.f,d.u,d.wt].join(' ').includes(t)));
+  if(!rows.length){tb.innerHTML='<tr><td colspan="6" class="empty">찾는 귀신이 없어요. 다른 말로 찾아보세요.</td></tr>';return}
+  let h='',last='';
+  rows.forEach(d=>{
+    const g=LG[d.g];
+    if(d.g!==last){h+=`<tr class="grp-row"><td colspan="6" style="color:var(${g.c})">${g.label}<span>${g.sub}</span></td></tr>`;last=d.g}
+    h+=`<tr>
+<td class="ln" data-l="이름"><strong>${esc(d.n)}</strong><span class="src">${esc(d.src)}</span></td>
+<td class="lk" data-l="어떤 귀신인가"><span class="cat" style="color:var(${g.c})">${g.label}</span><br>${esc(d.k)}</td>
+<td class="ls" data-l="전해지는 이야기">${esc(d.s)}</td>
+<td class="lf" data-l="특징 · 약점">${esc(d.f)}</td>
+<td class="lu" data-l="명월사진관 스토리">${esc(d.u)}</td>
+<td class="lw" data-l="넣을 자리"><span class="v v-${d.w}">${VL[d.w]}</span><br>${esc(d.wt)}</td></tr>`;
+  });
+  tb.innerHTML=h;
+}
+tabs.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;cur=b.dataset.k;mk();render()});
+q.addEventListener('input',render);
+mk();render();
+})();
+
+const CK={won:["원귀","--g-guest"],yo:["요괴","--g-yokai"],sin:["신·신령","--g-god"],mix:["원귀 + 요괴","--g-vil"],mod:["근현대 괴담","--g-vil"]};
+const C=[
+{id:"A",t:"여우구슬",gh:"구미호",k:"yo",when:"勿開 구간 앞 (시즌 1 후반)",len:"2화",
+ who:"천 년을 산 꼬리 아홉 여우. 수장고 第九號",
+ st:"1944년 구로다는 여우구슬의 힘을 노려 구미호를 사냥했고, 만신이 먼저 건판에 숨겨 줌. 깨어난 여우는 「사람으로 찍힌 사진 한 장」이 있으면 사람이 될 수 있다며 사진관을 찾아옴. 그런데 하나가 렌즈로 보니, 사람이 되고 싶은 이유는 1944년 끌려간 사냥꾼의 딸을 대신 키우려던 약속 때문. 그 딸은 지금 아흔 살 할머니로 살아 있음",
+ hor:"웃는 얼굴로 하나의 배를 손가락으로 톡 짚으며 「여기 맛있겠다」. 거울에는 꼬리 아홉 개가 비침",
+ hum:"솔이와 여우의 「누가 더 오래 살았나」 기싸움. 솔이 82년 대 여우 천 년에 솔이 완패. 엄 실장 「둘 다 조용히」",
+ end:"사람이 되는 대신, 할머니 곁에서 마지막 사진을 함께 찍고 여우구슬을 하나에게 맡기고 떠남"},
+{id:"B",t:"붉은 연꽃",gh:"장화와 홍련",k:"won",when:"시즌 2 초반",len:"2화",
+ who:"누명을 쓰고 연못에 빠져 죽은 두 자매. 수장고 第二十一號·第二十二號 (두 장이 한 쌍)",
+ st:"1942년 지주 집안의 두 딸. 재산을 노린 후처와 친일 면장이 짜고 「정절을 잃었다」는 누명을 씌워 언니가 연못에 몸을 던지고, 동생이 따라감. 2026년 그 연못 자리는 아파트 단지의 인공 연못. 밤마다 연못에서 붉은 연꽃이 피고, 그 집안 후손이 사는 동에서만 사고가 남",
+ hor:"아파트 연못 수면 아래 나란히 선 두 소녀의 얼굴. 엘리베이터 거울 속에 젖은 두 자매가 뒤에 서 있음",
+ hum:"단지 관리소장이 「연꽃 심은 적 없는데요」를 매일 반복. 아파트 단톡방에 「연못에 누가 연꽃 심으셨나요」 공지",
+ end:"하나가 족보와 면 기록에서 누명을 벗기고, 두 자매를 한 장의 사진에 나란히 다시 찍어 줌"},
+{id:"C",t:"손돌바람",gh:"손돌",k:"won",when:"시즌 1 중반 (음력 10월 20일 무렵, 지금 계절과 맞음)",len:"1~2화",
+ who:"억울하게 처형된 뱃사공의 원귀. 사진관 第九十四號",
+ st:"1943년 강화 앞바다 뱃사공 손씨. 일본군 수송선의 물길잡이로 끌려가, 「그 물목은 위험하다」고 막다가 첩자로 몰려 처형됨. 그가 남긴 말대로 수송선은 그 물목에서 좌초. 82년 뒤 손돌바람이 부는 날, 강화 앞바다의 해상풍력 공사 현장에서 「저기로 가면 안 돼」라는 목소리가 무전에 섞임",
+ hor:"바다 안개 속에서 바가지 하나가 떠내려 와 배를 이끎. 무전기에서 새어 나오는 1943년의 노 젓는 소리",
+ hum:"배멀미하는 엄 실장. 업구렁이인데 물에 약함. 솔이 「실장님 뱀이잖아요」 엄 실장 「땅 뱀이다」",
+ end:"공사 현장 노동자가 그의 말을 듣고 사고를 피함. 「당신 말이 맞았소」 한마디에 해원"},
+{id:"D",t:"형님",gh:"강철이 (이무기)",k:"yo",when:"시즌 2",len:"2화",
+ who:"승천에 실패한 이무기. 엄 실장의 옛 형제",
+ st:"수백 년 전 엄 실장과 함께 용이 되려던 이무기. 엄 실장은 승천 대신 만신 집안의 업이 되기를 택했고, 형은 승천에 실패해 강철이가 됨. 강철이가 지나는 곳마다 가뭄과 우박. 형은 엄 실장이 「사람 집 구렁이로 주저앉았다」고 원망하며 사진관을 찾아옴",
+ hor:"한여름 서울에 우박이 쏟아지고 한강 바닥이 갈라짐. 구름 속에서 거대한 비늘 몸이 꿈틀",
+ hum:"근엄한 엄 실장이 처음으로 「형님」 하고 고개를 숙임. 솔이 「실장님한테 형이 있었어요?!」 형이 솔이에게 「이 집 묵은 아직도 네 동생이 쑤냐」",
+ end:"엄 실장이 형에게 82년 동안 지킨 사람들의 사진을 보여 줌. 형이 처음으로 비를 내리고 떠남"},
+{id:"E",t:"아흔아홉",gh:"영노",k:"yo",when:"시즌 2",len:"1~2화",
+ who:"탈놀이에서 양반을 잡아먹던 괴물",
+ st:"양반 아흔아홉을 먹고 하나만 더 먹으면 하늘에 오른다는 영노가, 이번엔 「갑질하는 자」만 골라 먹음. 대도건설 임원들이 차례로 사라지고, 남은 임원들이 「저는 갑이 아닙니다」 서류를 들고 사진관에 찾아옴. 백 번째로 노리는 건 권혁무 실장",
+ hor:"회의실 테이블 밑에서 탈을 쓴 얼굴이 올라옴. 사라진 임원의 넥타이만 의자에 남음",
+ hum:"임원들이 영노 앞에서 「저 사실 을이에요」 「저는 병입니다」 서로 계급을 낮춤. 솔이 「그럼 하청은 정이에요?」",
+ end:"하나가 영노에게 먹지 말고 「찍으라」고 함. 갑질 장면을 사진으로 남겨 최도원의 증거가 됨. 영노는 아흔아홉에서 멈춘 채 탈 속으로 돌아감"},
+{id:"F",t:"점지",gh:"삼신할머니",k:"sin",when:"시즌 1 중반 (하나의 출생 비밀)",len:"1화",
+ who:"아이를 점지하고 지켜 주는 출산의 신",
+ st:"「출생아 역대 최저」 뉴스에 일감이 끊긴 삼신할머니가 재개발 동네 경로당에서 화투를 침. 하나를 보자마자 「아이고, 내가 점지한 애네」. 82년 전 만신이 장부에 이름을 적을 때, 그 아이를 언제 어느 집에 보낼지 삼신과 약속했다는 비밀이 드러남",
+ hor:"하나의 등 뒤, 어릴 적 사진마다 같은 할머니가 작게 서 있었음",
+ hum:"「요즘은 점지를 해도 안 낳아」 「집값이 30억인데 누가 낳아」. 하나 엉덩이 몽고반점 얘기에 하나가 기겁",
+ end:"삼신이 하나의 장부 이름 옆에 붉은 점 하나를 찍어 줌. 「다 컸으면 네 일은 네가 해라」"},
+{id:"G",t:"진짜 손님",gh:"손님마마 (호구별성)",k:"sin",when:"시즌 2 메인 사건",len:"3~4화",
+ who:"천연두를 옮기는 역신. 성지 맨 밑 돌제단 아래 수천 년",
+ st:"대도건설이 돌제단 아래까지 파자 깨어남. 서울에 붉은 반점의 열병이 번짐. 사진관이 82년 동안 「손님」이라 부르던 말이 뒤집힘. 봉인도 해원도 안 되는 신이라, 쫓지 않고 대접해서 보내야 함. 구로다조차 두려워해 잠깐 손을 잡음",
+ hor:"사진관 문 종이 저절로 울리고 아무도 없는데 장부가 넘어감. 엄 실장 「…진짜 손님이 오셨습니다」",
+ hum:"동네 할머니들이 마마배송굿에서 진지하게 떡을 쌓음. 만복이 굿하다 허리를 삐끗 「신은 돌아왔는데 허리가 안 돌아와」",
+ end:"사진관 문 위의 처용 탈이 마지막 방패. 손님마마를 배웅하고 돌제단을 다시 덮음"},
+{id:"H",t:"고양이 찾는 할머니",gh:"홍콩할매귀신",k:"mod",when:"감초 회차, 언제든",len:"1화",
+ who:"1990년대 초등학교 괴담의 주인공",
+ st:"하나가 초등학생 때 덜덜 떨던 그 괴담의 주인공이 진짜 손님으로 옴. 알고 보니 1990년대 초 홍콩 여행길이 아니라 서울 재개발 철거 때 집과 고양이를 함께 잃은 할머니. 아이들이 괴담으로 부풀린 사이, 할머니는 30년 넘게 고양이만 찾아 헤맴",
+ hor:"학교 복도 끝에서 「얘야, 우리 나비 못 봤니」. 고양이 눈으로 번뜩이는 할머니 얼굴",
+ hum:"하나가 초등학생 때 외운 대처법 「홍콩, 홍콩, 홍콩」을 진지하게 외침. 할머니 「…홍콩은 왜?」",
+ end:"흰 것이 고양이 울음을 흉내 내 할머니를 이끌고, 고양이와 함께 찍은 사진으로 보냄"},
+{id:"I",t:"금돼지굴",gh:"금돼지",k:"yo",when:"시즌 1 후반 (재개발 투기 풍자)",len:"1~2화",
+ who:"최치원 설화에서 여인을 잡아가던 금빛 돼지 요괴",
+ st:"108만 호 공급 발표 뒤 재개발 구역에 「금돼지 꿈을 꾸면 분양에 당첨된다」는 소문이 돌고, 사람들이 집을 몇 채씩 사들임. 꿈에 나타난 금돼지는 사람들의 욕심을 먹고 점점 커짐. 구로다가 땅값을 올리려 풀어 놓은 요괴",
+ hor:"모델하우스 밤샘 줄의 사람들 그림자가 하나씩 돼지 모양으로 바뀜. 금빛 굴 속에 쌓인 계약서 더미",
+ hum:"최도원이 금돼지 꿈을 꾸고 몰래 청약 넣었다 들킴. 「형사님도요?」 「…경찰도 집은 필요해요」",
+ end:"설화처럼 금돼지의 약점인 사슴가죽을 쓰자 힘을 잃음. 하나 배낭의 사슴가죽 주머니가 처음 쓰이는 회차"},
+{id:"J",t:"날개",gh:"아기장수 우투리",k:"won",when:"시즌 2 (성지의 기원)",len:"1~2화",
+ who:"겨드랑이에 날개가 달려 태어났다가 죽임당한 아기장수",
+ st:"성지가 왜 수천 년 동안 제사를 지냈는지 밝혀지는 회차. 아주 먼 옛날 날개 달린 아기장수가 태어나자, 역적이 될까 두려워한 사람들이 아기를 죽였고, 아기를 태우러 온 용마가 울다 죽은 자리가 바로 성지. 성지는 그 아기의 원한을 달래던 곳",
+ hor:"발굴 현장에서 아주 작은 아기 뼈와 날개 모양 뼈가 나옴. 밤마다 들리는 말 울음소리",
+ hum:"솔이가 「날개 달린 아기? 천사네!」 했다가 만복에게 「서양 거 갖다 붙이지 마」",
+ end:"하나가 발굴한 뼈를 제단에 다시 모시고, 만복이 첫 큰굿을 올려 성지가 다시 평온해짐"},
+{id:"K",t:"명부의 빈칸",gh:"저승사자",k:"sin",when:"감초 회차, 시즌 1 후반",len:"1화",
+ who:"명부에 따라 넋을 데려가는 저승의 사자",
+ st:"82년 동안 구로다를 못 데려간 저승사자가 저승에서 실적 미달로 징계 위기에 몰림. 사진관에 찾아와 「그 이름 좀 알아봐 주게」 부탁함. 이름이 없으면 저승에 갈 수 없다는 규칙이 처음으로 저승 쪽 입장에서 설명됨",
+ hor:"사진관 괘종시계가 멈추고, 저승사자 발밑에서만 서리가 낌. 명부를 넘기면 거기 적힌 이름의 사람이 그 자리에서 숨을 멈춤",
+ hum:"저승사자가 엄 실장에게 하소연 「요즘 저승도 성과급이야」. 솔이가 명부를 훔쳐보다 자기 이름이 없자 서운해함",
+ end:"구로다의 성 「黑田」만 적힌 빈칸을 보여 주며 「나머지 이름은 108번 안에 있네」라는 결정적 단서를 남김"},
+{id:"L",t:"버려진 딸",gh:"바리데기",k:"sin",when:"시즌 2 (엄마 서정희의 이야기)",len:"2화",
+ who:"버려진 공주가 저승까지 가 약수를 구해 온 무당들의 조상신",
+ st:"엄마 서정희가 갑자기 쓰러져 깨어나지 못함. 렌즈로 보니 엄마의 넋이 저승길 입구에 서 있음. 무당 집안에서 「딸이라 버려진」 기억을 안고 산 엄마. 하나가 바리데기처럼 렌즈를 통해 저승 문턱까지 가서 엄마를 데려와야 함",
+ hor:"렌즈 너머로 이어지는 끝없는 흰 길, 길가에 서서 하나를 쳐다보는 이름 없는 넋들",
+ hum:"저승 문 앞에서 다시 만난 저승사자(K) 「또 자네인가」",
+ end:"바리데기가 하나에게 방울을 건네고, 엄마가 돌아옴. 엄마가 처음으로 무당의 딸로 산 걸 원망하지 않게 됨"},
+{id:"M",t:"장승 부부",gh:"천하대장군·지하여장군",k:"sin",when:"철거 구간 앞",len:"1화",
+ who:"마을 어귀에서 잡귀를 막던 장승",
+ st:"재개발로 뽑혀 고물상 마당에 처박힌 마을 장승 부부. 지킬 마을이 없어진 신들이 「우리는 어디 서 있어야 하나」 하고 밤마다 고물상 주인 꿈에 나옴. 하나와 솔이가 장승을 사진관 골목 어귀로 옮겨 세움",
+ hor:"고물상 CCTV에 밤마다 조금씩 걸어 나오는 장승. 얼굴 방향이 매일 바뀜",
+ hum:"부부 장승이 82년 만에 부부싸움. 「당신이 똑바로 안 서 있어서 마을이 헐렸잖소」 솔이가 중재",
+ end:"철거 날 골목 어귀의 장승 부부가 잡귀와 용역 한쪽을 막아 줌"},
+{id:"N",t:"집이 떠난다",gh:"성주신",k:"sin",when:"철거 직전",len:"1화",
+ who:"집을 지키는 가장 높은 가신",
+ st:"철거를 앞둔 동네의 집마다 성주신들이 보따리를 싸서 줄지어 떠나는 밤. 하나만 그 행렬을 봄. 마지막으로 남은 건 명월사진관의 성주. 그런데 사진관의 성주는 1944년에 이미 떠났고, 그 자리를 82년 동안 엄 실장이 대신 지켜 왔다는 사실이 드러남",
+ hor:"새벽 골목, 보따리를 인 작은 노인들이 소리 없이 끝없이 걸어 나감. 비어 버린 집들의 창이 하나씩 꺼짐",
+ hum:"성주들이 엄 실장에게 「자네 아직 안 갔나」 「업이 성주 노릇까지 하느라 고생이 많네」",
+ end:"엄 실장이 처음으로 사진관이 헐리는 걸 받아들이고, 「집은 떠나도 식구는 남습니다」"},
+{id:"O",t:"사혼",gh:"몽달귀신과 손각시",k:"won",when:"시즌 1 후반 (최종화 앞)",len:"1화",
+ who:"혼인 못 하고 죽은 총각과 처녀",
+ st:"몽달귀신이 51번 손각시를 끝내 찾아내지만, 손각시는 이미 떠난 뒤. 하나가 손각시의 남은 사진으로 영혼결혼식을 열어 주기로 함. 사진관에서 처음 치르는 혼례. 시우는 그 혼례 사진을 찍으며 자기도 모르게 손이 떨림",
+ hor:"혼례 도중 촛불이 하나씩 꺼지며 제단 위 번호 없는 건판이 저절로 떨림",
+ hum:"주례를 맡은 만복이 「신랑 입장」 대신 「망자 입장」. 솔이가 축가로 트로트",
+ end:"두 넋이 함께 떠나고, 시우가 처음으로 「저도… 이렇게 찍어 주고 싶은 사람이 있었던 것 같습니다」"},
+{id:"P",t:"도롱이",gh:"그슨새",k:"yo",when:"장마철 회차",len:"1화",
+ who:"비 오는 날 도롱이를 쓰고 사람을 홀리는 귀신 (제주 전승)",
+ st:"장마철 밤, 빗속을 달리던 배달 기사들이 하나둘 사라짐. 마지막 위치는 모두 같은 육교 밑. 비 맞으며 끝없이 달리던 사람들을 그슨새가 「쉬었다 가라」며 도롱이 속으로 데려감. 그 안은 따뜻하고, 나오기 싫어짐",
+ hor:"육교 밑 어둠 속에 도롱이를 쓴 사람들이 비를 맞으며 줄지어 서 있음. 그 안에 사라진 배달 기사들의 헬멧",
+ hum:"솔이가 배달 앱으로 메밀묵을 시켰는데 배달 기사가 도롱이를 쓰고 옴",
+ end:"하나가 도롱이를 불에 말리자 기사들이 깨어남. 그슨새는 비 그친 하늘 아래 작게 웅크림"},
+{id:"Q",t:"고시원",gh:"어둑시니",k:"yo",when:"시즌 2",len:"1화",
+ who:"볼수록 커지는 어둠의 귀신",
+ st:"창문 없는 고시원 복도의 전등이 하나씩 나감. 외롭게 지내던 청년들이 어둠을 볼수록 어둑시니가 자라 방문을 막음. 그중 한 방에는 아무도 모르게 세상을 떠난 청년의 넋이 있음. 어둑시니는 그 외로움을 먹고 자람",
+ hor:"복도 끝 어둠이 숨을 쉼. 방문 틈으로 검은 것이 밀려 들어옴",
+ hum:"엄 실장이 고시원 총무에게 「전구는 갈아 끼우셔야지요」 하고 직접 갈아 줌",
+ end:"하나가 고독사한 청년의 이름을 찾아 불러 주고, 이웃 방 청년들이 처음으로 문을 열고 나와 서로 인사함"},
+{id:"R",t:"한 번만",gh:"지귀",k:"won",when:"勿開 구간 (구로다의 방화범)",len:"1~2화",
+ who:"사모의 불에 타 불귀신이 된 신라 사람",
+ st:"서울 곳곳의 화재 현장마다 같은 문장이 그을음으로 남음. 「보고 싶다」. 구로다가 부적으로 부리는 불귀신 지귀. 만복 어머니 신당 화재의 진범. 하나는 렌즈로 그가 사모한 사람이 여왕이 아니라, 1944년 사진관 앞을 지나던 은희였다는 사실을 봄",
+ hor:"불길 속에 우는 사람 얼굴. 소방관 무전에 「안에 누가 서 있어요, 불이 사람 모양이에요」",
+ hum:"지귀가 해원 직전 수줍게 「저… 그분 사진도 한 장 찍어 주십니까」 시우 「…안 됩니다」 (질투)",
+ end:"해치 장식이 불을 삼키고, 지귀 주문으로 부적을 떼어 「그저 한 번 보고 싶었을 뿐」 해원"},
+{id:"S",t:"헛기침 세 번",gh:"측신",k:"sin",when:"감초 회차, 언제든",len:"1화",
+ who:"뒷간을 지키는 성질 고약한 여신",
+ st:"하나가 사진관 화장실을 비데로 바꾸겠다고 리모델링 업체를 부름. 82년 동안 그 뒷간을 지켜 온 측신이 대노해 사진관 수도가 전부 역류. 엄 실장은 측신 앞에서만 쩔쩔맴",
+ hor:"변기 물 위로 긴 머리카락이 끝없이 올라옴. 화장실 거울에 등 돌린 여자",
+ hum:"엄 실장과 시우까지 화장실 앞에 줄 서서 「흠, 흠, 흠」. 비데 설치 기사가 측신을 보고 기절",
+ end:"비데는 포기하고 측신에게 새 수건과 향을 올려 화해"},
+{id:"T",t:"담 큰 사또",gh:"아랑",k:"won",when:"시즌 1 후반 (최도원 중심)",len:"1~2화",
+ who:"억울한 죽음을 사또 앞에 호소한 밀양의 원귀",
+ st:"최도원 앞에 밤마다 작업복 차림의 넋들이 나타남. 산재 열한 건의 피해자들. 귀신을 안 믿던 최도원이 처음엔 도망치다가, 아랑을 만난 옛 사또처럼 피하지 않고 하나하나 사연을 듣기로 함. 넋들이 알려 준 곳에서 은폐된 증거가 나옴",
+ hor:"새벽 경찰서 사무실, 최도원 책상 앞에 젖은 사람, 불탄 사람, 떨어진 사람이 말없이 줄지어 서 있음",
+ hum:"최도원이 넋들에게 「순서대로 한 분씩요. 번호표 드릴게요」",
+ end:"최도원이 넋들의 이름을 수첩에 다 적고, 그 수첩이 압수수색 영장의 근거가 됨"},
+{id:"U",t:"뒷전",gh:"수비 (잡귀잡신)",k:"won",when:"만복의 신이 돌아온 직후",len:"1화",
+ who:"굿판 끝에 몰려드는 이름 없는 떠돌이 넋",
+ st:"신이 돌아온 만복이 처음 큰굿을 올리자 서울의 떠돌이 잡귀가 다 몰려듦. 이름도 사연도 기억 못 하는 넋들. 하나는 「이름 없는 넋은 다 구로다가 데려가는 줄 알았는데, 그냥 잊힌 사람들도 있구나」를 알게 됨",
+ hor:"굿판 바깥 어둠 속에 수백 개의 손이 상을 향해 뻗어 옴",
+ hum:"솔이의 메밀묵까지 다 뺏김. 만복 「뒷전엔 원래 다 퍼 주는 거야」 솔이 「그럼 내 건 왜 줘!」",
+ end:"이름 없는 넋들에게 「오늘 여기 온 분들」이라는 이름으로 단체 사진을 찍어 줌. 그것도 이름이 됨"}
+];
+
+(function(){
+const grid=document.getElementById('cgrid'),n=document.getElementById('pickn'),msg=document.getElementById('pickmsg'),ta=document.getElementById('picktext');
+let picked=new Set();
+try{(JSON.parse(localStorage.getItem('cand-pick')||'[]')).forEach(x=>picked.add(x))}catch(_){}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function save(){try{localStorage.setItem('cand-pick',JSON.stringify([...picked]))}catch(_){}}
+function draw(){
+  grid.innerHTML=C.map(c=>{const k=CK[c.k];return `<article class="cc${picked.has(c.id)?' on':''}">
+<label class="top" for="cb-${c.id}"><input type="checkbox" id="cb-${c.id}" data-id="${c.id}" ${picked.has(c.id)?'checked':''}><span><span class="cid">후보 ${c.id}</span><span class="ct">「${esc(c.t)}」 · ${esc(c.gh)}</span></span></label>
+<div class="meta"><span class="kind" style="color:var(${k[1]})">${k[0]}</span><span>${esc(c.when)}</span><span>${esc(c.len)}</span></div>
+<dl>
+<dt>어떤 귀신</dt><dd>${esc(c.who)}</dd>
+<dt>이야기</dt><dd>${esc(c.st)}</dd>
+<dt>무서운 장면</dt><dd class="hor">${esc(c.hor)}</dd>
+<dt>웃음 포인트</dt><dd class="hum">${esc(c.hum)}</dd>
+<dt>풀리는 방식</dt><dd>${esc(c.end)}</dd>
+</dl></article>`}).join('');
+  n.textContent=picked.size+'개 고름';
+}
+grid.addEventListener('change',e=>{const id=e.target.dataset.id;if(!id)return;e.target.checked?picked.add(id):picked.delete(id);save();draw();document.getElementById('cb-'+id).focus()});
+function text(){const list=C.filter(c=>picked.has(c.id));return list.length?'명월사진관 에피소드 후보 선택: '+list.map(c=>`${c.id}「${c.t}」(${c.gh})`).join(', '):''}
+document.getElementById('pickcopy').addEventListener('click',()=>{
+  const t=text(); if(!t){msg.textContent='먼저 후보를 하나 이상 골라 주세요.';return}
+  ta.value=t; ta.hidden=false;
+  const done=()=>{msg.textContent='복사했어요. 대화창에 붙여 넣어 주세요.'};
+  const fail=()=>{ta.focus();ta.select();msg.textContent='자동 복사가 안 돼요. 아래 글을 직접 복사해 주세요.'};
+  try{navigator.clipboard.writeText(t).then(done,fail)}catch(_){fail()}
+});
+document.getElementById('pickclear').addEventListener('click',()=>{picked.clear();save();draw();ta.hidden=true;msg.textContent=''});
+draw();
+})();
+
+</script>
+
+</body></html>

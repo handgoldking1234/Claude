@@ -1,0 +1,571 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>패널·모달 정리 기록</title>
+<style>
+  :root {
+    --ground:#f2f5f8; --surface:#fff; --surface-3:#f8fafc;
+    --ink:#131820; --ink-2:#3f4a5c; --ink-3:#6b7686;
+    --rule:#dbe2ec; --rule-soft:#e9eef4;
+    --accent:#1d4ed8; --accent-2:#153ea8; --accent-wash:#e6edfd;
+    --ok:#0a6b48; --ok-wash:#e7f5ef; --ok-rule:#8fcfb4;
+    --warn:#8a5200; --warn-wash:#fdf1dc;
+    --danger:#a4243b; --danger-wash:#fdecef; --danger-rule:#e5a5b1;
+    --code-bg:#eceff5;
+    --shadow:0 1px 2px rgba(19,24,32,.05), 0 10px 26px -24px rgba(19,24,32,.65);
+    --f-body:"Segoe UI Variable Text","Segoe UI",ui-sans-serif,system-ui,-apple-system,sans-serif;
+    --f-mono:"Cascadia Mono","Cascadia Code",ui-monospace,Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:#0a0d12; --surface:#131820; --surface-3:#161a22;
+      --ink:#eceff6; --ink-2:#adb9cb; --ink-3:#7f8998;
+      --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+      --accent:#5c9bff; --accent-2:#93bcff; --accent-wash:rgba(92,155,255,.13);
+      --ok:#4ec793; --ok-wash:rgba(78,199,147,.10); --ok-rule:rgba(78,199,147,.45);
+      --warn:#e2a544; --warn-wash:rgba(226,165,68,.13);
+      --danger:#f08096; --danger-wash:rgba(240,128,150,.09); --danger-rule:rgba(240,128,150,.42);
+      --code-bg:rgba(255,255,255,.05);
+      --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -24px rgba(0,0,0,.95);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#0a0d12; --surface:#131820; --surface-3:#161a22;
+    --ink:#eceff6; --ink-2:#adb9cb; --ink-3:#7f8998;
+    --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+    --accent:#5c9bff; --accent-2:#93bcff; --accent-wash:rgba(92,155,255,.13);
+    --ok:#4ec793; --ok-wash:rgba(78,199,147,.10); --ok-rule:rgba(78,199,147,.45);
+    --warn:#e2a544; --warn-wash:rgba(226,165,68,.13);
+    --danger:#f08096; --danger-wash:rgba(240,128,150,.09); --danger-rule:rgba(240,128,150,.42);
+    --code-bg:rgba(255,255,255,.05);
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -24px rgba(0,0,0,.95);
+  }
+
+  *, *::before, *::after { box-sizing:border-box; }
+  body { margin:0; background:var(--ground); color:var(--ink);
+    font-family:var(--f-body); font-size:15px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:1180px; margin:0 auto; padding:40px 22px 90px; }
+
+  code { font-family:var(--f-mono); font-size:.88em; background:var(--code-bg);
+    border-radius:4px; padding:.1em .38em; overflow-wrap:anywhere; }
+  a { color:var(--accent); }
+  a:focus-visible { outline:2px solid var(--accent); outline-offset:2px; border-radius:4px; }
+
+  .eyebrow { font-family:var(--f-mono); font-size:11.5px; letter-spacing:.11em;
+    text-transform:uppercase; color:var(--ink-3); margin:0 0 10px; }
+  h1 { font-size:clamp(27px,4vw,36px); line-height:1.18; letter-spacing:-.022em;
+    margin:0 0 12px; text-wrap:balance; }
+  .lede { margin:0; max-width:68ch; color:var(--ink-2); font-size:16px; }
+
+  .meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+  .chip { display:inline-flex; align-items:baseline; gap:7px; background:var(--surface);
+    border:1px solid var(--rule); border-radius:999px; padding:5px 13px;
+    font-size:12.5px; box-shadow:var(--shadow); }
+  .chip b { font-family:var(--f-mono); font-weight:600; font-size:12px; }
+  .chip span { color:var(--ink-3); }
+
+  section { margin-top:52px; }
+  h2 { font-size:19px; letter-spacing:-.015em; margin:0 0 6px; padding-bottom:9px;
+    border-bottom:1px solid var(--rule); display:flex; flex-wrap:wrap;
+    align-items:baseline; gap:4px 12px; }
+  h2 .n { font-family:var(--f-mono); font-size:12px; color:var(--ink-3); font-weight:500; }
+  h3 { font-size:15px; margin:0 0 7px; }
+  p { margin:12px 0; max-width:82ch; }
+  p.tight { margin-top:8px; color:var(--ink-2); font-size:14px; }
+
+  .toc { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:1px 22px; margin-top:26px; padding:16px 20px; background:var(--surface);
+    border:1px solid var(--rule); border-radius:12px; box-shadow:var(--shadow); }
+  .toc a { color:var(--ink-2); text-decoration:none; font-size:14px; padding:3px 0; display:block; }
+  .toc a:hover { color:var(--accent); text-decoration:underline; text-underline-offset:3px; }
+  .toc a span { font-family:var(--f-mono); font-size:11px; color:var(--ink-3); }
+
+  .entry { background:var(--surface); border:1px solid var(--rule); border-radius:12px;
+    padding:18px 20px 20px; box-shadow:var(--shadow); margin-top:18px; }
+  .entry__head { display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 14px; }
+  .entry h3 { font-size:16px; margin:0; letter-spacing:-.01em; }
+  .route { font-family:var(--f-mono); font-size:12px; color:var(--accent-2);
+    text-decoration:none; border-bottom:1px solid color-mix(in srgb, var(--accent-2) 32%, transparent);
+    overflow-wrap:anywhere; }
+  .route:hover { color:var(--accent); border-bottom-color:currentColor; }
+  .route.none { color:var(--ink-3); border:0; }
+  .path { font-family:var(--f-mono); font-size:11.5px; color:var(--ink-3);
+    margin:5px 0 0; word-break:break-all; }
+  .note { font-size:13.5px; color:var(--ink-2); margin:9px 0 0; }
+  .sub { font-size:12.5px; color:var(--ink-3); margin:10px 0 0; }
+  .miss { color:var(--danger); font-size:13px; }
+
+  .ba { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; }
+  @media (max-width:900px) { .ba { grid-template-columns:1fr; } }
+  .ba__col { min-width:0; display:flex; flex-direction:column; gap:6px; }
+  .ba__tag { font-family:var(--f-mono); font-size:10.5px; font-weight:600;
+    letter-spacing:.06em; text-transform:uppercase; }
+  .ba__tag.before { color:var(--danger); }
+  .ba__tag.after { color:var(--ok); }
+
+  .code { border-radius:9px; border:1px solid var(--rule-soft); overflow-x:auto; flex:1; }
+  .code pre { margin:0; padding:12px 14px; font-family:var(--f-mono);
+    font-size:12px; line-height:1.62; white-space:pre; color:var(--ink-2); }
+  .code.del { background:var(--danger-wash); border-left:3px solid var(--danger-rule); }
+  .code.add { background:var(--ok-wash); border-left:3px solid var(--ok-rule); }
+  .code.empty { display:flex; align-items:center; justify-content:center;
+    padding:14px; font-size:12px; color:var(--ink-3); font-family:var(--f-mono); }
+
+  .note-box { border:1px solid var(--rule); border-left:3px solid var(--accent);
+    border-radius:9px; background:var(--surface); padding:15px 18px;
+    box-shadow:var(--shadow); margin-bottom:12px; }
+  .note-box:last-child { margin-bottom:0; }
+  .note-box.warn { border-left-color:var(--warn); }
+  .note-box h3 { font-size:14px; margin:0 0 6px; }
+  .note-box p { font-size:13.5px; color:var(--ink-2); margin:0; max-width:none; }
+  .note-box p + p { margin-top:8px; }
+
+  .tablewrap { overflow-x:auto; border:1px solid var(--rule); border-radius:12px;
+    background:var(--surface); box-shadow:var(--shadow); margin-top:16px; }
+  table { border-collapse:collapse; width:100%; min-width:600px; }
+  th, td { text-align:left; padding:10px 14px; border-bottom:1px solid var(--rule-soft); vertical-align:top; }
+  thead th { font-family:var(--f-mono); font-size:10.5px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--ink-3); font-weight:600; background:var(--surface-3); }
+  tbody tr:last-child td { border-bottom:0; }
+  td small { display:block; font-size:11.5px; color:var(--ink-3); word-break:keep-all; }
+
+  footer { margin-top:56px; padding-top:16px; border-top:1px solid var(--rule);
+    font-size:12.5px; color:var(--ink-3); }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">작업 기록 · 2026-09-07 · 커밋 f133e958 이후</p>
+    <h1>패널·모달 정리 기록</h1>
+    <p class="lede">
+      오늘 커밋을 마친 뒤 이어서 한 작업입니다. 모달 닫기 버튼에 아이콘과 공통 툴팁을 붙이고,
+      자체 카드로 만들어져 있던 영역 세 화면을 공통 <code>Panel</code> 로 옮겼습니다.
+      화면마다 이전 소스와 이후 소스를 나란히 실었고, 경로를 누르면 해당 화면이 새 탭으로 열립니다.
+    </p>
+    <div class="meta">
+      <span class="chip"><span>수정 파일</span><b>7</b></span>
+      <span class="chip"><span>영향 받는 모달</span><b>24</b></span>
+      <span class="chip"><span>Panel 로 전환</span><b>6</b></span>
+      <span class="chip"><span>상태</span><b>미커밋</b></span>
+    </div>
+    <nav class="toc">
+      <a href="#modal">모달 닫기 버튼 <span>· 2</span></a>
+      <a href="#panel">패널 적용 <span>· 5</span></a>
+      <a href="#check">확인이 필요한 점 <span>· 3</span></a>
+      <a href="#rest">이어서 볼 것</a>
+    </nav>
+  </header>
+
+  <section id="modal">
+    <h2>모달 닫기 버튼 <span class="n">2</span></h2>
+    <p class="tight">닫기 버튼에 아이콘을 넣고, 모든 모달에 공통 툴팁을 붙였다. 툴팁은 .btn-icon 과 같은 모양이되 위치만 다르게 잡았다.</p>
+    
+      <article class="entry">
+        <header class="entry__head"><h3>모달 닫기 버튼 툴팁</h3><a class="route" href="http://127.0.0.1:3100/front-component?tab=overlay" target="_blank" rel="noreferrer">아무 모달에서나 확인</a></header>
+        <p class="path">src/shared/styles/global/_02-ui-components.scss</p>
+        <p class="note">.ui-modal__close 를 쓰는 모달 24개가 모두 aria-label="닫기" 를 갖고 있어, 공통 CSS 한 곳으로 전부 적용된다. 마크업은 한 줄도 고치지 않았다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del empty"><span>— 없음 —</span></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>/* 모달 닫기 버튼 툴팁 — aria-label 값을 .btn-icon 과 같은 모양으로 노출한다.
+   위치는 버튼 오른쪽 끝에 맞춘다(right: 0). 닫기 버튼은 헤더 오른쪽 끝에 있어
+   가운데 정렬하면 라벨이 길어질 때 .ui-modal__panel(overflow: hidden) 밖으로
+   나가 잘린다. */
+.ui-modal__close {
+  position: relative;
+}
+
+.ui-modal__close[aria-label]::after {
+  content: attr(aria-label);
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 4px 8px;
+  border-radius: var(--ui-radius-sm);
+  background: #4b4f52;
+  color: #fff;
+  font-size: var(--ui-fs-sm);
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 70;
+}
+
+.ui-modal__close[aria-label]:hover::after,
+.ui-modal__close[aria-label]:focus-visible::after {
+  opacity: 1;
+}</pre></div>
+          </div>
+        </div>
+        
+      </article>
+
+      <article class="entry">
+        <header class="entry__head"><h3>문항카드 크게 보기 · 닫기 아이콘</h3><span class="route none">평가설계 문항설계 단계에서 카드의 「크게 보기」</span></header>
+        <p class="path">src/features/tds/evaluation-design/pages/design-all-in-one/QuestionCardPreviewModal.tsx</p>
+        <p class="note">우상단 닫기가 유니코드 문자 ✕ 였던 것을 IconClose 컴포넌트로 바꾸고, 하단 닫기 버튼에도 아이콘을 넣었다. 실제 모달 다수(FinalizeConfirmModal 등)가 쓰는 형태다. 하단 버튼의 btn-shadow 는 별도로 추가된 것이 함께 반영돼 있다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>  ✕
+&lt;button type="button" className="btn btn-primary btn-sm" onClick={onClose}&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>  &lt;IconClose /&gt;
+&lt;button type="button" className="btn btn-primary btn-shadow btn-sm" onClick={onClose}&gt;
+  &lt;IconClose size={15} /&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함.</p>
+      </article>
+  </section>
+
+  <section id="panel">
+    <h2>패널 적용 <span class="n">5</span></h2>
+    <p class="tight">자체 카드로 만들어져 있던 영역들을 공통 Panel 로 옮겼다. 세 화면 모두 「선택 → 실행 → 로그」가 같은 리듬이 된다.</p>
+    
+      <article class="entry">
+        <header class="entry__head"><h3>내부표준화 도움말</h3><a class="route" href="http://127.0.0.1:3100/grading/internal-standardization/help" target="_blank" rel="noreferrer">/grading/internal-standardization/help</a></header>
+        <p class="path">src/features/grading/front-internal-standardization/pages/InternalStandardizationHelpPage.tsx</p>
+        <p class="note">자체 카드로 만들어져 있던 섹션 3개를 공통 Panel 로 바꿨다. 제목 묶음(kicker · h2 · 설명)이 Panel 의 subTitle · title · description 에 그대로 대응된다. 가이드가 "색은 의미로 고른다" 고 명시하고 있어 iconType 도 primary · role · warning 으로 지정했다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 1</span>
+            <div class="code del"><pre>&lt;section className="ist-help__section" aria-labelledby="ist-help-flow-title"&gt;
+  &lt;div className="ist-help__section-heading"&gt;
+    &lt;span className="ist-help__section-kicker"&gt;전체 흐름&lt;/span&gt;
+    &lt;h2 id="ist-help-flow-title"&gt;이 순서만 기억하면 됩니다&lt;/h2&gt;
+    &lt;p&gt;대표가 기준을 만들고, 모두 연습한 뒤, 결과를 확인하고 본채점으로 넘어가요.&lt;/p&gt;
+  &lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 1</span>
+            <div class="code add"><pre>{/* 섹션 카드는 공통 Panel 로 통일한다. 제목 묶음(kicker · h2 · 설명)은
+    Panel 의 subTitle · title · description 에 그대로 대응된다. */}
+&lt;Panel
+  className="ist-help__section"
+  icon={&lt;ArrowRight size={18} aria-hidden /&gt;}
+  iconType="primary"
+  subTitle="전체 흐름"
+  title="이 순서만 기억하면 됩니다"
+  description="대표가 기준을 만들고, 모두 연습한 뒤, 결과를 확인하고 본채점으로 넘어가요."
+  headerLine
+&gt;</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 2</span>
+            <div class="code del"><pre>&lt;/section&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 2</span>
+            <div class="code add"><pre>&lt;/Panel&gt;</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 3</span>
+            <div class="code del"><pre>&lt;section id="ist-help-role-guide" className="ist-help__section ist-help__section--roles" aria-labelledby="ist-help-role-title"&gt;
+  &lt;div className="ist-help__section-heading"&gt;
+    &lt;span className="ist-help__section-kicker"&gt;역할별 따라 하기&lt;/span&gt;
+    &lt;h2 id="ist-help-role-title"&gt;{isPractice ? '실습할 화면을 골라보세요' : '지금 로그인한 역할을 골라보세요'}&lt;/h2&gt;
+    &lt;p&gt;아래 탭을 누르면 그 역할이 해야 할 일만 순서대로 볼 수 있어요.&lt;/p&gt;
+  &lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 3</span>
+            <div class="code add"><pre>&lt;Panel
+  className="ist-help__section ist-help__section--roles"
+  icon={&lt;UsersRound size={18} aria-hidden /&gt;}
+  iconType="role"
+  subTitle="역할별 따라 하기"
+  title={isPractice ? '실습할 화면을 골라보세요' : '지금 로그인한 역할을 골라보세요'}
+  description="아래 탭을 누르면 그 역할이 해야 할 일만 순서대로 볼 수 있어요."
+  headerLine
+&gt;</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 4</span>
+            <div class="code del"><pre>&lt;/section&gt;
+&lt;section className="ist-help__section" aria-labelledby="ist-help-trouble-title"&gt;
+  &lt;div className="ist-help__section-heading"&gt;
+    &lt;span className="ist-help__section-kicker"&gt;막혔을 때&lt;/span&gt;
+    &lt;h2 id="ist-help-trouble-title"&gt;이것부터 확인해 보세요&lt;/h2&gt;
+  &lt;/div&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 4</span>
+            <div class="code add"><pre>&lt;/Panel&gt;
+&lt;Panel
+  className="ist-help__section"
+  icon={&lt;Sparkles size={18} aria-hidden /&gt;}
+  iconType="warning"
+  subTitle="막혔을 때"
+  title="이것부터 확인해 보세요"
+  headerLine
+&gt;</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 5</span>
+            <div class="code del"><pre>&lt;/section&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 5</span>
+            <div class="code add"><pre>&lt;/Panel&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head"><h3>내부표준화 도움말 · CSS</h3><span class="route none">위 화면의 스타일</span></header>
+        <p class="path">src/features/grading/front-internal-standardization/pages/internal-standardization-help.css</p>
+        <p class="note">카드(테두리·라운드·배경·그림자)와 여백은 Panel 이 그리므로 중복 규칙을 걷어냈다. kicker 의 색·굵기만 subTitle 자리로 옮겨 유지한다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>.ist-help__section {
+  padding: 34px;
+  border: 1px solid var(--ui-border-soft);
+  border-radius: 24px;
+  background: var(--ui-surface);
+  box-shadow: var(--ui-shadow-sm);
+  .ist-help__section { padding: 24px 18px; border-radius: 19px; }</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>/* 카드(테두리·라운드·배경·그림자)와 여백은 모두 공통 Panel 이 관리한다.
+   여기서는 kicker(subTitle)의 색·굵기만 이 화면 규격으로 되돌린다.
+   제목 묶음은 Panel 헤더(.ui-panel__header)로 옮겼고,
+   kicker 는 subTitle, 설명은 description 에 대응한다. */
+.ist-help__section .ui-panel__title-subTitle {
+  color: var(--ist-help-blue);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .02em;</pre></div>
+          </div>
+        </div>
+        
+      </article>
+
+      <article class="entry">
+        <header class="entry__head"><h3>내부표준화 데모 시드</h3><a class="route" href="http://127.0.0.1:3100/evaluation/internal-standardization-demo-seeds" target="_blank" rel="noreferrer">/evaluation/internal-standardization-demo-seeds</a></header>
+        <p class="path">src/features/aes/local-seed/pages/InternalStandardizationDemoSeedPage.tsx</p>
+        <p class="note">학년 선택 카드 줄과, 그 아래 설명+런처 덩어리를 각각 Panel 로 감쌌다. union-local-seeds 의 .union-seed-config 와 같은 구성이다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 1</span>
+            <div class="code del"><pre>&lt;section className="standardization-seed-grade-tabs" aria-label="내부표준화 데모시드 학년 선택"&gt;
+  &lt;div className="standardization-seed-grade-cards" role="tablist" aria-orientation="horizontal"&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 1</span>
+            <div class="code add"><pre>{/* 카드(테두리·라운드·배경·그림자)는 공통 Panel 이 그린다.
+    union-local-seeds 의 .union-seed-config 와 같은 형태다. */}
+&lt;Panel
+  className="standardization-seed-grade-tabs"
+  title="시드를 만들 학년을 선택하세요."
+  icon={&lt;IconSliders size={18} /&gt;}
+  iconType="primary"
+  headerLine
+  actions={&lt;span className="badge badge-info"&gt;
+    {activeConfig.levelLabel} · {activeConfig.questionCount}문항 · {activeConfig.studentCount.toLocaleString('ko-KR')}명
+  &lt;/span&gt;}&gt;
+  &lt;div
+    className="standardization-seed-grade-cards"
+    role="tablist"
+    aria-orientation="horizontal"
+    aria-label="내부표준화 데모시드 학년 선택"
+  &gt;</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 2</span>
+            <div class="code del"><pre>&lt;/section&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 2</span>
+            <div class="code add"><pre>&lt;/Panel&gt;</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 3</span>
+            <div class="code del empty"><span>— 없음 —</span></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 3</span>
+            <div class="code add"><pre>{/* 좌측 설명과 우측 런처가 한 덩어리인데 모양이 서로 달라(흰 카드 / 남색 카드)
+    두 개처럼 읽혔다. 패널로 묶어 '선택 → 실행' 단계를 분명히 한다. */}
+&lt;Panel
+  title="시드 생성"
+  icon={&lt;IconPlay size={18} /&gt;}
+  iconType="primary"
+  headerLine
+  actions={&lt;span className={`badge ${summary ? 'badge-info' : 'badge-role'}`}&gt;
+    {summary ? '생성됨' : '준비됨'}
+  &lt;/span&gt;}&gt;</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 4</span>
+            <div class="code del empty"><span>— 없음 —</span></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 4</span>
+            <div class="code add"><pre>&lt;/Panel&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함.</p>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head"><h3>데모 시드 · CSS</h3><span class="route none">위 화면의 스타일</span></header>
+        <p class="path">src/features/aes/local-seed/pages/internal-standardization-demo-seed.css</p>
+        <p class="note">Panel 로 바뀌면서 > div 가 카드 그리드가 아니라 패널 헤더·본문을 가리키게 되어, 반응형 선택자를 카드 클래스로 직접 지목하도록 고쳤다. 그대로 뒀으면 700px 이하에서 레이아웃이 깨진다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>.standardization-seed-grade-tabs { padding: 9px; border: 1px solid var(--ui-border); border-radius: var(--ui-box-radius); background: var(--ui-surface); box-shadow: 0 1px 3px rgba(16, 36, 43, .035); }
+  .standardization-seed-grade-tabs { align-items: stretch; flex-direction: column; }
+  .standardization-seed-grade-tabs &gt; p { display: flex; justify-content: space-between; min-width: 0; padding: 3px 8px; }
+  .standardization-seed-grade-tabs &gt; div { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .standardization-seed-grade-tabs button { align-items: flex-start; flex-direction: column; gap: 2px; }
+  .standardization-seed-grade-tabs &gt; div { grid-template-columns: 1fr; }</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>/* 카드(테두리·라운드·배경·그림자)와 여백은 공통 Panel 이 관리한다. */
+  /* Panel 로 바뀌면서 &gt; div 는 패널 헤더·본문을 가리킨다. 카드 그리드를 직접 지목한다. */
+  .standardization-seed-grade-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .standardization-seed-grade-card { align-items: flex-start; flex-direction: column; gap: 2px; }</pre></div>
+          </div>
+        </div>
+        
+      </article>
+
+      <article class="entry">
+        <header class="entry__head"><h3>연합 로컬 시드</h3><a class="route" href="http://127.0.0.1:3100/evaluation/union-local-seeds" target="_blank" rel="noreferrer">/evaluation/union-local-seeds</a></header>
+        <p class="path">src/features/aes/local-seed/pages/UnionLocalSeedPage.tsx</p>
+        <p class="note">5단계 카드 줄을 Panel 로 감쌌다. 카드들이 각자 테두리와 상태색(is-complete · is-locked)을 가진 완결된 카드라, 패널은 제목 줄만 얹는다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 1</span>
+            <div class="code del empty"><span>— 없음 —</span></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 1</span>
+            <div class="code add"><pre>{/* 단계 카드들은 각자 테두리·상태색(is-complete·is-locked)을 가진 완결된 카드다.
+    flush 를 주어 본문 패딩 없이 그대로 두고, 패널은 제목 줄만 얹는다.
+    그러지 않으면 카드 안의 카드가 되어 상태색이 흐려진다.
+    flush 는 쓰지 않는다. 본문 좌우 여백이 없으면 카드가 패널 가장자리에 붙는다. */}
+&lt;Panel
+  title="진행 단계"
+  icon={&lt;IconList size={18} /&gt;}
+  iconType="primary"
+  headerLine
+  actions={&lt;span className="badge badge-info"&gt;{activeScope.label}&lt;/span&gt;}&gt;</pre></div>
+          </div>
+        </div>
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전 · 2</span>
+            <div class="code del empty"><span>— 없음 —</span></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후 · 2</span>
+            <div class="code add"><pre>&lt;/Panel&gt;</pre></div>
+          </div>
+        </div>
+        <p class="sub">import 정리 포함.</p>
+      </article>
+  </section>
+
+  <section id="check">
+    <h2>확인이 필요한 점 <span class="n">3</span></h2>
+    <p class="tight">판단이 갈릴 수 있는 항목입니다. 되돌릴 것이 있으면 알려주세요.</p>
+
+    <div class="note-box warn">
+      <h3>1. 툴팁 위치를 <code>.btn-icon</code> 과 다르게 잡았습니다</h3>
+      <p><code>.btn-icon</code> 툴팁은 <code>left: 50%</code> 로 버튼 가운데에 뜨는데,
+      모달 닫기 버튼은 헤더 오른쪽 끝에 있습니다. 가운데로 띄우면 툴팁의 오른쪽 절반이
+      <code>.ui-modal__panel</code>(<code>overflow: hidden</code>) 밖으로 나가 잘립니다.</p>
+      <p>그래서 <code>right: 0</code> 으로 버튼 오른쪽 끝에 맞췄습니다.
+      라벨이 길어져도 패널 밖으로 나가지 않고, 버튼 아래 왼쪽으로 펼쳐집니다.</p>
+    </div>
+
+    <div class="note-box warn">
+      <h3>2. 닫기·취소 버튼 아이콘 — 가이드와 실제 구현이 다릅니다</h3>
+      <p>가이드의 모달 예제(<code>OverlaySections.tsx</code>)는 <code>취소</code> · <code>확인</code> 을
+      <b>아이콘 없이</b> 두는데, 실제 모달 다섯 곳 이상은 <code>&lt;IconClose size={15} /&gt; 취소</code> 형태로
+      아이콘을 붙이고 있습니다.</p>
+      <p>이번에는 <b>실제 다수 관행</b>을 따랐습니다. 가이드 예제도 맞추려면 별도로 손봐야 합니다.</p>
+    </div>
+
+    <div class="note-box warn">
+      <h3>3. 반응형 선택자가 깨질 뻔했습니다</h3>
+      <p>데모 시드 화면의 <code>.standardization-seed-grade-tabs &gt; div</code> 는 원래 카드 그리드를
+      가리켰는데, <code>Panel</code> 로 바뀌면 직계 자식이 <b>패널 헤더·본문</b>이 됩니다.
+      그대로 뒀으면 700px 이하에서 헤더에 <code>grid-template-columns</code> 가 걸려 레이아웃이 깨집니다.</p>
+      <p>카드 클래스를 직접 지목하도록 고쳤습니다. 자체 카드를 <code>Panel</code> 로 옮길 때마다
+      <code>&gt;</code> 선택자를 함께 확인해야 합니다.</p>
+    </div>
+  </section>
+
+  <section id="rest">
+    <h2>이어서 볼 것</h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="width:32%"><col><col style="width:120px"></colgroup>
+        <thead><tr><th>대상</th><th>내용</th><th>상태</th></tr></thead>
+        <tbody>
+          <tr><td>데모 시드의 4단계 상태 줄<small>standardization-seed-flow</small></td>
+            <td>클릭 대상이 아니라 결과를 읽는 요약 줄이라 패널로 감싸지 않았습니다. 감싸는 편이 낫다면 같은 방식으로 처리 가능합니다.</td>
+            <td>판단 필요</td></tr>
+          <tr><td>내부표준화 도움말의 히어로<small>ist-help__hero</small></td>
+            <td>그라데이션 배경에 궤도 아이콘이 도는 장식 영역이라 패널과 성격이 다릅니다. 패널로 만들면 도입부 인상이 사라집니다.</td>
+            <td>판단 필요</td></tr>
+          <tr><td>가이드 모달 예제<small>OverlaySections.tsx</small></td>
+            <td>취소·확인 버튼에 아이콘이 없어 실제 구현과 어긋납니다.</td>
+            <td>미수정</td></tr>
+          <tr><td>목록 푸터 남은 4개<small>이전 보고서</small></td>
+            <td>분류 게시판 보기(교체 예정이라 보류) + 리포트 학급·개인·문항 3개.</td>
+            <td>대기</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <code>tsc</code> 통과 · 빌드 성공을 확인했고 <b>아직 커밋하지 않았습니다.</b>
+    직전 커밋은 <code>f133e958</code>, 브랜치는 <code>feature/front-goldking-new</code> 입니다.
+    이전 작업(목록 푸터 공통화 51개 등)은 별도 보고서에 정리돼 있습니다.
+  </footer>
+</div>
+
+</body></html>

@@ -1,0 +1,198 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>해원 인물관계도</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* Layout: 한지 위에 먹으로 그린 족보 포스터. 위는 1944년, 아래는 2026년. 선의 색이 관계의 성격을 말한다. */
+:root{
+  --paper:#efe7d6; --paper-2:#e6dcc6; --ink:#2a231f; --ink-soft:#6b5f55;
+  --seal:#a3322b; --gold:#9a7a35; --love:#b8537a; --state:#55507f; --sepia:#8b6b4a;
+  --node:#f7f2e7; --node-glyph:#3a302a; --tag:#fffaf0; --band:rgba(139,107,74,.10);
+  --display:"Nanum Myeongjo","Batang","AppleMyungjo",serif;
+  --body:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#1b1715; --paper-2:#231e1b; --ink:#ece3d3; --ink-soft:#b3a796;
+  --seal:#d0574d; --gold:#c9a457; --love:#d97ea2; --state:#9b95cf; --sepia:#b8946c;
+  --node:#2b2420; --node-glyph:#efe5d3; --tag:#2f2824; --band:rgba(184,148,108,.10); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#1b1715; --paper-2:#231e1b; --ink:#ece3d3; --ink-soft:#b3a796;
+  --seal:#d0574d; --gold:#c9a457; --love:#d97ea2; --state:#9b95cf; --sepia:#b8946c;
+  --node:#2b2420; --node-glyph:#efe5d3; --tag:#2f2824; --band:rgba(184,148,108,.10); color-scheme:dark}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:16px;padding-block:28px 56px}
+header{text-align:center;display:grid;gap:6px;justify-items:center}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--ink-soft)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(40px,8vw,76px);line-height:1.05;margin:0;color:var(--seal);text-wrap:balance}
+h1 small{display:block;font-size:.32em;color:var(--ink);letter-spacing:.3em;margin-top:8px}
+.sub{color:var(--ink-soft);max-width:60ch;margin:4px 0 0}
+.chart{margin-top:24px;overflow-x:auto;border-radius:6px;background:var(--paper-2)}
+.chart svg{display:block;width:100%;min-width:760px;height:auto}
+.legend{display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:center;margin:20px 0 6px;font-size:13px;color:var(--ink-soft)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend svg{width:34px;height:10px;flex:none}
+h2{font-family:var(--display);font-size:24px;margin:40px 0 14px;text-wrap:balance}
+.groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.group{min-width:0;border-top:3px solid var(--c);padding-top:10px}
+.group h3{margin:0 0 8px;font-size:14px;letter-spacing:.08em;color:var(--c)}
+.group ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.group li b{font-weight:700}
+.group li i{font-style:normal;color:var(--ink-soft);font-size:13px;display:block}
+.note{margin-top:28px;font-size:13px;color:var(--ink-soft)}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">사극 오컬트 숏드라마 · 108화</div>
+    <h1>해원<small>解冤 · 인물관계도</small></h1>
+    <p class="sub">1944년, 한 사진사가 밀고당해 사진관에 갇혔다. 82년 뒤 그 사진관을 찾아온 여자는 밀고자의 손녀이자, 원수가 노리는 다음 몸이다.</p>
+  </header>
+
+  <div class="chart" role="img" aria-label="해원 인물관계도">
+    <svg id="map" viewBox="0 0 1080 1560" xmlns="http://www.w3.org/2000/svg"></svg>
+  </div>
+
+  <div class="legend" aria-label="선 범례">
+    <span><svg viewBox="0 0 34 10"><line x1="0" y1="5" x2="34" y2="5" stroke="var(--ink)" stroke-width="2.5"/></svg>혈연</span>
+    <span><svg viewBox="0 0 34 10"><line x1="0" y1="5" x2="34" y2="5" stroke="var(--ink)" stroke-width="2.5" stroke-dasharray="2 5"/></svg>이혼한 부부</span>
+    <span><svg viewBox="0 0 34 10"><line x1="0" y1="5" x2="34" y2="5" stroke="var(--love)" stroke-width="2.5"/></svg>연정</span>
+    <span><svg viewBox="0 0 34 10"><line x1="0" y1="5" x2="34" y2="5" stroke="var(--gold)" stroke-width="2.5"/></svg>동료 · 조력</span>
+    <span><svg viewBox="0 0 34 10"><line x1="0" y1="5" x2="34" y2="5" stroke="var(--seal)" stroke-width="2.5" stroke-dasharray="6 4"/></svg>살해 · 밀고 · 몸을 빼앗음</span>
+    <span><svg viewBox="0 0 34 10"><line x1="0" y1="5" x2="34" y2="5" stroke="var(--seal)" stroke-width="4"/></svg>숙적</span>
+    <span><svg viewBox="0 0 34 10"><line x1="0" y1="5" x2="34" y2="5" stroke="var(--state)" stroke-width="2.5" stroke-dasharray="6 4"/></svg>감시</span>
+  </div>
+
+  <h2>세력별 인물</h2>
+  <div class="groups">
+    <section class="group" style="--c:var(--sepia)"><h3>1944 · 경성</h3><ul>
+      <li><b>한시우 (24)</b><i>본정 사진관 조수. 도경삼의 밀고로 사진관에 갇혀, 82년째 귀신 손님을 맞는 유령 사진사가 됐다</i></li>
+      <li><b>김순례</b><i>시우의 누이. 도경삼의 밀고로 누명을 쓰고 혼례 전에 강에 몸을 던져 처녀귀신이 됐다. 107번째 손님</i></li>
+      <li><b>시우의 어머니</b><i>만신. 구로다에게 끌려가 죽으며 방울과 청동거울을 남겼다</i></li>
+      <li><b>김서방</b><i>사진관에서 30년 쓴 대빗자루가 깨어난 도깨비. 지금도 사진관에 산다</i></li>
+    </ul></section>
+    <section class="group" style="--c:var(--seal)"><h3>도씨 집안 · 구로다</h3><ul>
+      <li><b>구로다</b><i>총독부 음양사. 1944년 섬광에 제 몸을 잃고, 처음 들어간 몸의 핏줄을 따라서만 옮겨 다닌다</i></li>
+      <li><b>도경삼</b><i>시우와 순례를 밀고한 조선인 순사. 구로다가 처음 들어간 몸이자 하나의 할아버지</i></li>
+      <li><b>도정환 (67)</b><i>대도건설 회장. 도경삼의 아들이자 지금의 구로다. 하나의 아버지</i></li>
+    </ul></section>
+    <section class="group" style="--c:var(--gold)"><h3>하나 편</h3><ul>
+      <li><b>서하나 (34)</b><i>발굴조사원. 도정환의 딸이지만 아버지의 성을 버렸다. 시우와 함께 셔터를 눌러야 손님을 보낼 수 있다. 구로다가 노리는 다음 몸</i></li>
+      <li><b>서정희 (58)</b><i>하나의 엄마. 남편의 몸에 다른 것이 있음을 알고 딸을 데리고 떠났다. 5부에서 첫 희생자가 된다</i></li>
+      <li><b>한옥분</b><i>외할머니. 무당. 3년 전 도정환에게 살해되어 창귀가 됐다</i></li>
+      <li><b>박만복 (54)</b><i>옥분의 신아들인 퇴물 박수무당. 스승을 지키지 못한 죄책감을 안고 산다</i></li>
+      <li><b>최도원 (41)</b><i>형사. 대도건설의 산재 은폐 사건을 쫓다 하나와 손잡는다</i></li>
+    </ul></section>
+    <section class="group" style="--c:var(--state)"><h3>국가 (최소 등장)</h3><ul>
+      <li><b>권혁무</b><i>정체 모를 기관의 사람. 검은 차에서 하나를 지켜본다. 시즌 2의 떡밥</i></li>
+    </ul></section>
+  </div>
+  <p class="note">정희, 최도원, 권혁무는 가칭. 기관명과 지명(송현동)은 가상이다.</p>
+</div>
+
+<script>
+(function(){
+  const NS="http://www.w3.org/2000/svg";
+  const svg=document.getElementById("map");
+  const el=(t,a={},p=svg)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e;};
+  const C={sepia:"var(--sepia)",gold:"var(--gold)",seal:"var(--seal)",state:"var(--state)",ink:"var(--ink)",love:"var(--love)"};
+
+  const N={
+    mansin:{n:"시우의 어머니",r:"만신",g:"巫",x:140,y:300,R:56,f:"sepia"},
+    siwoo:{n:"한시우(24)",r:"유령 사진사",g:"影",x:400,y:300,R:86,f:"sepia",main:1},
+    sunrye:{n:"김순례",r:"시우의 누이 · 처녀귀신",g:"魂",x:670,y:310,R:64,f:"love"},
+    kuroda:{n:"구로다",r:"총독부 음양사",g:"鬼",x:930,y:310,R:68,f:"seal"},
+    kim:{n:"김서방",r:"사진관 빗자루 도깨비",g:"箒",x:140,y:620,R:60,f:"gold"},
+    okbun:{n:"한옥분",r:"외할머니 · 창귀",g:"虎",x:560,y:640,R:60,f:"ink"},
+    gyeong:{n:"도경삼",r:"밀고자 · 할아버지",g:"密",x:930,y:620,R:62,f:"seal"},
+    manbok:{n:"박만복(54)",r:"옥분의 신아들",g:"鈴",x:150,y:930,R:60,f:"gold"},
+    jeong:{n:"서정희(58)",r:"엄마",g:"魄",x:560,y:930,R:60,f:"ink"},
+    doh:{n:"도정환(67)",r:"아버지 · 지금의 구로다",g:"黑",x:920,y:930,R:86,f:"seal",main:1},
+    hana:{n:"서하나(34)",r:"발굴조사원 · 밀고자의 손녀",g:"名",x:540,y:1250,R:104,f:"gold",main:1},
+    dowon:{n:"최도원(41)",r:"형사",g:"捕",x:160,y:1260,R:58,f:"gold"},
+    kwon:{n:"권혁무",r:"감시자",g:"國",x:940,y:1300,R:50,f:"state"}
+  };
+
+  el("rect",{x:0,y:180,width:1080,height:290,fill:"var(--band)"});
+  const bandTxt=(t,y)=>{const e=el("text",{x:24,y,fill:"var(--ink-soft)","font-family":"var(--display)","font-size":20,"font-weight":800,"letter-spacing":"4"});e.textContent=t;};
+  bandTxt("1944 · 京城",212);
+  bandTxt("2026 · 송현동",510);
+  const gl=(t,x,y,c)=>{const e=el("text",{x,y,fill:c,"font-size":14,"font-weight":700,"letter-spacing":"3","text-anchor":"middle"});e.textContent=t;};
+  gl("도씨 집안",930,212,"var(--seal)");
+  gl("외가",560,550,"var(--ink-soft)");
+
+  const defs=el("defs");
+  [["seal","var(--seal)"],["state","var(--state)"],["love","var(--love)"]].forEach(([id,c])=>{
+    const m=el("marker",{id:"a-"+id,viewBox:"0 0 10 10",refX:9,refY:5,markerWidth:7,markerHeight:7,orient:"auto-start-reverse"},defs);
+    el("path",{d:"M0,0 L10,5 L0,10 z",fill:c},m);
+  });
+  const edgeLayer=el("g"), labelLayer=el("g"), nodeLayer=el("g");
+
+  function trim(a,b){const dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy);return{x1:a.x+dx/d*(a.R+6),y1:a.y+dy/d*(a.R+6),x2:b.x-dx/d*(b.R+8),y2:b.y-dy/d*(b.R+8)};}
+  function label(t,x,y,c){
+    const g=el("g",{},labelLayer);
+    const w=t.length*15+18; el("rect",{x:x-w/2,y:y-13,width:w,height:26,rx:13,fill:"var(--paper-2)",stroke:c,"stroke-width":1.2},g);
+    const tx=el("text",{x,y:y+5,"text-anchor":"middle","font-size":15,"font-weight":700,fill:c},g);tx.textContent=t;
+  }
+  const style={blood:[C.ink,2.5,"",""],div:[C.ink,2.5,"2 6",""],love:[C.love,3,"","love"],ally:[C.gold,2.5,"",""],harm:[C.seal,2.5,"7 5","seal"],rival:[C.seal,5,"",""],state:[C.state,2.5,"7 5","state"]};
+  function edge(a,b,type,t,opt={}){
+    const [c,w,dash,arrow]=style[type];
+    const A=N[a],B=N[b];
+    let lx,ly,attrs={fill:"none",stroke:c,"stroke-width":w,"stroke-linecap":"round"};
+    if(dash)attrs["stroke-dasharray"]=dash;
+    if(arrow&&!opt.noArrow)attrs["marker-end"]="url(#a-"+arrow+")";
+    if(opt.path){attrs.d=opt.path;el("path",attrs,edgeLayer);lx=opt.lx;ly=opt.ly;}
+    else{const p=trim(A,B);Object.assign(attrs,p);el("line",attrs,edgeLayer);lx=(p.x1+p.x2)/2+(opt.dx||0);ly=(p.y1+p.y2)/2+(opt.dy||0);}
+    if(t)label(t,lx,ly,c);
+  }
+
+  // 1944
+  edge("mansin","siwoo","blood","모자");
+  edge("siwoo","sunrye","blood","남매");
+  edge("kuroda","mansin","harm","살해",{path:"M902,248 C780,110 300,110 170,256",lx:540,ly:146});
+  edge("siwoo","kuroda","rival","봉인 대결",{path:"M462,370 C560,520 820,520 880,375",lx:700,ly:487});
+  edge("kuroda","gyeong","harm","몸을 빼앗음");
+  edge("gyeong","sunrye","harm","",{});
+  label("밀고 · 누명",800,438,C.seal);
+  edge("gyeong","siwoo","harm","",{});
+  label("밀고",770,528,C.seal);
+  edge("kim","siwoo","ally","사진관의 빗자루",{dx:-14,dy:6});
+  // 2026 핏줄
+  edge("gyeong","doh","harm","아들 · 구로다가 옮겨감",{dy:24});
+  edge("doh","jeong","blood","",{noArrow:true});
+  el("line",{x1:N.doh.x-N.doh.R-8,y1:930,x2:N.jeong.x+N.jeong.R+8,y2:930,stroke:"var(--paper-2)","stroke-width":3},edgeLayer);
+  el("line",{x1:N.doh.x-N.doh.R-8,y1:930,x2:N.jeong.x+N.jeong.R+8,y2:930,stroke:"var(--ink)","stroke-width":2.5,"stroke-dasharray":"2 6","stroke-linecap":"round"},edgeLayer);
+  label("이혼",728,930,C.ink);
+  edge("okbun","jeong","blood","모녀");
+  edge("jeong","hana","blood","모녀");
+  edge("doh","hana","rival","부녀 · 다음 몸으로 노림",{dx:-40,dy:46});
+  edge("doh","okbun","harm","살해 → 창귀",{dx:-6,dy:-20});
+  // 하나 편
+  edge("manbok","okbun","ally","신아들",{dx:90,dy:-66});
+  edge("manbok","hana","ally","조력자");
+  edge("kim","hana","ally","동료",{dx:-34,dy:20});
+  edge("dowon","hana","ally","공조");
+  edge("dowon","doh","ally","",{path:"M214,1232 C430,1120 700,1090 846,990",lx:0,ly:0});
+  label("산재 은폐 수사",400,1160,C.gold);
+  edge("kwon","hana","state","감시",{dy:-8});
+  // 연정
+  edge("siwoo","hana","love","♥ 82년을 건넌 연정",{path:"M360,384 C250,700 330,1060 450,1190",lx:300,ly:780});
+
+  for(const k in N){
+    const d=N[k], g=el("g",{},nodeLayer), ring=C[d.f];
+    if(d.main) el("circle",{cx:d.x,cy:d.y,r:d.R+10,fill:"none",stroke:ring,"stroke-width":1.5,"stroke-dasharray":"2 5"},g);
+    el("circle",{cx:d.x,cy:d.y,r:d.R,fill:"var(--node)",stroke:ring,"stroke-width":d.main?5:3.5},g);
+    const gt=el("text",{x:d.x,y:d.y+d.R*0.34,"text-anchor":"middle","font-family":"var(--display)","font-weight":800,"font-size":d.R*0.95,fill:"var(--node-glyph)"},g);gt.textContent=d.g;
+    const small=d.R<55;
+    const ny=d.y+d.R+(small?26:32);
+    if(d.main){
+      const w=d.n.length*24+34;
+      el("rect",{x:d.x-w/2,y:ny-25,width:w,height:38,rx:4,fill:"var(--tag)",stroke:ring,"stroke-width":1.5},g);
+    }
+    const nt=el("text",{x:d.x,y:ny,"text-anchor":"middle","font-size":small?17:(d.main?24:20),"font-weight":700,fill:"var(--ink)",stroke:"var(--paper-2)","stroke-width":6,"paint-order":"stroke","stroke-linejoin":"round"},g);nt.textContent=d.n;
+    const rt=el("text",{x:d.x,y:ny+(small?22:(d.main?32:26)),"text-anchor":"middle","font-size":small?13:15,fill:"var(--ink-soft)",stroke:"var(--paper-2)","stroke-width":5,"paint-order":"stroke","stroke-linejoin":"round"},g);rt.textContent=d.r;
+  }
+})();
+</script>
+
+</body></html>

@@ -1,0 +1,303 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>오늘 수정한 화면</title>
+<style>
+  :root {
+    --ground:#f2f5f8; --surface:#fff; --surface-2:#e8edf4; --surface-3:#f8fafc;
+    --ink:#131820; --ink-2:#3f4a5c; --ink-3:#6b7686;
+    --rule:#dbe2ec; --rule-soft:#e9eef4;
+    --accent:#1d4ed8; --accent-2:#153ea8; --accent-wash:#e6edfd;
+    --new-c:#0a6b48; --new-wash:#e1f4ec;
+    --warn:#8a5200; --warn-wash:#fdf1dc;
+    --code-bg:#eceff5;
+    --shadow:0 1px 2px rgba(19,24,32,.05), 0 10px 26px -24px rgba(19,24,32,.65);
+    --f-body:"Segoe UI Variable Text","Segoe UI",ui-sans-serif,system-ui,-apple-system,sans-serif;
+    --f-mono:"Cascadia Mono","Cascadia Code",ui-monospace,Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:#0a0d12; --surface:#131820; --surface-2:#1b2029; --surface-3:#161a22;
+      --ink:#eceff6; --ink-2:#adb9cb; --ink-3:#7f8998;
+      --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+      --accent:#5c9bff; --accent-2:#93bcff; --accent-wash:rgba(92,155,255,.13);
+      --new-c:#4ec793; --new-wash:rgba(78,199,147,.13);
+      --warn:#e2a544; --warn-wash:rgba(226,165,68,.13);
+      --code-bg:rgba(255,255,255,.05);
+      --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -24px rgba(0,0,0,.95);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#0a0d12; --surface:#131820; --surface-2:#1b2029; --surface-3:#161a22;
+    --ink:#eceff6; --ink-2:#adb9cb; --ink-3:#7f8998;
+    --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+    --accent:#5c9bff; --accent-2:#93bcff; --accent-wash:rgba(92,155,255,.13);
+    --new-c:#4ec793; --new-wash:rgba(78,199,147,.13);
+    --warn:#e2a544; --warn-wash:rgba(226,165,68,.13);
+    --code-bg:rgba(255,255,255,.05);
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -24px rgba(0,0,0,.95);
+  }
+
+  *, *::before, *::after { box-sizing:border-box; }
+  body { margin:0; background:var(--ground); color:var(--ink);
+    font-family:var(--f-body); font-size:15px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:1080px; margin:0 auto; padding:40px 22px 90px; }
+
+  code { font-family:var(--f-mono); font-size:.88em; background:var(--code-bg);
+    border-radius:4px; padding:.1em .38em; overflow-wrap:anywhere; }
+  a { color:var(--accent); }
+  a:focus-visible { outline:2px solid var(--accent); outline-offset:2px; border-radius:4px; }
+
+  .eyebrow { font-family:var(--f-mono); font-size:11.5px; letter-spacing:.11em;
+    text-transform:uppercase; color:var(--ink-3); margin:0 0 10px; }
+  h1 { font-size:clamp(27px,4vw,36px); line-height:1.18; letter-spacing:-.022em;
+    margin:0 0 12px; text-wrap:balance; }
+  .lede { margin:0; max-width:66ch; color:var(--ink-2); font-size:16px; }
+
+  .meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+  .chip { display:inline-flex; align-items:baseline; gap:7px; background:var(--surface);
+    border:1px solid var(--rule); border-radius:999px; padding:5px 13px;
+    font-size:12.5px; box-shadow:var(--shadow); }
+  .chip b { font-family:var(--f-mono); font-weight:600; font-size:12px; }
+  .chip span { color:var(--ink-3); }
+
+  section { margin-top:46px; }
+  h2 { font-size:19px; letter-spacing:-.015em; margin:0 0 14px; padding-bottom:9px;
+    border-bottom:1px solid var(--rule); display:flex; flex-wrap:wrap;
+    align-items:baseline; gap:4px 12px; }
+  h2 .n { font-family:var(--f-mono); font-size:12px; color:var(--ink-3); font-weight:500; }
+  h3 { font-size:15px; margin:0 0 7px; }
+  p { margin:0 0 12px; max-width:78ch; }
+  p:last-child { margin-bottom:0; }
+
+  .toc { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    gap:1px 22px; margin-top:26px; padding:16px 20px; background:var(--surface);
+    border:1px solid var(--rule); border-radius:12px; box-shadow:var(--shadow); }
+  .toc a { color:var(--ink-2); text-decoration:none; font-size:14px; padding:3px 0; display:block; }
+  .toc a:hover { color:var(--accent); text-decoration:underline; text-underline-offset:3px; }
+  .toc a span { font-family:var(--f-mono); font-size:11px; color:var(--ink-3); }
+
+  .tablewrap { overflow-x:auto; border:1px solid var(--rule); border-radius:12px;
+    background:var(--surface); box-shadow:var(--shadow); }
+  table { border-collapse:collapse; width:100%; min-width:720px; }
+  colgroup .c-scr { width:21%; }
+  colgroup .c-url { width:26%; }
+  th, td { text-align:left; padding:11px 16px; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; }
+  thead th { font-family:var(--f-mono); font-size:10.5px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--ink-3); font-weight:600; background:var(--surface-3); }
+  tbody tr:last-child td { border-bottom:0; }
+  td.scr { font-weight:600; }
+  td.url { font-family:var(--f-mono); font-size:12px; color:var(--accent-2); word-break:break-all; }
+  td.chg { font-size:13px; color:var(--ink-2); }
+  td.chg b { color:var(--ink); }
+  td.chg ul { margin:0; padding-left:16px; }
+  td.chg li { margin-bottom:3px; }
+  td.chg li:last-child { margin-bottom:0; }
+  td.sha { font-family:var(--f-mono); font-size:12px; color:var(--ink-3);
+    font-variant-numeric:tabular-nums; white-space:nowrap; }
+
+  .note { border:1px solid var(--rule); border-left:3px solid var(--accent);
+    border-radius:9px; background:var(--surface); padding:15px 18px;
+    box-shadow:var(--shadow); margin-bottom:12px; }
+  .note:last-child { margin-bottom:0; }
+  .note.warn { border-left-color:var(--warn); }
+  .note p { font-size:14px; color:var(--ink-2); }
+
+  footer { margin-top:52px; padding-top:16px; border-top:1px solid var(--rule);
+    font-size:12.5px; color:var(--ink-3); }
+
+  @media (max-width:640px) {
+    table { min-width:620px; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">확인 목록 · 2026-09-10</p>
+    <h1>오늘 수정한 화면</h1>
+    <p class="lede">
+      커밋 <code>f238dc2a</code> 이후 수정한 화면입니다. <b>아직 커밋 전</b>이며,
+      링크를 눌러 바로 확인할 수 있습니다. 모바일 항목은 개발자도구에서
+      폭을 줄여(360~640px) 확인해 주세요.
+    </p>
+    <div class="meta">
+      <span class="chip"><span>브랜치</span><b>feature/front-goldking-new</b></span>
+      <span class="chip"><span>변경</span><b>22 files</b></span>
+      <span class="chip"><span>상태</span><b>미커밋</b></span>
+      <span class="chip"><span>검증</span><b>tsc ✓ · vite build ✓</b></span>
+    </div>
+  </header>
+
+  <section>
+    <h2>화면별 <span class="n">9개 · 링크를 눌러 확인</span></h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-url"><col></colgroup>
+        <thead><tr><th>화면</th><th>주소</th><th>무엇을 볼지</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">감독 현황</td>
+            <td class="url"><a href="http://127.0.0.1:3100/evaluation/proctor">/evaluation/proctor</a></td>
+            <td class="chg"><ul>
+              <li><b>학생 현황 표</b> — 열 폭이 고르게 잡히고 th·td 가 가운데 정렬</li>
+              <li>보안 열의 배지와 <code>F 0 / FS 0 / V 0</code> 이 <b>위아래로</b> 쌓임</li>
+              <li>좁히면 표가 뭉개지지 않고 가로 스크롤(최소 1020px)</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">담당 과제 목록</td>
+            <td class="url"><a href="http://127.0.0.1:3100/my/assignments">/my/assignments</a></td>
+            <td class="chg"><ul>
+              <li><b>모바일</b> — 검색창과 새로고침이 한 줄에 함께, 좌우 여백이 다른 화면과 같음</li>
+              <li>카드 제목이 잘리지 않고 두 줄로 접힘</li>
+              <li><code>튜터 결과 확인</code> 버튼이 공통 파랑 버튼</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">실시간 응시·과제 제출</td>
+            <td class="url"><a href="http://127.0.0.1:3100/my/evaluations">/my/evaluations</a></td>
+            <td class="chg"><ul>
+              <li>카드에 마우스를 올리면 <b>살짝 떠오르고 그림자</b></li>
+              <li>세 탭(응시 대기·진행 중·완료) 모두 동일</li>
+              <li>로딩 중 회색 자리표시자는 반응하지 않음</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">분류게시판</td>
+            <td class="url"><a href="http://127.0.0.1:3100/reference/category">/reference/category</a></td>
+            <td class="chg"><ul>
+              <li><b>768px 이하</b> — 분류 목록과 교과서 파일이 <b>위아래로</b> 쌓임</li>
+              <li>이전에는 가로로 고정돼 접히지 않았음</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">메뉴 관리</td>
+            <td class="url"><a href="http://127.0.0.1:3100/admin/menus">/admin/menus</a></td>
+            <td class="chg"><ul>
+              <li><b>768px 이하</b> — 접근 권한 패널의 설명 문구가 구분선에 닿지 않음</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">내부표준화 목록</td>
+            <td class="url"><a href="http://127.0.0.1:3100/grading/internal-standardization">/grading/internal-standardization</a></td>
+            <td class="chg"><ul>
+              <li><code>내부표준화 진행</code> 버튼이 공통 파랑 버튼</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">채점현황 상세</td>
+            <td class="url"><a href="http://127.0.0.1:3100/grading/status/633715">/grading/status/633715</a></td>
+            <td class="chg"><ul>
+              <li>확정 채점자 표의 열 폭이 px 고정(최소 660px)</li>
+              <li>좁히면 뭉개지지 않고 가로 스크롤</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">내부표준화 데모 시드</td>
+            <td class="url"><a href="http://127.0.0.1:3100/evaluation/internal-standardization-demo-seeds">/evaluation/internal-standardization-demo-seeds</a></td>
+            <td class="chg"><ul>
+              <li><b>640px 이하</b> — 학년 카드 안쪽 간격 8px</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">성적 산출<br><b>미해결</b></td>
+            <td class="url"><a href="http://127.0.0.1:3100/evaluation-result/grade-processing/calculate">/evaluation-result/grade-processing/calculate</a></td>
+            <td class="chg"><ul>
+              <li><b>640px 이하에서 아이콘이 숨겨져 있습니다</b>(기존 코드의 의도적 처리)</li>
+              <li>1열로 접히면서 아이콘이 오른쪽 끝에 홀로 남는 걸 피하려던 규칙</li>
+              <li><b>2열로 되돌리고 아이콘을 살릴지 답을 기다리는 중</b></li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>평가설계 <span class="n">STEP 1~6 · 한 화면</span></h2>
+    <p>
+      <a href="http://127.0.0.1:3100/tds/evaluations/632689/designs/633708">/tds/evaluations/632689/designs/633708</a>
+      — 단계를 옮겨가며 확인해 주세요.
+    </p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col></colgroup>
+        <thead><tr><th>단계</th><th>무엇을 볼지</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">공통</td>
+            <td class="chg"><ul>
+              <li><b>모바일</b> — 패널 좌우 여백이 다른 화면과 같음(768 12px · 440 10px)</li>
+              <li><code>STEP 4</code> 배지가 <code>STEP / 4</code> 로 끊기지 않음</li>
+              <li>제목이 길면 상태 배지가 <b>아랫줄로</b> 내려감</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">STEP 2<br>문항설계</td>
+            <td class="chg"><ul><li>표 열 폭이 px 고정(최소 990px) — 좁히면 가로 스크롤</li></ul></td>
+          </tr>
+          <tr>
+            <td class="scr">STEP 4<br>학생배정</td>
+            <td class="chg"><ul>
+              <li><code>학급 선택</code>·<code>학생 목록</code> 라벨이 한 글자씩 끊기지 않음</li>
+              <li><b>모바일</b> — 검색바가 아랫줄로 내려가 100%</li>
+              <li>학생 표 열 폭 px 고정(최소 670px)</li>
+              <li><b>버그 수정</b> — 빈 목록일 때 표 오른쪽에 유령 열이 생기던 문제(<code>colSpan</code> 7→6)</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">STEP 5<br>채점자배정</td>
+            <td class="chg"><ul>
+              <li>제목 <code>채점자 배정</code> 이 두 줄로 끊기지 않음</li>
+              <li><b>640px 이하</b> — 후보 교사 검색의 필터가 1열로 펴져 오른쪽이 비지 않음</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">STEP 6<br>최종검토</td>
+            <td class="chg"><ul>
+              <li>버튼 두 개가 <b>위</b>, 안내문이 <b>아래 한 줄 전체</b></li>
+              <li>안내문 아이콘 옆에 글자가 붙어 있음(아래로 떨어지지 않음)</li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>전역 <span class="n">모든 화면 영향 · 아무 페이지에서나 확인</span></h2>
+    <div class="note">
+      <p>
+        <b>사이드바</b> — 햄버거 버튼에 배경이 없고 호버에만 색이 들어옵니다.
+        접힌 상태에서 메뉴를 클릭하면 <b>툴팁이 사라집니다</b>(이전에는 열린 하위 메뉴를 덮었습니다).
+      </p>
+    </div>
+    <div class="note">
+      <p>
+        <b>패널</b> — 좁은 폭 좌우 여백이 768px 12px · 440px 10px 로 통일됐습니다.
+        제목이 낱말 중간에서 끊기지 않고, 설명이 액션 버튼과 붙기 전에 버튼이 먼저 아랫줄로 내려갑니다.
+      </p>
+    </div>
+    <div class="note">
+      <p>
+        <b>상태 카드</b>(<code>GridStatus</code>) — 라벨이 길어도 아이콘이 아래로 떨어지지 않고
+        글자만 줄바꿈됩니다. 1180px 이하에서 라벨과 숫자가 붙습니다.
+        <a href="http://127.0.0.1:3100/admin/roles/user-roles">/admin/roles/user-roles</a> 에서 확인하기 좋습니다.
+      </p>
+    </div>
+    <div class="note">
+      <p>
+        <b>안내 배너</b> — 아이콘 옆 글자가 아래로 떨어지지 않습니다.
+        클래스 없이 <code>&lt;p&gt;</code> 만 쓴 배너가 여럿 있어 함께 고쳐졌습니다.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <code>feature/front-goldking-new</code> · 기준 커밋 <code>f238dc2a</code> ·
+    22 files 미커밋 · <code>tsc --noEmit</code> · <code>vite build</code> 통과
+  </footer>
+
+</div>
+
+</body></html>

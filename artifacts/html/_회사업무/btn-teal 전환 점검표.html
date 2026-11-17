@@ -1,0 +1,814 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>btn-teal 전환 점검표</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+
+<style>
+  :root {
+    --ground: #f5f7fb;
+    --surface: #ffffff;
+    --surface-2: #eef1f7;
+    --ink: #131722;
+    --ink-2: #4d566b;
+    --ink-3: #7b8397;
+    --line: #dde3ee;
+    --line-soft: #e9edf5;
+    --teal: #1c777a;
+    --teal-soft: #dcefef;
+    --primary: #3076f2;
+    --primary-2: #ab81ff;
+    --primary-soft: #e3ecfe;
+    --warn: #a8640a;
+    --warn-soft: #fdf0d8;
+    --dead: #98405a;
+    --dead-soft: #fbe4ea;
+    --shadow: 0 1px 2px rgba(19, 23, 34, .06), 0 8px 24px -12px rgba(19, 23, 34, .18);
+    --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+    --sans: "IBM Plex Sans KR", "Malgun Gothic", system-ui, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0e1117;
+      --surface: #161a23;
+      --surface-2: #1d222d;
+      --ink: #e6eaf3;
+      --ink-2: #a3abbe;
+      --ink-3: #767e92;
+      --line: #272d3a;
+      --line-soft: #212734;
+      --teal: #4bb3b0;
+      --teal-soft: #16302f;
+      --primary: #6f9dfa;
+      --primary-2: #c3a5ff;
+      --primary-soft: #17243f;
+      --warn: #e0a94a;
+      --warn-soft: #33280f;
+      --dead: #e086a0;
+      --dead-soft: #37151f;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px -12px rgba(0, 0, 0, .7);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0e1117;
+    --surface: #161a23;
+    --surface-2: #1d222d;
+    --ink: #e6eaf3;
+    --ink-2: #a3abbe;
+    --ink-3: #767e92;
+    --line: #272d3a;
+    --line-soft: #212734;
+    --teal: #4bb3b0;
+    --teal-soft: #16302f;
+    --primary: #6f9dfa;
+    --primary-2: #c3a5ff;
+    --primary-soft: #17243f;
+    --warn: #e0a94a;
+    --warn-soft: #33280f;
+    --dead: #e086a0;
+    --dead-soft: #37151f;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px -12px rgba(0, 0, 0, .7);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 20px 96px;
+  }
+
+  /* ── header ── */
+  .masthead {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 44px 0 26px;
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(28px, 4.2vw, 40px);
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  .swap {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-family: var(--mono);
+    font-size: 14px;
+  }
+
+  .chipcode {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 11px;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+
+  .chipcode.from { background: var(--teal-soft); color: var(--teal); }
+  .chipcode.to { background: var(--primary-soft); color: var(--primary); }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex: none;
+  }
+
+  .dot.from { background: var(--teal); }
+  .dot.to { background: linear-gradient(160deg, var(--primary-2), var(--primary)); }
+
+  .arrow { color: var(--ink-3); }
+
+  .lede {
+    max-width: 62ch;
+    margin: 0;
+    color: var(--ink-2);
+  }
+
+  /* ── stat strip ── */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .stat {
+    background: var(--surface);
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat b {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -.02em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+  }
+
+  .stat span {
+    font-size: 12px;
+    color: var(--ink-3);
+  }
+
+  .stat.is-warn b { color: var(--warn); }
+  .stat.is-dead b { color: var(--dead); }
+
+  /* ── sticky bar ── */
+  .bar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--ground) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+    margin: 0 -20px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-2);
+    flex: none;
+  }
+
+  .track {
+    width: 128px;
+    height: 5px;
+    border-radius: 99px;
+    background: var(--surface-2);
+    overflow: hidden;
+  }
+
+  .fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--primary-2), var(--primary));
+    transition: width .25s ease;
+  }
+
+  .filters {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-left: auto;
+  }
+
+  .filters button,
+  .reset {
+    font-family: var(--sans);
+    font-size: 12.5px;
+    padding: 5px 11px;
+    border-radius: 99px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: border-color .15s, color .15s;
+  }
+
+  .filters button:hover,
+  .reset:hover { border-color: var(--ink-3); color: var(--ink); }
+
+  .filters button[aria-pressed="true"] {
+    border-color: transparent;
+    background: var(--ink);
+    color: var(--ground);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  /* ── groups ── */
+  .group { margin-top: 34px; }
+
+  .group > h2 {
+    margin: 0 0 2px;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -.01em;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .group > h2 em {
+    font-family: var(--mono);
+    font-style: normal;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .group > p {
+    margin: 0 0 12px;
+    font-size: 13px;
+    color: var(--ink-3);
+  }
+
+  .rows {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--line-soft);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .row {
+    background: var(--surface);
+    display: grid;
+    grid-template-columns: 30px 34px minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 4px 12px;
+    padding: 12px 14px;
+    transition: background .12s;
+  }
+
+  .row:hover { background: var(--surface-2); }
+  .row.done { background: var(--surface); }
+  .row.done .label,
+  .row.done .cls,
+  .row.done .loc { opacity: .42; }
+  .row.done .label s { text-decoration-color: var(--ink-3); }
+  .row.hidden { display: none; }
+
+  .row input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    margin: 4px 0 0;
+    accent-color: var(--primary);
+    cursor: pointer;
+  }
+
+  .num {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-3);
+    padding-top: 5px;
+  }
+
+  .main { min-width: 0; }
+
+  .label {
+    font-size: 14.5px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .label s { text-decoration: none; }
+  .row.done .label s { text-decoration: line-through; }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: .04em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  .tag.cond { background: var(--warn-soft); color: var(--warn); }
+  .tag.modal { background: var(--surface-2); color: var(--ink-2); }
+  .tag.param { background: var(--surface-2); color: var(--ink-2); }
+  .tag.dead { background: var(--dead-soft); color: var(--dead); }
+
+  .cls {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-2);
+    margin-top: 3px;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 2px;
+  }
+
+  .cls mark {
+    background: var(--teal-soft);
+    color: var(--teal);
+    padding: 0 2px;
+    border-radius: 2px;
+  }
+
+  .loc {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--ink-3);
+    margin-top: 4px;
+    display: block;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: copy;
+    text-align: left;
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .loc:hover { color: var(--ink-2); }
+  .loc.copied { color: var(--primary); }
+
+  .open {
+    font-family: var(--mono);
+    font-size: 12px;
+    text-decoration: none;
+    color: var(--primary);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 4px 10px;
+    white-space: nowrap;
+    transition: border-color .15s, background .15s;
+  }
+
+  .open:hover { border-color: var(--primary); background: var(--primary-soft); }
+
+  .open.none {
+    color: var(--ink-3);
+    cursor: default;
+    pointer-events: none;
+    border-style: dashed;
+  }
+
+  /* ── notes ── */
+  .note {
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--warn);
+    border-radius: 5px;
+    background: var(--surface);
+    padding: 14px 16px;
+    margin-top: 20px;
+  }
+
+  .note.is-dead { border-left-color: var(--dead); }
+
+  .note h3 {
+    margin: 0 0 6px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .note p, .note ul { margin: 0; color: var(--ink-2); font-size: 13.5px; }
+  .note ul { padding-left: 18px; }
+  .note code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface-2);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  footer {
+    margin-top: 46px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    font-size: 12.5px;
+    color: var(--ink-3);
+  }
+
+  footer code {
+    font-family: var(--mono);
+    background: var(--surface-2);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  @media (max-width: 640px) {
+    .row {
+      grid-template-columns: 26px 1fr;
+      grid-template-areas: "chk main" ". open";
+    }
+    .num { display: none; }
+    .row input[type="checkbox"] { grid-area: chk; }
+    .main { grid-area: main; }
+    .open { grid-area: open; justify-self: start; margin-top: 6px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <div class="eyebrow">클래스 전환 점검표 · feature/front-goldking-new</div>
+    <h1>btn-teal 을 btn-primary 로</h1>
+    <div class="swap">
+      <span class="chipcode from"><span class="dot from"></span>btn-teal</span>
+      <span class="arrow">→</span>
+      <span class="chipcode to"><span class="dot to"></span>btn-primary</span>
+    </div>
+    <p class="lede">
+      <code style="font-family:var(--mono);font-size:13px">src/</code> 전체에서 <b>59곳</b>을 찾았습니다.
+      화면을 열어 하나씩 확인하고 체크하세요. 체크 상태는 이 브라우저에 저장됩니다.
+    </p>
+
+    <div class="stats">
+      <div class="stat"><b>59</b><span>전체 케이스</span></div>
+      <div class="stat"><b>45</b><span>파일</span></div>
+      <div class="stat is-warn"><b>6</b><span>조건부 — 문자열 치환 누락</span></div>
+      <div class="stat is-dead"><b>5</b><span>화면 접근 불가</span></div>
+    </div>
+  </header>
+
+  <div class="bar">
+    <div class="progress">
+      <span id="count">0 / 59</span>
+      <span class="track"><span class="fill" id="fill"></span></span>
+    </div>
+    <div class="filters">
+      <button type="button" data-filter="all" aria-pressed="true">전체</button>
+      <button type="button" data-filter="cond" aria-pressed="false">조건부 6</button>
+      <button type="button" data-filter="modal" aria-pressed="false">모달 10</button>
+      <button type="button" data-filter="dead" aria-pressed="false">접근 불가 5</button>
+      <button type="button" data-filter="todo" aria-pressed="false">미확인</button>
+      <button type="button" class="reset" id="reset">초기화</button>
+    </div>
+  </div>
+
+  <div class="note">
+    <h3>먼저 볼 것 — 단순 치환으로는 안 잡히는 6곳</h3>
+    <p>
+      아래 <span class="tag cond">조건부</span> 표시된 곳은 클래스가
+      <code>btn btn-sm ${on ? 'btn-teal' : 'btn-outline'}</code> 형태의 삼항 연산자 안에 들어 있습니다.
+      <code>"btn btn-teal"</code> 문자열만 찾아 바꾸면 <b>전부 빠집니다.</b>
+      <code>btn-teal</code> 단독으로 검색해야 잡힙니다.
+    </p>
+  </div>
+
+  <!-- ── 리포트 ── -->
+  <section class="group">
+    <h2>리포트·현황 <em>11곳 / 6파일</em></h2>
+    <p>가장 많이 몰려 있는 영역. 대부분 '출력'·'다운로드' 버튼입니다.</p>
+    <div class="rows" id="g-report"></div>
+  </section>
+
+  <!-- ── 채점 ── -->
+  <section class="group">
+    <h2>채점관리 <em>10곳 / 7파일</em></h2>
+    <p>등급 선택 토글 3곳이 조건부입니다. 모달은 부모 화면에서 버튼을 눌러야 열립니다.</p>
+    <div class="rows" id="g-grading"></div>
+  </section>
+
+  <!-- ── 사용자·권한 ── -->
+  <section class="group">
+    <h2>사용자·자문위원 <em>8곳 / 5파일</em></h2>
+    <div class="rows" id="g-users"></div>
+  </section>
+
+  <!-- ── 커뮤니티 ── -->
+  <section class="group">
+    <h2>커뮤니티·자료게시판 <em>7곳 / 5파일</em></h2>
+    <p>자료게시판의 분류 필터 칩 2곳이 조건부입니다.</p>
+    <div class="rows" id="g-community"></div>
+  </section>
+
+  <!-- ── 기준데이터 ── -->
+  <section class="group">
+    <h2>기준데이터 <em>7곳 / 7파일</em></h2>
+    <p>모두 '등록' 버튼 또는 등록 모달의 저장 버튼입니다.</p>
+    <div class="rows" id="g-master"></div>
+  </section>
+
+  <!-- ── 평가결과 ── -->
+  <section class="group">
+    <h2>평가결과·성적처리 <em>5곳 / 5파일</em></h2>
+    <div class="rows" id="g-result"></div>
+  </section>
+
+  <!-- ── 평가설계 ── -->
+  <section class="group">
+    <h2>평가설계 (TDS) <em>3곳 / 3파일</em></h2>
+    <p>설계 화면은 <code>regId</code>·<code>designId</code>가 필요합니다. 평가 목록에서 설계로 들어간 뒤 해당 단계 탭을 여세요.</p>
+    <div class="rows" id="g-tds"></div>
+  </section>
+
+  <!-- ── 참조데이터 ── -->
+  <section class="group">
+    <h2>참조데이터·NEIS <em>2곳 / 2파일</em></h2>
+    <div class="rows" id="g-ref"></div>
+  </section>
+
+  <!-- ── 지원 ── -->
+  <section class="group">
+    <h2>지원·통계 <em>2곳 / 2파일</em></h2>
+    <div class="rows" id="g-support"></div>
+  </section>
+
+  <!-- ── 접근 불가 ── -->
+  <section class="group">
+    <h2>화면에서 확인 불가 <em>5곳 / 3파일</em></h2>
+    <p>코드에는 있지만 앱에서 열 수 없는 곳입니다. 눈으로 확인할 수 없으니 코드만 바꾸거나, 파일 자체의 존치 여부를 먼저 판단하세요.</p>
+    <div class="rows" id="g-dead"></div>
+  </section>
+
+  <div class="note is-dead">
+    <h3>왜 접근이 안 되나</h3>
+    <ul>
+      <li><code>AlarmManagePage.tsx</code>, <code>AiModelPerformancePage.tsx</code> — 라우트에도 없고 <b>어디에서도 import 되지 않습니다.</b> 사실상 죽은 파일입니다.</li>
+      <li><code>CompetencyTierModal.tsx</code> — <code>CompetencyMappingPage</code>에서만 쓰이는데, 그 페이지의 라우트는 "3-tier 매핑 기능 폐기"로 주석 처리돼 있습니다.</li>
+    </ul>
+  </div>
+
+  <footer>
+    기준 커밋 <code>c99a0f0</code> · 브랜치 <code>feature/front-goldking-new</code> · 개발 서버 <code>http://127.0.0.1:3100</code><br>
+    <code>.btn-teal</code> 정의는 <code>src/shared/styles/global/_03-cmp-components.scss:2319</code>,
+    <code>.btn-primary</code>는 같은 파일 <code>:2236</code>.
+    <code>.badge-teal</code>(같은 파일 <code>:2037</code>)은 버튼이 아니므로 건드리지 마세요.
+  </footer>
+</div>
+
+<script>
+  const BASE = 'http://127.0.0.1:3100';
+
+  // [번호, 라벨, 클래스, 파일, 라인, 경로, 태그]
+  const DATA = {
+    'g-report': [
+      [1, '조회', 'btn btn-teal btn-shadow ml-auto', 'features/ops/report/pages/ReportStatisticsPage.tsx', 140, '/report/statistics', ''],
+      [2, '이 통계로 리포트 생성', 'btn btn-teal btn-shadow btn-lg', 'features/ops/report/pages/ReportStatisticsPage.tsx', 204, '/report/statistics', ''],
+      [3, '리포트 생성', 'btn btn-teal btn-shadow btn-lg', 'features/ops/report/pages/ReportCreatePage.tsx', 169, '/report/create', ''],
+      [4, '출력 (상단)', 'btn btn-teal btn-shadow', 'features/ops/report/pages/ReportCreatePersonalPage.tsx', 188, '/report/create/personal', ''],
+      [5, '출력 (하단)', 'btn btn-teal btn-sm btn-shadow', 'features/ops/report/pages/ReportCreatePersonalPage.tsx', 296, '/report/create/personal', ''],
+      [6, '출력 (상단)', 'btn btn-teal btn-shadow', 'features/ops/report/pages/ReportCreateClassPage.tsx', 198, '/report/create/class', ''],
+      [7, '출력 (하단)', 'btn btn-teal btn-sm btn-shadow', 'features/ops/report/pages/ReportCreateClassPage.tsx', 317, '/report/create/class', ''],
+      [8, '출력 (상단)', 'btn btn-teal btn-shadow', 'features/ops/report/pages/ReportCreateResultPage.tsx', 107, '/report/create/result', ''],
+      [9, '출력 (하단)', 'btn btn-teal btn-sm btn-shadow', 'features/ops/report/pages/ReportCreateResultPage.tsx', 202, '/report/create/result', ''],
+      [10, '다운로드 (상단)', 'btn btn-teal btn-shadow', 'features/ops/report/pages/ReportCreateQuestionPage.tsx', 197, '/report/create/question', ''],
+      [11, '다운로드 (하단)', 'btn btn-teal btn-sm btn-shadow', 'features/ops/report/pages/ReportCreateQuestionPage.tsx', 340, '/report/create/question', ''],
+    ],
+    'g-grading': [
+      [12, '전처리 완료 확정', 'btn btn-teal btn-shadow', 'features/grading/answer-preprocessing/pages/PreprocessConfirmPage.tsx', 47, '/grading/answer-preprocessing/confirm', ''],
+      [13, '확정하고 채점 진입', 'btn btn-teal', 'features/grading/answer-preprocessing/components/PreprocessConfirmModal.tsx', 35, '/grading/answer-preprocessing/confirm', 'modal'],
+      [14, '플래그 유지', 'btn btn-teal', 'features/grading/answer-preprocessing/pages/SimilarityCheckPage.tsx', 191, '/grading/answer-preprocessing/similarity', ''],
+      [15, '저장', 'btn btn-teal', 'features/grading/main-grading/pages/CrossGradingAiPage.tsx', 127, '/grading/main-grading/cross-ai', ''],
+      [16, '등급 선택 토글', "btn btn-sm flex-1 ${on ? 'btn-teal' : 'btn-outline'}", 'features/grading/main-grading/pages/CrossGradingAiPage.tsx', 233, '/grading/main-grading/cross-ai', 'cond'],
+      [17, '전체 참고 반영', 'btn btn-teal', 'features/grading/main-grading/components/AiScoringResultModal.tsx', 32, '/grading/main-grading/cross-ai', 'modal'],
+      [18, '닫기', 'btn btn-teal', 'features/grading/main-grading/components/AnswerDetailModal.tsx', 42, '/grading/main-grading/cross-ai', 'modal'],
+      [19, '등급 선택 토글', "btn btn-sm flex-1 ${on ? 'btn-teal' : 'btn-outline'}", 'features/grading/main-grading/pages/CrossGradingPage.tsx', 190, '/grading/main-grading/cross', 'cond'],
+      [20, '내 레이어 확정', 'btn btn-teal btn-shadow w-full', 'features/grading/main-grading/pages/CrossGradingPage.tsx', 209, '/grading/main-grading/cross', ''],
+      [21, '등급 선택 토글', "btn btn-sm ${finalGrade === grade ? 'btn-teal' : 'btn-outline'}", 'features/grading/main-grading/pages/AdjustmentGradingPage.tsx', 178, '/grading/main-grading/adjustment', 'cond'],
+    ],
+    'g-users': [
+      [22, '사용자 등록', 'btn btn-teal btn-lg btn-shadow', 'features/ops/users/pages/UsersListPage.tsx', 424, '/admin/roles/user-roles', ''],
+      [23, '역할 부여', 'btn btn-sm btn-teal btn-shadow', 'features/ops/users/pages/UsersListPage.tsx', 543, '/admin/roles/user-roles', ''],
+      [24, '역할 부여 (저장)', 'btn btn-teal btn-shadow', 'features/ops/roles/components/RoleAssignmentsModal.tsx', 54, '/admin/roles/user-roles', 'modal'],
+      [25, '자문위원 등록', 'btn btn-teal btn-lg btn-shadow', 'features/ops/external-advisors/pages/ExternalAdvisorListPage.tsx', 222, '/admin/roles/advisors', ''],
+      [26, '계정 발급', 'btn btn-teal btn-shadow btn-sm', 'features/ops/external-advisors/pages/ExternalAdvisorListPage.tsx', 331, '/admin/roles/advisors', ''],
+      [27, '임시 비밀번호 확인', 'btn btn-teal btn-shadow', 'features/ops/roles/components/AdvisorsPageModal.tsx', 44, '/admin/roles/advisors', 'modal'],
+      [28, '재위촉 (목록 행)', 'btn btn-teal btn-shadow btn-sm', 'features/ops/external-advisors/pages/ExternalAdvisorRevocationListPage.tsx', 269, '/admin/external-advisor-revocations', ''],
+      [29, '재위촉 (제출)', 'btn btn-teal btn-up', 'features/ops/external-advisors/pages/ExternalAdvisorRevocationListPage.tsx', 359, '/admin/external-advisor-revocations', ''],
+    ],
+    'g-community': [
+      [30, '글 쓰기', 'btn btn-teal btn-sm btn-shadow', 'features/ops/common/pages/CommunityPage.tsx', 201, '/community/board', ''],
+      [31, '등록', 'btn btn-teal btn-shadow ml-auto', 'features/ops/common/pages/CommunityRegisterPage.tsx', 162, '/community/board/new', ''],
+      [32, '수정하기', 'btn btn-teal btn-shadow ml-auto', 'features/ops/common/pages/CommunityModifyPage.tsx', 209, '/community/board', 'param'],
+      [33, '댓글 등록', 'btn btn-teal btn-shadow', 'features/ops/common/pages/CommunityViewPage.tsx', 402, '/community/board', 'param'],
+      [34, "분류 필터 '전체'", "btn btn-sm ${category === '' ? 'btn-teal' : 'btn-outline'}", 'features/ops/common/pages/ResourcesPage.tsx', 200, '/community/share', 'cond'],
+      [35, '분류 필터 칩', "btn btn-sm ${category === item.value ? 'btn-teal' : 'btn-outline'}", 'features/ops/common/pages/ResourcesPage.tsx', 209, '/community/share', 'cond'],
+      [36, '자료 등록', 'btn btn-teal btn-sm btn-shadow', 'features/ops/common/pages/ResourcesPage.tsx', 295, '/community/share', ''],
+    ],
+    'g-master': [
+      [37, '수행지시어 등록', 'btn btn-teal btn-lg btn-shadow', 'features/ops/master-data/pages/CommandTermsPage.tsx', 75, '/admin/master-data/command-terms', ''],
+      [38, '저장', 'btn btn-teal btn-shadow', 'features/ops/master-data/components/CommandTermFormModal.tsx', 52, '/admin/master-data/command-terms', 'modal'],
+      [39, '핵심역량 등록', 'btn btn-teal btn-lg btn-shadow', 'features/ops/master-data/pages/SubjectCompetenciesPage.tsx', 61, '/admin/master-data/subject-competencies', ''],
+      [40, '저장', 'btn btn-teal btn-shadow', 'features/ops/master-data/components/SubjectCompetencyFormModal.tsx', 42, '/admin/master-data/subject-competencies', 'modal'],
+      [41, '저장', 'btn btn-teal btn-shadow', 'features/ops/master-data/components/AchievementFormModal.tsx', 88, '/admin/master-data/achievement-standards', 'modal'],
+      [42, '확인', 'btn btn-teal btn-shadow ml-auto', 'features/ops/master-data/components/CoreIdeaStdModal.tsx', 31, '/admin/master-data/core-ideas', 'modal'],
+      [43, '등록 (역량 티어)', 'btn btn-teal btn-shadow', 'features/ops/master-data/components/CompetencyTierModal.tsx', 22, '', 'dead'],
+    ],
+    'g-result': [
+      [44, '성적 확정', 'btn btn-teal', 'features/evaluationResult/grade-processing/pages/GradeConfirmationPage.tsx', 74, '/evaluation-result/grade-processing/confirm', ''],
+      [45, '확정하기', 'btn btn-teal btn-shadow', 'features/evaluationResult/grade-processing/components/GradeConfirmModal.tsx', 45, '/evaluation-result/grade-processing/confirm', 'modal'],
+      [46, '다운로드', "ml-auto ${item.primary ? 'btn btn-teal' : 'btn btn-outline'}", 'features/evaluationResult/grade-processing/pages/NeisExportPage.tsx', 102, '/evaluation-result/grade-processing/neis-export', 'cond'],
+      [47, '초안 재생성', 'btn btn-teal btn-shadow', 'features/evaluationResult/result-inquiry/pages/InquiryReviewPage.tsx', 198, '/evaluation-result/result-inquiry/review', ''],
+      [48, '임시저장', 'btn btn-teal btn-shadow', 'features/evaluationResult/result-inquiry/pages/OverallFeedbackPage.tsx', 173, '/evaluation-result/result-inquiry/feedback', ''],
+    ],
+    'g-tds': [
+      [49, '문항 추가 — 2단계', 'btn btn-teal btn-shadow', 'features/tds/evaluation-design/pages/design-all-in-one/Step2QuestionsPanel.tsx', 251, '/tds/evaluations', 'param'],
+      [50, '채점자 추가 — 5단계', 'btn btn-teal btn-shadow', 'features/tds/evaluation-design/pages/design-all-in-one/Step5ScorersPanel.tsx', 311, '/tds/evaluations', 'param'],
+      [51, '최종확인 완료 — 6단계', 'btn btn-teal btn-shadow', 'features/tds/evaluation-design/pages/design-all-in-one/Step6ConfirmationPanel.tsx', 72, '/tds/evaluations', 'param'],
+    ],
+    'g-ref': [
+      [52, '자료 등록', 'btn btn-teal btn-lg btn-shadow', 'features/ops/reference-data/pages/admin/CategoryBoardsPage.tsx', 154, '/admin/reference-data/category-boards', ''],
+      [53, '저장 확정', 'btn btn-teal btn-shadow ml-auto', 'features/ops/neis/components/NeisSettingsModal.tsx', 83, '/admin/neis/settings', 'modal'],
+    ],
+    'g-support': [
+      [54, '다운로드', 'btn btn-teal btn-shadow', 'features/ops/support/pages/PlatformUsageStatsPage.tsx', 194, '/support/statistics', ''],
+      [55, '확인', 'btn btn-teal btn-sm', 'features/ops/support/pages/ServiceRequestPage.tsx', 502, '/support/requests/new', ''],
+    ],
+    'g-dead': [
+      [56, '저장', 'btn btn-teal btn-shadow', 'features/ops/common/pages/AlarmManagePage.tsx', 114, '', 'dead'],
+      [57, '저장', 'btn btn-teal btn-shadow', 'features/ops/common/pages/AlarmManagePage.tsx', 256, '', 'dead'],
+      [58, '설정 저장', 'btn btn-teal btn-shadow', 'features/ops/common/pages/AiModelPerformancePage.tsx', 87, '', 'dead'],
+      [59, '저장', 'btn btn-teal btn-shadow', 'features/ops/common/pages/AiModelPerformancePage.tsx', 256, '', 'dead'],
+    ],
+  };
+
+  const TAG_TEXT = { cond: '조건부', modal: '모달', param: '파라미터 필요', dead: '접근 불가' };
+  const KEY = 'btn-teal-audit-v1';
+
+  let done = new Set();
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) done = new Set(JSON.parse(raw));
+  } catch (e) { /* 저장소 접근 불가 — 체크는 이번 세션에만 유지 */ }
+
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify([...done])); } catch (e) { /* 무시 */ }
+  }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  }
+
+  function clsHtml(cls) {
+    return esc(cls).replace(/btn-teal/g, '<mark>btn-teal</mark>');
+  }
+
+  function render() {
+    for (const [gid, items] of Object.entries(DATA)) {
+      const host = document.getElementById(gid);
+      if (!host) continue;
+      host.innerHTML = items.map(([n, label, cls, file, line, route, tag]) => {
+        const id = file + ':' + line;
+        const isDone = done.has(id);
+        const tagHtml = tag ? `<span class="tag ${tag}">${TAG_TEXT[tag]}</span>` : '';
+        const openHtml = route
+          ? `<a class="open" href="${BASE}${route}" target="_blank" rel="noopener">화면 열기 ↗</a>`
+          : `<span class="open none">라우트 없음</span>`;
+        return `<div class="row${isDone ? ' done' : ''}" data-id="${esc(id)}" data-tag="${tag}">
+          <input type="checkbox"${isDone ? ' checked' : ''} aria-label="${esc(label)} 확인 완료">
+          <span class="num">${String(n).padStart(2, '0')}</span>
+          <div class="main">
+            <div class="label"><s>${esc(label)}</s>${tagHtml}</div>
+            <div class="cls">${clsHtml(cls)}</div>
+            <button type="button" class="loc" title="클릭하면 경로가 복사됩니다">src/${esc(file)}:${line}</button>
+          </div>
+          ${openHtml}
+        </div>`;
+      }).join('');
+    }
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const total = 59;
+    const n = done.size;
+    document.getElementById('count').textContent = `${n} / ${total}`;
+    document.getElementById('fill').style.width = (n / total * 100) + '%';
+  }
+
+  document.addEventListener('change', (e) => {
+    if (e.target.type !== 'checkbox') return;
+    const row = e.target.closest('.row');
+    if (!row) return;
+    const id = row.dataset.id;
+    if (e.target.checked) { done.add(id); row.classList.add('done'); }
+    else { done.delete(id); row.classList.remove('done'); }
+    save();
+    updateProgress();
+    applyFilter();
+  });
+
+  document.addEventListener('click', (e) => {
+    const loc = e.target.closest('.loc');
+    if (loc) {
+      const text = loc.textContent;
+      navigator.clipboard?.writeText(text).then(() => {
+        const old = loc.textContent;
+        loc.classList.add('copied');
+        loc.textContent = '복사됨 · ' + old;
+        setTimeout(() => { loc.textContent = old; loc.classList.remove('copied'); }, 1100);
+      }).catch(() => { /* 클립보드 차단 — 무시 */ });
+    }
+  });
+
+  let filter = 'all';
+
+  function applyFilter() {
+    document.querySelectorAll('.row').forEach(row => {
+      const tag = row.dataset.tag;
+      let show = true;
+      if (filter === 'todo') show = !row.classList.contains('done');
+      else if (filter !== 'all') show = tag === filter;
+      row.classList.toggle('hidden', !show);
+    });
+  }
+
+  document.querySelectorAll('.filters [data-filter]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      filter = btn.dataset.filter;
+      document.querySelectorAll('.filters [data-filter]').forEach(b => {
+        b.setAttribute('aria-pressed', String(b === btn));
+      });
+      applyFilter();
+    });
+  });
+
+  document.getElementById('reset').addEventListener('click', () => {
+    done.clear();
+    save();
+    render();
+    applyFilter();
+  });
+
+  render();
+</script>
+
+</body></html>

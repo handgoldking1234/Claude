@@ -1,0 +1,228 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>회사명 후보 노트</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* 레이아웃: 위에 기준과 필터, 아래에 이름 카드 그리드. 이름은 붓글씨 느낌의 바탕체로 크게 */
+:root{
+ --bg:#f6f4ef;--card:#ffffff;--ink:#22201b;--muted:#6f6a5f;--line:#e4dfd3;
+ --gold:#a8740f;--gold-soft:#f5ead2;--warn:#b4471f;--warn-soft:#f8e6dd;--ok:#3f6b3a;
+ --f-name:"Gowun Batang","Nanum Myeongjo",serif;--f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17150f;--card:#211e17;--ink:#f1ece0;--muted:#a59f90;--line:#3a352a;--gold:#e0b04a;--gold-soft:#3a2f17;--warn:#f08a5d;--warn-soft:#3b2219;--ok:#8fc285;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#17150f;--card:#211e17;--ink:#f1ece0;--muted:#a59f90;--line:#3a352a;--gold:#e0b04a;--gold-soft:#3a2f17;--warn:#f08a5d;--warn-soft:#3b2219;--ok:#8fc285;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.6 var(--f-body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
+.wrap{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+header{display:flex;flex-direction:column;gap:8px}
+h1{font-family:var(--f-name);font-size:clamp(28px,4vw,40px);margin:0;letter-spacing:-.01em;text-wrap:balance}
+.lead{margin:0;color:var(--muted);max-width:68ch}
+.crit{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.crit span{font-size:12.5px;padding:3px 10px;border-radius:999px;background:var(--gold-soft);color:var(--gold);font-weight:600}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 13px;font:inherit;font-size:13.5px;font-weight:500;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.chip b{font-weight:600;color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip[aria-pressed="true"] b{color:var(--bg);opacity:.75}
+.chip:focus-visible,.star:focus-visible,#q:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+#q{flex:1;min-width:0;max-width:340px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 12px;font:inherit;font-size:14px}
+.tog{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--muted);cursor:pointer}
+.count{font-size:13px;color:var(--muted);margin-left:auto;font-variant-numeric:tabular-nums}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 16px 14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.card.fav{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.top{display:flex;align-items:flex-start;gap:8px}
+.nm{flex:1;min-width:0}
+.nm .k{font-family:var(--f-name);font-size:26px;font-weight:700;line-height:1.2;word-break:keep-all}
+.nm .r{font-size:13px;color:var(--muted);letter-spacing:.04em}
+.star{border:0;background:transparent;font-size:22px;line-height:1;cursor:pointer;color:var(--line);padding:2px;border-radius:6px}
+.card.fav .star{color:var(--gold)}
+.mean{margin:0;font-size:14px}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto}
+.tag{font-size:11.5px;padding:2px 8px;border-radius:6px;background:var(--bg);color:var(--muted);font-weight:500}
+.tag.lang{color:var(--ink);font-weight:600}
+.tag.w{background:var(--warn-soft);color:var(--warn);font-weight:600}
+.tag.c{background:var(--gold-soft);color:var(--gold);font-weight:600}
+.empty{padding:40px 0;text-align:center;color:var(--muted)}
+.foot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:4px}
+@media (prefers-reduced-motion:no-preference){.card{transition:border-color .15s}}
+</style>
+
+<div class="wrap">
+ <header>
+  <h1>회사명 후보 노트</h1>
+  <p class="lead">카카오·망고처럼 짧고 독특하면서 뜻이 있는 이름을 순우리말·옛말, 몽골어, 만주어, 일본어, 그 밖의 외국어에서 모았어요. 마음에 드는 이름에 별을 눌러 두면 「즐겨찾기」로 모아 볼 수 있어요.</p>
+  <div class="crit"><span>손 · 솜씨</span><span>금 · 황금</span><span>장인</span><span>빛 · 시작</span><span>성장 · 꾸준함</span><span>예쁜 말</span></div>
+ </header>
+
+ <div class="bar">
+  <div class="row" id="langs" role="group" aria-label="언어로 거르기"></div>
+  <div class="row">
+   <input id="q" type="search" placeholder="이름·뜻으로 찾기 (예: 손, 금, 장인)" aria-label="이름이나 뜻으로 찾기">
+   <label class="tog"><input type="checkbox" id="hideWarn"> 겹침 주의 이름 숨기기</label>
+   <span class="count" id="count"></span>
+  </div>
+ </div>
+
+ <div class="grid" id="grid"></div>
+ <p class="empty" id="empty" hidden>조건에 맞는 이름이 없어요. 필터를 바꿔 보세요.</p>
+
+ <div class="foot">
+  <span><b class="tag c">추천</b> 뜻이 서비스(누구나 금손이 되는 도구)와 잘 맞고, 짧게 찾아봤을 때 겹치는 브랜드가 안 보인 이름이에요.</span>
+  <span><b class="tag w">겹침 주의</b> 이미 흔히 쓰이거나 큰 회사가 쓰는 이름이에요. <b class="tag">뜻 확인</b> 사전으로 한 번 더 확인할 이름이에요.</span>
+  <span>상표 등록 여부는 확인 전이에요. 고른 이름은 KIPRIS에서 9류(소프트웨어)·41류(교육)·42류(SaaS)를 꼭 검색하세요.</span>
+ </div>
+</div>
+
+<script>
+// [이름, 로마자, 언어, 뜻, 주제태그[], 상태(c=추천, w=겹침 주의, v=뜻 확인)]
+const N=[
+// 순우리말 · 옛말
+["바치","Bachi","우리말","옛말. 갖바치·성냥바치처럼 솜씨 있는 기술자, 장인",["장인"],"c"],
+["금바치","Geumbachi","우리말","금 + 바치 = 금을 다루는 장인, 금손 장인 (조합어)",["금","장인"],"c"],
+["볕뉘","Byeonnwi","우리말","작은 틈으로 잠깐 드는 볕. 작은 빛이 쌓인다는 느낌",["빛","예쁜 말"],"c"],
+["시나브로","Sinabro","우리말","모르는 사이에 조금씩. 하루 5분 학습 콘셉트와 딱 맞음",["성장","예쁜 말"],"w"],
+["마중물","Majungmul","우리말","펌프에서 물을 끌어올리려고 먼저 붓는 물. 시작을 도와주는 것",["시작"],""],
+["늘품","Neulpum","우리말","앞으로 좋게 발전할 수 있는 품성이나 바탕",["성장"],"c"],
+["오롯","Orot","우리말","모자람 없이 온전한. 오롯이",["예쁜 말"],""],
+["해밀","Haemil","우리말","비가 갠 뒤 맑게 갠 하늘",["빛","예쁜 말"],"w"],
+["너나들이","Neonadeuri","우리말","서로 너, 나 하고 터놓고 지내는 사이",["예쁜 말"],""],
+["디딤","Didim","우리말","디딤돌. 다음 단계로 올라서게 해 주는 발판",["시작","성장"],"w"],
+["소담","Sodam","우리말","생김새가 탐스럽고 보기 좋음 (소담스럽다)",["예쁜 말"],"w"],
+["새뜻","Saetteut","우리말","새롭고 산뜻하다",["예쁜 말"],""],
+["한결","Hangyeol","우리말","한결같이. 처음과 끝이 같음",["꾸준함"],"w"],
+["비나리","Binari","우리말","앞길의 복을 비는 축원",["예쁜 말"],""],
+["도담","Dodam","우리말","탈 없이 잘 자라는 모양 (도담도담)",["성장"],"w"],
+["온새미로","Onsaemiro","우리말","가르거나 쪼개지 않고 생긴 그대로, 언제나 변함없이",["꾸준함","예쁜 말"],""],
+["윤슬","Yunseul","우리말","햇빛·달빛에 반짝이는 잔물결",["빛","예쁜 말"],"w"],
+["가온","Gaon","우리말","가운데, 중심",["예쁜 말"],"w"],
+["다솜","Dasom","우리말","사랑 (옛말에서 온 말로 알려짐)",["예쁜 말"],"w"],
+["아라","Ara","우리말","바다 (옛말)",["예쁜 말"],"w"],
+["너울","Neoul","우리말","바다의 크고 사나운 물결",["예쁜 말"],""],
+["나래","Narae","우리말","날개 (문학적인 말)",["성장"],"w"],
+["마루","Maru","우리말","꼭대기, 으뜸",["성장"],"w"],
+["미리내","Mirinae","우리말","은하수 (방언에서 온 말)",["빛","예쁜 말"],"w"],
+["가람","Garam","우리말","강 (옛말)",["예쁜 말"],"w"],
+["라온","Raon","우리말","즐거운 (옛말로 알려져 있으나 출처 논란)",["예쁜 말"],"wv"],
+["이든","Ideun","우리말","착하고 어진 (옛말로 알려짐)",["예쁜 말"],"v"],
+["그루","Geuru","우리말","나무를 세는 말, 한 그루. 그루터기",["성장"],""],
+["잎새","Ipsae","우리말","나무의 잎",["성장","예쁜 말"],""],
+["손빛","Sonbit","우리말","손 + 빛, 솜씨가 빛난다 (조합어)",["손","빛"],"c"],
+["솜씨","Somssi","우리말","손을 놀려 무엇을 만드는 재주",["손"],"w"],
+["손맵시","Sonmaepsi","우리말","손으로 매만진 모양새, 손재주의 맵시",["손","예쁜 말"],""],
+["금손랩","Geumson Lab","우리말","금손 + 랩. 손재주 좋은 사람들의 연구실 (조합어)",["손","금"],""],
+// 몽골어
+["알탄가르","Altangar","몽골어","altan(황금) + gar(손) = 황금 손, 금손을 몽골어로",["손","금"],"cv"],
+["알탄","Altan","몽골어","황금, 황금빛 (알탄 칸의 그 알탄)",["금"],""],
+["다르항","Darkhan","몽골어","장인, 손재주 좋은 사람. 몽골 도시 이름이기도 함",["장인"],"w"],
+["메르겐","Mergen","몽골어","지혜로운, 활을 잘 쏘는 명사수",["장인"],"v"],
+["에르덴","Erdene","몽골어","보배, 보석",["금"],""],
+["뭉흐","Mönkh","몽골어","영원한",["꾸준함"],""],
+["오드","Od","몽골어","별",["빛"],"v"],
+["나란","Naran","몽골어","해, 태양",["빛"],""],
+["텡게르","Tenger","몽골어","하늘",["예쁜 말"],""],
+["체첵","Tsetseg","몽골어","꽃",["예쁜 말"],""],
+["사이항","Saikhan","몽골어","아름다운, 좋은",["예쁜 말"],""],
+["바야르","Bayar","몽골어","기쁨, 축제",["예쁜 말"],""],
+["조릭","Zorig","몽골어","용기",["성장"],""],
+["암갈랑","Amgalan","몽골어","평화, 편안함",["예쁜 말"],""],
+["엥흐","Enkh","몽골어","평화",["예쁜 말"],""],
+["울","Uul","몽골어","산",["성장"],""],
+["누르","Nuur","몽골어","호수",["예쁜 말"],""],
+["알탄오드","Altan Od","몽골어","황금 별 (조합어)",["금","빛"],"cv"],
+// 만주어
+["아이신","Aisin","만주어","금 (청 황실 아이신기오로의 그 금)",["금"],"w"],
+["갈라","Gala","만주어","손",["손"],"v"],
+["압카","Abka","만주어","하늘",["예쁜 말"],""],
+["슌","Šun","만주어","해, 태양",["빛"],""],
+["비야","Biya","만주어","달",["빛","예쁜 말"],""],
+["우시하","Usiha","만주어","별",["빛"],""],
+["일하","Ilha","만주어","꽃",["예쁜 말"],""],
+["사인","Sain","만주어","좋은",["예쁜 말"],"w"],
+["암바","Amba","만주어","큰",["성장"],""],
+["무커","Muke","만주어","물",["예쁜 말"],""],
+["묵던","Mukden","만주어","흥성하다, 일어나다 (심양의 옛 이름)",["성장","시작"],""],
+["메르겐","Mergen","만주어","지혜로운, 솜씨 있는 (몽골어와 같은 뿌리)",["장인"],"v"],
+// 일본어
+["타쿠미","Takumi","일본어","匠, 장인·숙련된 솜씨",["장인"],"w"],
+["쇼쿠닌","Shokunin","일본어","職人, 한 가지 기술을 닦은 장인",["장인"],"w"],
+["와자","Waza","일본어","技, 기술·솜씨",["손","장인"],""],
+["코가네","Kogane","일본어","黄金, 황금 (부드러운 옛 말씨)",["금"],"c"],
+["킨","Kin","일본어","金, 금",["금"],""],
+["테","Te","일본어","手, 손",["손"],""],
+["아카리","Akari","일본어","灯り, 불빛·등불",["빛","예쁜 말"],"w"],
+["히카리","Hikari","일본어","光, 빛",["빛"],"w"],
+["츠즈리","Tsuzuri","일본어","綴り, 글을 엮어 짓다. 콘티·원고를 엮는 도구와 잘 맞음",["손","예쁜 말"],"c"],
+["츠무기","Tsumugi","일본어","紬, 실을 자아 짠 천. 이야기를 엮다(紡ぐ)는 느낌",["손","예쁜 말"],""],
+["후데","Fude","일본어","筆, 붓",["손"],""],
+["스미","Sumi","일본어","墨, 먹",["손"],"w"],
+["이키","Iki","일본어","粋, 세련되고 멋스러움",["예쁜 말"],""],
+["에니시","Enishi","일본어","縁, 인연",["예쁜 말"],""],
+["미야비","Miyabi","일본어","雅, 우아함",["예쁜 말"],"w"],
+["린","Rin","일본어","凛, 늠름하고 단정함",["예쁜 말"],"w"],
+["잇포","Ippo","일본어","一歩, 한 걸음. 하루 한 걸음씩",["성장","시작"],""],
+["히토후데","Hitofude","일본어","一筆, 붓을 떼지 않고 한 번에 그림",["손"],"c"],
+["메","Me","일본어","芽, 새싹",["성장"],""],
+["사쿠라","Sakura","일본어","桜, 벚꽃",["예쁜 말"],"w"],
+["소라","Sora","일본어","空, 하늘",["예쁜 말"],"w"],
+// 유럽어 · 라틴어
+["마노로","Manoro","스페인·이탈리아어","mano(손) + oro(금) = 금손 (조합어)",["손","금"],"c"],
+["오로마노","Oromano","스페인·이탈리아어","oro(금) + mano(손) (조합어)",["금","손"],""],
+["오라포","Orafo","이탈리아어","금세공 장인, 금을 다루는 사람",["금","장인"],"c"],
+["마노","Mano","스페인·이탈리아어","손",["손"],"w"],
+["오로","Oro","스페인·이탈리아어","금",["금"],"w"],
+["마누","Manu","라틴어","manus(손)에서 온 말. manufacture의 뿌리",["손"],""],
+["아르티펙스","Artifex","라틴어","장인, 예술가",["장인"],""],
+["아르스","Ars","라틴어","기술, 예술 (art의 뿌리)",["장인"],""],
+["테크네","Techne","그리스어","기술·솜씨 (technology의 뿌리)",["장인"],""],
+["크리소","Chryso","그리스어","chrysos(금)에서",["금"],""],
+["루모","Lumo","에스페란토","빛",["빛"],""],
+["쿨타","Kulta","핀란드어","금. 「사랑하는 사람」이라는 애칭으로도 씀",["금","예쁜 말"],"c"],
+// 그 밖의 언어
+["푼디","Fundi","스와힐리어","장인, 기술자, 솜씨 좋은 사람",["장인"],""],
+["다하부","Dhahabu","스와힐리어","금",["금"],""],
+["칼라","Kala","산스크리트어","예술·기예 (64가지 기예를 뜻함)",["장인"],"w"],
+["하스타","Hasta","산스크리트어","손",["손"],""],
+["실파","Shilpa","산스크리트어","공예, 만드는 기술",["장인"],""],
+["소나","Sona","힌디어","금",["금"],""],
+["마히르","Mahir","말레이·인도네시아어","솜씨 좋은, 능숙한 (아랍어에서 옴)",["장인"],""],
+["호나르","Honar","페르시아어","예술, 재주",["장인"],""],
+["우스타","Usta","튀르키예어","숙련된 장인, 장인의 우두머리",["장인"],"c"],
+["알튼","Altın","튀르키예어","금",["금"],""],
+// 과일 · 자연 (카카오·망고 계열)
+["키와노","Kiwano","과일","뿔 달린 아프리카 멜론",["예쁜 말"],"c"],
+["사포테","Sapote","과일","중남미 과일",["예쁜 말"],""],
+["피타야","Pitaya","과일","용과",["예쁜 말"],"w"],
+["룰로","Lulo","과일","콜롬비아 과일. 같은 이름의 은행·앱이 이미 있음",["예쁜 말"],"w"]
+];
+const ST=(()=>{try{return JSON.parse(localStorage.getItem('nameFavs')||'[]')}catch(e){return[]}})();
+const fav=new Set(ST);
+const saveFav=()=>{try{localStorage.setItem('nameFavs',JSON.stringify([...fav]))}catch(e){}};
+const langs=['전체','★ 즐겨찾기','추천',...[...new Set(N.map(n=>n[2]))]];
+let cur='전체';
+const $=s=>document.querySelector(s);
+const key=n=>n[0]+'|'+n[2];
+function cnt(l){return l==='전체'?N.length:l==='★ 즐겨찾기'?N.filter(n=>fav.has(key(n))).length:l==='추천'?N.filter(n=>n[5].includes('c')).length:N.filter(n=>n[2]===l).length}
+function drawLangs(){$('#langs').innerHTML=langs.map(l=>`<button class="chip" data-l="${l}" aria-pressed="${l===cur}">${l}<b>${cnt(l)}</b></button>`).join('')}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function draw(){
+ const q=$('#q').value.trim().toLowerCase(),hw=$('#hideWarn').checked;
+ const L=N.filter(n=>(cur==='전체'||(cur==='★ 즐겨찾기'?fav.has(key(n)):cur==='추천'?n[5].includes('c'):n[2]===cur))&&(!hw||!n[5].includes('w'))&&(!q||(n[0]+n[1]+n[3]+n[4].join(' ')).toLowerCase().includes(q)));
+ $('#grid').innerHTML=L.map(n=>{const k=key(n),f=fav.has(k);return `<article class="card${f?' fav':''}">
+  <div class="top"><div class="nm"><div class="k">${esc(n[0])}</div><div class="r">${esc(n[1])}</div></div>
+  <button class="star" data-k="${esc(k)}" aria-pressed="${f}" aria-label="${esc(n[0])} 즐겨찾기">${f?'★':'☆'}</button></div>
+  <p class="mean">${esc(n[3])}</p>
+  <div class="tags"><span class="tag lang">${esc(n[2])}</span>${n[4].map(t=>`<span class="tag">${esc(t)}</span>`).join('')}${n[5].includes('c')?'<span class="tag c">추천</span>':''}${n[5].includes('w')?'<span class="tag w">겹침 주의</span>':''}${n[5].includes('v')?'<span class="tag">뜻 확인</span>':''}</div></article>`}).join('');
+ $('#empty').hidden=L.length>0;$('#count').textContent=`${L.length}개 표시 · 즐겨찾기 ${fav.size}개`;
+}
+$('#langs').addEventListener('click',e=>{const b=e.target.closest('[data-l]');if(!b)return;cur=b.dataset.l;drawLangs();draw();});
+$('#grid').addEventListener('click',e=>{const b=e.target.closest('.star');if(!b)return;const k=b.dataset.k;fav.has(k)?fav.delete(k):fav.add(k);saveFav();drawLangs();draw();});
+$('#q').addEventListener('input',draw);$('#hideWarn').addEventListener('change',draw);
+drawLangs();draw();
+</script>
+
+</body></html>

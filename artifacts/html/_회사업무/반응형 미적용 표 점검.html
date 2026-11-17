@@ -1,0 +1,698 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>반응형 미적용 표 점검</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --ground: #F5F6FA;
+    --surface: #FFFFFF;
+    --surface-sunk: #EEF0F7;
+    --ink: #171A22;
+    --ink-soft: #454B5D;
+    --muted: #6B7287;
+    --line: #E1E4EF;
+    --line-soft: #EDEFF6;
+    --accent: #514EFA;
+    --accent-soft: #ECECFE;
+    --accent-line: #C9C8FD;
+    --flag-high: #B3400B;
+    --flag-high-soft: #FCEEE6;
+    --flag-high-line: #F0CDB6;
+    --flag-mid: #1F6D64;
+    --flag-mid-soft: #E6F2F0;
+    --flag-mid-line: #BEDCD7;
+
+    --fs-xs: 0.75rem;
+    --fs-sm: 0.8125rem;
+    --fs-base: 0.9375rem;
+    --fs-md: 1.0625rem;
+    --fs-lg: 1.375rem;
+    --fs-xl: 1.875rem;
+
+    --sans: 'IBM Plex Sans KR', system-ui, -apple-system, 'Malgun Gothic', sans-serif;
+    --mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #101219;
+      --surface: #191C24;
+      --surface-sunk: #14161D;
+      --ink: #E9EBF2;
+      --ink-soft: #BCC1D1;
+      --muted: #8E95AB;
+      --line: #2B2F3C;
+      --line-soft: #23262F;
+      --accent: #9C99FF;
+      --accent-soft: #23233A;
+      --accent-line: #3A3A62;
+      --flag-high: #F0A579;
+      --flag-high-soft: #2A1D16;
+      --flag-high-line: #4A3427;
+      --flag-mid: #7FCFC2;
+      --flag-mid-soft: #15251F;
+      --flag-mid-line: #274039;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #101219;
+    --surface: #191C24;
+    --surface-sunk: #14161D;
+    --ink: #E9EBF2;
+    --ink-soft: #BCC1D1;
+    --muted: #8E95AB;
+    --line: #2B2F3C;
+    --line-soft: #23262F;
+    --accent: #9C99FF;
+    --accent-soft: #23233A;
+    --accent-line: #3A3A62;
+    --flag-high: #F0A579;
+    --flag-high-soft: #2A1D16;
+    --flag-high-line: #4A3427;
+    --flag-mid: #7FCFC2;
+    --flag-mid-soft: #15251F;
+    --flag-mid-line: #274039;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding-block: 44px 72px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: var(--fs-base);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  a { color: var(--accent); }
+  a:focus-visible,
+  .go:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+  code, .path { font-family: var(--mono); font-size: 0.86em; }
+
+  /* ── 머리 ────────────────────────────────── */
+  .masthead { display: flex; flex-direction: column; gap: 10px; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  h1 {
+    margin: 0;
+    font-size: var(--fs-xl);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+  .lede { margin: 0; max-width: 60ch; color: var(--ink-soft); }
+  .correction {
+    margin: 10px 0 0;
+    max-width: 66ch;
+    padding: 13px 15px;
+    border: 1px solid var(--flag-high-line);
+    border-left-width: 3px;
+    border-radius: 4px;
+    background: var(--flag-high-soft);
+    color: var(--ink-soft);
+    font-size: var(--fs-sm);
+  }
+  .correction b { color: var(--flag-high); font-weight: 600; }
+  .tally {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .tally span {
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    padding: 4px 9px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: var(--surface);
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── 접속 준비 ────────────────────────────── */
+  .setup {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 26px 26px 28px;
+  }
+  .setup h2 {
+    margin: 0 0 4px;
+    font-size: var(--fs-md);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .setup > p.sub { margin: 0 0 20px; color: var(--muted); font-size: var(--fs-sm); }
+
+  ol.steps {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  ol.steps > li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+  ol.steps > li::before {
+    content: counter(step);
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    line-height: 24px;
+    text-align: center;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+  }
+  ol.steps b { font-weight: 600; display: block; margin-bottom: 2px; }
+  ol.steps p { margin: 0; color: var(--ink-soft); font-size: var(--fs-sm); }
+  ol.steps p + p { margin-top: 5px; }
+
+  pre.cmd {
+    margin: 8px 0 0;
+    padding: 11px 14px;
+    background: var(--surface-sunk);
+    border: 1px solid var(--line-soft);
+    border-radius: 4px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: var(--fs-sm);
+    line-height: 1.7;
+    color: var(--ink);
+  }
+  .note {
+    margin-top: 6px;
+    font-size: var(--fs-sm);
+    color: var(--muted);
+  }
+
+  /* ── 섹션 ────────────────────────────────── */
+  .group { display: flex; flex-direction: column; gap: 16px; }
+  .group-head { display: flex; flex-direction: column; gap: 5px; }
+  .group-head h2 {
+    margin: 0;
+    font-size: var(--fs-lg);
+    font-weight: 700;
+    letter-spacing: -0.018em;
+  }
+  .group-head p { margin: 0; color: var(--muted); font-size: var(--fs-sm); max-width: 62ch; }
+
+  .list { display: flex; flex-direction: column; gap: 10px; }
+
+  .item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--flag-mid);
+    border-radius: 5px;
+    padding: 18px 20px 19px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .item.is-high { border-left-color: var(--flag-high); }
+
+  .item-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .item-top h3 {
+    margin: 0;
+    font-size: var(--fs-base);
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    flex: 1 1 260px;
+    min-width: 0;
+  }
+  .cols {
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+    background: var(--surface-sunk);
+    white-space: nowrap;
+  }
+  .chip--actor {
+    border-color: var(--accent-line);
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .chip--high {
+    border-color: var(--flag-high-line);
+    background: var(--flag-high-soft);
+    color: var(--flag-high);
+  }
+  .chip--mid {
+    border-color: var(--flag-mid-line);
+    background: var(--flag-mid-soft);
+    color: var(--flag-mid);
+  }
+
+  .route {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line-soft);
+  }
+  .route dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 62px 1fr;
+    gap: 4px 12px;
+    font-size: var(--fs-sm);
+  }
+  .route dt {
+    color: var(--muted);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding-top: 2px;
+  }
+  .route dd { margin: 0; color: var(--ink-soft); min-width: 0; overflow-wrap: anywhere; }
+  .route dd .path { color: var(--ink); }
+
+  .go {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    align-self: flex-start;
+    padding: 7px 13px;
+    border: 1px solid var(--accent-line);
+    border-radius: 4px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 120ms ease, border-color 120ms ease;
+  }
+  .go:hover { background: var(--surface); border-color: var(--accent); }
+  .go::after { content: '↗'; font-size: 0.9em; opacity: 0.75; }
+
+  .src {
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    color: var(--muted);
+    overflow-wrap: anywhere;
+  }
+
+  /* ── 꼬리 ────────────────────────────────── */
+  .footnote {
+    border-top: 1px solid var(--line);
+    padding-top: 22px;
+    font-size: var(--fs-sm);
+    color: var(--muted);
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .footnote b { color: var(--ink-soft); font-weight: 600; }
+  .footnote p { margin: 0; max-width: 68ch; }
+
+  @media (max-width: 560px) {
+    body { padding-block: 32px 56px; }
+    .wrap { gap: 32px; }
+    .setup { padding: 20px 18px 22px; }
+    .route dl { grid-template-columns: 1fr; gap: 2px; }
+    .route dt { padding-top: 8px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="eyebrow">DEPTH 프론트엔드 · 퍼블리싱 점검</p>
+    <h1>colgroup·반응형이 빠진 표</h1>
+    <p class="lede">
+      <code>src/**/*.tsx</code>의 <code>&lt;table&gt;</code> 124개를 전수 검사해, 좁은 폭에서
+      카드로 접히지 않는 표만 추렸습니다. 내부 개발용 화면(front-progress·front-component
+      계열 8건)은 제외했습니다.
+    </p>
+    <div class="tally">
+      <span>전체 124</span>
+      <span>users-table--cards 102</span>
+      <span>wf-table 자체 규칙 4</span>
+      <span>내부 화면 8</span>
+      <span>남은 10</span>
+    </div>
+    <p class="correction">
+      <b>1차 목록에서 정정</b> — 글쓰기튜터 교사 화면 4건(결과 종합·동료 유사도·웹 인용·AI 의심)을
+      빼습니다. 이 표들은 <code>users-table--cards</code>가 아니라 각자의 <code>.css</code>에
+      640px 카드 규칙을 따로 갖고 있습니다. 문항카드 칸이 <code>rowSpan</code>으로 여러 행을 묶어서
+      공통 규칙으로 풀면 병합이 사라지기 때문에, 병합 셀을 감추고 그룹 제목 줄을 카드 위에 세우는
+      방식을 쓰고 있었습니다. 처음 검사할 때 클래스 이름만 봐서 놓쳤습니다.
+    </p>
+  </header>
+
+  <section class="setup">
+    <h2>접속 준비</h2>
+    <p class="sub">아래 순서대로 한 번만 해두면 목록의 링크가 바로 열립니다.</p>
+    <ol class="steps">
+      <li>
+        <div>
+          <b>개발 서버 실행</b>
+          <p><code>npm run dev</code>는 <code>--mode development</code>로 뜹니다. <code>npm run local</code>은 모드가 달라 3번 항목이 적용되지 않으니 쓰지 마세요.</p>
+          <pre class="cmd">cd D:\depth\front
+npm run dev</pre>
+          <p class="note">서버 주소 — <a href="http://127.0.0.1:3100" target="_blank" rel="noopener">http://127.0.0.1:3100</a></p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <b>로그인 후 액터 전환</b>
+          <p>화면마다 필요한 액터가 다릅니다. 로그인한 뒤 <b>헤더 우측 액터 선택기</b>에서 해당 액터로 바꾸세요. 여러 액터를 가진 계정이면 재로그인 없이 전환됩니다.</p>
+          <p class="note">Master(ACT-00) 계정은 rightwrite를 포함한 모든 경로를 그대로 통과합니다.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <b>메뉴 가드는 이미 꺼져 있습니다</b>
+          <p><code>.env.development</code> 42번 줄에 <code>VITE_DISABLE_MENU_GUARD=true</code>가 들어 있어, 계정에 메뉴가 매핑되지 않은 화면도 주소만 치면 열립니다. 퍼블리싱·반응형 확인용으로 열어둔 개발 전용 스위치이고 운영 빌드에서는 켜지지 않습니다.</p>
+          <p class="note">단, <code>/rightwrite/**</code>는 메뉴가 아니라 코드에 액터가 박혀 있어 이 스위치로 뚫리지 않습니다. 해당 액터로 전환해야 합니다.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <b>좁은 폭으로 보기</b>
+          <p>F12 → 디바이스 툴바(Ctrl+Shift+M) → 폭을 <b>640px 이하</b>로. 카드형 전환 기준점은 <code>sm = 640px</code>입니다. 이 목록의 표들은 이 폭에서 가로 스크롤로 남습니다.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <b>ID는 목록에서 받아오기</b>
+          <p>아래 링크는 전부 <b>목록 화면</b>으로 연결됩니다. 아무 건이나 눌러 들어가면 주소창에 <code>designId</code>·<code>assignmentId</code>가 찍히고, 그 뒤 '도달 경로'대로 이동하면 해당 표가 나옵니다.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="group">
+    <div class="group-head">
+      <h2>colgroup·반응형 모두 없음</h2>
+      <p>열 폭을 잡아주는 <code>&lt;colgroup&gt;</code>도 없고 카드형 전환도 안 된 표입니다. 넓은 화면에서도 열 폭이 내용에 따라 흔들립니다.</p>
+    </div>
+    <div class="list">
+
+      <article class="item is-high">
+        <div class="item-top">
+          <h3>채점교사 본채점 — '내 본채점 대상'</h3>
+          <span class="cols">7열</span>
+        </div>
+        <div class="chips">
+          <span class="chip chip--actor">ACT-12 채점교사</span>
+          <span class="chip chip--high">colgroup 없음</span>
+          <span class="chip chip--high">반응형 없음</span>
+        </div>
+        <div class="route">
+          <a class="go" href="http://127.0.0.1:3100/grading/internal-standardization" target="_blank" rel="noopener">내부 표준화 목록 열기</a>
+          <dl>
+            <dt>경로</dt>
+            <dd><span class="path">/grading/internal-standardization/teacher/{designId}</span></dd>
+            <dt>도달</dt>
+            <dd>목록에서 설계 선택 → 채점교사 화면 → <b>내 본채점 대상</b> 패널</dd>
+          </dl>
+          <p class="src">src/features/grading/front-internal-standardization/pages/InternalStandardizationTeacherPage.tsx:902</p>
+        </div>
+      </article>
+
+      <article class="item is-high">
+        <div class="item-top">
+          <h3>연습 채점 — 지표 표 ①</h3>
+          <span class="cols">4열</span>
+        </div>
+        <div class="chips">
+          <span class="chip chip--actor">ACT-06 선임채점관</span>
+          <span class="chip chip--high">colgroup 없음</span>
+          <span class="chip chip--high">반응형 없음</span>
+        </div>
+        <div class="route">
+          <a class="go" href="http://127.0.0.1:3100/grading/internal-standardization" target="_blank" rel="noopener">내부 표준화 목록 열기</a>
+          <dl>
+            <dt>경로</dt>
+            <dd><span class="path">/grading/internal-standardization/{designId}</span></dd>
+            <dt>도달</dt>
+            <dd>설계 선택 → 위저드 3단계 <b>연습 채점</b> 탭. 단계는 URL이 아니라 화면 안 탭입니다.</dd>
+          </dl>
+          <p class="src">src/features/grading/front-internal-standardization/components/InternalStandardizationDetailPractice.tsx:451</p>
+        </div>
+      </article>
+
+      <article class="item is-high">
+        <div class="item-top">
+          <h3>연습 채점 — 지표 표 ②</h3>
+          <span class="cols">4열</span>
+        </div>
+        <div class="chips">
+          <span class="chip chip--actor">ACT-06 선임채점관</span>
+          <span class="chip chip--high">colgroup 없음</span>
+          <span class="chip chip--high">반응형 없음</span>
+        </div>
+        <div class="route">
+          <a class="go" href="http://127.0.0.1:3100/grading/internal-standardization" target="_blank" rel="noopener">내부 표준화 목록 열기</a>
+          <dl>
+            <dt>경로</dt>
+            <dd><span class="path">/grading/internal-standardization/{designId}</span></dd>
+            <dt>도달</dt>
+            <dd>①과 같은 3단계 <b>연습 채점</b> 화면, 아래쪽 두 번째 표</dd>
+          </dl>
+          <p class="src">src/features/grading/front-internal-standardization/components/InternalStandardizationDetailPractice.tsx:488</p>
+        </div>
+      </article>
+
+      <article class="item is-high">
+        <div class="item-top">
+          <h3>연습 채점 실패 피드백</h3>
+          <span class="cols">5열</span>
+        </div>
+        <div class="chips">
+          <span class="chip chip--actor">ACT-12 채점교사</span>
+          <span class="chip chip--high">colgroup 없음</span>
+          <span class="chip chip--high">반응형 없음</span>
+        </div>
+        <div class="route">
+          <a class="go" href="http://127.0.0.1:3100/grading/internal-standardization" target="_blank" rel="noopener">내부 표준화 목록 열기</a>
+          <dl>
+            <dt>경로</dt>
+            <dd><span class="path">/grading/internal-standardization/teacher/{designId}</span></dd>
+            <dt>도달</dt>
+            <dd>채점교사 화면에서 연습 채점이 <b>불합격</b>인 상태일 때 나타나는 피드백 영역</dd>
+          </dl>
+          <p class="src">src/features/grading/front-internal-standardization/components/PracticeScoringFailureFeedback.tsx:156</p>
+        </div>
+      </article>
+
+      <article class="item is-high">
+        <div class="item-top">
+          <h3>AI 문항 생성 모달 — 루브릭</h3>
+          <span class="cols">4열</span>
+        </div>
+        <div class="chips">
+          <span class="chip chip--actor">ACT-07 출제교사</span>
+          <span class="chip chip--actor">ACT-03·04 업무관리자</span>
+          <span class="chip chip--high">colgroup 없음</span>
+          <span class="chip chip--high">반응형 없음</span>
+        </div>
+        <div class="route">
+          <a class="go" href="http://127.0.0.1:3100/tds/evaluations" target="_blank" rel="noopener">평가 목록 열기</a>
+          <dl>
+            <dt>경로</dt>
+            <dd><span class="path">/tds/evaluations/{regId}/designs/{designId}</span></dd>
+            <dt>도달</dt>
+            <dd>평가 선택 → 설계 화면 2단계 문항 패널 → <b>AI 문항 추가</b> 버튼 → 모달 하단 루브릭 표</dd>
+          </dl>
+          <p class="src">src/features/tds/evaluation-design/pages/design-all-in-one/ai-question-modal/QuestionParamsSection.tsx:209</p>
+        </div>
+      </article>
+
+      <article class="item is-high">
+        <div class="item-top">
+          <h3>학생 리포트</h3>
+          <span class="cols">4열</span>
+        </div>
+        <div class="chips">
+          <span class="chip chip--actor">ACT-09 학생</span>
+          <span class="chip chip--high">colgroup 없음</span>
+          <span class="chip chip--high">반응형 없음</span>
+        </div>
+        <div class="route">
+          <a class="go" href="http://127.0.0.1:3100/rightwrite/student" target="_blank" rel="noopener">학생 과제 목록 열기</a>
+          <dl>
+            <dt>경로</dt>
+            <dd><span class="path">/rightwrite/student/assignments/{assignmentId}/report</span></dd>
+            <dt>도달</dt>
+            <dd>학생 액터로 전환 필수 — 메뉴 가드 스위치로는 안 열립니다. 과제 선택 → 리포트</dd>
+          </dl>
+          <p class="src">src/features/rightwrite/student/features/report/ReportPage.tsx:73</p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-head">
+      <h2>colgroup은 있고 반응형만 없음</h2>
+      <p>열 폭은 잡혀 있어 넓은 화면은 정상이지만, 640px 이하에서 카드로 접히지 않고 가로 스크롤로 남는 표입니다.</p>
+    </div>
+    <div class="list">
+
+      <article class="item">
+        <div class="item-top">
+          <h3>시드 답안 선택 모달 — 후보 목록</h3>
+          <span class="cols">6열</span>
+        </div>
+        <div class="chips">
+          <span class="chip chip--actor">ACT-06 선임채점관</span>
+          <span class="chip chip--mid">colgroup 있음</span>
+          <span class="chip chip--high">반응형 없음</span>
+        </div>
+        <div class="route">
+          <a class="go" href="http://127.0.0.1:3100/grading/internal-standardization" target="_blank" rel="noopener">내부 표준화 목록 열기</a>
+          <dl>
+            <dt>경로</dt>
+            <dd><span class="path">/grading/internal-standardization/{designId}</span></dd>
+            <dt>도달</dt>
+            <dd>위저드 4단계 <b>채점자 최종 확정</b> → 시드 답안 모달 열기</dd>
+          </dl>
+          <p class="src">src/features/grading/front-internal-standardization/components/SeedAnswerModal.tsx:477</p>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="item-top">
+          <h3>시드 답안 선택 모달 — 선택 목록</h3>
+          <span class="cols">머리글 없음</span>
+        </div>
+        <div class="chips">
+          <span class="chip chip--actor">ACT-06 선임채점관</span>
+          <span class="chip chip--mid">colgroup 있음</span>
+          <span class="chip chip--high">반응형 없음</span>
+        </div>
+        <div class="route">
+          <a class="go" href="http://127.0.0.1:3100/grading/internal-standardization" target="_blank" rel="noopener">내부 표준화 목록 열기</a>
+          <dl>
+            <dt>경로</dt>
+            <dd><span class="path">/grading/internal-standardization/{designId}</span></dd>
+            <dt>도달</dt>
+            <dd>같은 모달 아래쪽, 선택된 답안이 쌓이는 표</dd>
+          </dl>
+          <p class="src">src/features/grading/front-internal-standardization/components/SeedAnswerModal.tsx:501</p>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="item-top">
+          <h3>세부 채점 기준 확정 — 기준 표</h3>
+          <span class="cols">2열</span>
+        </div>
+        <div class="chips">
+          <span class="chip chip--actor">ACT-06 선임채점관</span>
+          <span class="chip chip--mid">colgroup 있음</span>
+          <span class="chip chip--high">반응형 없음</span>
+        </div>
+        <div class="route">
+          <a class="go" href="http://127.0.0.1:3100/grading/internal-standardization" target="_blank" rel="noopener">내부 표준화 목록 열기</a>
+          <dl>
+            <dt>경로</dt>
+            <dd><span class="path">/grading/internal-standardization/{designId}</span></dd>
+            <dt>도달</dt>
+            <dd>위저드 2단계 <b>세부 채점 기준 확정</b></dd>
+          </dl>
+          <p class="src">src/features/grading/front-internal-standardization/components/InternalStandardizationDetailRubric.tsx:415</p>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="item-top">
+          <h3>채점 기준 이력 보기 모달</h3>
+          <span class="cols">머리글 없음</span>
+        </div>
+        <div class="chips">
+          <span class="chip chip--actor">ACT-06 선임채점관</span>
+          <span class="chip chip--mid">colgroup 있음</span>
+          <span class="chip chip--high">반응형 없음</span>
+        </div>
+        <div class="route">
+          <a class="go" href="http://127.0.0.1:3100/grading/internal-standardization" target="_blank" rel="noopener">내부 표준화 목록 열기</a>
+          <dl>
+            <dt>경로</dt>
+            <dd><span class="path">/grading/internal-standardization/{designId}</span> 또는 <span class="path">.../senior/{designId}</span></dd>
+            <dt>도달</dt>
+            <dd>2단계 기준 표의 <b>이력 보기</b>, 또는 선임 관리 화면의 같은 버튼. 두 곳 모두 같은 모달입니다.</dd>
+          </dl>
+          <p class="src">src/features/grading/front-internal-standardization/components/VersionHistoryModal.tsx:173</p>
+        </div>
+      </article>
+
+      
+
+            
+
+            
+
+            
+
+          </div>
+  </section>
+
+  <footer class="footnote">
+    <p><b>액터 코드</b> — ACT-00 Master · ACT-03 교육청 업무관리자 · ACT-04 학교 업무관리자 · ACT-05 대표교사 · ACT-06 선임채점관 · ACT-07 출제교사 · ACT-09 학생 · ACT-12 채점교사</p>
+    <p><b>제외한 것</b> — front-progress 2건, front-component 계열 6건은 내부 개발용 화면이라 뺐습니다. <code>tstd-metric-table</code>·<code>report-table</code>처럼 <code>users-table</code>이 아닌 전용 클래스를 쓰는 표는 <code>users-table--cards</code>만 붙여서는 카드로 접히지 않으니, 클래스 교체까지 필요합니다.</p>
+    <p><b>덤으로 나온 깨짐 2건</b> — 카드형은 적용됐지만 인라인 스타일이 카드 규칙을 이기는 자리입니다. Step2QuestionsPanel.tsx:400의 <code>maxWidth: 0</code>은 좁은 폭에서 '지문 요약' 칸을 통째로 접어버리고, ExternalAdvisorRevocationListPage.tsx:272·282의 <code>width: 70px</code>는 카드 아랫줄 버튼이 한 줄을 다 쓰지 못하게 막습니다.</p>
+  </footer>
+
+</div>
+
+</body></html>

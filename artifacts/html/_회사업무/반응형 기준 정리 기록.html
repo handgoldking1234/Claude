@@ -1,0 +1,907 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>반응형 기준 정리 기록</title>
+<style>
+  :root {
+    --ground:#f2f5f8; --surface:#fff; --surface-3:#f8fafc;
+    --ink:#131820; --ink-2:#3f4a5c; --ink-3:#6b7686;
+    --rule:#dbe2ec; --rule-soft:#e9eef4;
+    --accent:#1d4ed8; --accent-2:#153ea8;
+    --ok:#0a6b48; --ok-wash:#e7f5ef; --ok-rule:#8fcfb4;
+    --warn:#8a5200; --warn-wash:#fdf1dc;
+    --danger:#a4243b; --danger-wash:#fdecef; --danger-rule:#e5a5b1;
+    --code-bg:#eceff5;
+    --shadow:0 1px 2px rgba(19,24,32,.05), 0 10px 26px -24px rgba(19,24,32,.65);
+    --f-body:"Segoe UI Variable Text","Segoe UI",ui-sans-serif,system-ui,-apple-system,sans-serif;
+    --f-mono:"Cascadia Mono","Cascadia Code",ui-monospace,Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:#0a0d12; --surface:#131820; --surface-3:#161a22;
+      --ink:#eceff6; --ink-2:#adb9cb; --ink-3:#7f8998;
+      --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+      --accent:#5c9bff; --accent-2:#93bcff;
+      --ok:#4ec793; --ok-wash:rgba(78,199,147,.10); --ok-rule:rgba(78,199,147,.45);
+      --warn:#e2a544; --warn-wash:rgba(226,165,68,.13);
+      --danger:#f08096; --danger-wash:rgba(240,128,150,.09); --danger-rule:rgba(240,128,150,.42);
+      --code-bg:rgba(255,255,255,.05);
+      --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -24px rgba(0,0,0,.95);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#0a0d12; --surface:#131820; --surface-3:#161a22;
+    --ink:#eceff6; --ink-2:#adb9cb; --ink-3:#7f8998;
+    --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+    --accent:#5c9bff; --accent-2:#93bcff;
+    --ok:#4ec793; --ok-wash:rgba(78,199,147,.10); --ok-rule:rgba(78,199,147,.45);
+    --warn:#e2a544; --warn-wash:rgba(226,165,68,.13);
+    --danger:#f08096; --danger-wash:rgba(240,128,150,.09); --danger-rule:rgba(240,128,150,.42);
+    --code-bg:rgba(255,255,255,.05);
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -24px rgba(0,0,0,.95);
+  }
+
+  *, *::before, *::after { box-sizing:border-box; }
+  body { margin:0; background:var(--ground); color:var(--ink);
+    font-family:var(--f-body); font-size:15px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:1180px; margin:0 auto; padding:40px 22px 90px; }
+
+  code { font-family:var(--f-mono); font-size:.88em; background:var(--code-bg);
+    border-radius:4px; padding:.1em .38em; overflow-wrap:anywhere; }
+  a { color:var(--accent); }
+  a:focus-visible { outline:2px solid var(--accent); outline-offset:2px; border-radius:4px; }
+
+  .eyebrow { font-family:var(--f-mono); font-size:11.5px; letter-spacing:.11em;
+    text-transform:uppercase; color:var(--ink-3); margin:0 0 10px; }
+  h1 { font-size:clamp(27px,4vw,36px); line-height:1.18; letter-spacing:-.022em;
+    margin:0 0 12px; text-wrap:balance; }
+  .lede { margin:0; max-width:68ch; color:var(--ink-2); font-size:16px; }
+
+  .meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+  .chip { display:inline-flex; align-items:baseline; gap:7px; background:var(--surface);
+    border:1px solid var(--rule); border-radius:999px; padding:5px 13px;
+    font-size:12.5px; box-shadow:var(--shadow); }
+  .chip b { font-family:var(--f-mono); font-weight:600; font-size:12px; }
+  .chip span { color:var(--ink-3); }
+
+  section { margin-top:52px; }
+  h2 { font-size:19px; letter-spacing:-.015em; margin:0 0 6px; padding-bottom:9px;
+    border-bottom:1px solid var(--rule); display:flex; flex-wrap:wrap;
+    align-items:baseline; gap:4px 12px; }
+  h2 .n { font-family:var(--f-mono); font-size:12px; color:var(--ink-3); font-weight:500; }
+  h3 { font-size:15px; margin:0 0 7px; }
+  p { margin:12px 0; max-width:82ch; }
+  p.tight { margin-top:8px; color:var(--ink-2); font-size:14px; }
+
+  .toc { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:1px 22px; margin-top:26px; padding:16px 20px; background:var(--surface);
+    border:1px solid var(--rule); border-radius:12px; box-shadow:var(--shadow); }
+  .toc a { color:var(--ink-2); text-decoration:none; font-size:14px; padding:3px 0; display:block; }
+  .toc a:hover { color:var(--accent); text-decoration:underline; text-underline-offset:3px; }
+  .toc a span { font-family:var(--f-mono); font-size:11px; color:var(--ink-3); }
+
+  .entry { background:var(--surface); border:1px solid var(--rule); border-radius:12px;
+    padding:18px 20px 20px; box-shadow:var(--shadow); margin-top:18px; }
+  .entry__head { display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 14px; }
+  .entry h3 { font-size:16px; margin:0; letter-spacing:-.01em; }
+  .route { font-family:var(--f-mono); font-size:12px; color:var(--accent-2);
+    text-decoration:none; border-bottom:1px solid color-mix(in srgb, var(--accent-2) 32%, transparent);
+    overflow-wrap:anywhere; }
+  .route:hover { color:var(--accent); border-bottom-color:currentColor; }
+  .route.none { color:var(--ink-3); border:0; }
+  .path { font-family:var(--f-mono); font-size:11.5px; color:var(--ink-3);
+    margin:5px 0 0; word-break:break-all; }
+  .note { font-size:13.5px; color:var(--ink-2); margin:9px 0 0; }
+  .miss { color:var(--danger); font-size:13px; }
+
+  .ba { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; }
+  @media (max-width:900px) { .ba { grid-template-columns:1fr; } }
+  .ba__col { min-width:0; display:flex; flex-direction:column; gap:6px; }
+  .ba__tag { font-family:var(--f-mono); font-size:10.5px; font-weight:600;
+    letter-spacing:.06em; text-transform:uppercase; }
+  .ba__tag.before { color:var(--danger); }
+  .ba__tag.after { color:var(--ok); }
+
+  .code { border-radius:9px; border:1px solid var(--rule-soft); overflow-x:auto; flex:1; }
+  .code pre { margin:0; padding:12px 14px; font-family:var(--f-mono);
+    font-size:12px; line-height:1.62; white-space:pre; color:var(--ink-2); }
+  .code.del { background:var(--danger-wash); border-left:3px solid var(--danger-rule); }
+  .code.add { background:var(--ok-wash); border-left:3px solid var(--ok-rule); }
+  .code.empty { display:flex; align-items:center; justify-content:center;
+    padding:14px; font-size:12px; color:var(--ink-3); font-family:var(--f-mono); }
+
+  .note-box { border:1px solid var(--rule); border-left:3px solid var(--accent);
+    border-radius:9px; background:var(--surface); padding:15px 18px;
+    box-shadow:var(--shadow); margin-bottom:12px; }
+  .note-box:last-child { margin-bottom:0; }
+  .note-box.warn { border-left-color:var(--warn); }
+  .note-box h3 { font-size:14px; margin:0 0 6px; }
+  .note-box p { font-size:13.5px; color:var(--ink-2); margin:0; max-width:none; }
+  .note-box p + p { margin-top:8px; }
+
+  .tablewrap { overflow-x:auto; border:1px solid var(--rule); border-radius:12px;
+    background:var(--surface); box-shadow:var(--shadow); margin-top:16px; }
+  table { border-collapse:collapse; width:100%; min-width:600px; }
+  th, td { text-align:left; padding:10px 14px; border-bottom:1px solid var(--rule-soft); vertical-align:top; }
+  thead th { font-family:var(--f-mono); font-size:10.5px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--ink-3); font-weight:600; background:var(--surface-3); }
+  tbody tr:last-child td { border-bottom:0; }
+  td.num { font-family:var(--f-mono); font-variant-numeric:tabular-nums; }
+  td small { display:block; font-size:11.5px; color:var(--ink-3); word-break:keep-all; }
+
+  footer { margin-top:56px; padding-top:16px; border-top:1px solid var(--rule);
+    font-size:12.5px; color:var(--ink-3); }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">작업 기록 · 2026-09-08 · 커밋 3개 푸시 완료</p>
+    <h1>반응형 기준 정리 기록</h1>
+    <p class="lede">
+      흩어져 있던 <code>@media</code> 값 40종을 토큰 6단계로 모으고, 사이드바가 접히는 기준을
+      <b>1023 → 1180px</b> 으로 올렸습니다. 이어서 640px 이하에서 사이드바를 화면에서 빼고
+      헤더만 남기는 모바일 레이아웃을 정리했습니다.
+    </p>
+    <div class="meta">
+      <span class="chip"><span>수정 파일</span><b>55</b></span>
+      <span class="chip"><span>옮긴 브레이크포인트</span><b>127</b></span>
+      <span class="chip"><span>토큰</span><b>6단계</b></span>
+      <span class="chip"><span>커밋</span><b>3</b></span>
+    </div>
+    <nav class="toc">
+      <a href="#bp">토큰 6단계</a>
+      <a href="#token">브레이크포인트 토큰화 <span>· 2</span></a>
+      <a href="#mobile">모바일 헤더 · 공통 컴포넌트 <span>· 8</span></a>
+      <a href="#filter">필터바 줄바꿈 <span>· 3</span></a>
+      <a href="#exception">토큰 예외 <span>· 1</span></a>
+      <a href="#lesson">이번에 걸린 함정 <span>· 4</span></a>
+      <a href="#commit">커밋 <span>· 3</span></a>
+    </nav>
+  </header>
+
+  <section id="bp">
+    <h2>토큰 6단계</h2>
+    <p class="tight">이미 있던 <code>respond-to()</code> 믹스인의 맵에 <code>xs</code> 와 <code>aside</code> 를 더했습니다.</p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="width:90px"><col style="width:80px"><col></colgroup>
+        <thead><tr><th>이름</th><th>값</th><th>경계에서 일어나는 일</th></tr></thead>
+        <tbody>
+          <tr><td><code>xs</code></td><td class="num">440px</td><td>드롭다운을 화면 폭에 맞춰 편다<small>스마트폰 세로(360~430) 아래</small></td></tr>
+          <tr><td><code>sm</code></td><td class="num">640px</td><td>사이드바를 화면에서 빼고 헤더만 남긴다</td></tr>
+          <tr><td><code>md</code></td><td class="num">768px</td><td>다열 그리드를 1열로 접는다<small>공통 유틸 .grid-cols-* 와 같은 눈금</small></td></tr>
+          <tr><td><code>lg</code></td><td class="num">1024px</td><td>일반 레이아웃 단계</td></tr>
+          <tr><td><code>aside</code></td><td class="num">1180px</td><td><b>사이드바를 아이콘 레일로 접는다</b><small>1023 에서 올림</small></td></tr>
+          <tr><td><code>xl</code></td><td class="num">1280px</td><td>일반 레이아웃 단계</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note-box" style="margin-top:16px">
+      <h3>왜 1180 인가</h3>
+      <p>표 <code>minWidth</code> 가 1000~1200px 인 화면이 <b>7개</b>입니다. 사이드바(250)와 본문 여백(32)을 빼면
+      1180 아래에서 본문이 <b>898px 이하</b>로 줄어 그 표들이 가로 스크롤에 걸립니다.</p>
+      <p>1280 이상 노트북은 영향이 없고, 애매하게 좁던 1024~1180 구간만 레일(64px)로 접혀
+      본문이 927~1084px 로 넓어집니다. <code>aside</code> 만 t-shirt 이름이 아닌 이유이기도 합니다 —
+      화면 단계가 아니라 실제 표 폭이 정한 값입니다.</p>
+    </div>
+  </section>
+
+  <section id="token">
+    <h2>브레이크포인트 토큰화 <span class="n">2</span></h2>
+    <p class="tight">@media 값이 40종으로 흩어져 있던 것을 6단계로 모으고, 사이드바 접힘 기준을 1023 → 1180 으로 올렸다.</p>
+    
+      <article class="entry">
+        <header class="entry__head"><h3>브레이크포인트 토큰</h3><span class="route none">공통 토큰</span></header>
+        <p class="path">src/shared/styles/abstracts/_breakpoints.scss</p>
+        <p class="note">xs(440) 와 aside(1180) 를 새로 넣어 6단계가 됐다. aside 만 t-shirt 이름이 아닌데, 화면 단계가 아니라 표 폭에서 나온 값이라서다. 콘텐츠가 정한 값은 토큰으로 맞추지 않는다는 예외 기준도 함께 적었다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>// 신규 코드 작성용 표준 브레이크포인트. (기존 화면의 비표준 @media 값은 픽셀이
+// 달라지면 렌더가 바뀌므로 이 맵으로 강제 치환하지 않는다 — 점진 정리 대상.)</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>// 신규 코드 작성용 표준 브레이크포인트.
+//
+// [예외] 콘텐츠가 정한 값은 이 맵으로 맞추지 않는다.
+//   브레이크포인트에는 성격이 다른 두 종류가 있다.
+//     - 디바이스 단계 : 화면 크기 대역을 나눈다. 이 맵으로 통일한다.
+//     - 콘텐츠 기준   : '이 요소가 몇 개까지 들어가는가' 가 정한다.
+//                      예) union-local-seed 의 5열 단계 카드는 1700px 이상에서만
+//                      들어가므로 상한이 1700px 이다. 토큰(1280)으로 낮추면
+//                      그 사이 구간이 5열로 돌아가 카드가 깨진다.
+//   후자는 값을 그대로 두되, 왜 그 숫자인지 주석으로 남긴다.
+// 값의 근거
+//  xs    스마트폰 세로(360~430) 아래. 드롭다운을 화면 폭에 맞춰 펴는 지점.
+//  sm    사이드바를 화면에서 완전히 빼고 헤더만 남기는 지점.
+//  md    다열 그리드를 1열로 접는 지점(공통 유틸 .grid-cols-* 와 같은 눈금).
+//  lg/xl 일반적인 레이아웃 단계.
+//  aside 사이드바를 아이콘 레일로 접는 지점. 표 minWidth 가 1000~1200px 인 화면이
+//        많은데, 사이드바(250)와 본문 여백(32)을 빼면 1180 아래에서 본문이
+//        898px 이하로 줄어 그 표들이 가로 스크롤에 걸린다. 그래서 t-shirt 단계가
+//        아니라 실제 표 폭에서 나온 값이다.
+  xs: 440px,
+  aside: 1180px,</pre></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head"><h3>사이드바 접힘 기준 · 토글 아이콘</h3><span class="route none">모든 화면의 사이드바</span></header>
+        <p class="path">src/app/MainAside.tsx</p>
+        <p class="note">matchMedia 기준을 1023 → 1180 으로 올리고, 640px 이하에서만 토글 아이콘을 햄버거/닫기로 바꾸는 상태를 더했다. JS 는 SCSS 토큰을 직접 읽을 수 없어 주석으로 연결해 두었다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>/** 이 폭 이하에서는 본문 폭이 부족해 사이드바를 강제로 접는다(브레이크포인트 lg 미만). */
+const ASIDE_AUTO_COLLAPSE_QUERY = '(max-width: 1023px)';
+  // 1023px 이하에서는 사용자가 펼쳐 두었더라도 접는다. 저장은 사용자가 직접 누른
+          {ICONS.menu}</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>/** 이 폭 이하에서는 본문 폭이 부족해 사이드바를 강제로 접는다.
+ *  SCSS 토큰 $breakpoints 의 aside 와 같은 값이어야 한다
+ *  (src/shared/styles/abstracts/_breakpoints.scss). */
+const ASIDE_AUTO_COLLAPSE_QUERY = '(max-width: 1180px)';
+
+/** 이 폭 이하에서는 아이콘 레일까지 감추고 접기 버튼만 헤더에 남긴다.
+ *  CSS 의 640px 블록과 같은 기준. 그 구간에서만 토글 아이콘을 햄버거/닫기로 바꾼다. */
+const ASIDE_MOBILE_QUERY = '(max-width: 640px)';
+  // 이 폭 이하에서는 사용자가 펼쳐 두었더라도 접는다. 저장은 사용자가 직접 누른
+  // 640px 이하 여부. 이 구간에서만 토글 아이콘을 햄버거/닫기로 바꾼다.
+  const [mobile, setMobile] = useState&lt;boolean&gt;(
+    () =&gt; window.matchMedia(ASIDE_MOBILE_QUERY).matches,
+  );
+  useEffect(() =&gt; {
+    const query = window.matchMedia(ASIDE_MOBILE_QUERY);
+    const sync = (event: MediaQueryListEvent) =&gt; setMobile(event.matches);
+    setMobile(query.matches);
+    query.addEventListener('change', sync);
+    return () =&gt; query.removeEventListener('change', sync);
+  }, []);
+
+          {/* 모바일에서는 사이드바가 화면에서 아예 빠지므로, 패널 토글 대신
+              여닫이를 그대로 말해 주는 햄버거/닫기 아이콘을 쓴다. */}
+          {mobile ? (collapsed ? &lt;IconMenu size={22} /&gt; : &lt;IconClose size={22} /&gt;) : ICONS.menu}</pre></div>
+          </div>
+        </div>
+      </article>
+  </section>
+
+  <section id="mobile">
+    <h2>모바일 헤더 · 공통 컴포넌트 <span class="n">8</span></h2>
+    <p class="tight">640px 이하에서 사이드바를 화면에서 빼고 헤더만 남긴다. 그 과정에서 드러난 쌓임 맥락·명시도·flex 축소 문제도 함께 정리했다.</p>
+    
+      <article class="entry">
+        <header class="entry__head"><h3>사이드바 · 640px 이하</h3><span class="route none">모든 화면</span></header>
+        <p class="path">src/shared/styles/global/_00-base-aside.scss</p>
+        <p class="note">사이드바 폭 0, 접기 버튼만 헤더 좌측에 fixed 로 꺼낸다. .app-sidebar 가 z-index 30 으로 쌓임 맥락을 만들어 그 안의 버튼이 헤더(40)를 넘지 못하므로, 버튼이 아니라 사이드바 자체를 41로 올렸다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>//== aside floating (1023px 이하에서 접기 버튼으로 펼친 상태)</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>//== aside floating (사이드바가 자동으로 접히는 구간에서 접기 버튼으로 펼친 상태)
+//== 640px 이하 — 사이드바를 화면에서 빼고 접기 버튼만 남긴다.
+// 자동 접힘 구간의 아이콘 레일(64px)도 이 폭에서는 본문을 너무 좁힌다.
+// 레일을 없애는 대신 접기 버튼을 헤더 좌측(로고 앞)에 고정해 여는 통로를 남긴다.
+// .small-aside 는 '접힌 상태'에만 붙으므로, 펼친 상태(.aside-floating)는
+// 아래 블록의 영향을 받지 않고 250px 그대로 겹쳐 뜬다.
+@media (max-width: 640px) {
+  // body 를 붙여 명시도를 올린다. _00-base.scss 가 이 파일을 @use 로 먼저 읽고
+  // 자기 .small-aside .admin-users-page 규칙을 뒤에 두므로, 같은 명시도로는 진다.
+  body.small-aside {
+    .app-sidebar {
+      width: 0;
+      border-right: 0;
+      // .app-sidebar 는 z-index: 30 으로 쌓임 맥락을 만든다. 그 안의 접기 버튼은
+      // z-index 를 얼마로 주든 헤더(40)를 넘지 못하므로 사이드바 자체를 올린다.
+      // 폭이 0 이라 다른 것을 가리지 않는다.
+      z-index: 41;
+    }
+
+    // 레일이 없어졌으니 헤더·본문을 왼쪽 끝까지 붙인다.
+    .app-header {
+      left: 0;
+    }
+
+    .admin-users-page {
+      margin-left: 0;
+    }
+
+    // 폭이 0 이라 안쪽 요소는 그릴 자리가 없다. 접기 버튼만 헤더 위로 꺼내 둔다.
+    .app-sidebar-top {
+      height: auto;
+      padding: 0;
+      border-bottom: 0;
+    }
+
+    .app-sidebar-nav,
+    .app-sidebar-top .sidebar-brand {
+      display: none;
+    }
+
+… 외 36줄</pre></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head"><h3>헤더 · 640px 이하</h3><span class="route none">모든 화면</span></header>
+        <p class="path">src/shared/styles/global/_00-base-header.scss</p>
+        <p class="note">액터 스위처를 알림·로그아웃과 같은 42px 아이콘 버튼으로 만든다. 알림 버튼의 보더·그림자도 걷어냈고, 평평해진 만큼 hover 도 색만 바꾸게 했다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>  border: 1px solid var(--ui-border);
+  box-shadow: var(--ui-shadow-btn);
+    transform: translateY(-2px);
+    box-shadow: 0 7px 16px -5px rgba(16, 36, 43, .22);
+    //min-width: 188px;
+    height: 42px;
+    width: 30px;
+    height: 30px;
+    color: #fff;
+    background: linear-gradient(135deg,var(--color-primary-300), var(--color-primary-500));
+/* 1023px 이하 — 사이드바가 강제로 접히는 구간(MainAside 의 자동 접힘과 같은 기준).
+@media (max-width: 1023px) {</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>  border: 0;
+  /* 보더·그림자를 뺀 평평한 버튼이라 hover 도 색만 바꾼다.
+     들어올림(translateY)과 그림자는 테두리가 있을 때의 표현이다. */
+    background: var(--ui-surface-muted);
+    height: 36px;
+  /* 아이콘은 640px 이하에서만 쓴다. 그 위에서는 이름·역할이 이미 다 보인다. */
+  &amp;__icon {
+    display: none;
+  }
+
+  /* 이름 앞 동그라미 — 배경은 흰색이라 테두리로 형태를 잡는다.
+     버튼 높이 36px 에서 위아래 패딩 5px 을 빼면 26px 이 남는다. */
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    color: var(--ui-text);
+    background: #fff;
+    border: 1px solid var(--ui-border-soft);
+/* 사이드바가 강제로 접히는 구간(MainAside 의 자동 접힘과 같은 기준).
+@include respond-to(aside) {
+
+/* 640px 이하 — 사이드바가 화면에서 빠지고 헤더만 남는 구간.
+   액터 스위처가 이름·역할을 감추고 아이콘 버튼이 되어 폭을 크게 줄이므로,
+   알림·로그아웃은 42px 를 그대로 두고 셋을 같은 크기로 맞춘다. */
+@media (max-width: 640px) {
+  /* 계정 전환은 알약 버튼이 기본이라, 알림·로그아웃과 같은 아이콘 버튼 모양으로 맞춘다.
+     크기(42px)·모서리는 .header-icon-btn 기본값을 그대로 쓴다. */
+  .active-role-switcher__button {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    max-width: none;
+    padding: 0;
+    justify-content: center;
+    border: 0;
+    box-shadow: none;
+    color: var(--ui-text-subtle);
+    background: #fff;
+
+    &amp;:hover,
+… 외 44줄</pre></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head"><h3>액터 스위처</h3><span class="route none">헤더 우측 사용자 버튼</span></header>
+        <p class="path">src/features/auth/components/ActiveActorSwitcher.tsx</p>
+        <p class="note">640px 이하에서만 보이는 아이콘을 더하고, 이름·역할은 감춘다. 화면에서 이름이 사라지므로 버튼에 aria-label 을 줘 스크린리더에서는 정보가 유지된다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div ref={rootRef} className="active-role-switcher"&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;div ref={rootRef} className={`active-role-switcher header-tooltip-host${open ? ' is-open' : ''}`}&gt;
+    aria-label={`${user.name} · ${actorLabel(activeActorCode, activeActor?.actorName)} · 계정 전환`}
+    {/* 640px 이하에서만 보이는 아이콘. 그 폭에서는 아래 텍스트를 감추고
+       알림·로그아웃과 같은 아이콘 버튼이 된다. */}
+    &lt;span className="active-role-switcher__icon" aria-hidden="true"&gt;&lt;IconUser size={16} /&gt;&lt;/span&gt;
+
+  {/* 아이콘만 남는 640px 이하에서 쓰는 툴팁. 알림·로그아웃과 같은 규격이다.
+     드롭다운이 열려 있으면 감춘다(.is-open). */}
+  &lt;span className="header-tooltip header-tooltip--tight active-role-switcher__tip"&gt;계정 전환&lt;/span&gt;</pre></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head"><h3>드롭다운 · 툴팁 · 구분선</h3><a class="route" href="http://127.0.0.1:3100/evaluation/proctor" target="_blank" rel="noreferrer">필터바 있는 화면에서 확인</a></header>
+        <p class="path">src/shared/styles/global/_02-ui-components.scss</p>
+        <p class="note">알림 드롭다운 top 이 56px 로 박혀 헤더(74px)를 파고들던 것을 토큰으로 바꿨다. 필터바가 접히면 의미가 없어지는 세로 구분선을 감추고, ⓘ 툴팁 호스트의 z-index 를 걷어내 스크롤 시 헤더 위로 떠오르던 것을 고쳤다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>@media (max-width: 767px) {
+@media (max-width: 760px) {
+.header-notification-host.is-open .header-tooltip {
+    top: 56px;
+    right: 12px;
+    left: 12px;
+@media (max-width: 720px) {
+  z-index: 70;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>/* 필터바가 여러 줄로 접히면 세로 구분선은 줄 첫머리나 끝에 홀로 남아 의미가 없다.
+   CSS 로는 '줄바꿈되어 새 줄에 왔다'를 감지할 수 없으므로, 접힘이 확정되는
+   폭(모바일)에서 아예 감춘다. 이 구간에서는 셀렉트가 100% 폭이라 항상 접힌다. */
+@media (max-width: 640px) {
+  .h-bar {
+    display: none;
+  }
+}
+
+@include respond-to(md) {
+@include respond-to(md) {
+.header-notification-host.is-open .header-tooltip,
+.active-role-switcher.is-open .header-tooltip {
+/* 액터 전환 툴팁은 아이콘만 남는 640px 이하에서만 쓴다.
+   그 위에서는 버튼에 이름·역할이 이미 적혀 있어 덧붙일 말이 없다. */
+.active-role-switcher__tip {
+  display: none;
+}
+
+  .active-role-switcher__tip {
+    display: flex;
+  }
+}
+
+@media (max-width: 640px) {
+  /* 계정 전환 드롭다운과 같은 기준 — 헤더 바로 아래, 좌우 15px.
+     top 이 56px 로 박혀 있어 헤더(74px)를 파고들고 있었다. */
+    top: var(--ui-layout-header-height);
+    right: 15px;
+    left: 15px;
+    max-width: none;
+@include respond-to(md) {
+/* z-index 는 호스트가 아니라 툴팁에 준다. 호스트에 주면 position: relative 와 함께
+   쌓임 맥락이 만들어져, 본문을 스크롤할 때 ⓘ 아이콘이 고정 헤더(40) 위로 떠오른다.
+   툴팁은 아이콘 아래로 열리므로 본문(1~3)만 넘으면 되고 헤더를 넘을 필요가 없다. */
+  /* 본문 카드·표(1~3) 위에는 뜨되, 사이드바(30)·헤더(40)는 넘지 않는다. */
+  z-index: 20;</pre></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head"><h3>상태 카드 · 2열 유지</h3><a class="route" href="http://127.0.0.1:3100/evaluation/unions" target="_blank" rel="noreferrer">/evaluation/unions</a></header>
+        <p class="path">src/shared/components/common/GridStatus.tsx</p>
+        <p class="note">공통 유틸 .grid-cols-* 가 768px 아래에서 1열로 접어 카드가 화면 폭 전체로 늘어났다. 전역 규칙을 건드리지 않도록 래퍼에만 식별 클래스를 붙였다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;div className={[`grid grid-cols-${items.length} gap-3`, className].filter(Boolean).join(' ')}&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>&lt;div className={[`grid grid-cols-${items.length} grid-stat-cards gap-3`, className].filter(Boolean).join(' ')}&gt;</pre></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head"><h3>상태 카드 · CSS</h3><span class="route none">위 컴포넌트의 스타일</span></header>
+        <p class="path">src/shared/components/common/grid-status.scss</p>
+        <p class="note">.grid 를 함께 걸어 전역 규칙(.grid-cols-4)보다 명시도를 높였다. 같은 명시도로는 파일 로드 순서에 따라 진다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>}</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>@use '@/shared/styles/abstracts/breakpoints' as *;
+}
+
+/* 사이드바가 접히는 지점. 좁은 화면에서 카드가 4개씩 들어가면 숫자가 커
+   라벨·단위와 붙어 보이므로 한 단계씩 줄인다. */
+/* 768px 아래 — 공통 유틸(common.css)이 .grid-cols-* 를 1열로 접는다.
+   상태 카드는 라벨·숫자가 짧아 1열이면 한 줄에 아이콘만 덩그러니 남으므로
+   2열로 되돌린다. .grid 를 함께 걸어 전역 규칙보다 명시도를 높인다. */
+@include respond-to(md) {
+  .grid.grid-stat-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@include respond-to(aside) {
+  .grid-stat__value-num {
+    font-size: 20px;
+  }
+
+  .grid-stat__value-unit {
+    font-size: 12px;
+  }
+}</pre></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head"><h3>필터 셀렉트 · 모바일 100%</h3><a class="route" href="http://127.0.0.1:3100/evaluation/proctor" target="_blank" rel="noreferrer">/evaluation/proctor</a></header>
+        <p class="path">src/shared/components/common/select-search.scss</p>
+        <p class="note">값이 길면 내용 폭이 화면을 넘었다. 감싼 .form-field 가 flex 항목이라 min-width: auto 로 내용보다 작아지지 못하는 것이 진짜 원인이라, 감싼 요소까지 축소를 허용했다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del empty"><span>— 없음 —</span></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>/* 모바일에서는 값이 길면(시행명·일시·학교 수 등) 내용 폭이 화면을 넘는다.
+   필터바가 어차피 한 줄씩 접히는 폭이므로 두 변형 모두 100% 로 편다. */
+@media (max-width: 640px) {
+  .select-search.select-search--filter,
+  .select-search.select-search--filter-auto {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* 감싼 요소까지 줄어들 수 있어야 한다. flex 항목의 기본값 min-width: auto 는
+     내용보다 작아지지 않아, 안쪽을 100% 로 해도 필터바가 옆으로 넘친다.
+     한 줄을 통째로 쓰게 두고(flex-basis 100%) 축소를 허용한다. */
+  .form-field:has(&gt; .select-search--filter),
+  .form-field:has(&gt; .select-search--filter-auto) {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+}</pre></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head"><h3>페이지 제목 크기</h3><span class="route none">모든 화면의 제목</span></header>
+        <p class="path">src/shared/styles/global/_03-cmp-components.scss</p>
+        <p class="note">사이드바가 접히는 지점에서 27px → 24px.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>@media (max-width: 767px) {
+@media (max-width: 1100px) {
+@media (max-width: 767px) {
+@media (min-width: 1200px) {
+@media (max-width: 520px) {
+@media (min-width: 1025px) {</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>@use '@/shared/styles/abstracts/breakpoints' as *;
+
+@include respond-to(md) {
+@include respond-to(lg) {
+@include respond-to(md) {
+  /* 사이드바가 접히는 지점 — 본문 폭이 줄어드는 만큼 제목도 한 단계 줄인다. */
+  @include respond-to(aside) {
+    font-size: 24px;
+  }
+
+@include respond-to(aside, min) {
+@include respond-to(xs) {
+@include respond-to(lg, min) {</pre></div>
+          </div>
+        </div>
+      </article>
+  </section>
+
+  <section id="filter">
+    <h2>필터바 줄바꿈 <span class="n">3</span></h2>
+    <p class="tight">라벨과 입력이 따로 떨어지던 세 화면. 각 쌍을 한 묶음으로 감싸 flex 항목 하나로 만들었다.</p>
+    
+      <article class="entry">
+        <header class="entry__head"><h3>연합 목록 필터</h3><a class="route" href="http://127.0.0.1:3100/evaluation/unions" target="_blank" rel="noreferrer">/evaluation/unions</a></header>
+        <p class="path">src/features/ops/unions/pages/UnionsPage.tsx</p>
+        <p class="note">조회 범위 · 연합 상태를 각각 라벨과 묶었다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;b className="text-muted-light text-xs"&gt;조회 범위&lt;/b&gt;
+
+&lt;BoxTabs
+    tabs={BASE_TABS.map((tab) =&gt; ({ key: tab.id, label: tab.label }))}
+    currentTab={activeTab}
+    onChange={(key) =&gt; patchQuery({ tab: key as UnionListTab })}
+/&gt;
+&lt;b className="text-muted-light text-xs"&gt;연합 상태&lt;/b&gt;
+&lt;BoxTabs
+    tabs={STATUS_FILTERS.map((filter) =&gt; ({
+      key: filter.id,
+      label: `${filter.label} (${filter.id === 'all' ? searchedRows.length : (statusCounts[filter.id] ?? 0)})`,
+    }))}
+    currentTab={statusFilter}
+    onChange={(key) =&gt; patchQuery({ status: key as UnionStatusFilter })}
+/&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>{/* 라벨과 탭을 한 묶음으로 감싼다. 따로 두면 줄바꿈될 때
+    라벨만 윗줄에 남고 탭만 아래로 떨어진다. */}
+&lt;div className="flex flex-wrap items-center gap-3"&gt;
+  &lt;b className="text-muted-light text-xs"&gt;조회 범위&lt;/b&gt;
+
+  &lt;BoxTabs
+      tabs={BASE_TABS.map((tab) =&gt; ({ key: tab.id, label: tab.label }))}
+      currentTab={activeTab}
+      onChange={(key) =&gt; patchQuery({ tab: key as UnionListTab })}
+  /&gt;
+&lt;/div&gt;
+&lt;div className="flex flex-wrap items-center gap-3"&gt;
+  &lt;b className="text-muted-light text-xs"&gt;연합 상태&lt;/b&gt;
+  &lt;BoxTabs
+      tabs={STATUS_FILTERS.map((filter) =&gt; ({
+        key: filter.id,
+        label: `${filter.label} (${filter.id === 'all' ? searchedRows.length : (statusCounts[filter.id] ?? 0)})`,
+      }))}
+      currentTab={statusFilter}
+      onChange={(key) =&gt; patchQuery({ status: key as UnionStatusFilter })}
+  /&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head"><h3>감독 현황 필터</h3><a class="route" href="http://127.0.0.1:3100/evaluation/proctor" target="_blank" rel="noreferrer">/evaluation/proctor</a></header>
+        <p class="path">src/features/aes/proctor/pages/ProctorPage.tsx</p>
+        <p class="note">참여 시행 · 학생 상태를 묶고, 참여 시행 쪽에는 min-w-0 을 줘 안쪽 셀렉트가 줄어들 수 있게 했다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;span className="text-muted-light text-xs font-bold"&gt;참여 시행&lt;/span&gt;
+&lt;div className="form-field"&gt;
+  &lt;SelectSearch
+    ariaLabel="참여 시행"
+    className="select-search--filter-auto"
+    matchTriggerWidth={false}
+    prefillSearchWithSelected={false}
+    options={executionOptions}
+    value={executionIdInput === '' ? null : executionIdInput}
+    onChange={(value: string) =&gt; handleExecutionSelect(value)}
+    loading={executionsLoadStatus === 'loading'}
+    disabled={executionsLoadStatus === 'loading' || executions.length === 0}
+    placeholder={executions.length === 0 ? '참여 시행 없음' : `전체 시행 (${executions.length}건)`}
+    searchPlaceholder="시행 번호·학교명을 입력하세요"
+    emptyText="일치하는 시행이 없습니다"
+  /&gt;
+&lt;span className="text-muted-light text-xs font-bold"&gt;학생 상태&lt;/span&gt;
+&lt;select
+  className="form-select"
+  value={statusFilter}
+  onChange={(event) =&gt; setStatusFilter(event.target.value as CbtStudentStatusFilter)}
+  aria-label="학생 상태"
+&gt;
+  {STUDENT_STATUS_OPTIONS.map((option) =&gt; (
+    &lt;option key={option.value} value={option.value}&gt;{option.label}&lt;/option&gt;
+  ))}
+&lt;/select&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>{/* 라벨과 입력을 한 묶음으로 감싼다. 따로 두면 줄바꿈될 때
+    라벨만 윗줄에 남고 입력만 아래로 떨어진다. */}
+&lt;div className="flex flex-wrap items-center gap-3 min-w-0"&gt;
+  &lt;span className="text-muted-light text-xs font-bold"&gt;참여 시행&lt;/span&gt;
+  &lt;div className="form-field"&gt;
+    &lt;SelectSearch
+      ariaLabel="참여 시행"
+      className="select-search--filter-auto"
+      matchTriggerWidth={false}
+      prefillSearchWithSelected={false}
+      options={executionOptions}
+      value={executionIdInput === '' ? null : executionIdInput}
+      onChange={(value: string) =&gt; handleExecutionSelect(value)}
+      loading={executionsLoadStatus === 'loading'}
+      disabled={executionsLoadStatus === 'loading' || executions.length === 0}
+      placeholder={executions.length === 0 ? '참여 시행 없음' : `전체 시행 (${executions.length}건)`}
+      searchPlaceholder="시행 번호·학교명을 입력하세요"
+      emptyText="일치하는 시행이 없습니다"
+    /&gt;
+  &lt;/div&gt;
+&lt;div className="flex flex-wrap items-center gap-3"&gt;
+  &lt;span className="text-muted-light text-xs font-bold"&gt;학생 상태&lt;/span&gt;
+  &lt;select
+    className="form-select"
+    value={statusFilter}
+    onChange={(event) =&gt; setStatusFilter(event.target.value as CbtStudentStatusFilter)}
+    aria-label="학생 상태"
+  &gt;
+    {STUDENT_STATUS_OPTIONS.map((option) =&gt; (
+      &lt;option key={option.value} value={option.value}&gt;{option.label}&lt;/option&gt;
+    ))}
+  &lt;/select&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="entry">
+        <header class="entry__head"><h3>사용 통계 기간 필터</h3><a class="route" href="http://127.0.0.1:3100/support/statistics" target="_blank" rel="noreferrer">/support/statistics</a></header>
+        <p class="path">src/features/ops/support/pages/PlatformUsageStatsPage.tsx</p>
+        <p class="note">시작일 · ~ · 종료일 · 조회는 끊기면 의미가 깨지는 한 덩어리라 flex-wrap 없이 통째로 내려가게 했다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>&lt;span className="text-muted-light text-xs font-bold"&gt;기간&lt;/span&gt;
+&lt;BoxTabs tabs={PERIOD_TABS} currentTab={periodTab} onChange={selectPeriod} /&gt;
+&lt;input
+  type="date"
+  className="form-input"
+  value={from}
+  max={to}
+  onChange={(event) =&gt; { setFrom(event.target.value); setPeriodTab('custom'); setEventPage(1); }}
+  aria-label="조회 시작일"
+/&gt;
+&lt;span&gt;~&lt;/span&gt;
+&lt;input
+  type="date"
+  className="form-input"
+  value={to}
+  min={from}
+  onChange={(event) =&gt; { setTo(event.target.value); setPeriodTab('custom'); setEventPage(1); }}
+  aria-label="조회 종료일"
+/&gt;
+&lt;button type="button"
+        className="btn btn-white btn-shadow"
+        onClick={() =&gt; setReloadKey((key) =&gt; key + 1)}
+        disabled={loading}&gt;
+  &lt;IconSearch size={15}/&gt;
+  조회
+&lt;/button&gt;</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>{/* 라벨과 기간 탭은 한 묶음. 따로 두면 라벨만 윗줄에 남는다. */}
+&lt;div className="flex flex-wrap items-center gap-3"&gt;
+  &lt;span className="text-muted-light text-xs font-bold"&gt;기간&lt;/span&gt;
+  &lt;BoxTabs tabs={PERIOD_TABS} currentTab={periodTab} onChange={selectPeriod} /&gt;
+&lt;/div&gt;
+
+{/* 시작일 · ~ · 종료일 · 조회는 하나의 조작 단위다.
+    따로 두면 물결표만 윗줄 끝에 남는 식으로 중간에서 끊긴다. */}
+&lt;div className="flex items-center gap-3"&gt;
+  &lt;input
+    type="date"
+    className="form-input"
+    value={from}
+    max={to}
+    onChange={(event) =&gt; { setFrom(event.target.value); setPeriodTab('custom'); setEventPage(1); }}
+    aria-label="조회 시작일"
+  /&gt;
+  &lt;span&gt;~&lt;/span&gt;
+  &lt;input
+    type="date"
+    className="form-input"
+    value={to}
+    min={from}
+    onChange={(event) =&gt; { setTo(event.target.value); setPeriodTab('custom'); setEventPage(1); }}
+    aria-label="조회 종료일"
+  /&gt;
+  &lt;button type="button"
+          className="btn btn-white btn-shadow"
+          onClick={() =&gt; setReloadKey((key) =&gt; key + 1)}
+          disabled={loading}&gt;
+    &lt;IconSearch size={15}/&gt;
+    조회
+  &lt;/button&gt;
+&lt;/div&gt;</pre></div>
+          </div>
+        </div>
+      </article>
+  </section>
+
+  <section id="exception">
+    <h2>토큰 예외 <span class="n">1</span></h2>
+    <p class="tight">토큰으로 맞추면 안 되는 값. 되돌리고 근거를 남겼다.</p>
+    
+      <article class="entry">
+        <header class="entry__head"><h3>연합 로컬 시드 · 예외</h3><a class="route" href="http://127.0.0.1:3100/evaluation/union-local-seeds" target="_blank" rel="noreferrer">/evaluation/union-local-seeds</a></header>
+        <p class="path">src/features/aes/local-seed/pages/union-local-seed.css</p>
+        <p class="note">토큰으로 밀었다가 1600px 에서 깨져 되돌린 자리. 5열 단계 카드는 1700px 이상에서만 들어가므로 상한이 콘텐츠로 정해진다. 왜 그 숫자인지 주석으로 남겼다.</p>
+        
+        <div class="ba">
+          <div class="ba__col">
+            <span class="ba__tag before">이전</span>
+            <div class="code del"><pre>@media (max-width: 700px) {</pre></div>
+          </div>
+          <div class="ba__col">
+            <span class="ba__tag after">이후</span>
+            <div class="code add"><pre>/* 콘텐츠 기준 브레이크포인트 — 디바이스 단계가 아니므로 토큰으로 맞추지 않는다.
+   단계 카드는 min-height 292px 에 내용이 많아 5열은 1700px 이상에서만 들어간다.
+   그 아래 1181px 까지는 3열로 접는다. 상한을 낮추면 그 사이 구간이 5열로 돌아가
+   카드가 깨진다. */
+@media (max-width: 640px) {</pre></div>
+          </div>
+        </div>
+      </article>
+  </section>
+
+  <section id="lesson">
+    <h2>이번에 걸린 함정 <span class="n">4</span></h2>
+    <p class="tight">같은 종류의 문제로 여러 번 헤맸습니다. 다음에 같은 자리에서 멈추지 않도록 남깁니다.</p>
+
+    <div class="note-box warn">
+      <h3>1. 미디어쿼리는 명시도를 올려주지 않는다 <span style="color:var(--ink-3);font-weight:400">— 3회</span></h3>
+      <p><code>.small-aside .admin-users-page</code> 여백, <code>.grid-cols-4</code>, <code>.sidebar-toggle-btn</code> 테두리.
+      세 번 모두 오버라이드가 안 먹었는데 원인이 같았습니다. 원본이 더 깊은 중첩이거나(<code>0,3,0</code>)
+      나중에 선언돼 있어서입니다.</p>
+      <p>이 코드베이스는 SCSS 중첩이 깊은 편이라, 오버라이드를 쓸 때는 <b>원본 선택자의 깊이를 먼저 확인</b>해야 합니다.</p>
+    </div>
+
+    <div class="note-box warn">
+      <h3>2. z-index 는 쌓임 맥락 안에서만 겨룬다</h3>
+      <p>사이드바 토글 버튼에 <code>z-index: 41</code> 을 줘도 헤더(40) 뒤에 그려졌습니다.
+      <code>.app-sidebar</code> 가 <code>z-index: 30</code> 으로 <b>쌓임 맥락을 만들기 때문</b>에,
+      그 안의 자식은 값을 아무리 올려도 30 이라는 천장을 넘지 못합니다. 사이드바 자체를 올려야 했습니다.</p>
+      <p>반대 방향도 있었습니다. ⓘ 툴팁 호스트의 <code>z-index: 70</code> 은 스크롤할 때 아이콘이
+      고정 헤더 위로 떠오르게 만들었습니다.</p>
+    </div>
+
+    <div class="note-box warn">
+      <h3>3. flex 항목은 <code>min-width: auto</code> 로 내용보다 작아지지 않는다</h3>
+      <p>셀렉트를 <code>width: 100%</code> 로 해도 가로 스크롤이 사라지지 않았습니다.
+      100% 의 기준인 부모(<code>.form-field</code>)가 이미 내용 폭만큼 늘어나 있었기 때문입니다.
+      <b>감싼 요소까지 축소를 허용</b>해야 안쪽의 <code>text-overflow: ellipsis</code> 가 동작합니다.</p>
+    </div>
+
+    <div class="note-box warn">
+      <h3>4. 브레이크포인트에는 두 종류가 있다</h3>
+      <p>연합 로컬 시드가 1600px 에서 깨졌습니다. <code>1700px</code> 은 흩어진 값이 아니라
+      <b>5열 카드가 들어가는 최소 폭</b>이었는데 토큰으로 밀어버린 탓입니다.</p>
+      <p>디바이스 단계는 토큰으로 통일하고, <b>콘텐츠가 정한 값은 그대로 두되 근거를 주석으로</b> 남기는 것으로
+      기준을 정해 토큰 파일에 적었습니다.</p>
+    </div>
+  </section>
+
+  <section id="commit">
+    <h2>커밋 <span class="n">feature/front-goldking-new</span></h2>
+    <p class="tight"><code>e3dbb1c8</code> 이후 <code>c221178e</code> 까지 세 개입니다.</p>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="width:110px"><col><col style="width:80px"></colgroup>
+        <thead><tr><th>해시</th><th>제목</th><th>파일</th></tr></thead>
+        <tbody>
+          <tr><td><code>6e63387c</code></td><td>refactor: 미디어쿼리 브레이크포인트를 토큰으로 통일</td><td class="num">43</td></tr>
+          <tr><td><code>97052e11</code></td><td>feat: 모바일 헤더·사이드바 정리와 공통 컴포넌트 반응형 보완</td><td class="num">9</td></tr>
+          <tr><td><code>c221178e</code></td><td>fix: 필터바가 접힐 때 라벨과 입력이 함께 내려가게</td><td class="num">3</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <code>tsc</code> 통과 · 빌드 성공을 확인하고 커밋했습니다. 작업 트리는 깨끗합니다.
+    브레이크포인트를 옮긴 화면은 확인을 마쳤고, 깨진 곳은 연합 로컬 시드 한 곳으로 되돌렸습니다.
+  </footer>
+</div>
+
+</body></html>

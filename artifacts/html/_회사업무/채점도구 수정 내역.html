@@ -1,0 +1,510 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>채점도구 수정 내역</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --ground: #F5F6FA;
+    --surface: #FFFFFF;
+    --surface-sunk: #EEF0F7;
+    --ink: #171A22;
+    --ink-soft: #454B5D;
+    --muted: #6B7287;
+    --line: #E1E4EF;
+    --line-soft: #EDEFF6;
+    --accent: #514EFA;
+    --accent-soft: #ECECFE;
+    --accent-line: #C9C8FD;
+    --ok: #1F6D64;
+    --ok-soft: #E6F2F0;
+    --ok-line: #BEDCD7;
+    --warn: #B3400B;
+    --warn-soft: #FCEEE6;
+    --warn-line: #F0CDB6;
+
+    --fs-xs: 0.75rem;
+    --fs-sm: 0.8125rem;
+    --fs-base: 0.9375rem;
+    --fs-md: 1.0625rem;
+    --fs-lg: 1.375rem;
+    --fs-xl: 1.875rem;
+
+    --sans: 'IBM Plex Sans KR', system-ui, -apple-system, 'Malgun Gothic', sans-serif;
+    --mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #101219;
+      --surface: #191C24;
+      --surface-sunk: #14161D;
+      --ink: #E9EBF2;
+      --ink-soft: #BCC1D1;
+      --muted: #8E95AB;
+      --line: #2B2F3C;
+      --line-soft: #23262F;
+      --accent: #9C99FF;
+      --accent-soft: #23233A;
+      --accent-line: #3A3A62;
+      --ok: #7FCFC2;
+      --ok-soft: #15251F;
+      --ok-line: #274039;
+      --warn: #F0A579;
+      --warn-soft: #2A1D16;
+      --warn-line: #4A3427;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #101219;
+    --surface: #191C24;
+    --surface-sunk: #14161D;
+    --ink: #E9EBF2;
+    --ink-soft: #BCC1D1;
+    --muted: #8E95AB;
+    --line: #2B2F3C;
+    --line-soft: #23262F;
+    --accent: #9C99FF;
+    --accent-soft: #23233A;
+    --accent-line: #3A3A62;
+    --ok: #7FCFC2;
+    --ok-soft: #15251F;
+    --ok-line: #274039;
+    --warn: #F0A579;
+    --warn-soft: #2A1D16;
+    --warn-line: #4A3427;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding-block: 44px 72px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: var(--fs-base);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+
+  code, .path { font-family: var(--mono); font-size: 0.86em; }
+
+  /* ── 머리 ── */
+  .masthead { display: flex; flex-direction: column; gap: 10px; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  h1 {
+    margin: 0;
+    font-size: var(--fs-xl);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+  .lede { margin: 0; max-width: 64ch; color: var(--ink-soft); }
+  .tally { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .tally span {
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    padding: 4px 9px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: var(--surface);
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── 검사 결과 ── */
+  .checks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .check {
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--ok);
+    border-radius: 5px;
+    background: var(--surface);
+    padding: 14px 16px;
+  }
+  .check.is-skipped { border-left-color: var(--warn); }
+  .check__name { font-family: var(--mono); font-size: var(--fs-xs); color: var(--muted); }
+  .check__result { margin-top: 4px; font-size: var(--fs-base); font-weight: 600; color: var(--ok); }
+  .check.is-skipped .check__result { color: var(--warn); }
+  .check__note { margin: 4px 0 0; font-size: var(--fs-xs); color: var(--muted); }
+
+  /* ── 섹션 ── */
+  .group { display: flex; flex-direction: column; gap: 16px; }
+  .group-head { display: flex; flex-direction: column; gap: 5px; }
+  .group-head h2 { margin: 0; font-size: var(--fs-lg); font-weight: 700; letter-spacing: -0.018em; }
+  .group-head p { margin: 0; color: var(--muted); font-size: var(--fs-sm); max-width: 66ch; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 18px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .card__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 10px; }
+  .card__head h3 { margin: 0; font-size: var(--fs-base); font-weight: 600; flex: 1 1 220px; min-width: 0; }
+  .file {
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    color: var(--muted);
+    overflow-wrap: anywhere;
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
+  thead th {
+    text-align: left;
+    padding: 0 10px 7px 0;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+    border-bottom: 1px solid var(--line);
+  }
+  tbody td { padding: 7px 10px 7px 0; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.before { color: var(--muted); }
+  td.after { color: var(--ink); font-weight: 500; }
+  .tablewrap { overflow-x: auto; }
+
+  .note { margin: 0; font-size: var(--fs-sm); color: var(--ink-soft); }
+
+  .issue {
+    background: var(--surface);
+    border: 1px solid var(--warn-line);
+    border-left: 3px solid var(--warn);
+    border-radius: 5px;
+    padding: 16px 18px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .issue h3 { margin: 0; font-size: var(--fs-base); font-weight: 600; color: var(--warn); }
+  .issue p { margin: 0; font-size: var(--fs-sm); color: var(--ink-soft); }
+
+  .footnote {
+    border-top: 1px solid var(--line);
+    padding-top: 22px;
+    font-size: var(--fs-sm);
+    color: var(--muted);
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .footnote b { color: var(--ink-soft); font-weight: 600; }
+  .footnote p { margin: 0; max-width: 72ch; }
+
+  @media (max-width: 640px) {
+    body { padding-block: 32px 56px; }
+    .wrap { gap: 32px; }
+    .checks { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="eyebrow">DEPTH 프론트엔드 · 채점도구</p>
+    <h1>채점도구 수정 내역</h1>
+    <p class="lede">
+      채점도구(<code>/answer-annotation</code>)를 플랫폼 디자인에 맞추고 좁은 폭에서 쓸 수 있게 손본
+      기록입니다. 커밋 <code>42dc2ee5</code> 이후의 <b>미커밋 변경</b>입니다.
+    </p>
+    <div class="tally">
+      <span>수정 15파일</span>
+      <span>신규 3파일</span>
+      <span>+661 / −281</span>
+      <span>미커밋</span>
+    </div>
+  </header>
+
+  <section class="checks">
+    <div class="check">
+      <div class="check__name">tsc -b</div>
+      <div class="check__result">통과</div>
+      <p class="check__note">타입 에러 0</p>
+    </div>
+    <div class="check">
+      <div class="check__name">sass 컴파일</div>
+      <div class="check__result">통과</div>
+      <p class="check__note">styles.scss · evaluation-design.scss</p>
+    </div>
+    <div class="check is-skipped">
+      <div class="check__name">eslint</div>
+      <div class="check__result">실행 못 함</div>
+      <p class="check__note">node_modules 에 eslint 없음</p>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-head">
+      <h2>신규 파일</h2>
+      <p>세 개 모두 채점도구 안에서만 쓰입니다.</p>
+    </div>
+
+    <div class="card">
+      <div class="card__head">
+        <h3>ThemePicker — 라이트·다크 선택기</h3>
+      </div>
+      <p class="note">
+        플랫폼 <code>MainAside</code> 하단에 <b>주석 처리돼 있던 UI</b>를 찾아 짜임과 동작을 그대로 가져왔습니다.
+        아이콘 → 목록 → 고른 항목에 체크, 바깥 클릭·Esc 로 닫힘.
+        클래스는 다시 입혔습니다 — <code>.sidebar-theme-*</code> 를 그대로 쓰면 채점도구 리셋과 부딪힙니다.
+      </p>
+      <p class="file">src/domains/annotation/components/ThemePicker.tsx</p>
+    </div>
+
+    <div class="card">
+      <div class="card__head">
+        <h3>IconTooltip — 아이콘 말풍선</h3>
+      </div>
+      <p class="note">
+        플랫폼 헤더의 <code>.header-tooltip</code>(알림 종)과 같은 모양. 도구 띠가
+        <code>overflow-y: auto</code> 라 그 안에 절대배치하면 잘려서, 자리만 화면 기준(fixed)으로 잡았습니다.
+        마우스에서만 뜨고, 누르면 걷히고, 화면 끝에서는 안쪽으로 당겨집니다.
+      </p>
+      <p class="file">src/domains/annotation/components/IconTooltip.tsx</p>
+    </div>
+
+    <div class="card">
+      <div class="card__head">
+        <h3>AnswerMetaMenu — 채점 정보 드롭다운</h3>
+      </div>
+      <p class="note">
+        시행·문항·수험번호·채점자 네 쌍은 한 줄에 295px 을 씁니다. 1180px 미만에서 아이콘 하나로 접습니다.
+        펼친 쪽과 접힌 쪽이 <code>answerMetaItems</code> 한 배열을 나눠 써서 값이 어긋나지 않습니다.
+      </p>
+      <p class="file">src/features/grading/grading-tool/components/AnswerMetaMenu.tsx</p>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-head">
+      <h2>색·글꼴 토큰</h2>
+      <p>채점도구는 다른 코드베이스에서 옮겨 오며 자기 주색(빨강)과 글꼴(Geist)을 들고 있었습니다. 플랫폼 것으로 맞췄습니다.</p>
+    </div>
+
+    <div class="card">
+      <div class="card__head">
+        <h3>토큰 교체 · 다크 팔레트 신설</h3>
+      </div>
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr><th>토큰</th><th>전</th><th>후</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>--primary</code></td><td class="before">#e42313 (빨강)</td><td class="after">var(--ui-primary) = #2d76f7</td></tr>
+            <tr><td><code>--grading-primary-rgb</code></td><td class="before">228 35 19</td><td class="after">45 118 247</td></tr>
+            <tr><td><code>--foreground</code></td><td class="before">#0d0d0d</td><td class="after">#111827</td></tr>
+            <tr><td><code>--grading-foreground-rgb</code></td><td class="before">13 13 13</td><td class="after">17 24 39</td></tr>
+            <tr><td><code>--font-geist-sans</code> 외 2</td><td class="before">'Geist'</td><td class="after">'Pretendard'</td></tr>
+            <tr><td><code>--border-strong</code></td><td class="before">—</td><td class="after">#d0d4da (신설)</td></tr>
+            <tr><td><code>--warning-light</code></td><td class="before">—</td><td class="after">#fffbeb (신설)</td></tr>
+            <tr><td><code>[data-theme='dark']</code></td><td class="before">—</td><td class="after">배경·글자·테두리·주색 연한 면·의미색 연한 면 (신설)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">
+        <b>주의 — 토큰이 두 벌입니다.</b> Tailwind 의 <code>bg-primary</code>·<code>text-foreground</code> 는
+        위 hex 가 아니라 <code>*-rgb</code> 삼원색을 봅니다(<code>tailwind.config.ts</code> 의 withAlpha).
+        한쪽만 고치면 절반만 바뀝니다.
+      </p>
+      <p class="note">
+        Geist <code>@font-face</code> 와 <code>GeistVF.woff</code> 다운로드를 걷어냈습니다.
+        Pretendard 는 <code>common.css</code> 가 이미 전역으로 싣고 있습니다.
+      </p>
+      <p class="file">src/shared/styles/abstracts/_grading-tokens.scss · src/features/grading/grading-tool/grading-tool.css</p>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-head">
+      <h2>화면별 수정</h2>
+    </div>
+
+    <div class="card">
+      <div class="card__head">
+        <h3>헤더</h3>
+      </div>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>항목</th><th>전</th><th>후</th></tr></thead>
+          <tbody>
+            <tr><td>로고</td><td class="before">아이콘 + DEPTH + 대구형평가플랫폼 (손으로 조립)</td><td class="after">공통 Logo, 테마 따라 변형 전환</td></tr>
+            <tr><td>반응형 기준</td><td class="before">lg (1024px)</td><td class="after">1180px</td></tr>
+            <tr><td>메타 4쌍</td><td class="before">항상 한 줄</td><td class="after">1180px 미만 → 아이콘 드롭다운</td></tr>
+            <tr><td>이력보기·채점 정보</td><td class="before">아이콘만 / 이름 숨김</td><td class="after">아이콘 + 이름, 12px</td></tr>
+            <tr><td>답안 이동 묶음</td><td class="before">헤더 안 고정, 테두리·배경·min-width</td><td class="after">640px 미만 → 헤더 아래 제 줄(가운데), 상자 제거</td></tr>
+            <tr><td>좌우 여백</td><td class="before">px-6 양쪽</td><td class="after">왼쪽 12px 고정, 오른쪽만 24px</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="file">src/features/grading/grading-tool/pages/GradingToolPage.tsx</p>
+    </div>
+
+    <div class="card">
+      <div class="card__head">
+        <h3>도구 띠</h3>
+      </div>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>항목</th><th>전</th><th>후</th></tr></thead>
+          <tbody>
+            <tr><td>폭</td><td class="before">80px</td><td class="after">64px</td></tr>
+            <tr><td>스탬프</td><td class="before">2열, 색 면 + 색 아이콘</td><td class="after">1열, 면 없음, 단색 아이콘</td></tr>
+            <tr><td>강조 두께</td><td class="before">얇 / 보통 / 굵, 24px, 간격 4px</td><td class="after">L / M / B, 16px, 간격 없음</td></tr>
+            <tr><td>라벨 글자</td><td class="before">10px</td><td class="after">11px</td></tr>
+            <tr><td>섹션 제목 색</td><td class="before">--foreground-muted</td><td class="after">#94a3b8</td></tr>
+            <tr><td>작업(되돌리기)</td><td class="before">띠 맨 아래</td><td class="after">답안 위 막대 왼쪽으로 이동</td></tr>
+            <tr><td>테마 선택</td><td class="before">—</td><td class="after">띠 맨 아래 고정(sticky)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">쓰이지 않게 된 <code>getStampColor</code>·<code>ActionButton</code>·관련 prop 을 정리했습니다.</p>
+      <p class="file">src/domains/annotation/components/Toolbar.tsx</p>
+    </div>
+
+    <div class="card">
+      <div class="card__head">
+        <h3>답안 위 막대</h3>
+      </div>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>항목</th><th>전</th><th>후</th></tr></thead>
+          <tbody>
+            <tr><td>자리</td><td class="before">답안 아래</td><td class="after">답안 위 (border-t → border-b)</td></tr>
+            <tr><td>높이</td><td class="before">p-3 (위아래 12px)</td><td class="after">py-1 → 41px</td></tr>
+            <tr><td>배치</td><td class="before">전부 가운데</td><td class="after">왼쪽 되돌리기 / 가운데 쪽이동 / 오른쪽 확대</td></tr>
+            <tr><td>툴팁</td><td class="before">Zoom in / Fit to width …</td><td class="after">우리말 + 단축키, 말풍선</td></tr>
+            <tr><td>확대 비율</td><td class="before">왼쪽 정렬, 테두리 안 보임</td><td class="after">가운데 정렬, 테두리 · 볼드</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">PDF 뷰어와 텍스트 답안 뷰어 <b>양쪽</b>에 적용해 답안 종류가 바뀌어도 막대가 옮겨다니지 않습니다.</p>
+      <p class="file">src/domains/pdf/components/PdfControls.tsx · PdfViewer.tsx · src/domains/answer/components/TextAnswerViewer.tsx</p>
+    </div>
+
+    <div class="card">
+      <div class="card__head">
+        <h3>채점 패널</h3>
+      </div>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>항목</th><th>전</th><th>후</th></tr></thead>
+          <tbody>
+            <tr><td>접기</td><td class="before">DOM 에서 제거 — 애니메이션 없음</td><td class="after">남겨 두고 미끄러짐. 넓은 폭은 margin-right, 좁은 폭은 transform</td></tr>
+            <tr><td>손잡이</td><td class="before">답안 오른쪽 위 네모 버튼</td><td class="after">세로 가운데 탭, 패널을 따라 움직임</td></tr>
+            <tr><td>문항 카드</td><td class="before">바깥 테두리 + 안쪽 카드 테두리</td><td class="after">바깥 테두리 제거, 면으로만 표시</td></tr>
+            <tr><td>문항 머리글</td><td class="before">한 줄 (문항 N: 설명 … 점수)</td><td class="after">두 줄 (문항 N · 점수/화살표 / 설명)</td></tr>
+            <tr><td>선택 카드 면</td><td class="before">bg-blue-50/50 (라이트 전용)</td><td class="after">bg-primary-light</td></tr>
+            <tr><td>임시저장</td><td class="before">테두리 안 그려짐</td><td class="after">1px #aeb6c2</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="file">src/domains/grading/components/GradingPanel.tsx</p>
+    </div>
+
+    <div class="card">
+      <div class="card__head">
+        <h3>코멘트 — 작성 팝업 · 모아보기</h3>
+      </div>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>항목</th><th>전</th><th>후</th></tr></thead>
+          <tbody>
+            <tr><td>팝업 강조색</td><td class="before">채점관 잉크색(1번이 빨강)</td><td class="after">주색. 윗머리 색 띠 제거</td></tr>
+            <tr><td>모아보기 자리</td><td class="before">화면 오른쪽에 붙음</td><td class="after">화면 가운데</td></tr>
+            <tr><td>좁은 폭 배치</td><td class="before">좌우 2단 — 상세가 46px 로 눌림</td><td class="after">상하 배치, 스크롤은 바깥 한 겹</td></tr>
+            <tr><td>목록 강조</td><td class="before">잉크색 테두리·면, 하드코딩 #E2E8F0</td><td class="after">주색 + 토큰, 점은 중립색</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="file">src/domains/annotation/components/AnnotationCanvas.tsx · CommentHistoryPanel.tsx · ScoreStampPopover.tsx</p>
+    </div>
+
+    <div class="card">
+      <div class="card__head">
+        <h3>채점도구 밖 — 다른 화면 3건</h3>
+      </div>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>화면</th><th>수정</th><th>파일</th></tr></thead>
+          <tbody>
+            <tr><td>연합 목록</td><td class="after">운영 기준 두 줄 우측정렬 (<code>ui-cell-group</code>)</td><td class="file">UnionsPage.tsx:838</td></tr>
+            <tr><td>채점목록</td><td class="after">640px 이하 카드 여백 19/20px → 14px</td><td class="file">grading-list.css:58</td></tr>
+            <tr><td>내부 표준화 상세</td><td class="after">AI 진행 상자 여백 17/18/15px → 14px</td><td class="file">internal-standardization-detail.scss</td></tr>
+            <tr><td>분류게시판</td><td class="after">배지 <code>min-width:0</code> + <code>white-space:normal</code> — 640px 가로 넘침 해소</td><td class="file">_09-page-components.scss</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-head">
+      <h2>작업 중 드러난 함정 3가지</h2>
+      <p>채점도구 설정에서 비롯된 것들이라, 앞으로 이 안에서 작업할 때 같은 증상을 다시 만나게 됩니다.</p>
+    </div>
+
+    <div class="issue">
+      <h3>1. 리셋이 Tailwind <code>border</code> 를 무력화한다</h3>
+      <p>
+        <code>.grading-tool-shell button/input/textarea/select { border: 0 }</code> 때문에
+        <b>폼 요소에서만</b> <code>border border-border</code> 가 그려지지 않습니다.
+        실측: <code>&lt;div&gt;</code> 는 <code>solid 1px</code>, <code>&lt;button&gt;</code> 은 <code>none 0px</code>.
+      </p>
+      <p>
+        이번에 다섯 곳(임시저장 · 패널 손잡이 · 점수 버튼 · 확대 비율 · 평가요소 셀렉트)을
+        0-3-0 개별 규칙으로 우회했습니다. <b>아직 남은 곳</b>: 코멘트 입력창과 취소 버튼
+        (<code>AnnotationCanvas.tsx:1456, 1469</code>). 원래부터 그랬던 자리입니다.
+      </p>
+    </div>
+
+    <div class="issue">
+      <h3>2. <code>preflight: false</code> 의 부작용</h3>
+      <p>
+        Tailwind 의 translate 유틸리티(<code>-translate-x-1/2</code> 등)가 <b>전부 무효</b>입니다 —
+        <code>--tw-translate-y</code> 같은 기본값이 preflight 에 깔려 있어야 <code>transform</code> 선언이 성립합니다.
+        채점도구 안 4곳을 <code>[transform:…]</code> 로 바꿨고 지금은 남은 게 없습니다.
+      </p>
+      <p><code>border-style</code> 기본값이 <code>none</code> 인 것도 같은 뿌리로, 위 1번과 겹칩니다.</p>
+    </div>
+
+    <div class="issue">
+      <h3>3. <code>.hidden</code> 이름 충돌</h3>
+      <p>
+        플랫폼 <code>common.css:189</code> 가 <code>.hidden { visibility: hidden }</code> 으로 정의합니다.
+        Tailwind 의 <code>hidden</code>(display:none)과 이름이 같아, 맨 <code>hidden</code> 을 쓰면
+        요소가 <b>자리는 차지한 채 안 보입니다</b>. 실제로 PC 헤더가 이 때문에 비어 보였습니다.
+      </p>
+      <p>
+        변형 접두사가 붙은 <code>sm:hidden</code>·<code>max-sm:hidden</code> 은 클래스 이름이 달라 안전합니다.
+        현재 맨 <code>hidden</code> 사용처는 없습니다.
+      </p>
+    </div>
+  </section>
+
+  <footer class="footnote">
+    <p><b>확인하지 못한 것</b> — ① eslint 미실행(패키지 없음) ② 답안 이동 묶음은 SMS 문맥에서만 렌더돼 실물 확인 불가(640px 경계는 시험용 요소로 간접 확인) ③ 다크모드에서 <code>bg-amber-50</code>(오류 배너 3곳)·<code>bg-sky-50</code>(안내 배너)는 라이트 전용으로 남음</p>
+    <p><b>제안</b> — 위 1번은 <code>grading-tool.css</code> 리셋에서 <code>border: 0</code> 을 빼면 개별 우회가 더 필요 없어집니다. 다만 채점도구 전체 버튼·입력에 영향이 가는 변경이라 이번엔 손대지 않았습니다.</p>
+    <p><b>상태</b> — 모두 미커밋입니다. 커밋 여부는 지시 주시면 진행합니다.</p>
+  </footer>
+
+</div>
+
+</body></html>

@@ -1,0 +1,537 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>모바일 필터와 공통 컴포넌트</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Serif+KR:wght@600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+  :root {
+    --ink: #101828; --ink-2: #344054; --ink-3: #667085; --ink-4: #98a2b3;
+    --ground: #f6f7fb; --card: #ffffff; --line: #e4e7ec; --line-soft: #f0f1f5;
+    --blue: #1d4ed8; --blue-wash: #eef3ff;
+    --amber: #b45309; --amber-wash: #fef6e7;
+    --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --sans: 'Noto Sans KR', -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    --serif: 'Noto Serif KR', Georgia, serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #e8ebf2; --ink-2: #c2c8d6; --ink-3: #8d95a8; --ink-4: #6b7385;
+      --ground: #0d1017; --card: #151922; --line: #262c38; --line-soft: #1d222c;
+      --blue: #7ea6ff; --blue-wash: #182238;
+      --amber: #f0b45e; --amber-wash: #2a2113;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #e8ebf2; --ink-2: #c2c8d6; --ink-3: #8d95a8; --ink-4: #6b7385;
+    --ground: #0d1017; --card: #151922; --line: #262c38; --line-soft: #1d222c;
+    --blue: #7ea6ff; --blue-wash: #182238;
+    --amber: #f0b45e; --amber-wash: #2a2113;
+  }
+
+  body { background: var(--ground); color: var(--ink-2); font-family: var(--sans); line-height: 1.7; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 56px 24px 96px; }
+
+  .eyebrow { margin: 0 0 10px; color: var(--blue); font-size: 12px; font-weight: 900; letter-spacing: .12em; }
+  h1 { margin: 0 0 14px; font-family: var(--serif); font-size: clamp(30px, 5vw, 46px); font-weight: 700;
+       line-height: 1.2; letter-spacing: -.02em; color: var(--ink); text-wrap: balance; }
+  .lede { margin: 0 0 26px; max-width: 62ch; font-size: 16px; color: var(--ink-2); }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 34px; }
+  .chip { display: inline-flex; align-items: baseline; gap: 7px; padding: 6px 12px; border: 1px solid var(--line);
+          border-radius: 999px; background: var(--card); font-size: 12px; }
+  .chip span { color: var(--ink-3); }
+  .chip b { color: var(--ink); font-family: var(--mono); font-weight: 600; }
+
+  nav.toc { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 6px;
+            padding: 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); margin-bottom: 56px; }
+  nav.toc a { display: flex; align-items: baseline; gap: 9px; padding: 7px 10px; border-radius: 9px;
+              color: var(--ink-2); font-size: 13px; font-weight: 500; text-decoration: none; }
+  nav.toc a:hover { background: var(--blue-wash); color: var(--blue); }
+  nav.toc a em { font-family: var(--mono); font-style: normal; font-size: 11px; color: var(--ink-4); }
+
+  section { margin-bottom: 60px; scroll-margin-top: 20px; }
+  h2 { display: flex; align-items: baseline; gap: 12px; margin: 0 0 6px; font-family: var(--serif);
+       font-size: 24px; font-weight: 700; color: var(--ink); letter-spacing: -.01em; }
+  h2 em { font-family: var(--mono); font-style: normal; font-size: 13px; font-weight: 400; color: var(--ink-4); }
+  .sub { margin: 0 0 22px; color: var(--ink-3); font-size: 14px; max-width: 64ch; }
+  h3 { margin: 30px 0 10px; font-size: 15px; font-weight: 700; color: var(--ink); }
+  p { margin: 0 0 14px; }
+  code { font-family: var(--mono); font-size: .86em; padding: 1px 5px; border-radius: 5px;
+         background: var(--line-soft); color: var(--ink); }
+  b { color: var(--ink); }
+
+  .tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 13px; background: var(--card); }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th, td { padding: 11px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line-soft); }
+  thead th { background: var(--line-soft); color: var(--ink-3); font-size: 11.5px; font-weight: 700;
+             letter-spacing: .04em; white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.k { color: var(--ink); font-weight: 700; word-break: keep-all; }
+  td.n { font-family: var(--mono); font-size: 12.5px; color: var(--blue); white-space: nowrap; }
+  td a { color: var(--blue); text-decoration: none; border-bottom: 1px solid transparent;
+         font-family: var(--mono); font-size: 12.5px; }
+  td a:hover { border-bottom-color: currentColor; }
+
+  pre { overflow-x: auto; margin: 0 0 16px; padding: 15px 17px; border: 1px solid var(--line);
+        border-radius: 12px; background: var(--card); font-family: var(--mono); font-size: 12.5px;
+        line-height: 1.65; color: var(--ink-2); }
+  pre b { color: var(--blue); font-weight: 600; }
+  pre i { color: var(--ink-4); font-style: normal; }
+
+  .note { padding: 15px 17px; border-left: 3px solid var(--blue); border-radius: 0 11px 11px 0;
+          background: var(--blue-wash); margin: 0 0 16px; font-size: 14px; }
+  .note.warn { border-left-color: var(--amber); background: var(--amber-wash); }
+  .note p:last-child { margin-bottom: 0; }
+  .note .tag { display: block; margin-bottom: 5px; font-size: 11px; font-weight: 900;
+               letter-spacing: .08em; color: var(--blue); }
+  .note.warn .tag { color: var(--amber); }
+
+  footer { margin-top: 70px; padding-top: 22px; border-top: 1px solid var(--line);
+           color: var(--ink-4); font-size: 12.5px; }
+  footer code { background: none; padding: 0; color: var(--ink-3); }
+</style>
+
+<div class="wrap">
+
+  <p class="eyebrow">작업 이력 · 2026-09-11</p>
+  <h1>모바일 필터와 공통 컴포넌트</h1>
+  <p class="lede">
+    화면마다 직접 칠하고 직접 짜던 것들을 공통으로 모았습니다.
+    <b>같은 일을 하는 코드가 여러 벌 있으면 한 곳만 고쳐도 나머지가 어긋난다</b>는 문제가
+    이번 작업 대부분의 출발점이었습니다.
+  </p>
+
+  <div class="chips">
+    <span class="chip"><span>브랜치</span><b>feature/front-goldking-new</b></span>
+    <span class="chip"><span>커밋</span><b>60f543fa</b></span>
+    <span class="chip"><span>변경</span><b>141 files · +1207 −1120</b></span>
+    <span class="chip"><span>검증</span><b>tsc ✓ build ✓ 857/861</b></span>
+  </div>
+
+  <nav class="toc">
+    <a href="#cmp"><em>01</em> 공통 컴포넌트</a>
+    <a href="#token"><em>02</em> 색 토큰</a>
+    <a href="#filter"><em>03</em> 모바일 필터</a>
+    <a href="#tip"><em>04</em> 툴팁</a>
+    <a href="#misc"><em>05</em> 그 밖</a>
+    <a href="#screens"><em>06</em> 화면별 확인</a>
+    <a href="#todo"><em>07</em> 남은 것</a>
+  </nav>
+
+  <section id="cmp">
+    <h2>공통 컴포넌트 <em>01</em></h2>
+    <p class="sub">없어서 각자 만들던 것을 만들고, 있는데 안 쓰던 곳을 옮겼습니다.</p>
+
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="min-width:130px"><col style="min-width:70px"><col style="min-width:320px"></colgroup>
+        <thead><tr><th>이름</th><th>구분</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="k">HelpTooltip</td><td class="n">신설</td>
+            <td>제목 옆 도움말. <code>MainHeader</code> 안에만 있어 다른 곳에서 쓸 수 없던 마크업을 분리했습니다.
+                <code>Panel</code> 에도 <code>tooltip</code> prop 을 열어 패널 제목 옆에 붙습니다.
+                컨테이너는 <code>div</code> → <code>span</code> — <code>h1</code>·<code>h2</code> 안에 <code>div</code> 는 올 수 없습니다.</td>
+          </tr>
+          <tr>
+            <td class="k">option-card</td><td class="n">신설</td>
+            <td>라디오·체크박스를 통째로 감싼 선택 카드. 화면마다 직접 칠하던 파랑
+                <b>7종</b>(<code>#6d91ea</code> <code>#6f8fe0</code> <code>#8eaaef</code> <code>#9ab0e8</code> <code>#315fd0</code> …)을
+                토큰으로 모았습니다. 3개 화면 이관, 전용 CSS 20줄 삭제.</td>
+          </tr>
+          <tr>
+            <td class="k">Modal</td><td class="n">보강</td>
+            <td><code>role="dialog"</code> · <code>aria-modal</code> · <code>ariaLabel</code> 추가.
+                <b>이를 쓰는 팝업 52곳이 한꺼번에 얻습니다.</b> 문항 생성 모달을 공통으로 옮기다
+                그쪽이 갖고 있던 것을 잃게 돼 발견했습니다.</td>
+          </tr>
+          <tr>
+            <td class="k">HelpBanner</td><td class="n">보강</td>
+            <td><code>role</code> prop(note/status/alert). 없으면 평가설계 안내문 10곳을 옮길 때
+                오류(<code>alert</code>)와 안내(<code>status</code>) 구분이 사라집니다.</td>
+          </tr>
+          <tr>
+            <td class="k">BoxTabs</td><td class="n">보강</td>
+            <td>래퍼에 <code>box-tabs</code> 클래스. 유틸 클래스뿐이라 바깥에서 가리킬 수 없었습니다.
+                통계 조회의 직접 만든 탭도 이 컴포넌트로 옮겼습니다.</td>
+          </tr>
+          <tr>
+            <td class="k">Panel</td><td class="n">이관</td>
+            <td>답안 보기 팝업의 <code>01 02 03</code> 번호 카드를 공통 패널로. 전용 CSS 120줄 삭제.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <span class="tag">한 번 더 정리가 필요한 곳</span>
+      <p>
+        팝업 <b>푸터 버튼은 아직 컴포넌트가 아닙니다.</b> <code>Modal</code> 은 <code>footer</code> 를
+        ReactNode 로 받기만 하고 내용은 호출하는 쪽이 매번 씁니다. 그래서 이번에 그림자를 넣을 때
+        <b>45개 파일 77개 버튼</b>을 일일이 고쳐야 했습니다. <code>ModalActions</code> 로 묶으면
+        다음부터는 파일 한 개만 고치면 됩니다.
+      </p>
+    </div>
+  </section>
+
+  <section id="token">
+    <h2>색 토큰 <em>02</em></h2>
+    <p class="sub">같은 색이 여러 이름으로 흩어져 있던 것을 이름 하나로 모았습니다.</p>
+
+    <h3>#2563eb — 리터럴 118곳</h3>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="min-width:210px"><col style="min-width:60px"><col style="min-width:300px"></colgroup>
+        <thead><tr><th>형태</th><th>수</th><th>처리</th></tr></thead>
+        <tbody>
+          <tr><td class="k">리터럴 <code>#2563eb</code></td><td class="n">106</td><td><code>var(--blue-600)</code></td></tr>
+          <tr><td class="k">지역 변수 정의</td><td class="n">4</td>
+              <td><code>--ar-blue</code> <code>--mg-blue</code> <code>--diff-color</code> <code>--menu-accent</code> 가 같은 토큰을 가리키게</td></tr>
+          <tr><td class="k"><code>var(--x, #2563eb)</code> 폴백</td><td class="n">8</td><td><code>var(--x, var(--blue-600))</code></td></tr>
+          <tr><td class="k"><code>rgb(37 99 235)</code></td><td class="n">2</td><td>같은 색, 다른 표기 — 함께 전환</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <span class="tag">합치지 않은 이유</span>
+      <p>
+        <code>--ui-primary</code> 로 묶지 <b>않았습니다.</b> 그 값은 <code>#2d76f7</code> 이라 색이 다릅니다.
+        눈으로는 비슷해 보여도 합치면 118곳이 전부 미세하게 달라집니다. 자기 이름을 줬습니다.
+      </p>
+    </div>
+
+    <h3>지표 띠 — <code>--metricbar-*</code></h3>
+    <p>같은 규격의 띠가 다섯 화면에 복제돼 있었습니다. 토큰 한 벌을 <code>:root</code> 에 두고 공유합니다.</p>
+<pre>--metricbar-bg: var(--blue-700);           <i>/* #1d4ed8 */</i>
+--metricbar-shadow: 0 6px 16px rgba(29, 78, 216, .28);
+--metricbar-divider: rgba(255, 255, 255, .22);
+--metricbar-label: rgba(255, 255, 255, .78);
+--metricbar-value: #ffffff;
+--metricbar-value-warn: #fde047;
+
+<i>/* 구분선은 border 가 아니라 1px 그라데이션 면 —</i>
+<i>   border 는 색을 하나만 받아 양 끝을 흐리게 할 수 없다 */</i>
+--metricbar-divider-v: linear-gradient(180deg, transparent,
+  var(--metricbar-divider) 20%, var(--metricbar-divider) 80%, transparent);</pre>
+
+    <p>
+      쓰는 곳은 <b>성적 산출 · 성적 열람 · 참고출처 확인 상세 · AI 의심도 상세 · 평가설계 헤더</b> 다섯입니다.
+      경고값을 노랑(<code>#fde047</code>)으로 바꾼 건 대비 때문입니다 — 빨강 계열은 파란 배경에서
+      탁하게 가라앉아 흰 값과 구분되지 않았습니다.
+    </p>
+  </section>
+
+  <section id="filter">
+    <h2>모바일 필터 <em>03</em></h2>
+    <p class="sub">라벨과 컨트롤이 형제로 나란히 놓여 있어, 줄이 바뀌면 라벨만 윗줄에 남고 컨트롤이 떨어졌습니다.</p>
+
+<pre>.ui-filters-field {
+  --ui-filters-field-cols: 2;
+  display: flex; flex-wrap: wrap; align-items: center;
+}
+.ui-filters-field--3col { --ui-filters-field-cols: 3; }
+.ui-filters-field--4col { --ui-filters-field-cols: 4; }
+.ui-filters-field--5col { --ui-filters-field-cols: 5; }
+
+@include respond-to(sm) {
+  .ui-filters-field {
+    flex-direction: column; align-items: flex-start; width: 100%;
+    &gt; b, &gt; span { width: 100%; }                    <i>/* 라벨은 무조건 윗줄 */</i>
+    .box-tabs, &gt; .ui-filters-group {
+      display: <b>grid</b>;
+      grid-template-columns: repeat(var(--ui-filters-field-cols), minmax(0, 1fr));
+    }
+  }
+}</pre>
+
+    <div class="note">
+      <span class="tag">flex 가 아니라 grid</span>
+      <p>
+        flex 로 두면 <code>전체 (288)</code> 와 <code>응답 대기 (3)</code> 의 글자 길이가 달라
+        칸 폭이 들쭉날쭉해지고 <b>계단처럼</b> 보입니다. grid 는 칸이 균등합니다.
+      </p>
+    </div>
+
+    <h3>열 수는 라벨 길이로 정합니다</h3>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="min-width:120px"><col style="min-width:320px"></colgroup>
+        <thead><tr><th>변형</th><th>쓰는 때</th></tr></thead>
+        <tbody>
+          <tr><td class="k">기본 2열</td><td>라벨이 길거나 탭이 2개. 건수가 붙는 라벨(<code>전체 (12)</code>)도 여기</td></tr>
+          <tr><td class="k">--3col</td><td>탭이 3개(딱 맞음) 또는 5~6개</td></tr>
+          <tr><td class="k">--4col / --5col</td><td>짧은 라벨. 글자를 한 단계 줄여 <b>고정</b>하고 좌우 여백 축소</td></tr>
+          <tr><td class="k">--compact</td><td>열 수와 무관하게 글자만 줄임. 3열인데 라벨이 긴 경우</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <span class="tag">말줄임이 높이를 바꿨다</span>
+      <p>
+        칸을 넘칠 때 줄바꿈이 아니라 말줄임입니다 — 한 칸만 두 줄이 되면 그 줄 전체 높이가 어긋납니다.
+        그런데 <code>text-overflow</code> 는 flex 항목에 걸리지 않아 <code>display: block</code> 이 필요하고,
+        그러면 <code>.btn</code> 의 세로 가운데 정렬이 사라져 <code>line-height</code> 로 대신 맞춰야 합니다.
+        <b>이때 위아래 padding 4px 을 함께 지우지 않아 이 탭만 44px 로 커져 있었습니다</b>(다른 탭은 36px).
+        <code>padding: 0 var(--ui-space-1)</code> 로 바로잡았습니다.
+      </p>
+    </div>
+
+    <h3>검색 버튼</h3>
+    <p>
+      검색창 뒤에 붙는 버튼을 훑어 11군데를 찾았고, <code>type</code> 으로 정확히 갈렸습니다 —
+      <b>검색 실행은 <code>submit</code>, 새로고침은 <code>button</code> + <code>.square</code> 아이콘.</b>
+      페이지를 하나씩 고치지 않고 CSS 하나로 구분됩니다.
+    </p>
+<pre>.ui-filters-slot:has(.btn[type="submit"]) {
+  flex-wrap: wrap;
+  &gt; .search-input-wrap, &gt; .form-input { <b>flex: 1 1 100%</b>; }
+  &gt; .btn[type="submit"] { width: 100%; }
+}</pre>
+    <div class="note warn">
+      <span class="tag">width 로는 줄이 갈리지 않는다</span>
+      <p>
+        <code>flex-basis: 100%</code> 가 실제로 줄을 가르는 부분입니다. flex 줄바꿈은
+        <b>줄어들기 전</b> 크기로 판단하는데, <code>width: 100%</code> 만으로는 그 기준이 여전히
+        <code>flex-basis</code>(0 또는 auto)라 버튼이 옆에 남습니다.
+      </p>
+    </div>
+
+    <h3>탭 생김새</h3>
+<pre>.box-tabs .btn.btn-primary { background: var(--ui-primary); }  <i>/* 그라데이션 제거 */</i>
+@include respond-to(sm) {
+  .box-tabs .btn.btn-empty { border-color: var(--ui-border); }
+}</pre>
+    <div class="note warn">
+      <span class="tag">두 번 다 명시도에 걸렸다</span>
+      <p>
+        <code>.box-tabs .btn-empty</code>(0-2-0)는 같은 파일 뒤쪽의
+        <code>.btn.btn-empty</code>(0-2-0)에 졌습니다. 같은 값이면 <b>뒤에 오는 쪽이 이깁니다.</b>
+        미디어쿼리는 명시도를 올려 주지 않습니다. <code>.btn</code> 을 함께 걸어 0-3-0 으로 올렸고,
+        선택된 탭의 단색 처리도 같은 이유로 같은 형태입니다.
+      </p>
+    </div>
+  </section>
+
+  <section id="tip">
+    <h2>툴팁 <em>04</em></h2>
+    <p class="sub">잘린다는 지적이 네 번 있었고, 매번 원인이 달랐습니다.</p>
+
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="min-width:150px"><col style="min-width:340px"></colgroup>
+        <thead><tr><th>증상</th><th>원인과 처리</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="k">패널에서 윗부분 잘림</td>
+            <td><code>.ui-panel</code> 이 둥근 모서리 때문에 <code>overflow: hidden</code>.
+                768 이상에서 툴팁은 버튼 오른쪽에 <b>세로 가운데</b>로 붙는데,
+                버튼보다 키가 크면 위쪽 절반이 패널 밖으로 나갑니다.</td>
+          </tr>
+          <tr>
+            <td class="k">고쳤는데 그대로</td>
+            <td>SCSS 중첩에서 <code>&amp;</code> 를 잘못 써서 호버 규칙이 존재하지 않는 구조로 컴파일됐습니다.
+                기본 규칙이 이겨 <code>translate(0, -50%)</code> 가 그대로 걸렸고,
+                넣어 둔 <code>top: 0</code> 이 무용지물이었습니다.</td>
+          </tr>
+          <tr>
+            <td class="k">글이 길면 또 잘림</td>
+            <td>가운데 정렬은 <b>길어질수록 위로 더 올라갑니다.</b> 패널만이 아니라 전역 규칙 자체를
+                버튼 윗선 기준으로 바꿨습니다 — 이제 길어지는 만큼 아래로만 자랍니다.</td>
+          </tr>
+          <tr>
+            <td class="k">목록에서 잘림</td>
+            <td>세로 스크롤 목록은 위·아래 어느 쪽도 안전하지 않습니다(첫 행·마지막 행).
+                <code>btn-icon--tip-left</code> 로 <b>옆에</b> 둡니다 — 툴팁 높이가 행 높이를 넘지 않습니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <span class="tag">화살표 위치</span>
+      <p>
+        상자를 10px 올리면 <code>::before</code> 도 따라 올라갑니다. 화살표는 툴팁 기준으로 위치를 잡기 때문에,
+        올린 만큼(<code>5px → 15px</code>) 되돌려 더해야 아이콘을 계속 가리킵니다.
+        기준값은 버튼 높이 19px(아이콘 17 + 테두리 2)의 절반에서 화살표 반높이(5px)를 뺀 값입니다.
+      </p>
+    </div>
+  </section>
+
+  <section id="misc">
+    <h2>그 밖 <em>05</em></h2>
+
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="min-width:170px"><col style="min-width:60px"><col style="min-width:320px"></colgroup>
+        <thead><tr><th>항목</th><th>수</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td class="k">상단 버튼 아이콘</td><td class="n">26</td>
+              <td><code>size={15}</code> 로 통일. 이미 28곳이 15라 그 쪽이 기준. <code>MainHeader</code> 안의 버튼만 골랐습니다</td></tr>
+          <tr><td class="k">아이콘 없던 헤더 버튼</td><td class="n">13</td>
+              <td>목록 <code>IconList</code> · 감독 <code>IconEye</code> · 이력 <code>IconHistory</code> · 내보내기 <code>IconDownload</code></td></tr>
+          <tr><td class="k">팝업 푸터 버튼 그림자</td><td class="n">77</td><td><code>btn-shadow</code> 클래스. 45개 파일</td></tr>
+          <tr><td class="k">안내문 → HelpBanner</td><td class="n">10</td>
+              <td>평가설계의 <code>eval-design-message</code> 전용 클래스 제거</td></tr>
+          <tr><td class="k">기출문항 표 colgroup</td><td class="n">1</td>
+              <td>합계 700px. 문항 열 420px 이 기준 — 제목 아래 연도·학기·과목·학년·단원·학교명이 한 줄</td></tr>
+          <tr><td class="k">배너 테두리 제거</td><td class="n">6종</td>
+              <td>색 있는 바탕이 이미 영역을 말합니다. <code>etc</code>·점선형만 남김</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>겹침 · 잘림</h3>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="min-width:150px"><col style="min-width:380px"></colgroup>
+        <thead><tr><th>화면</th><th>원인</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="k">분류게시판</td>
+            <td>미리보기 버튼이 <code>flex: 1 1 0</code>. 기준 폭이 0 이라 아무리 좁아져도
+                "한 줄에 못 들어간다"는 판단이 서지 않아 글자가 다운로드 버튼 밑으로 파고들었습니다.
+                기준 폭 <code>280px</code> 을 주니 해결.</td>
+          </tr>
+          <tr>
+            <td class="k">채점목록 상태 카드</td>
+            <td>모바일 2열이 1열로 되돌려져 있었습니다(주석은 "2열로 되돌린다"인데 값만 1열).
+                아이콘은 <code>display: none</code> 대신 46px → 34px 로 줄여 남겼습니다 —
+                그 카드가 무엇을 센 수인지 알려 주는 유일한 표시입니다.</td>
+          </tr>
+          <tr>
+            <td class="k">성적 열람 배너</td>
+            <td>모바일에서 세로 구분선을 가로로 눕히고, 평가 정보 항목을 한 줄에 하나씩.
+                가운뎃점은 글자가 아니라 <code>::before</code> 로 — 글자로 두면 그 자리에서 줄을 나눌 수 없습니다.</td>
+          </tr>
+          <tr>
+            <td class="k">헤더 Actor 칩</td>
+            <td><code>ACT-00</code> 코드는 내부 식별자라 노출하지 않습니다. 코드가 쓰던 칩 자리에
+                사람이 읽는 라벨을 넣었습니다. 코드는 <code>aria-label</code> 에 남아 스크린리더로는 읽힙니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="screens">
+    <h2>화면별 확인 <em>06</em></h2>
+    <p class="sub">모바일 필터는 폭을 640px 아래로 줄여서 봐 주세요.</p>
+
+    <h3>모바일 필터 — 14개 화면</h3>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="min-width:50px"><col style="min-width:140px"><col style="min-width:280px"></colgroup>
+        <thead><tr><th>열</th><th>화면</th><th>주소</th></tr></thead>
+        <tbody>
+          <tr><td class="n">5</td><td class="k">자료공유</td><td><a href="http://127.0.0.1:3100/community/share">/community/share</a></td></tr>
+          <tr><td class="n">4</td><td class="k">담당 과제 목록</td><td><a href="http://127.0.0.1:3100/my/assignments">/my/assignments</a></td></tr>
+          <tr><td class="n">4</td><td class="k">수행지시어</td><td><a href="http://127.0.0.1:3100/admin/master-data/command-terms">/admin/master-data/command-terms</a></td></tr>
+          <tr><td class="n">3</td><td class="k">실시간 응시</td><td><a href="http://127.0.0.1:3100/my/evaluations">/my/evaluations</a></td></tr>
+          <tr><td class="n">3·2</td><td class="k">연합평가 목록</td><td><a href="http://127.0.0.1:3100/evaluation/unions">/evaluation/unions</a></td></tr>
+          <tr><td class="n">3</td><td class="k">메시지 코드</td><td><a href="http://127.0.0.1:3100/admin/message-codes">/admin/message-codes</a></td></tr>
+          <tr><td class="n">3</td><td class="k">메인화면 구성</td><td><a href="http://127.0.0.1:3100/admin/home-layouts">/admin/home-layouts</a></td></tr>
+          <tr><td class="n">3</td><td class="k">알림 관리</td><td><a href="http://127.0.0.1:3100/admin/notifications">/admin/notifications</a></td></tr>
+          <tr><td class="n">3</td><td class="k">공지사항·도움말</td><td><a href="http://127.0.0.1:3100/support/notices">/support/notices</a></td></tr>
+          <tr><td class="n">3</td><td class="k">알림 목록</td><td><a href="http://127.0.0.1:3100/notifications">/notifications</a></td></tr>
+          <tr><td class="n">3</td><td class="k">플랫폼 사용 통계</td><td><a href="http://127.0.0.1:3100/support/statistics">/support/statistics</a></td></tr>
+          <tr><td class="n">3</td><td class="k">서비스 요청 검토</td><td><a href="http://127.0.0.1:3100/support/requests">/support/requests</a></td></tr>
+          <tr><td class="n">2</td><td class="k">평가 목록</td><td><a href="http://127.0.0.1:3100/tds/evaluations">/tds/evaluations</a></td></tr>
+          <tr><td class="n">2</td><td class="k">통계 조회</td><td><a href="http://127.0.0.1:3100/report/statistics">/report/statistics</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>그 밖</h3>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="min-width:150px"><col style="min-width:230px"><col style="min-width:280px"></colgroup>
+        <thead><tr><th>화면</th><th>주소</th><th>볼 것</th></tr></thead>
+        <tbody>
+          <tr><td class="k">평가설계</td><td><a href="http://127.0.0.1:3100/tds/evaluations/new">/tds/evaluations/new</a></td>
+              <td>헤더 바탕·단계 알약·작성중 배지, 도넛 축소로 띠 높이 ↓</td></tr>
+          <tr><td class="k">AI 생성 의심도 상세</td><td><a href="http://127.0.0.1:3100/rightwrite/teacher">/rightwrite/teacher</a></td>
+              <td>지표 띠 단색 + 사라지는 구분선, 노란 경고값, 안내 배너가 제목 옆 툴팁으로</td></tr>
+          <tr><td class="k">성적 열람</td><td><a href="http://127.0.0.1:3100/evaluation-result/result-inquiry/score">…/result-inquiry/score</a></td>
+              <td>모바일 가로 구분선, 평가 정보 한 줄에 하나씩</td></tr>
+          <tr><td class="k">내부표준화</td><td><a href="http://127.0.0.1:3100/grading/internal-standardization">/grading/internal-standardization</a></td>
+              <td>답안 보기 팝업이 공통 패널로, 카드 버튼이 공통 btn-primary 로</td></tr>
+          <tr><td class="k">기출문항게시판</td><td><a href="http://127.0.0.1:3100/reference/past-items">/reference/past-items</a></td>
+              <td>표 colgroup, 검색 버튼 100%</td></tr>
+          <tr><td class="k">분류게시판</td><td><a href="http://127.0.0.1:3100/reference/category">/reference/category</a></td>
+              <td>파일 행 겹침, 트리 아이콘 툴팁이 옆으로</td></tr>
+          <tr><td class="k">데모 시드 3종</td><td><a href="http://127.0.0.1:3100/evaluation/union-local-seeds">/evaluation/union-local-seeds</a></td>
+              <td>선택 카드가 공통 option-card 로</td></tr>
+          <tr><td class="k">리포트 생성</td><td><a href="http://127.0.0.1:3100/report/create">/report/create</a></td>
+              <td>생성 방식 안내 배너가 제목 옆 툴팁으로</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="todo">
+    <h2>남은 것 <em>07</em></h2>
+
+    <div class="note warn">
+      <span class="tag">확인이 필요한 것</span>
+      <p>
+        <b>ModalActions</b> — 팝업 푸터 버튼을 컴포넌트로 묶을지. 지금 <code>btn-shadow</code> 77곳이
+        여기로 흡수됩니다. 취소 버튼이 <code>btn-outline</code> 과 <code>btn-white</code> 로 섞여 있어
+        어느 쪽으로 통일할지도 함께 정해야 합니다.
+      </p>
+      <p>
+        <b>직접 짠 팝업 16개</b> — <code>.ui-modal__footer</code> 마크업을 직접 쓰고 있습니다.
+        문항 생성(신규 UX)만 공통 <code>Modal</code> 로 옮겼습니다.
+      </p>
+      <p>
+        <b><code>.eval-ai-card</code> 40곳</b> — 공통 <code>Panel</code> 로 옮기면 AI 모달 전체의
+        생김새가 바뀝니다. 범위 확인이 필요합니다.
+      </p>
+      <p>
+        <b>선택 카드 teal 계열</b> — 리포트 생성의 <code>tpl-card</code>, 연합 생성 다이얼로그 2종,
+        선임 지정 2종이 아직 자기 색을 씁니다. teal 을 유지한 채 옮길지, 파랑으로 통일할지.
+      </p>
+    </div>
+
+    <div class="note">
+      <span class="tag">남겨 둔 것</span>
+      <p>
+        <b>알파가 붙은 <code>rgba(37, 99, 235, …)</code> 47곳</b> — 소스에 <code>#2563eb</code> 문자열이 아니고,
+        <code>var()</code> 는 <code>rgba()</code> 안에 넣을 수 없어 <code>color-mix()</code> 로 바꿔야 합니다.
+      </p>
+      <p>
+        <b><code>#1d4ed8</code> 6곳</b> — 전부 버튼 <b>호버</b> 색입니다. 이제 <code>--blue-700</code> 이 있으니
+        그 이름으로 모을 수 있습니다.
+      </p>
+      <p>
+        <b>colgroup 없는 표 43개</b> — 열이 많을수록 증상이 심합니다.
+        내부표준화 상세(11열·9열) · 선임관리(8열) 순입니다.
+      </p>
+      <p>
+        <b>격자로 세우지 않은 탭 2곳</b> — 외부 API 사용량은 라벨이
+        <code>HyperCLOVA X STT</code> 처럼 길어 격자에 넣으면 전부 말줄임됩니다.
+      </p>
+      <p>
+        <b>컴포넌트 가이드</b> — <a href="http://127.0.0.1:3100/front-component-layout">/front-component-layout</a> 의
+        <code>조회 범위</code> 예시가 옛 구조라 실제 화면과 어긋납니다.
+        <code>ui-filters-field</code> · <code>option-card</code> · <code>HelpTooltip</code> 항목도 아직 없습니다.
+      </p>
+    </div>
+
+    <div class="note warn">
+      <span class="tag">이전부터 실패하던 테스트 4개</span>
+      <p>
+        <code>front-progress.api-usage</code> ·
+        <code>InternalStandardizationDetailSample.aiReason</code> ×2 ·
+        <code>designAllInOneModel</code> — 모두 이번에 손대지 않은 파일입니다.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <code>feature/front-goldking-new</code> · <code>3dd1497e..60f543fa</code> · 푸시 완료 ·
+    <code>tsc --noEmit</code> ✓ · <code>vite build</code> ✓ · 테스트 857/861
+  </footer>
+
+</div>
+
+</body></html>

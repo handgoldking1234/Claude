@@ -1,0 +1,679 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>반응형 작업 내역</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --ground: #F5F6FA;
+    --surface: #FFFFFF;
+    --surface-sunk: #EEF0F7;
+    --ink: #171A22;
+    --ink-soft: #454B5D;
+    --muted: #6B7287;
+    --line: #E1E4EF;
+    --line-soft: #EDEFF6;
+    --accent: #514EFA;
+    --accent-soft: #ECECFE;
+    --accent-line: #C9C8FD;
+    --done: #1F6D64;
+    --done-soft: #E6F2F0;
+    --done-line: #BEDCD7;
+    --pending: #B3400B;
+    --pending-soft: #FCEEE6;
+    --pending-line: #F0CDB6;
+
+    --fs-xs: 0.75rem;
+    --fs-sm: 0.8125rem;
+    --fs-base: 0.9375rem;
+    --fs-md: 1.0625rem;
+    --fs-lg: 1.375rem;
+    --fs-xl: 1.875rem;
+
+    --sans: 'IBM Plex Sans KR', system-ui, -apple-system, 'Malgun Gothic', sans-serif;
+    --mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #101219;
+      --surface: #191C24;
+      --surface-sunk: #14161D;
+      --ink: #E9EBF2;
+      --ink-soft: #BCC1D1;
+      --muted: #8E95AB;
+      --line: #2B2F3C;
+      --line-soft: #23262F;
+      --accent: #9C99FF;
+      --accent-soft: #23233A;
+      --accent-line: #3A3A62;
+      --done: #7FCFC2;
+      --done-soft: #15251F;
+      --done-line: #274039;
+      --pending: #F0A579;
+      --pending-soft: #2A1D16;
+      --pending-line: #4A3427;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #101219;
+    --surface: #191C24;
+    --surface-sunk: #14161D;
+    --ink: #E9EBF2;
+    --ink-soft: #BCC1D1;
+    --muted: #8E95AB;
+    --line: #2B2F3C;
+    --line-soft: #23262F;
+    --accent: #9C99FF;
+    --accent-soft: #23233A;
+    --accent-line: #3A3A62;
+    --done: #7FCFC2;
+    --done-soft: #15251F;
+    --done-line: #274039;
+    --pending: #F0A579;
+    --pending-soft: #2A1D16;
+    --pending-line: #4A3427;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding-block: 44px 72px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: var(--fs-base);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 880px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+
+  a { color: var(--accent); }
+  a:focus-visible, .go:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+  code, .path { font-family: var(--mono); font-size: 0.86em; }
+
+  /* ── 머리 ── */
+  .masthead { display: flex; flex-direction: column; gap: 10px; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  h1 {
+    margin: 0;
+    font-size: var(--fs-xl);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+  .lede { margin: 0; max-width: 62ch; color: var(--ink-soft); }
+  .tally { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .tally span {
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    padding: 4px 9px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: var(--surface);
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── 커밋 요약 ── */
+  .commits {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--surface);
+    overflow: hidden;
+  }
+  .commits__head {
+    padding: 15px 20px 13px;
+    border-bottom: 1px solid var(--line-soft);
+    background: var(--surface-sunk);
+  }
+  .commits__head h2 { margin: 0; font-size: var(--fs-md); font-weight: 600; letter-spacing: -0.01em; }
+  .commits__head p { margin: 3px 0 0; font-size: var(--fs-sm); color: var(--muted); }
+  .commit {
+    display: grid;
+    grid-template-columns: 82px 1fr;
+    gap: 4px 14px;
+    padding: 14px 20px;
+  }
+  .commit + .commit { border-top: 1px solid var(--line-soft); }
+  .commit__sha {
+    font-family: var(--mono);
+    font-size: var(--fs-sm);
+    color: var(--accent);
+    padding-top: 1px;
+  }
+  .commit__subject { font-weight: 600; font-size: var(--fs-sm); }
+  .commit__detail { grid-column: 2; margin: 0; font-size: var(--fs-sm); color: var(--muted); }
+
+  /* ── 섹션 ── */
+  .group { display: flex; flex-direction: column; gap: 16px; }
+  .group-head { display: flex; flex-direction: column; gap: 5px; }
+  .group-head h2 { margin: 0; font-size: var(--fs-lg); font-weight: 700; letter-spacing: -0.018em; }
+  .group-head p { margin: 0; color: var(--muted); font-size: var(--fs-sm); max-width: 64ch; }
+
+  .list { display: flex; flex-direction: column; gap: 10px; }
+
+  .item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 18px 20px 19px;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+  }
+
+  .item-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 10px; }
+  .item-top h3 {
+    margin: 0;
+    font-size: var(--fs-base);
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    flex: 1 1 240px;
+    min-width: 0;
+  }
+
+  .chip {
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+    background: var(--surface-sunk);
+    white-space: nowrap;
+  }
+  .chip--done { border-color: var(--done-line); background: var(--done-soft); color: var(--done); }
+  .chip--pending { border-color: var(--pending-line); background: var(--pending-soft); color: var(--pending); }
+
+  /* 증상 → 조치 */
+  .work { display: flex; flex-direction: column; gap: 11px; }
+  .work + .work { padding-top: 13px; border-top: 1px dashed var(--line); }
+  .work__name { font-size: var(--fs-sm); font-weight: 600; color: var(--accent); }
+  .work dl { margin: 0; display: grid; grid-template-columns: 44px 1fr; gap: 6px 12px; font-size: var(--fs-sm); }
+  .work dt {
+    color: var(--muted);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding-top: 2px;
+  }
+  .work dd { margin: 0; color: var(--ink-soft); min-width: 0; }
+  .work dd b { color: var(--ink); font-weight: 600; }
+
+  .go {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    align-self: flex-start;
+    padding: 7px 13px;
+    border: 1px solid var(--accent-line);
+    border-radius: 4px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 120ms ease, border-color 120ms ease;
+  }
+  .go:hover { background: var(--surface); border-color: var(--accent); }
+  .go::after { content: '↗'; font-size: 0.9em; opacity: 0.75; }
+
+  .src {
+    margin: 0;
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    color: var(--muted);
+    overflow-wrap: anywhere;
+    line-height: 1.8;
+  }
+
+  .footnote {
+    border-top: 1px solid var(--line);
+    padding-top: 22px;
+    font-size: var(--fs-sm);
+    color: var(--muted);
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .footnote b { color: var(--ink-soft); font-weight: 600; }
+  .footnote p { margin: 0; max-width: 70ch; }
+
+  @media (max-width: 560px) {
+    body { padding-block: 32px 56px; }
+    .wrap { gap: 32px; }
+    .commit { grid-template-columns: 1fr; gap: 3px; }
+    .commit__detail { grid-column: 1; }
+    .work dl { grid-template-columns: 1fr; gap: 2px; }
+    .work dt { padding-top: 7px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="eyebrow">DEPTH 프론트엔드 · 작업 내역</p>
+    <h1>반응형 작업 내역</h1>
+    <p class="lede">
+      좁은 폭(640px 이하)에서 어긋나던 자리를 잡은 기록 전체입니다. 목록 표를 카드로
+      바꾼 대규모 전환부터 화면별 잔손질까지, 각 항목에 <b>무엇이 어긋났는지</b>와
+      <b>무엇을 바꿨는지</b>를 한 벌로 적었습니다.
+      링크는 <code>http://127.0.0.1:3100</code> 기준이고, 확인은 F12 → Ctrl+Shift+M → 폭 640px 이하입니다.
+    </p>
+    <div class="tally">
+      <span>손댄 파일 110</span>
+      <span>카드형 표 102</span>
+      <span>화면별 손질 11</span>
+      <span>커밋 2 · 대기 3파일</span>
+    </div>
+  </header>
+
+  <section class="commits">
+    <div class="commits__head">
+      <h2>커밋 현황</h2>
+      <p>브랜치 <code>feature/front-goldking-new</code> — 아래 두 건은 푸시까지 끝났습니다.</p>
+    </div>
+    <div class="commit">
+      <span class="commit__sha">0dc80a59</span>
+      <span class="commit__subject">반응형 퍼블리싱 — 카드형 표 확대 · 필터/모달 여백 정리</span>
+      <p class="commit__detail">107개 파일, 3,600여 줄. 아래 '대규모 전환' 전체와 '화면별 손질' 9건이 함께 들어갔습니다.</p>
+    </div>
+    <div class="commit">
+      <span class="commit__sha">df16609c</span>
+      <span class="commit__subject">로그인 인트로 — 브랜드마크 조립 애니메이션 · 배경 회로 펄스</span>
+      <p class="commit__detail">3개 파일. 반응형과는 별개라 따로 끊었습니다.</p>
+    </div>
+    <div class="commit">
+      <span class="commit__sha">—</span>
+      <span class="commit__subject">아직 커밋 안 됨</span>
+      <p class="commit__detail">
+        평가 선택 목록 안쪽 스크롤, 페이지 제목줄 묶음 — 3개 파일이 작업 트리에 남아 있습니다.
+      </p>
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-head">
+      <h2>대규모 전환 — 목록 표를 카드로</h2>
+      <p>화면별 잔손질에 앞서 진행한 작업입니다. 열이 열 개쯤 되는 목록 표는 가로 스크롤을 끝까지 밀어도 한 행의 전부를 한눈에 볼 수 없어서, 좁은 폭에서 행 하나를 카드 하나로 세우는 체계를 만들고 전 화면에 적용했습니다.</p>
+    </div>
+    <div class="list">
+
+      <article class="item">
+        <div class="item-top">
+          <h3>카드형 표 체계 <code>.users-table--cards</code></h3>
+          <span class="chip chip--done">커밋됨</span>
+          <span class="chip">85개 파일</span>
+        </div>
+        <div class="work">
+          <dl>
+            <dt>방식</dt>
+            <dd>머리글(<code>thead</code>)을 감추고 각 칸이 자기 라벨을 <code>data-label</code>로 들고 있게 했습니다. DOM은 그대로 표라서 넓은 폭에서는 아무것도 달라지지 않고, 스크린리더에도 표로 읽힙니다.</dd>
+            <dt>변형</dt>
+            <dd>
+              <code>is-card-title</code> 카드 제목 칸 지목(제목이 첫 칸이 아닌 표용) ·
+              <code>is-card-lead</code> 오른쪽 위 보조 버튼 ·
+              <code>is-actions-bottom</code> 관리 버튼 아랫줄 ·
+              <code>is-actions-wide</code> 버튼 하나일 때 한 줄 ·
+              <code>is-stacked</code>/<code>is-right</code> 라벨을 값 위로 ·
+              <code>is-bare</code> 라벨 없이 값만 ·
+              <code>--kv-cards</code> 머리글이 왼쪽 <code>th</code>인 키-값 표
+            </dd>
+            <dt>범위</dt>
+            <dd>운영 41 · 채점 21 · 평가설계 6 · 결과 4 · 시행 4 · 글쓰기튜터 4개 파일. 전체 표 124개 중 <b>102개</b>가 카드형으로 전환됐습니다. <code>data-label</code>은 73개 파일, 열 폭을 잡는 <code>colgroup</code>은 23개 파일에 들어갔습니다.</dd>
+            <dt>확인</dt>
+            <dd>전수 검사에서 라벨이 필요한 칸 중 <code>data-label</code>이 빠진 곳 <b>0건</b>, 글자 있는 버튼인데 <code>is-actions-bottom</code>이 없는 표 <b>0건</b>이었습니다.</dd>
+          </dl>
+          <a class="go" href="http://127.0.0.1:3100/admin/users" target="_blank" rel="noopener">사용자 목록 열기</a>
+          <p class="src">src/shared/styles/global/_03-cmp-components.scss:867 (체계 정의)<br>src/shared/styles/global/_09-page-components.scss · _10-ops-unions.scss (화면별 보정)</p>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="item-top">
+          <h3>글쓰기튜터 교사 표 — 셀병합이 있는 표의 카드 전환</h3>
+          <span class="chip chip--done">커밋됨</span>
+          <span class="chip">4개 화면</span>
+        </div>
+        <div class="work">
+          <dl>
+            <dt>문제</dt>
+            <dd>결과 종합·동료 유사도·웹 인용·AI 의심 네 화면의 표는 문항카드 칸이 <code>rowSpan</code>으로 여러 행을 묶습니다. 공통 카드 규칙으로 풀면 그 병합이 사라져 그룹의 첫 문항에만 붙습니다.</dd>
+            <dt>조치</dt>
+            <dd>병합 셀을 감추고 <b>그룹 제목 줄을 카드 위에 세우는</b> 규칙을 각 <code>.css</code>에 따로 뒀습니다. <code>report.css</code>의 <code>min-width</code>(1100px 등)도 함께 풀어야 했습니다 — 안 풀면 카드가 그 폭으로 서서 가로 스크롤이 그대로 남습니다.</dd>
+          </dl>
+          <a class="go" href="http://127.0.0.1:3100/rightwrite/teacher" target="_blank" rel="noopener">교사 대시보드 열기</a>
+          <p class="src">AiSuspicionListPage.css +221 · PeerSimilarityListPage.css +226<br>WebCitationListPage.css +186 · AssignmentOverviewPage.css +173</p>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="item-top">
+          <h3>평가 설계 단계 탭 띠 — 가로 스크롤 + 좌우 이동 버튼</h3>
+          <span class="chip chip--done">커밋됨</span>
+        </div>
+        <div class="work">
+          <dl>
+            <dt>문제</dt>
+            <dd>단계가 6개라 좁은 폭에서 탭 띠가 화면 밖으로 넘쳤습니다.</dd>
+            <dt>조치</dt>
+            <dd>띠를 가로 스크롤로 두고, <b>넘칠 때만</b> 좌우 이동 버튼을 렌더합니다. <code>ResizeObserver</code>로 폭 변화를 보고 버튼 표시와 양 끝 도달 여부(<code>canPrev</code>/<code>canNext</code>)를 갱신합니다. 한 번 누르면 보이는 폭만큼 넘어갑니다.</dd>
+            <dt>주의</dt>
+            <dd>스크롤을 헤더 전체가 아니라 띠에만 걸었습니다. 헤더는 <code>overflow: hidden</code>이라 거기에 스크롤을 걸면 띠 전체에 스크롤바가 생깁니다.</dd>
+          </dl>
+          <a class="go" href="http://127.0.0.1:3100/tds/evaluations" target="_blank" rel="noopener">평가 목록 열기</a>
+          <p class="src">src/features/tds/evaluation-design/pages/design-all-in-one/DesignStepTabs.tsx:280<br>src/shared/styles/evaluation-design/_00-header-base.scss:154</p>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="item-top">
+          <h3>알림 배지 — 두 자리 이상이면 알약으로</h3>
+          <span class="chip chip--done">커밋됨</span>
+        </div>
+        <div class="work">
+          <dl>
+            <dt>증상</dt>
+            <dd>배지 폭이 16px로 고정이라 '99+' 같은 세 글자가 원을 뚫고 나갔습니다.</dd>
+            <dt>조치</dt>
+            <dd><code>width</code> → <code>min-width</code>로 바꾸고 좌우 여백을 줘, 한 자리면 원이고 두 자리 이상이면 좌우로만 늘어나는 알약이 됩니다. 숫자는 <code>tabular-nums</code>로 자리를 고정했습니다.</dd>
+          </dl>
+          <p class="src">src/shared/styles/global/_00-base-header.scss</p>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="item-top">
+          <h3>퍼블리싱 확인용 개발 스위치</h3>
+          <span class="chip chip--done">커밋됨</span>
+        </div>
+        <div class="work">
+          <dl>
+            <dt>문제</dt>
+            <dd>화면 접근 판정을 서버가 내려주는 메뉴 목록으로만 하기 때문에, 계정에 메뉴가 매핑되지 않은 화면은 어떤 액터로 로그인해도 열 수 없어 퍼블리싱·반응형 확인이 막혔습니다.</dd>
+            <dt>조치</dt>
+            <dd><code>VITE_DISABLE_MENU_GUARD=true</code>를 <code>.env.development</code>에 두고, <code>MainLayout</code>에서 <b>운영 빌드가 아닐 때 + 플래그가 명시적으로 'true'일 때</b>만 켜지도록 두 조건을 모두 봅니다. 운영 빌드에서는 플래그가 있어도 절대 켜지지 않습니다.</dd>
+            <dt>참고</dt>
+            <dd><code>.env.development</code>는 추적되는 템플릿 파일이라 브랜치를 받는 사람 모두에게 적용됩니다.</dd>
+          </dl>
+          <p class="src">.env.development:42 · src/app/MainLayout.tsx:463</p>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="item-top">
+          <h3>지표 막대 색 토큰 조정</h3>
+          <span class="chip chip--done">커밋됨</span>
+          <span class="chip">부수 작업</span>
+        </div>
+        <div class="work">
+          <dl>
+            <dt>조치</dt>
+            <dd>경고값 노랑을 <code>#fde047</code> → <code>#fbe77b</code>로 낮추고, 강조용 <code>--metricbar-value-accent</code>를 새로 뒀습니다.</dd>
+          </dl>
+          <p class="src">src/shared/styles/abstracts/_tokens.scss</p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-head">
+      <h2>공통 규칙 — 여러 화면에 걸림</h2>
+      <p>공통 컴포넌트나 전역 스타일을 고친 건이라 같은 구조를 쓰는 화면 전부에 적용됩니다. 링크는 눈으로 확인하기 좋은 대표 화면입니다.</p>
+    </div>
+    <div class="list">
+
+      <article class="item">
+        <div class="item-top">
+          <h3>모달 본문 좌우 여백</h3>
+          <span class="chip chip--done">커밋됨</span>
+          <span class="chip">전체 모달</span>
+        </div>
+        <div class="work">
+          <dl>
+            <dt>증상</dt>
+            <dd>입력칸만 안쪽으로 밀려 모달 제목·✕ 버튼과 왼쪽 선이 어긋났습니다.</dd>
+            <dt>원인</dt>
+            <dd>본문은 24px, 머리글·바닥글은 16px로 서로 달랐습니다. 여기에 덮개 16px까지 더해져 360px 화면에서 한쪽에 <b>40px</b>이 쌓였고, 입력칸에 남는 폭이 280px뿐이었습니다.</dd>
+            <dt>조치</dt>
+            <dd>640px 이하에서 본문 좌우를 16px로 낮춰 머리글·바닥글과 같은 선에 맞췄습니다. 입력칸 폭 <b>280 → 312px</b>. 표를 가장자리까지 붙이는 <code>--flush</code> 모달은 규칙 순서상 0을 그대로 지킵니다.</dd>
+          </dl>
+          <a class="go" href="http://127.0.0.1:3100/admin/core-ideas" target="_blank" rel="noopener">핵심아이디어 관리 열기</a>
+          <p class="src">src/shared/styles/global/_02-ui-components.scss:250</p>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="item-top">
+          <h3>페이지 제목줄 — 상태 배지·목록 바로가기</h3>
+          <span class="chip chip--pending">커밋 대기</span>
+          <span class="chip">MainSubHeader 쓰는 화면</span>
+        </div>
+        <div class="work">
+          <dl>
+            <dt>증상</dt>
+            <dd>제목이 길면 배지가 중간에 끼어들어 제목이 두세 글자씩 쪼개지고, 그래도 모자라면 배지가 제목 위로 겹쳐 올라왔습니다.</dd>
+            <dt>원인</dt>
+            <dd>배지와 바로가기 버튼이 제목과 형제로 흩어져 있어 각자 따로 줄바꿈됐습니다.</dd>
+            <dt>조치</dt>
+            <dd>둘을 <code>.users-header__meta</code> 한 묶음으로 감싸 통째로 움직이게 하고, 줄을 가르는 건 flex에 맡겼습니다. 제목이 짧으면 셋이 한 줄에 서고, 길면 묶음만 다음 줄로 갑니다. 넓은 화면에서 보이는 결과는 이전과 같습니다.</dd>
+          </dl>
+          <a class="go" href="http://127.0.0.1:3100/evaluation/unions" target="_blank" rel="noopener">연합 목록 열기</a>
+          <p class="src">src/shared/components/common/MainSubHeader.tsx:63<br>src/shared/styles/global/_03-cmp-components.scss:1800</p>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="item-top">
+          <h3>필터 묶음 안쪽 컨트롤 폭</h3>
+          <span class="chip chip--done">커밋됨</span>
+          <span class="chip">.ui-filters-group</span>
+        </div>
+        <div class="work">
+          <dl>
+            <dt>증상</dt>
+            <dd>'과목' 검색은 한 줄을 다 쓰는데 옆의 '학년·학기' 셀렉트만 글자 폭으로 남아 둘의 오른쪽 선이 어긋났습니다.</dd>
+            <dt>원인</dt>
+            <dd>이 묶음이 <code>.ui-filters</code> 밖(<code>.ui-filters-box</code> 직속)에 놓여 기존 규칙이 닿지 않았습니다. 검색 컴포넌트만 자체 100% 규칙을 들고 있었던 겁니다.</dd>
+            <dt>조치</dt>
+            <dd>640px 이하에서 묶음 안쪽 컨트롤도 100%로 펴지게 했습니다. 항목끼리 붙어 한 덩어리로 읽혀야 하는 <code>--tight</code>·<code>--unit</code>·<code>--inline</code>은 제외했습니다.</dd>
+          </dl>
+          <a class="go" href="http://127.0.0.1:3100/grading/internal-standardization" target="_blank" rel="noopener">내부 표준화 목록 열기</a>
+          <p class="src">src/shared/styles/global/_03-cmp-components.scss:1454</p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="group">
+    <div class="group-head">
+      <h2>개별 화면 손질</h2>
+      <p>대규모 전환 뒤에 화면을 하나씩 열어 보며 잡은 것들입니다. 화면 하나에만 걸립니다.</p>
+    </div>
+    <div class="list">
+
+      <article class="item">
+        <div class="item-top">
+          <h3>내부 표준화 목록</h3>
+          <span class="chip chip--done">커밋됨</span>
+        </div>
+        <div class="work">
+          <p class="work__name">채점 단계 탭 — 라벨 아래로, 4열 균등</p>
+          <dl>
+            <dt>증상</dt>
+            <dd>'채점 단계' 라벨 옆에 탭 4개가 끼어 폭이 제각각이었습니다.</dd>
+            <dt>조치</dt>
+            <dd>라벨과 탭을 <code>ui-filters-field--4col</code>로 묶어 라벨을 윗줄로 올리고 탭이 한 줄을 4등분하게 했습니다. CSS만으로는 못 합니다 — 열 수를 공통 규칙에 박으면 탭 개수가 다른 화면이 전부 깨져서, 이 프로젝트는 묶음에 <code>--4col</code>을 붙여 개수를 알려주는 방식을 씁니다.</dd>
+          </dl>
+          <p class="src">src/features/grading/front-internal-standardization/pages/InternalStandardizationListPage.tsx:302</p>
+        </div>
+        <div class="work">
+          <p class="work__name">학년·학기 셀렉트 100%</p>
+          <dl>
+            <dt>조치</dt>
+            <dd>위 '필터 묶음 안쪽 컨트롤 폭' 공통 규칙으로 해결됐습니다. 프로젝트 전체에서 이 규칙이 새로 닿는 곳은 이 화면 한 곳뿐입니다.</dd>
+          </dl>
+          <a class="go" href="http://127.0.0.1:3100/grading/internal-standardization" target="_blank" rel="noopener">화면 열기</a>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="item-top">
+          <h3>자료실</h3>
+          <span class="chip chip--done">커밋됨</span>
+        </div>
+        <div class="work">
+          <p class="work__name">분류 탭 5열 → 3열</p>
+          <dl>
+            <dt>증상</dt>
+            <dd>5열이면 한 칸이 70px 남짓이라 '교수학습자료'가 '교수학…'으로 잘렸습니다.</dd>
+            <dt>조치</dt>
+            <dd><code>--5col</code> → <code>--3col --compact</code>. 글자 축소·말줄임은 4·5열에만 자동으로 걸려서, 3열에는 <code>--compact</code>를 함께 붙여야 합니다. 360px 기준 한 칸 약 105px로 잘리지 않습니다.</dd>
+            <dt>남은 것</dt>
+            <dd>버튼이 5개라 <b>3 + 2</b>로 배치되고 둘째 줄 오른쪽 한 칸이 빕니다.</dd>
+          </dl>
+          <a class="go" href="http://127.0.0.1:3100/community/share?category=teaching" target="_blank" rel="noopener">자료실 열기</a>
+          <p class="src">src/features/ops/common/pages/ResourcesPage.tsx:250</p>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="item-top">
+          <h3>알림 관리</h3>
+          <span class="chip chip--done">커밋됨</span>
+        </div>
+        <div class="work">
+          <p class="work__name">템플릿 등록 폼 여백</p>
+          <dl>
+            <dt>증상</dt>
+            <dd>입력칸이 패널 제목보다 안쪽으로 들어가 좌우 여백이 크게 남았습니다.</dd>
+            <dt>원인</dt>
+            <dd>패널 본문이 이미 주는 좌우 여백 위에 폼이 인라인으로 16px을 또 줬습니다. 패널 쪽은 폭에 따라 24 → 12 → 10px로 줄어드는데 폼의 16px은 고정이라 좁을수록 더 도드라졌습니다.</dd>
+            <dt>조치</dt>
+            <dd><code>padding: 16</code> → <code>padding: '16px 0'</code>. 위아래 간격은 두고 좌우만 패널에 맡겼습니다.</dd>
+          </dl>
+          <a class="go" href="http://127.0.0.1:3100/admin/notifications" target="_blank" rel="noopener">알림 관리 열기</a>
+          <p class="src">src/features/ops/common/pages/NotificationManagePage.tsx:660</p>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="item-top">
+          <h3>성적 결과 조회</h3>
+          <span class="chip chip--done">커밋됨</span>
+        </div>
+        <div class="work">
+          <p class="work__name">문항 액션 버튼 100%</p>
+          <dl>
+            <dt>증상</dt>
+            <dd>'PDF 첨삭 원본 보기' 버튼이 글자 폭만큼만 차지해 카드 왼쪽에 작게 남았습니다.</dd>
+            <dt>조치</dt>
+            <dd>감싸개에 <code>score-result__actions</code>를 얹고 640px 이하에서 칸을 채우게 했습니다. <code>flex-basis</code>는 <code>auto</code>입니다 — 0으로 두면 버튼이 둘인 STT 문항에서 '원본 음성 다운로드' 같은 긴 라벨이 반 칸에 눌립니다.</dd>
+          </dl>
+          <a class="go" href="http://127.0.0.1:3100/evaluation-result/result-inquiry/score" target="_blank" rel="noopener">성적 결과 열기</a>
+          <p class="src">src/features/evaluationResult/result-inquiry/pages/ScoreResultViewPage.tsx:145<br>src/shared/styles/global/_09-page-components.scss:5650</p>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="item-top">
+          <h3>공통코드 관리</h3>
+          <span class="chip chip--done">커밋됨</span>
+        </div>
+        <div class="work">
+          <p class="work__name">수정·삭제 버튼 원래 크기로</p>
+          <dl>
+            <dt>증상</dt>
+            <dd>두 버튼이 한 줄을 반씩 나눠 가져 필요 이상으로 커져 있었습니다.</dd>
+            <dt>조치</dt>
+            <dd>버튼을 늘이던 규칙을 걷어냈습니다. 글자 폭 그대로 오른쪽에 나란히 섭니다. 같은 클래스를 쓰는 '하위 코드값' 패널(검색칸 + 코드 추가)은 별도 선택자가 잡고 있어 영향이 없습니다.</dd>
+          </dl>
+          <a class="go" href="http://127.0.0.1:3100/admin/common-codes" target="_blank" rel="noopener">공통코드 관리 열기</a>
+          <p class="src">src/shared/styles/global/_03-cmp-components.scss:141</p>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="item-top">
+          <h3>평가 설계</h3>
+          <span class="chip chip--done">커밋됨</span>
+        </div>
+        <div class="work">
+          <p class="work__name">단계 탭 띠 — 양 끝 알약 모서리</p>
+          <dl>
+            <dt>증상</dt>
+            <dd>1번·6번 단계 알약의 바깥쪽 라운드가 지워진 것처럼 깎여 보였습니다.</dd>
+            <dt>원인</dt>
+            <dd>탭 띠가 <code>overflow-x: auto</code>와 <code>border-radius: 16px</code>를 같이 갖고 있었습니다. 스크롤 상자는 자기 모서리 모양대로 내용을 자르는데, 띠는 배경도 테두리도 없어 그 라운드가 보이지 않으니 알약만 깎인 것처럼 보였습니다.</dd>
+            <dt>조치</dt>
+            <dd>띠의 <code>border-radius</code>를 제거했습니다. 알약은 저마다 라운드를 갖고 있어 띠 쪽 라운드는 클리핑 말고 하는 일이 없었습니다.</dd>
+          </dl>
+          <a class="go" href="http://127.0.0.1:3100/tds/evaluations" target="_blank" rel="noopener">평가 목록 열기</a>
+          <p class="src">src/shared/styles/evaluation-design/_00-header-base.scss:218</p>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="item-top">
+          <h3>글쓰기튜터 교사 대시보드</h3>
+          <span class="chip chip--pending">일부 커밋 대기</span>
+        </div>
+        <div class="work">
+          <p class="work__name">평가 선택 카드 — 640에서 2열, 440에서 1열 <span class="chip chip--done">커밋됨</span></p>
+          <dl>
+            <dt>증상</dt>
+            <dd>카드가 평가명 길이대로 폭이 제각각이고 줄 끝에 빈 자리가 남았습니다.</dd>
+            <dt>조치</dt>
+            <dd><code>flex-wrap</code>을 grid로 바꿔 칸을 균등 분할했습니다. 눈금은 브레이크포인트 토큰과 같은 sm 640 · xs 440입니다.</dd>
+          </dl>
+        </div>
+        <div class="work">
+          <p class="work__name">목록 높이 제한 + 안쪽 스크롤 <span class="chip chip--pending">커밋 대기</span></p>
+          <dl>
+            <dt>증상</dt>
+            <dd>평가가 수십 개면 고르는 목록만으로 화면이 한참 내려가 정작 볼 결과 표가 묻혔습니다.</dd>
+            <dt>조치</dt>
+            <dd>네 칸 반 높이에서 끊고 안에서 스크롤합니다. 반 칸을 남긴 건 스크롤바가 보이지 않는 기기에서도 '아래 더 있다'를 알리기 위해서입니다. 여유분 20px을 더해 약 295px. 높이는 <code>--eval-picker-rows</code>·<code>--eval-picker-item-h</code>·<code>--eval-picker-bleed</code> 세 변수로 조절합니다.</dd>
+            <dt>참고</dt>
+            <dd>440~640px 구간은 2열이라 같은 높이에 <b>4.5줄(약 9개)</b>이 보입니다.</dd>
+          </dl>
+          <a class="go" href="http://127.0.0.1:3100/rightwrite/teacher" target="_blank" rel="noopener">교사 대시보드 열기</a>
+          <p class="src">src/features/rightwrite/teacher/features/dashboard/DashboardPage.css:58</p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <footer class="footnote">
+    <p><b>확인 방법</b> — <code>npm run dev</code>로 띄웁니다(<code>npm run local</code>은 모드가 달라 메뉴 가드 해제가 적용되지 않습니다). <code>.env.development</code>의 <code>VITE_DISABLE_MENU_GUARD=true</code> 덕분에 계정에 메뉴가 매핑되지 않은 화면도 주소만 치면 열립니다. 다만 <code>/rightwrite/**</code>는 액터가 코드에 박혀 있어 학생(ACT-09) 또는 교사(ACT-05·06·07·12)로 전환하거나 Master 계정이 필요합니다.</p>
+    <p><b>아직 남은 것</b> — 카드형으로 접히지 않는 표 10건이 따로 있습니다. 화면별 링크와 필요 권한은 <b>'반응형 미적용 표 점검'</b> 문서에 정리해 뒀습니다.</p>
+    <p><b>손대지 않은 것</b> — 카드형은 적용됐지만 인라인 스타일이 카드 규칙을 이기는 자리가 둘 있습니다. <code>Step2QuestionsPanel.tsx:400</code>의 <code>maxWidth: 0</code>은 좁은 폭에서 '지문 요약' 칸을 통째로 접어버리고, <code>ExternalAdvisorRevocationListPage.tsx:272·282</code>의 <code>width: 70px</code>는 카드 아랫줄 버튼이 한 줄을 다 쓰지 못하게 막습니다.</p>
+  </footer>
+
+</div>
+
+</body></html>

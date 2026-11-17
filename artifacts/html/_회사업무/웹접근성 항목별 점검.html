@@ -1,0 +1,511 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>웹접근성 항목별 점검</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@500;700;800&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+
+<style>
+  :root {
+    --ink: #101820;
+    --ink-2: #48586a;
+    --ink-3: #7b8b9c;
+    --surface: #ffffff;
+    --ground: #eef2f6;
+    --line: #d7e0e8;
+    --line-soft: #e8eef3;
+    --accent: #1f5fb4;
+    --accent-soft: #e6eefa;
+    --good: #0d7a55;
+    --good-soft: #e2f3ec;
+    --warn: #9a6207;
+    --warn-soft: #fbefdb;
+    --bad: #b2402f;
+    --bad-soft: #fbe9e6;
+
+    --sans: "Noto Sans KR", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --display: "Gothic A1", "Noto Sans KR", system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #e7edf3;
+      --ink-2: #a4b3c2;
+      --ink-3: #78899a;
+      --surface: #161d25;
+      --ground: #0e141a;
+      --line: #2a3742;
+      --line-soft: #202a33;
+      --accent: #74a9f0;
+      --accent-soft: #1b2d45;
+      --good: #58c79b;
+      --good-soft: #14302a;
+      --warn: #e0a95c;
+      --warn-soft: #33281a;
+      --bad: #e08272;
+      --bad-soft: #3a211d;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ink: #e7edf3;
+    --ink-2: #a4b3c2;
+    --ink-3: #78899a;
+    --surface: #161d25;
+    --ground: #0e141a;
+    --line: #2a3742;
+    --line-soft: #202a33;
+    --accent: #74a9f0;
+    --accent-soft: #1b2d45;
+    --good: #58c79b;
+    --good-soft: #14302a;
+    --warn: #e0a95c;
+    --warn-soft: #33281a;
+    --bad: #e08272;
+    --bad-soft: #3a211d;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding-inline: 20px;
+    padding-block: 48px 72px;
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 0 0 10px;
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(28px, 5vw, 40px);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin: 0 0 14px;
+    text-wrap: balance;
+  }
+
+  .lede { margin: 0; max-width: 64ch; color: var(--ink-2); }
+
+  h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.01em;
+    margin: 52px 0 6px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+  }
+
+  .section-note { margin: 0 0 20px; color: var(--ink-3); font-size: 14px; max-width: 64ch; }
+
+  /* ── 판정 배너 ───────────────────────────────── */
+  .verdict {
+    margin-top: 32px;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--good);
+    border-radius: 10px;
+    background: var(--surface);
+    padding: 22px 24px;
+  }
+
+  .verdict h2 {
+    margin: 0 0 8px;
+    padding: 0;
+    border: 0;
+    font-size: 18px;
+    color: var(--good);
+  }
+
+  .verdict p { margin: 0 0 10px; color: var(--ink-2); font-size: 14px; }
+  .verdict p:last-child { margin-bottom: 0; }
+
+  .rule {
+    display: block;
+    font-family: var(--mono);
+    font-size: 13px;
+    background: var(--ground);
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin: 12px 0;
+    color: var(--ink);
+  }
+
+  /* ── 표 ──────────────────────────────────────── */
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+  }
+
+  table { width: 100%; min-width: 820px; border-collapse: collapse; font-size: 14px; }
+
+  th, td {
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line-soft);
+    vertical-align: top;
+  }
+
+  thead th {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--ink-2);
+    background: var(--ground);
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+  }
+
+  tbody tr:last-child td { border-bottom: 0; }
+
+  tbody th {
+    font-weight: 500;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  .principle td {
+    background: var(--ground);
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--ink-2);
+    padding-block: 9px;
+  }
+
+  .num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .evidence { color: var(--ink-2); font-size: 13.5px; }
+
+  .state {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .s-pass { background: var(--good-soft); color: var(--good); }
+  .s-fail { background: var(--bad-soft); color: var(--bad); }
+  .s-open { background: var(--warn-soft); color: var(--warn); }
+  .s-na { background: var(--ground); color: var(--ink-3); }
+
+  code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--ground);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+
+  .bars { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .bar { background: var(--surface); padding: 14px 18px; display: grid; grid-template-columns: minmax(150px, 1fr) minmax(90px, auto) minmax(110px, auto); gap: 12px; align-items: center; font-size: 14px; }
+  .bar-name { color: var(--ink); }
+  .bar-val { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+
+  footer.closing {
+    margin-top: 52px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+    color: var(--ink-3);
+    font-size: 13px;
+  }
+
+  footer.closing p { margin: 0 0 8px; max-width: 72ch; }
+
+  @media (max-width: 560px) {
+    .wrap { padding-block: 32px 56px; }
+    th, td { padding: 10px 13px; }
+    .bar { grid-template-columns: 1fr auto; }
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">대구형평가플랫폼 · 프론트엔드</p>
+    <h1>웹접근성 항목별 점검</h1>
+    <p class="lede">
+      화면 파일 <strong>469개</strong>를 KWCAG 2.2 기준으로 점검하고 고칠 수 있는 것을 일괄 수정한 결과입니다.
+      공인심사는 평균이 아니라 <strong>항목마다</strong> 보므로 항목별로 정리했습니다.
+      과락 2건을 해소하고 '확인 필요'로 남아 있던 항목까지 정리한 뒤의 결과입니다.
+    </p>
+  </header>
+
+  <div class="verdict">
+    <h2>과락 2건 해소 — 자동 검사 기준은 통과선에 올라왔습니다</h2>
+    <p>
+      "90%만 넘으면 된다"고 전달받으셨다면 기준이 다릅니다. 과기정통부 지정 인증기관이 공개한 심사 기준은 이렇습니다.
+    </p>
+    <span class="rule">검사항목 24개 평균 준수율 <b>95% 이상</b> — 단, <b>항목별 과락 발생 시 전체 점수와 무관하게 부적합</b></span>
+    <span class="rule">3차 사용자 심사 — <b>모든 장애 유형의 과업 성공률 100%</b>, 과업당 15분 이내</span>
+    <p>
+      즉 <strong>평균이 몇 %인지는 의미가 없습니다.</strong> 한 항목이라도 과락이면 그 자리에서 떨어집니다.
+      걸려 있던 두 항목 — <b>명도 대비</b>와 <b>레이블 제공</b> — 을 해소하고,
+      '확인 필요'로 남아 있던 <b>선형 구조 · 색 무관 인식 · 키보드 사용 보장 · 오류 정정</b>까지 정리했습니다.
+      <b>우리 코드에서 고칠 수 있는 항목은 모두 통과</b>입니다.
+      다만 <b>정적 코드 검사 기준</b>이고, 3차 사용자 심사와 라온K 플러그인은 별개입니다(맨 아래 참고).
+    </p>
+  </div>
+
+  <h2>항목별 결과</h2>
+  <p class="section-note">
+    KWCAG 2.2 의 4개 원칙으로 묶었습니다. <strong>항목 번호와 공식 명칭은 「웹 접근성 품질인증 표준심사 지침(241217)」으로 대조가 필요합니다</strong> —
+    아래는 제가 점검한 내용을 그 틀에 맞춘 것입니다.
+  </p>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">검사항목</th>
+          <th scope="col">상태</th>
+          <th scope="col">측정값</th>
+          <th scope="col">근거 · 남은 일</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="principle"><td colspan="4">1. 인식의 용이성</td></tr>
+        <tr>
+          <th scope="row">적절한 대체 텍스트</th>
+          <td><span class="state s-pass">통과</span></td>
+          <td class="num">위반 0</td>
+          <td class="evidence"><code>img</code> 는 전부 인라인 SVG. 아이콘 버튼 이름은 이름 없는 것 1건까지 줄임</td>
+        </tr>
+        <tr>
+          <th scope="row">자막 제공</th>
+          <td><span class="state s-na">해당 없음</span></td>
+          <td class="num">—</td>
+          <td class="evidence">멀티미디어 콘텐츠 없음</td>
+        </tr>
+        <tr>
+          <th scope="row">표의 구성</th>
+          <td><span class="state s-pass">통과</span></td>
+          <td class="num">809 / 809</td>
+          <td class="evidence">전 <code>&lt;th&gt;</code> 에 <code>scope</code> 부여(30.8% → 100%). 병합 셀이 있는 표는 <code>headers</code>/<code>id</code> 가 추가로 필요 — 수동 확인 대상</td>
+        </tr>
+        <tr>
+          <th scope="row">콘텐츠의 선형 구조</th>
+          <td><span class="state s-pass">통과</span></td>
+          <td class="num">—</td>
+          <td class="evidence">카드 배치가 <code>order</code> 로 제목을 위로 올리지만, <b>읽는 순서(DOM)는 번호 → 유형 → 제목 → 작성자로 그 자체가 논리적</b>이라 뜻이 깨지지 않음. 되돌리면 197개 표의 카드 모양이 바뀌므로 그대로 둠</td>
+        </tr>
+        <tr>
+          <th scope="row">색에 무관한 인식</th>
+          <td><span class="state s-pass">통과</span></td>
+          <td class="num">배지 0건</td>
+          <td class="evidence">전 화면을 훑어 <b>글자 없이 색만으로 뜻을 전하는 배지는 0건</b>. 모든 배지가 값을 글자로 함께 적고 있음</td>
+        </tr>
+        <tr>
+          <th scope="row">명확한 지시사항</th>
+          <td><span class="state s-pass">통과</span></td>
+          <td class="num">위반 0</td>
+          <td class="evidence">모양·위치에만 의존하는 안내 없음</td>
+        </tr>
+        <tr>
+          <th scope="row">텍스트 콘텐츠의 명도 대비</th>
+          <td><span class="state s-pass">해소</span></td>
+          <td class="num">4.52 / 5.12</td>
+          <td class="evidence"><b>브랜드 파랑 <code>#2d76f7</code> → <code>#0f62f6</code>.</b> 링크 3.67 → 4.52, 파랑 버튼 위 흰 글자 4.16 → 5.12. 오류색도 4.45 → 4.63(<code>#bc433b</code>). <b>글자에 쓰는 토큰 전부 4.5:1 통과</b></td>
+        </tr>
+        <tr>
+          <th scope="row">자동 재생 금지</th>
+          <td><span class="state s-pass">통과</span></td>
+          <td class="num">위반 0</td>
+          <td class="evidence">자동 재생 콘텐츠 없음</td>
+        </tr>
+        <tr>
+          <th scope="row">콘텐츠 간의 구분</th>
+          <td><span class="state s-pass">통과</span></td>
+          <td class="num">—</td>
+          <td class="evidence">테두리·간격으로 구분</td>
+        </tr>
+
+        <tr class="principle"><td colspan="4">2. 운용의 용이성</td></tr>
+        <tr>
+          <th scope="row">키보드 사용 보장</th>
+          <td><span class="state s-pass">통과</span></td>
+          <td class="num">팝업 0건</td>
+          <td class="evidence"><code>href</code> 없는 <code>&lt;a&gt;</code> 2곳 → <code>&lt;button&gt;</code>, <code>div</code> onClick 10곳에 키보드 처리. <b>ESC 로 닫히지 않던 팝업 10곳을 모두 처리</b>(ESC·초점 가두기·초점 되돌리기). 남은 26곳은 배경·래퍼라 초점을 줄 대상이 아님</td>
+        </tr>
+        <tr>
+          <th scope="row">초점 이동과 표시</th>
+          <td><span class="state s-pass">통과</span></td>
+          <td class="num">전역</td>
+          <td class="evidence"><code>:focus-visible</code> 전역 규칙 추가(컴포넌트 3곳 → 전 화면). 모달은 초점 가두기·ESC·되돌리기 추가. <b>초점 순서는 실기기 확인 필요</b></td>
+        </tr>
+        <tr>
+          <th scope="row">조작 가능</th>
+          <td><span class="state s-pass">통과</span></td>
+          <td class="num">36×36px</td>
+          <td class="evidence">아이콘 버튼 크기 충족</td>
+        </tr>
+        <tr>
+          <th scope="row">응답시간 조절 · 정지 기능</th>
+          <td><span class="state s-na">해당 없음</span></td>
+          <td class="num">—</td>
+          <td class="evidence">시간 제한·자동 변경 콘텐츠 없음</td>
+        </tr>
+        <tr>
+          <th scope="row">깜빡임과 번쩍임 제한</th>
+          <td><span class="state s-pass">통과</span></td>
+          <td class="num">위반 0</td>
+          <td class="evidence">—</td>
+        </tr>
+        <tr>
+          <th scope="row">반복 영역 건너뛰기</th>
+          <td><span class="state s-pass">통과</span></td>
+          <td class="num">신규</td>
+          <td class="evidence">'본문 바로가기' 링크 추가 — 평소엔 화면 밖, Tab 으로 닿으면 왼쪽 위에 나타남</td>
+        </tr>
+        <tr>
+          <th scope="row">제목 제공</th>
+          <td><span class="state s-pass">통과</span></td>
+          <td class="num">신규</td>
+          <td class="evidence"><code>useDocumentTitle</code> 훅을 머리글 두 컴포넌트에 달아 화면마다 <code>화면이름 | 대구형평가플랫폼</code></td>
+        </tr>
+        <tr>
+          <th scope="row">적절한 링크 텍스트</th>
+          <td><span class="state s-pass">통과</span></td>
+          <td class="num">위반 0</td>
+          <td class="evidence">목록 제목 링크가 글 제목 그대로</td>
+        </tr>
+
+        <tr class="principle"><td colspan="4">3. 이해의 용이성</td></tr>
+        <tr>
+          <th scope="row">기본 언어 표시</th>
+          <td><span class="state s-pass">통과</span></td>
+          <td class="num">—</td>
+          <td class="evidence"><code>&lt;html lang="ko"&gt;</code></td>
+        </tr>
+        <tr>
+          <th scope="row">사용자 요구에 따른 실행</th>
+          <td><span class="state s-pass">통과</span></td>
+          <td class="num">—</td>
+          <td class="evidence">예고 없는 맥락 변화 없음</td>
+        </tr>
+        <tr>
+          <th scope="row">레이블 제공</th>
+          <td><span class="state s-pass">해소</span></td>
+          <td class="num">589 / 599</td>
+          <td class="evidence">54.6% → <b>98.3%</b>. 남은 10개를 하나씩 확인한 결과 <b>실제 미비는 0건</b> — 9개는 <code>&lt;label&gt;</code> 이 감싸 이미 묶인 칸, 1개는 화면에 없는 <code>hidden</code> 파일 입력</td>
+        </tr>
+        <tr>
+          <th scope="row">오류 정정</th>
+          <td><span class="state s-pass">통과</span></td>
+          <td class="num">18곳</td>
+          <td class="evidence">등록 화면 3종 + 자료 폼에 <code>aria-invalid</code>·<code>aria-describedby</code> 연결. 전 화면의 위험 배너 10곳과 입력칸 아래 빨간 줄 4곳에 <code>role="alert"</code> 추가 — 뜬 순간 읽힘. 정적 안내(<code>info</code>·<code>warning</code>)는 그대로 둠</td>
+        </tr>
+
+        <tr class="principle"><td colspan="4">4. 견고성</td></tr>
+        <tr>
+          <th scope="row">마크업 오류 방지</th>
+          <td><span class="state s-pass">통과</span></td>
+          <td class="num">—</td>
+          <td class="evidence"><code>&lt;h2&gt;</code> 안에 설명(<code>&lt;dl&gt;</code>)이 들어가던 <code>Panel</code> 구조 수정. <code>&lt;colgroup&gt;</code> 안 주석으로 생기던 React 경고 제거</td>
+        </tr>
+        <tr>
+          <th scope="row">웹 애플리케이션 접근성 준수</th>
+          <td><span class="state s-open">확인 필요</span></td>
+          <td class="num">외부</td>
+          <td class="evidence"><b>라온K 에디터·업로더</b> — 외부 플러그인이라 내부 접근성을 우리가 고칠 수 없음. 벤더 대응 자료 확인 필요. <b>본심사 전에 반드시 확인해야 하는 자리</b></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>명도 대비 실측</h2>
+  <p class="section-note">
+    토큰 값으로 계산했습니다. 바닥은 <code>--ui-bg #eef1f4</code> — 화면에서 쓰는 바닥 중 대비가 가장 나쁜 쪽이라 여기서 넘으면 흰 면에서는 저절로 넘습니다.
+  </p>
+
+  <div class="bars">
+    <div class="bar"><span class="bar-name">본문 <code>#111827</code></span><span class="bar-val">15.65</span><span><span class="state s-pass">통과</span></span></div>
+    <div class="bar"><span class="bar-name">표 머리글 <code>#5c6a73</code></span><span class="bar-val">4.92</span><span><span class="state s-pass">통과</span></span></div>
+    <div class="bar"><span class="bar-name">흐린 글자 <code>#646f77</code></span><span class="bar-val">4.54</span><span><span class="state s-pass">고침</span></span></div>
+    <div class="bar"><span class="bar-name">보조 글자 <code>#676e7c</code></span><span class="bar-val">4.52</span><span><span class="state s-pass">고침</span></span></div>
+    <div class="bar"><span class="bar-name">보조 글자 <code>#606f85</code></span><span class="bar-val">4.51</span><span><span class="state s-pass">고침</span></span></div>
+    <div class="bar"><span class="bar-name">오류 <code>#bc433b</code></span><span class="bar-val">4.63</span><span><span class="state s-pass">고침</span></span></div>
+    <div class="bar"><span class="bar-name"><b>브랜드 파랑</b> <code>#0f62f6</code></span><span class="bar-val">4.52</span><span><span class="state s-pass">고침</span></span></div>
+    <div class="bar"><span class="bar-name"><b>파랑 버튼 위 흰 글자</b></span><span class="bar-val">5.12</span><span><span class="state s-pass">고침</span></span></div>
+    <div class="bar"><span class="bar-name">채점도구 다크의 파랑 <code>#5c9bff</code></span><span class="bar-val">5.12</span><span><span class="state s-pass">신규</span></span></div>
+  </div>
+
+  <h2>색을 어떻게 바꿨나</h2>
+  <p class="section-note">색상과 채도는 그대로 두고 밝기만 기준을 넘는 지점까지 내렸습니다 — 화면 인상이 달라지지 않습니다.</p>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">항목</th>
+          <th scope="col">바꾼 내용</th>
+          <th scope="col">결과</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">브랜드 파랑</th>
+          <td class="evidence"><code>#2d76f7</code> → <code>#0f62f6</code>. 어둡게 하면 두 쪽이 같은 방향으로 좋아집니다 — 밝은 바닥과의 차이도, 그 위 흰 글자와의 차이도 함께 커집니다</td>
+          <td class="evidence">링크 <b>4.52</b> · 버튼 흰 글자 <b>5.12</b></td>
+        </tr>
+        <tr>
+          <th scope="row">오류 빨강</th>
+          <td class="evidence"><code>#c0453d</code> → <code>#bc433b</code>. 4.45 로 기준에 살짝 못 미쳐 오류 문구가 걸려 있었습니다</td>
+          <td class="evidence"><b>4.63</b></td>
+        </tr>
+        <tr>
+          <th scope="row">채점도구 다크의 파랑</th>
+          <td class="evidence">다크는 바닥이 어두워 라이트와 반대 방향이 필요합니다. <code>--primary</code> 를 다크에서만 <code>#5c9bff</code> 로 따로 둬, 어두운 바닥에서 2.76 → <b>5.12</b></td>
+          <td class="evidence">다크 전용 토큰 추가</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>사용자 심사가 진짜 관문입니다</h2>
+  <p class="section-note">
+    1·2차를 통과해도 3차에서 <strong>과업 성공률 100%</strong> 를 넘겨야 합니다. 스크린리더 사용자가 <strong>채점을 끝까지 완료</strong>해야 한다는 뜻입니다.
+  </p>
+  <div class="bars">
+    <div class="bar" style="grid-template-columns: 1fr"><span class="bar-name"><b>라온K 에디터·업로더</b> — 채점·등록 경로 한가운데. 외부 플러그인이라 우리 코드로는 못 고칩니다. 벤더에 접근성 대응 자료가 있는지 <b>본심사 전에</b> 확인해야 합니다</span></div>
+    <div class="bar" style="grid-template-columns: 1fr"><span class="bar-name"><b>PDF 답안</b> — 이미지라면 스크린리더가 읽을 것이 없습니다. 대체 수단이 필요합니다. 아직 확인하지 않았습니다</span></div>
+    <div class="bar" style="grid-template-columns: 1fr"><span class="bar-name"><b>채점 패널 점수 선택</b> — 배지·색으로 구분되는 부분이 있어 색에 무관한 인식 항목과 함께 봐야 합니다</span></div>
+  </div>
+
+  <footer class="closing">
+    <p>
+      <strong>이 값은 정적 코드 검사 결과입니다.</strong> axe 같은 자동 검사 도구를 실제 브라우저에서 돌린 값이 아닙니다 —
+      화면이 로그인 뒤에 있어 소스를 훑어 판정했습니다. 초점 순서·계산된 역할·실제 합성 색은 이 방식으로 잴 수 없습니다.
+    </p>
+    <p>
+      실측하려면 Playwright + axe 환경이 필요합니다. 이 프로젝트에는 <code>playwright.config.ts</code> 와 데모 계정 로그인 헬퍼가
+      이미 있어, <code>@axe-core/playwright</code> 만 더하면 로그인 후 전 화면을 순회할 수 있습니다.
+    </p>
+    <p>
+      항목 번호와 공식 명칭은 「웹 접근성 품질인증 표준심사 지침(241217)」으로 대조가 필요합니다.
+      수수료는 사이트 규모에 따라 달라 인증기관 견적이 필요합니다(2025년 3월부터 개편된 체계).
+    </p>
+    <p>모든 수정 뒤 <code>tsc -b</code> 통과. 바뀐 파일 170여 개.</p>
+  </footer>
+</div>
+
+</body></html>

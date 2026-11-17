@@ -1,0 +1,470 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>목록 표 열 폭 정리</title>
+<style>
+  :root {
+    --ground:#f2f5f8; --surface:#fff; --surface-3:#f8fafc;
+    --ink:#131820; --ink-2:#3f4a5c; --ink-3:#6b7686;
+    --rule:#dbe2ec; --rule-soft:#e9eef4;
+    --accent:#1d4ed8; --accent-2:#153ea8; --accent-wash:#e6edfd;
+    --new-c:#0a6b48; --new-wash:#e1f4ec;
+    --warn:#8a5200; --warn-wash:#fdf1dc;
+    --code-bg:#eceff5;
+    --shadow:0 1px 2px rgba(19,24,32,.05), 0 10px 26px -24px rgba(19,24,32,.65);
+    --f-body:"Segoe UI Variable Text","Segoe UI",ui-sans-serif,system-ui,-apple-system,sans-serif;
+    --f-mono:"Cascadia Mono","Cascadia Code",ui-monospace,Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:#0a0d12; --surface:#131820; --surface-3:#161a22;
+      --ink:#eceff6; --ink-2:#adb9cb; --ink-3:#7f8998;
+      --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+      --accent:#5c9bff; --accent-2:#93bcff; --accent-wash:rgba(92,155,255,.13);
+      --new-c:#4ec793; --new-wash:rgba(78,199,147,.13);
+      --warn:#e2a544; --warn-wash:rgba(226,165,68,.13);
+      --code-bg:rgba(255,255,255,.05);
+      --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -24px rgba(0,0,0,.95);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#0a0d12; --surface:#131820; --surface-3:#161a22;
+    --ink:#eceff6; --ink-2:#adb9cb; --ink-3:#7f8998;
+    --rule:rgba(255,255,255,.1); --rule-soft:rgba(255,255,255,.05);
+    --accent:#5c9bff; --accent-2:#93bcff; --accent-wash:rgba(92,155,255,.13);
+    --new-c:#4ec793; --new-wash:rgba(78,199,147,.13);
+    --warn:#e2a544; --warn-wash:rgba(226,165,68,.13);
+    --code-bg:rgba(255,255,255,.05);
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -24px rgba(0,0,0,.95);
+  }
+
+  *, *::before, *::after { box-sizing:border-box; }
+  body { margin:0; background:var(--ground); color:var(--ink);
+    font-family:var(--f-body); font-size:15px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:1120px; margin:0 auto; padding:40px 22px 90px; }
+
+  code { font-family:var(--f-mono); font-size:.88em; background:var(--code-bg);
+    border-radius:4px; padding:.1em .38em; overflow-wrap:anywhere; }
+  a { color:var(--accent); }
+  a:focus-visible { outline:2px solid var(--accent); outline-offset:2px; border-radius:4px; }
+
+  .eyebrow { font-family:var(--f-mono); font-size:11.5px; letter-spacing:.11em;
+    text-transform:uppercase; color:var(--ink-3); margin:0 0 10px; }
+  h1 { font-size:clamp(27px,4vw,36px); line-height:1.18; letter-spacing:-.022em;
+    margin:0 0 12px; text-wrap:balance; }
+  .lede { margin:0; max-width:66ch; color:var(--ink-2); font-size:16px; }
+
+  .meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+  .chip { display:inline-flex; align-items:baseline; gap:7px; background:var(--surface);
+    border:1px solid var(--rule); border-radius:999px; padding:5px 13px;
+    font-size:12.5px; box-shadow:var(--shadow); }
+  .chip b { font-family:var(--f-mono); font-weight:600; font-size:12px; }
+  .chip span { color:var(--ink-3); }
+
+  section { margin-top:46px; }
+  h2 { font-size:19px; letter-spacing:-.015em; margin:0 0 14px; padding-bottom:9px;
+    border-bottom:1px solid var(--rule); display:flex; flex-wrap:wrap;
+    align-items:baseline; gap:4px 12px; }
+  h2 .n { font-family:var(--f-mono); font-size:12px; color:var(--ink-3); font-weight:500; }
+  h3 { font-size:15px; margin:0 0 7px; }
+  p { margin:0 0 12px; max-width:80ch; }
+  p:last-child { margin-bottom:0; }
+
+  .toc { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    gap:1px 22px; margin-top:26px; padding:16px 20px; background:var(--surface);
+    border:1px solid var(--rule); border-radius:12px; box-shadow:var(--shadow); }
+  .toc a { color:var(--ink-2); text-decoration:none; font-size:14px; padding:3px 0; display:block; }
+  .toc a:hover { color:var(--accent); text-decoration:underline; text-underline-offset:3px; }
+  .toc a span { font-family:var(--f-mono); font-size:11px; color:var(--ink-3); }
+
+  .rulebox { background:var(--surface); border:1px solid var(--rule); border-radius:12px;
+    padding:20px 22px; box-shadow:var(--shadow); }
+  .rulebox pre { margin:14px 0 0; padding:14px 16px; background:var(--code-bg);
+    border-radius:9px; font-family:var(--f-mono); font-size:12.5px; line-height:1.6;
+    overflow-x:auto; color:var(--ink-2); }
+
+  .tablewrap { overflow-x:auto; border:1px solid var(--rule); border-radius:12px;
+    background:var(--surface); box-shadow:var(--shadow); }
+  table { border-collapse:collapse; width:100%; min-width:800px; }
+  colgroup .c-scr { width:20%; }
+  colgroup .c-file { width:27%; }
+  th, td { text-align:left; padding:11px 16px; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; }
+  thead th { font-family:var(--f-mono); font-size:10.5px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--ink-3); font-weight:600; background:var(--surface-3); }
+  tbody tr:last-child td { border-bottom:0; }
+  td.scr { font-weight:600; }
+  td.scr small { display:block; margin-top:3px; font-weight:400; font-size:12px;
+    color:var(--ink-3); font-family:var(--f-mono); overflow-wrap:anywhere; }
+  td.file { font-family:var(--f-mono); font-size:11.5px; color:var(--accent-2); word-break:break-all; }
+  td.chg { font-size:13px; color:var(--ink-2); }
+  td.chg b { color:var(--ink); }
+  td.chg ul { margin:0; padding-left:16px; }
+  td.chg li { margin-bottom:3px; }
+  td.chg li:last-child { margin-bottom:0; }
+  td.sha { font-family:var(--f-mono); font-size:12px; color:var(--ink-3);
+    font-variant-numeric:tabular-nums; white-space:nowrap; }
+
+  .note { border:1px solid var(--rule); border-left:3px solid var(--accent);
+    border-radius:9px; background:var(--surface); padding:15px 18px;
+    box-shadow:var(--shadow); margin-bottom:12px; }
+  .note:last-child { margin-bottom:0; }
+  .note.warn { border-left-color:var(--warn); }
+  .note p { font-size:14px; color:var(--ink-2); }
+
+  footer { margin-top:52px; padding-top:16px; border-top:1px solid var(--rule);
+    font-size:12.5px; color:var(--ink-3); }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">작업 이력 · 2026-09-04</p>
+    <h1>목록 표 열 폭 정리</h1>
+    <p class="lede">
+      화면 20곳 · 표 26개의 열 폭을 <code>colgroup</code> 으로 모으고, 좁은 화면에서
+      내용이 뭉개지거나 옆 칸을 침범하던 문제를 함께 잡았습니다.
+    </p>
+    <div class="meta">
+      <span class="chip"><span>브랜치</span><b>feature/front-goldking-new</b></span>
+      <span class="chip"><span>커밋</span><b>3</b></span>
+      <span class="chip"><span>표</span><b>26개 · 화면 20곳</b></span>
+      <span class="chip"><span>검증</span><b>tsc ✓ · vite build ✓</b></span>
+    </div>
+    <nav class="toc">
+      <a href="#rule">적용한 규칙</a>
+      <a href="#union">연합 <span>· 표 2</span></a>
+      <a href="#aes">AES 시드 <span>· 표 1</span></a>
+      <a href="#rw">글쓰기튜터 교사 <span>· 표 4</span></a>
+      <a href="#grading">채점·내부표준화 <span>· 표 3</span></a>
+      <a href="#result">평가결과 <span>· 표 5</span></a>
+      <a href="#ops">운영·기준데이터 <span>· 표 11</span></a>
+      <a href="#bug">곁들여 고친 것 <span>· 5</span></a>
+      <a href="#commits">커밋 <span>· 3</span></a>
+      <a href="#todo">미해결 <span>· 1</span></a>
+    </nav>
+  </header>
+
+  <!-- ─────────────── 규칙 ─────────────── -->
+  <section id="rule">
+    <h2>적용한 규칙 <span class="n">모든 표 공통</span></h2>
+    <div class="rulebox">
+      <p>
+        <code>.users-table</code> 은 <code>table-layout: fixed</code> 입니다. 이 모드에서는
+        <b>colgroup 이 없으면 열이 균등 분할</b>되고, <b>폭을 비워둔 열은 나머지가 가져간 뒤
+        '남는 자리'만</b> 받습니다. 그래서 화면이 좁아질 때 정작 길이가 긴 열
+        (학교명·제목·메시지 내용 등)부터 뭉개졌습니다.
+      </p>
+      <p>표마다 같은 세 가지를 적용했습니다.</p>
+      <pre>1. 열마다 값 길이에 맞춘 px 폭을 준다
+2. 그 합계를 표 min-width 로 둔다
+3. 그보다 좁아지면 열을 뭉개는 대신 감싼 .box 가 가로 스크롤한다</pre>
+      <p style="margin-top:14px">
+        정렬은 <b>th 를 모두 가운데</b>로 두고, 길이가 들쭉날쭉해 세로로 훑기 어려운 열
+        (학교명·제목·설명·접근 메뉴 등)만 <b>td 를 좌측</b>에 남겼습니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─────────────── 연합 ─────────────── -->
+  <section id="union">
+    <h2>연합 <span class="n">표 2</span></h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-file"><col></colgroup>
+        <thead><tr><th>화면</th><th>파일</th><th>작업내역</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">연합 상세<small>/evaluation/unions/{id}</small></td>
+            <td class="file">features/ops/unions/pages/UnionDetailPage.tsx<br>shared/styles/global/_10-ops-unions.scss</td>
+            <td class="chg"><ul>
+              <li><b>참여 학교</b> — 학교명 240 · 학교ID 104 · 응답상태 110 · 응답일시 186 · 참여교사수 116 · 학생수 132 · 작업 96 <b>= 984</b></li>
+              <li><b>참여 교사</b> — 학교명 240 · 교사명 120 · 교사ID 104 · 역할 124 · 담당과목 180 · 작업 96 <b>= 864</b></li>
+              <li>응답일시는 <code>2026. 09. 03. 오후 05:52</code> 가 한 줄에 들어가는 폭</li>
+              <li>표별 합계가 달라 <code>union-detail-table--schools</code> 모디파이어로 분리</li>
+              <li><code>th, td { text-align: left }</code> 가 develop 머지로 되돌아와 있어 가운데로 재적용. 학교명만 좌측</li>
+              <li>담당 과목/배정 셀은 <code>justify-items: center</code> 추가 — 그리드라 <code>text-align</code> 이 안 먹습니다</li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── AES ─────────────── -->
+  <section id="aes">
+    <h2>AES 시드 <span class="n">표 1</span></h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-file"><col></colgroup>
+        <thead><tr><th>화면</th><th>파일</th><th>작업내역</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">CBT 데모 시드<small>/evaluation/local-seeds</small></td>
+            <td class="file">features/aes/local-seed/pages/LocalSeedPage.tsx<br>features/aes/local-seed/pages/local-seed.css</td>
+            <td class="chg"><ul>
+              <li><b>시행 참여 학생</b> — 학년/반/번호 150 · 학생이름 200 · 로그인ID 230 · 수험번호 170 · 응시상태 130 <b>= 880</b></li>
+              <li>로그인 ID 는 <code>dp_d6da656b58289ff9</code> 형태가 들어가는 폭</li>
+              <li><code>.local-seed-students__scroll table</code> 의 <code>min-width</code> 620 → 880</li>
+              <li>td 는 전부 가운데 정렬</li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── 글쓰기튜터 ─────────────── -->
+  <section id="rw">
+    <h2>글쓰기튜터 교사 <span class="n">/rightwrite/teacher · 표 4</span></h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-file"><col></colgroup>
+        <thead><tr><th>화면</th><th>파일</th><th>작업내역</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">결과 종합<small>…/assignments/{id}</small></td>
+            <td class="file">…/features/dashboard/AssignmentOverviewPage.tsx</td>
+            <td class="chg">문항카드 120 · 문항 가변 · 유사도 150 · 인용현황 170 · AI의심도 150 <b>= 810</b></td>
+          </tr>
+          <tr>
+            <td class="scr">학생간 유사도<small>…/peer-similarity</small></td>
+            <td class="file">…/features/peer-similarity/PeerSimilarityListPage.tsx</td>
+            <td class="chg">문항카드 120 · 문항 가변 · 그룹ID 130 · 학생수 90 · 유사학생 28% · 평균 110 · 상세 100 <b>= 940</b></td>
+          </tr>
+          <tr>
+            <td class="scr">참고출처 확인<small>…/web-citation</small></td>
+            <td class="file">…/features/web-citation/WebCitationListPage.tsx</td>
+            <td class="chg">머리글이 길어(학생당 평균 인용수 등) 숫자 열도 그 폭에 맞춤 <b>= 1090</b></td>
+          </tr>
+          <tr>
+            <td class="scr">AI 생성 의심도<small>…/ai-suspicion</small></td>
+            <td class="file">…/features/ai-suspicion/AiSuspicionListPage.tsx</td>
+            <td class="chg">LLM 판별점수 현황은 막대가 들어가 190 으로 넓게 <b>= 1100</b></td>
+          </tr>
+          <tr>
+            <td class="scr">공통 표 스타일</td>
+            <td class="file">features/rightwrite/teacher/styles/report.css</td>
+            <td class="chg"><ul>
+              <li><code>.wf-table</code> 에 <b><code>table-layout: fixed</code> 추가</b>. auto 레이아웃에서는 브라우저가 내용 기준으로 열 폭을 다시 계산해 colgroup 지정값이 무시됩니다</li>
+              <li>표별 <code>min-width</code> 4개 선언</li>
+              <li>문항 셀의 <code>min-width</code>/<code>max-width</code> 제거 — fixed 레이아웃에서는 열 폭 계산에 반영되지 않아 <b>동작하지 않는 값</b>입니다. 남겨두면 나중에 고쳐도 아무 일이 안 일어납니다</li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── 채점 ─────────────── -->
+  <section id="grading">
+    <h2>채점 · 내부표준화 <span class="n">표 3</span></h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-file"><col></colgroup>
+        <thead><tr><th>화면</th><th>파일</th><th>작업내역</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">내부표준화 상세<small>/grading/internal-standardization/{designId}</small></td>
+            <td class="file">…/components/InternalStandardizationDetailSample.tsx<br>…/pages/internal-standardization-detail.scss</td>
+            <td class="chg"><ul>
+              <li><b>학생 답안</b> — 수험번호 176 · 문항 110 · 답안 가변 · AI상태 110 · AI결과 180 · 답안보기 100 · 표본추출 100</li>
+              <li><b>표본 답안 확정</b> — 체크 56 · 수험번호 176 · 문항 110 · AI결과 가변 · 점수분포 100 · 확정 150 · 관리 100</li>
+              <li><b>표본 답안 채점</b> — 수험번호 176 · 문항 110 · AI결과/기준채점 가변 · 여부 130 · 관리 120</li>
+              <li>표본 확정 표에는 colgroup 이 있었지만 <code>&lt;col /&gt;</code> 3개가 폭 없이 남아 세 열이 남는 자리를 나눠 갖고 있었습니다</li>
+              <li>수험번호 176 — <code>2026-633665-0002</code> 가 한 줄에</li>
+              <li>AI 결과 180 — 점수와 <code>근거 보기</code> 버튼이 한 줄에. <code>.tstd-ai-result-cell</code> 에 <code>justify-content: center</code> 추가(두 줄로 감길 때 좌측에 붙던 문제)</li>
+              <li><code>.tstd-answer-table { min-width: 1000px }</code></li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── 평가결과 ─────────────── -->
+  <section id="result">
+    <h2>평가결과 <span class="n">표 5</span></h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-file"><col></colgroup>
+        <thead><tr><th>화면</th><th>파일</th><th>작업내역</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">성적 산출<small>/evaluation-result/grade-processing/calculate</small></td>
+            <td class="file">…/grade-processing/pages/GradeCalculationPage.tsx</td>
+            <td class="chg"><ul>
+              <li><b>점수 통합 로직</b> — 문항 110 · 유형 110 · 채점방식 140 · 통합로직 160 · 배점 90 · 평균 90 <b>= 700</b></li>
+              <li><b>학생별 산출 결과</b> — 수험번호 176 · 문1~문6 각 76 · 총점 100 · 성취수준 120 <b>= 852</b></li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">성적 확정<small>…/grade-processing/final</small></td>
+            <td class="file">…/grade-processing/pages/FinalGradePage.tsx</td>
+            <td class="chg">학생별 최종 성적 — 수험번호 176 · 성명 100 · 문1~문6 각 76 · 총점 100 · 석차 80 · 성취수준 96 <b>= 908</b></td>
+          </tr>
+          <tr>
+            <td class="scr">NEIS 양식 다운로드<small>…/grade-processing/neis-export</small></td>
+            <td class="file">…/grade-processing/pages/NeisExportPage.tsx</td>
+            <td class="chg"><ul>
+              <li>생성 이력 — 파일명 250 · 양식 150 · 생성자 110 · 생성일시 170 · 조치 140 <b>= 820</b></li>
+              <li><code>&lt;col&gt;</code> 의 <code>min-width</code> 는 fixed 레이아웃에서 무시되므로 <code>width</code> 로 지정</li>
+              <li>th 전부 가운데(<code>조치</code> 의 <code>text-right</code> 제거), 파일명 td 만 좌측</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">확정 처리<small>…/result-inquiry/finalize</small></td>
+            <td class="file">…/result-inquiry/pages/InquiryFinalizePage.tsx</td>
+            <td class="chg">미처리 질문 점검 — 답안 120 · 문항 110 · 처리결과 300 · 상태 110 · 조치 120 <b>= 760</b></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── 운영 ─────────────── -->
+  <section id="ops">
+    <h2>운영 · 기준데이터 <span class="n">표 11</span></h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-file"><col></colgroup>
+        <thead><tr><th>화면</th><th>파일</th><th>작업내역</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">접근기록 관리<small>/audit/access-logs</small></td>
+            <td class="file">features/ops/common/pages/AccessLogPage.tsx</td>
+            <td class="chg"><ul>
+              <li>접근 메뉴가 <code>&lt;col /&gt;</code> 로 비어 있어 나머지 6열(760)이 가져간 뒤 남는 것만 받고 있었습니다. 240 지정 <b>= 1000</b></li>
+              <li>접근 메뉴·조회 조건만 좌측, 나머지 가운데</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">서비스 요청<small>/support/requests/new</small></td>
+            <td class="file">features/ops/support/pages/ServiceRequestPage.tsx</td>
+            <td class="chg"><ul>
+              <li>내 요청 이력 — 접수번호 140 · 유형 100 · 제목 260 · 상태 100 · 등록일 110 · 처리자 90 · 처리결과 150 · 첨부 140 · 확인 70 <b>= 1160</b></li>
+              <li>th 전부 가운데, td 는 제목·첨부파일만 좌측</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">파일 관리<small>/support/files</small></td>
+            <td class="file">features/ops/support/pages/FileManagePage.tsx</td>
+            <td class="chg"><ul>
+              <li><b>보존정책</b> — % 를 전부 px 로. 파일유형 210 · 보존기간 110 · 적용기간 110 · 구분 80 · 수정일 110 <b>= 620</b></li>
+              <li><b>관리 파일</b> — 파일명 28% → 280px. 나머지 % 와 맞아떨어지도록 <code>min-width</code> 1000 → 1200</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">메시지코드<small>/admin/message-codes</small></td>
+            <td class="file">features/ops/message-codes/pages/MessageCodesPage.tsx</td>
+            <td class="chg"><ul>
+              <li><b>메시지 목록</b> — colgroup 은 있었지만 메시지 내용이 비어 있었습니다. 최종적으로 비율(14/10/29/14/11/14/8%)로 전환</li>
+              <li><b>변경 이력</b> — colgroup 이 없어 6열 균등 분할. 변경일시 160 · 코드 150 · 작업 100 · 변경전 260 · 변경후 260 · 처리자 110 <b>= 1000</b></li>
+              <li>안내 배너·저장 버튼을 <code>.box</code> 밖으로. 표와 폭이 달라 가로 스크롤 시 빈 영역이 남았습니다</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">공통코드<small>/admin/common-codes</small></td>
+            <td class="file">…/common-codes-page/CommonCodesDetailColumn.tsx</td>
+            <td class="chg">하위 코드값 — th 전부 가운데(<code>코드값</code>·<code>코드명</code>·<code>설명</code> 의 <code>text-left</code> 제거), td 는 설명만 좌측</td>
+          </tr>
+          <tr>
+            <td class="scr">사용자 역할<small>/admin/roles/user-roles</small></td>
+            <td class="file">features/ops/users/pages/UsersListPage.tsx<br>shared/styles/global/_09-page-components.scss</td>
+            <td class="chg"><ul>
+              <li><code>.user-role-table</code> 의 th·td 를 <code>left</code> → <code>center</code>, 이름만 좌측</li>
+              <li>보유 역할 셀은 flex 컨테이너라 <code>text-align</code> 이 안 먹어 <code>justify-center</code> 추가</li>
+            </ul></td>
+          </tr>
+          <tr>
+            <td class="scr">기준데이터 3종<small>/admin/master-data/…</small></td>
+            <td class="file">…/master-data/pages/CoreIdeasPage.tsx<br>…/master-data/pages/KeyConceptsPage.tsx<br>…/master-data/pages/SubjectCompetenciesPage.tsx</td>
+            <td class="chg"><ul>
+              <li>세 표 모두 폭이 <code>&lt;th style&gt;</code> 에 일부만 흩어져 있고 <b>가장 긴 텍스트 열에는 지정이 없었습니다</b>. colgroup 한 곳으로 모았습니다</li>
+              <li>핵심아이디어 <b>880</b> · 교과 역량 <b>800</b> · 핵심개념 <b>860</b></li>
+              <li>핵심개념은 기존 <code>min-width: 640</code> 이 합계보다 작아 860 으로</li>
+            </ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── 곁들여 고친 것 ─────────────── -->
+  <section id="bug">
+    <h2>곁들여 고친 것 <span class="n">5</span></h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col class="c-scr"><col class="c-file"><col></colgroup>
+        <thead><tr><th>증상</th><th>파일</th><th>원인과 조치</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="scr">학교명이 옆 칸을 덮음</td>
+            <td class="file">shared/styles/global/_10-ops-unions.scss</td>
+            <td class="chg"><code>.union-detail-school-name</code> 의 <code>min-width: 155px</code> 가 아이콘 30 + 간격 9 까지 하면 <b>최소 194px</b> 을 요구합니다. fixed 레이아웃에서 열이 그보다 좁으면 반드시 넘칩니다. 하한을 <code>0</code> 으로 두고 이름에 <code>min-width: 0</code> + <code>overflow-wrap: anywhere</code></td>
+          </tr>
+          <tr>
+            <td class="scr">이벤트 코드가 유형 열로 넘침</td>
+            <td class="file">features/ops/common/pages/NotificationManagePage.tsx</td>
+            <td class="chg"><code>PRACTICE_SCORING_CALIBRATION_REQUESTED</code> 는 공백이 없어 브라우저가 끊을 자리를 못 찾습니다. td 에 <code>overflow-wrap: anywhere</code> + <code>line-height: 1.35</code></td>
+          </tr>
+          <tr>
+            <td class="scr">접수번호가 두 줄로 감김</td>
+            <td class="file">features/ops/support/pages/ServiceRequestPage.tsx</td>
+            <td class="chg"><code>white-space: nowrap</code> 만 주면 열보다 길 때 옆 칸을 침범하므로 <code>overflow: hidden</code> + <code>text-overflow: ellipsis</code> 를 함께</td>
+          </tr>
+          <tr>
+            <td class="scr">colgroup 폭이 무시됨</td>
+            <td class="file">features/rightwrite/teacher/styles/report.css</td>
+            <td class="chg"><code>.wf-table</code> 이 auto 레이아웃이라 브라우저가 열 폭을 다시 계산했습니다. <code>table-layout: fixed</code> 추가</td>
+          </tr>
+          <tr>
+            <td class="scr">표 오른쪽에 빈 띠</td>
+            <td class="file">shared/styles/global/_02-ui-components.scss</td>
+            <td class="chg"><code>.box</code> 의 <code>overflow: auto</code> 는 <b>양축</b>이라, 가로 스크롤바가 생기면 그 높이만큼 내용이 박스보다 높아져 세로 스크롤바까지 따라 생깁니다. <code>box-scroll-x</code>(<code>overflow: auto hidden</code>) 변형 추가</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── 커밋 ─────────────── -->
+  <section id="commits">
+    <h2>커밋 <span class="n">feature/front-goldking-new</span></h2>
+    <div class="tablewrap">
+      <table>
+        <colgroup><col style="width:110px"><col></colgroup>
+        <thead><tr><th>SHA</th><th>제목</th></tr></thead>
+        <tbody>
+          <tr><td class="sha">b9d8da1d</td><td>style: 목록 표에 colgroup 을 넣고 열 폭·정렬을 정리 <span style="color:var(--ink-3)">— 26 files, +497 −257</span></td></tr>
+          <tr><td class="sha">d7ac8d93</td><td>refactor: AI 전체 재채점 확인창을 공통 Modal 로 전환</td></tr>
+          <tr><td class="sha">580a0401</td><td>fix: 좁은 화면 레이아웃 세 곳 정리</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─────────────── 미해결 ─────────────── -->
+  <section id="todo">
+    <h2>미해결 <span class="n">1</span></h2>
+    <div class="note warn">
+      <h3>메시지 목록 표 오른쪽 빈 띠 — 확인 중</h3>
+      <p>
+        <code>/admin/message-codes</code> 의 메시지 목록 표에서 오른쪽에 빈 띠가 남습니다.
+        열 개수 불일치 · colgroup 합계 · <code>box-sizing</code> · 형제 요소 폭 · 스크롤바를
+        차례로 배제했고, 마지막에는 열 폭을 비율로 바꿔 가로 스크롤 자체를 없앴는데도
+        재현됩니다. <b>근본 원인을 아직 못 밝혔습니다.</b>
+      </p>
+      <p>
+        같은 조건(px 폭 + <code>min-width</code>)인 다른 표에서는 보고가 없어, 이 화면만
+        다른 요인이 있는 것으로 보입니다. 다음 확인 시 <code>clientWidth</code> /
+        <code>scrollWidth</code> / <code>offsetWidth</code> 실측으로 잡을 예정입니다.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <code>feature/front-goldking-new</code> · <code>b9d8da1d · d7ac8d93 · 580a0401</code> · 푸시 완료 · <code>tsc --noEmit</code> 과 <code>vite build</code> 통과
+  </footer>
+
+</div>
+
+</body></html>

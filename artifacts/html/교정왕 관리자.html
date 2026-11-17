@@ -1,0 +1,975 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>교정왕 관리자</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap">
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<style>
+/* 레이아웃: 교정왕 본 서비스와 같은 토큰. 상단 바 + 왼쪽 메뉴 + 본문, 상세는 오른쪽 서랍. 흰 테마 기본, 다크 지원 */
+:root{
+  --bg:#f3f4f6; --pane:#ffffff; --pane2:#f7f8fa; --soft:#f1f3f5; --hover:#eceef1; --hover2:#e2e5e9;
+  --ink:#16181c; --text:#22252b; --muted:#5f6670; --dim:#9aa0a8; --line:#e3e6ea; --line2:#cfd4da;
+  --accent:#1ed760; --accent-hover:#3be477; --on-accent:#000000; --btn:#0f9d4a; --btn-hover:#0c8a40; --on-btn:#ffffff; --accent-soft:rgba(30,215,96,.15); --accent-ink:#0b7a35;
+  --good:#0b7a35; --good-bg:rgba(30,215,96,.15); --warn:#9a6200; --warn-bg:rgba(255,176,0,.18); --bad:#c21f2f; --bad-bg:rgba(209,26,42,.09); --info:#1d5fd1; --info-bg:rgba(29,95,209,.1);
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100;
+  --st-bad:#d92d3a; --st-warn:#b8661c; --st-good:#1ed760; --st-info:#2a6fd6; --pill:500px;
+  --card-shadow:0 1px 2px rgba(16,24,40,.04),0 6px 20px rgba(16,24,40,.06); --shadow:0 12px 36px rgba(16,24,40,.18);
+  --f-ui:"Figtree","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --r:8px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0c0c0c; --pane:#181818; --pane2:#1e1e1e; --soft:#242424; --hover:#2a2a2a; --hover2:#353535;
+  --ink:#ffffff; --text:#e8e8e8; --muted:#b3b3b3; --dim:#7a7a7a; --line:#2c2c2c; --line2:#444444;
+  --accent:#1ed760; --accent-hover:#3be477; --on-accent:#000000; --btn:#13a854; --btn-hover:#18b85d; --on-btn:#ffffff; --accent-soft:rgba(30,215,96,.14); --accent-ink:#1ed760;
+  --good:#3ddc84; --good-bg:rgba(30,215,96,.16); --warn:#f0b35e; --warn-bg:rgba(255,176,0,.16); --bad:#ff8178; --bad-bg:rgba(243,114,127,.15); --info:#8bb8ff; --info-bg:rgba(106,168,255,.15);
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+  --st-bad:#e5484d; --st-warn:#c47524; --st-good:#1ed760; --st-info:#3b82f6;
+  --card-shadow:0 1px 2px rgba(0,0,0,.4); --shadow:0 12px 36px rgba(0,0,0,.6);
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c0c0c; --pane:#181818; --pane2:#1e1e1e; --soft:#242424; --hover:#2a2a2a; --hover2:#353535;
+  --ink:#ffffff; --text:#e8e8e8; --muted:#b3b3b3; --dim:#7a7a7a; --line:#2c2c2c; --line2:#444444;
+  --accent:#1ed760; --accent-hover:#3be477; --on-accent:#000000; --btn:#13a854; --btn-hover:#18b85d; --on-btn:#ffffff; --accent-soft:rgba(30,215,96,.14); --accent-ink:#1ed760;
+  --good:#3ddc84; --good-bg:rgba(30,215,96,.16); --warn:#f0b35e; --warn-bg:rgba(255,176,0,.16); --bad:#ff8178; --bad-bg:rgba(243,114,127,.15); --info:#8bb8ff; --info-bg:rgba(106,168,255,.15);
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500;
+  --st-bad:#e5484d; --st-warn:#c47524; --st-good:#1ed760; --st-info:#3b82f6;
+  --card-shadow:0 1px 2px rgba(0,0,0,.4); --shadow:0 12px 36px rgba(0,0,0,.6);
+  color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+svg.lucide{width:17px;height:17px;stroke-width:1.9;flex:none}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:20;background:var(--pane)}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:15;height:56px;background:var(--pane);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:18px;letter-spacing:-.03em;white-space:nowrap}
+.logo .mark{width:28px;height:28px;border-radius:8px;background:var(--btn);color:var(--on-btn);display:grid;place-items:center}
+.logo .mark svg.lucide{width:16px;height:16px;stroke-width:2.6}
+.adm{font-size:11px;font-weight:800;color:var(--on-btn);background:var(--ink);border-radius:6px;padding:2px 7px;letter-spacing:.02em}
+.gsearch{margin-left:24px;display:flex;align-items:center;gap:6px;background:var(--soft);border-radius:var(--r);padding:0 10px;width:min(320px,30vw)}
+.gsearch input{border:0;background:transparent;padding:8px 0;flex:1;min-width:0;font-size:13px}
+.gsearch input:focus{outline:none}
+.gsearch svg.lucide{width:15px;height:15px;color:var(--dim)}
+.top .r{margin-left:auto;display:flex;align-items:center;gap:6px}
+.demo{font-size:11px;font-weight:700;color:var(--warn);background:var(--warn-bg);border-radius:6px;padding:3px 8px;white-space:nowrap}
+.icb{width:36px;height:36px;border:0;border-radius:var(--r);background:none;color:var(--muted);display:grid;place-items:center;position:relative}
+.icb:hover{background:var(--hover);color:var(--ink)}
+.dotb{position:absolute;top:7px;right:7px;width:8px;height:8px;border-radius:50%;background:var(--bad);box-shadow:0 0 0 2px var(--pane)}
+.me{width:32px;height:32px;border-radius:50%;background:var(--btn);color:var(--on-btn);font-weight:800;font-size:13px;display:grid;place-items:center}
+@media (max-width:760px){.gsearch,.demo{display:none}}
+
+/* shell */
+.shell{display:grid;grid-template-columns:232px minmax(0,1fr);min-height:calc(100vh - 56px)}
+.nav{background:var(--pane);border-right:1px solid var(--line);padding:14px 10px 24px;position:sticky;top:56px;height:calc(100vh - 56px);overflow:auto;padding-left:max(10px,env(safe-area-inset-left,0px))}
+.ng{font-size:11px;font-weight:700;color:var(--dim);padding:14px 10px 6px;letter-spacing:.02em}
+.ng:first-child{padding-top:2px}
+.nav a{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--r);color:var(--text);text-decoration:none;font-weight:600;font-size:13px}
+.nav a:hover{background:var(--hover)}
+.nav a[aria-current="page"]{background:var(--accent-soft);color:var(--accent-ink)}
+.nav a .cnt{margin-left:auto;min-width:20px;height:18px;border-radius:9px;background:var(--bad);color:#ffffff;font-size:11px;font-weight:800;display:grid;place-items:center;padding:0 5px;font-variant-numeric:tabular-nums}
+.nav a .cnt.z{display:none}
+.navfoot{margin-top:18px;padding:12px 10px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);display:grid;gap:6px}
+.navfoot a{padding:6px 0;color:var(--accent-ink);font-weight:700}
+@media (max-width:900px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .nav{position:sticky;top:calc(56px + env(safe-area-inset-top,0px));z-index:12;height:auto;display:flex;gap:4px;overflow-x:auto;padding:8px max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px));border-right:0;border-bottom:1px solid var(--line);scrollbar-width:none}
+  .nav::-webkit-scrollbar{display:none}
+  .ng,.navfoot{display:none}
+  .nav a{white-space:nowrap;flex:none}
+}
+.main{min-width:0;padding-block:24px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media (min-width:901px){.main{padding-left:28px;padding-right:max(28px,env(safe-area-inset-right,0px))}}
+.wrap{max-width:1240px;margin:0 auto;display:grid;gap:16px}
+
+/* page head */
+.ph{display:flex;align-items:flex-end;gap:12px 16px;flex-wrap:wrap}
+.ph h1{margin:0;font-size:22px;font-weight:800;letter-spacing:-.02em}
+.ph p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.ph .tools{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.seg{display:flex;gap:2px;background:var(--soft);border-radius:var(--r);padding:3px}
+.seg button{border:0;background:none;border-radius:6px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--pane);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.btn{border:1px solid var(--line2);background:var(--pane);border-radius:var(--r);padding:7px 13px;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{border-color:var(--ink)}
+.btn.pri{background:var(--btn);border-color:var(--btn);color:var(--on-btn)}
+.btn.pri:hover{background:var(--btn-hover)}
+.btn.ghost{border-color:transparent;background:none;color:var(--muted)}
+.btn.ghost:hover{color:var(--ink);background:var(--hover)}
+.btn.warn{color:var(--bad);border-color:var(--bad)}
+.btn.sm{padding:5px 10px;font-size:12px}
+.btn svg.lucide{width:15px;height:15px}
+
+/* panels */
+.panel{background:var(--pane);border:1px solid var(--line);border-radius:12px;box-shadow:var(--card-shadow);min-width:0}
+.panel > header{display:flex;align-items:center;gap:8px;padding:14px 18px 0;flex-wrap:wrap}
+.panel > header h2{margin:0;font-size:14px;font-weight:800;display:flex;align-items:center;gap:7px}
+.panel > header .sub{font-size:12px;color:var(--muted)}
+.panel > header .r{margin-left:auto;display:flex;gap:6px;align-items:center}
+.pb{padding:14px 18px 18px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
+.g2e{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:1100px){.g2,.g3{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:760px){.g2e{grid-template-columns:minmax(0,1fr)}}
+
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+@media (max-width:1240px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:560px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kpi{background:var(--pane);border:1px solid var(--line);border-radius:12px;box-shadow:var(--card-shadow);padding:14px 16px 12px;display:grid;gap:4px;min-width:0}
+.kpi .l{font-size:12px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:6px}
+.kpi .l svg.lucide{width:14px;height:14px}
+.kpi .v{font-size:24px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.kpi .v small{font-size:13px;font-weight:700;color:var(--muted);margin-left:2px}
+.kpi .d{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:4px}
+.kpi .d.up{color:var(--good)}.kpi .d.down{color:var(--bad)}.kpi .d.flat{color:var(--muted)}
+.kpi .d span{color:var(--dim);font-weight:500}
+.kpi.alert{border-color:var(--bad);background:var(--bad-bg)}
+.kpi.alert .v{color:var(--bad)}
+.spark{height:28px;width:100%;display:block;margin-top:4px}
+
+/* charts */
+.chart{position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart text{fill:var(--muted);font-size:11px;font-family:var(--f-ui)}
+.chart .grid line{stroke:var(--line);stroke-width:1}
+.chart .ln{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);border-radius:6px;padding:7px 10px;font-size:12px;line-height:1.5;white-space:nowrap;z-index:5;transform:translate(-50%,calc(-100% - 10px));box-shadow:var(--shadow)}
+.tip b{font-variant-numeric:tabular-nums}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+/* horizontal bars */
+.hbars{display:grid;gap:10px}
+.hb{display:grid;grid-template-columns:minmax(90px,140px) minmax(0,1fr) 72px;gap:10px;align-items:center;font-size:13px;position:relative}
+.hb .n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;display:flex;align-items:center;gap:6px}
+.hb .n svg.lucide{width:14px;height:14px;color:var(--muted)}
+.hb .t{height:10px;background:var(--soft);border-radius:5px;overflow:hidden}
+.hb .f{height:100%;background:var(--accent);border-radius:5px}
+.hb .f.alt{background:var(--s1)}
+.hb .f.badf{background:var(--bad)}
+.hb .v{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--text)}
+.hb .v small{display:block;font-weight:500;color:var(--dim);font-size:11px}
+.hb:hover .t{outline:2px solid var(--line2);outline-offset:2px}
+
+/* stacked 100% bar */
+.stack{display:flex;height:14px;border-radius:7px;overflow:hidden;gap:2px;background:var(--pane)}
+.stack span{height:100%}
+.stackl{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-top:12px}
+.stackl div{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.stackl i{width:10px;height:10px;border-radius:3px;flex:none}
+.stackl b{color:var(--ink);font-variant-numeric:tabular-nums;margin-left:auto}
+
+/* funnel */
+.funnel{display:grid;gap:8px}
+.fs{display:grid;grid-template-columns:minmax(110px,150px) minmax(0,1fr) 120px;gap:10px;align-items:center;font-size:13px}
+.fs .n{font-weight:600;white-space:nowrap}
+.fs .t{height:26px;background:var(--soft);border-radius:6px;position:relative;overflow:hidden}
+.fs .f{height:100%;background:var(--accent-soft);border-right:3px solid var(--accent);border-radius:6px 0 0 6px}
+.fs .f.full{border-radius:6px}
+.fs .v{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.fs .v small{color:var(--dim);font-weight:500;margin-left:4px}
+.fs .drop{grid-column:2/4;font-size:11px;color:var(--bad);margin-top:-4px;font-weight:600}
+@media (max-width:560px){.fs{grid-template-columns:minmax(0,1fr) 90px}.fs .t{grid-column:1/-1;grid-row:2}.fs .drop{grid-column:1/-1}.hb{grid-template-columns:minmax(80px,110px) minmax(0,1fr) 60px}}
+
+/* tables */
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:12px;font-weight:700;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--pane2)}
+td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:middle;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tbody tr.click{cursor:pointer}
+tbody tr.click:hover td{background:var(--hover)}
+tbody tr.sel td{background:var(--accent-soft)}
+td .sub{display:block;font-size:12px;color:var(--muted)}
+td.wrapc{white-space:normal;min-width:240px;max-width:440px}
+.clamp{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.unread td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+.unread td .ttl{font-weight:800}
+
+/* pills */
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;white-space:nowrap}
+.pill svg.lucide{width:12px;height:12px}
+.p-good{color:var(--good);background:var(--good-bg)}
+.p-warn{color:var(--warn);background:var(--warn-bg)}
+.p-bad{color:var(--bad);background:var(--bad-bg)}
+.p-info{color:var(--info);background:var(--info-bg)}
+.p-mute{color:var(--muted);background:var(--soft)}
+.via{display:inline-flex;align-items:center;gap:6px;font-weight:600}
+.via i{width:18px;height:18px;border-radius:5px;display:grid;place-items:center;font-style:normal;font-size:10px;font-weight:900}
+.v-kakao i{background:#FEE500;color:#191919}
+.v-naver i{background:#03C75A;color:#ffffff}
+.v-google i{background:var(--soft);color:var(--s1);border:1px solid var(--line2)}
+.v-email i{background:var(--soft);color:var(--muted);border:1px solid var(--line2)}
+.mono{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px}
+
+/* filters bar */
+.fbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:12px 18px;border-bottom:1px solid var(--line)}
+.fbar .search{display:flex;align-items:center;gap:6px;background:var(--soft);border-radius:var(--r);padding:0 10px;flex:1 1 200px;max-width:320px}
+.fbar .search input{border:0;background:transparent;padding:7px 0;flex:1;min-width:0;font-size:13px}
+.fbar .search input:focus{outline:none}
+.fbar .search svg.lucide{width:15px;height:15px;color:var(--dim)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips button{border:1px solid var(--line2);background:var(--pane);border-radius:var(--r);padding:5px 11px;font-size:12px;font-weight:700;color:var(--muted);display:inline-flex;gap:5px;white-space:nowrap}
+.chips button b{color:var(--ink);font-variant-numeric:tabular-nums}
+.chips button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
+.chips button[aria-pressed="true"] b{color:var(--accent-ink)}
+.fbar select{border:1px solid var(--line2);border-radius:var(--r);background:var(--pane);padding:6px 8px;font-size:12px;font-weight:600}
+.pager{display:flex;align-items:center;gap:8px;justify-content:flex-end;padding:10px 18px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+
+/* todo list */
+.todo{display:grid;gap:2px}
+.todo a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--r);color:var(--text);text-decoration:none}
+.todo a:hover{background:var(--hover)}
+.todo .ic{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;flex:none}
+.todo .tx{min-width:0;flex:1}
+.todo .tx b{display:block;font-size:13px}
+.todo .tx span{font-size:12px;color:var(--muted);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.todo .n{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:30}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(480px,100vw);background:var(--pane);z-index:31;box-shadow:var(--shadow);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);padding-right:env(safe-area-inset-right,0px)}
+.dh{display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:1px solid var(--line)}
+.dh h3{margin:0;font-size:16px;font-weight:800;min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.db{flex:1;overflow:auto;padding:18px;display:grid;gap:18px;align-content:start}
+.df{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.kv{display:grid;grid-template-columns:96px minmax(0,1fr);gap:8px 12px;font-size:13px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;font-weight:600;overflow-wrap:anywhere}
+.sect h4{margin:0 0 8px;font-size:12px;font-weight:700;color:var(--muted)}
+.quote{background:var(--pane2);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;font-size:13px;line-height:1.7;white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere}
+.chg{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:15px;font-weight:700}
+.chg s{color:var(--bad);font-weight:500}
+.chg b{color:var(--good)}
+.chg svg.lucide{color:var(--dim);width:15px;height:15px}
+.field{display:grid;gap:6px;font-size:12px;font-weight:700;color:var(--muted)}
+.field textarea,.field input,.field select{border:1px solid var(--line2);border-radius:var(--r);background:var(--pane);padding:9px 10px;font-size:13px;font-weight:400;color:var(--ink)}
+.field textarea{min-height:110px;resize:vertical;line-height:1.6}
+.tpls{display:flex;gap:6px;flex-wrap:wrap}
+.tpls button{border:1px dashed var(--line2);background:none;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:600;color:var(--muted)}
+.tpls button:hover{color:var(--ink);border-color:var(--ink)}
+.timeline{display:grid;gap:10px;font-size:12px}
+.timeline div{display:grid;grid-template-columns:110px minmax(0,1fr);gap:8px;color:var(--muted)}
+.timeline b{color:var(--text);font-weight:600}
+.confirm{display:flex;gap:8px;align-items:center;background:var(--bad-bg);border-radius:var(--r);padding:10px 12px;font-size:12px;color:var(--bad);font-weight:700;flex-wrap:wrap}
+.confirm span{flex:1}
+
+/* switch */
+.sw{width:34px;height:20px;border-radius:10px;border:0;background:var(--line2);position:relative;padding:0;flex:none}
+.sw::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#ffffff;transition:transform .15s}
+.sw[aria-checked="true"]{background:var(--accent)}
+.sw[aria-checked="true"]::after{transform:translateX(14px)}
+.rate{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+.rate .bar{width:60px;height:6px;border-radius:3px;background:var(--soft);overflow:hidden}
+.rate .bar i{display:block;height:100%;background:var(--accent)}
+.rate .bar i.hi{background:var(--bad)}
+
+/* notices */
+.nlist{display:grid;gap:10px}
+.nitem{border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;gap:4px}
+.nitem .top2{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.nitem b{font-size:14px}
+.nitem p{margin:0;font-size:13px;color:var(--muted)}
+.nitem .meta{font-size:11px;color:var(--dim);margin-left:auto}
+.preview{border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;gap:10px;background:var(--pane2)}
+.preview .ic{width:30px;height:30px;border-radius:50%;background:var(--soft);display:grid;place-items:center;color:var(--accent-ink);flex:none}
+.preview b{font-size:13px;display:block}
+.preview p{margin:2px 0 0;font-size:12px;color:var(--muted)}
+.perm td{text-align:center}
+.perm td:first-child,.perm th:first-child{text-align:left}
+.perm .y{color:var(--good)}.perm .n{color:var(--dim)}
+.note{font-size:12px;color:var(--muted)}
+.empty{padding:40px 10px;text-align:center;color:var(--muted);font-size:13px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);font-weight:600;padding:10px 18px;border-radius:8px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:40;box-shadow:var(--shadow)}
+.toast.show{opacity:1}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ===== IUX.studio 어드민 스타일 · 스포티파이 시스템 ===== */
+.top{height:64px;gap:14px;background:var(--pane)}
+.logo{font-size:21px;font-weight:800;letter-spacing:-.03em;gap:10px;align-items:baseline}
+.adm{background:none;color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.14em;padding:0}
+.gsearch{margin:0 auto;width:min(460px,38vw);border-radius:var(--pill);background:var(--soft);padding:0 16px;flex-direction:row}
+.gsearch input{padding:11px 0;font-size:14px}
+.gsearch svg.lucide{width:17px;height:17px}
+.top .r{margin-left:0;gap:8px}
+.bcount{position:absolute;top:3px;right:1px;min-width:17px;height:17px;border-radius:9px;background:var(--st-bad);color:#ffffff;font-size:10px;font-weight:800;display:grid;place-items:center;padding:0 4px;box-shadow:0 0 0 2px var(--pane)}
+.who{display:flex;align-items:center;gap:8px;padding:4px 8px;border-radius:var(--pill);color:var(--muted)}
+.who:hover{background:var(--hover)}
+.me{width:34px;height:34px;font-size:14px}
+.wt{display:grid;line-height:1.2}
+.wt b{font-size:13px;color:var(--ink)}
+.wt small{font-size:11px;color:var(--dim)}
+.who svg.lucide{width:15px;height:15px}
+@media (max-width:1100px){.wt,.who svg.lucide{display:none}}
+@media (max-width:760px){.logo .adm{display:none}}
+.shell{grid-template-columns:240px minmax(0,1fr);min-height:calc(100vh - 64px)}
+body.navoff .shell{grid-template-columns:minmax(0,1fr)}
+body.navoff .nav{display:none}
+.nav{top:64px;height:calc(100vh - 64px);padding:16px 12px 24px;gap:2px}
+.nav .cta{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--btn);color:var(--on-btn);border-radius:var(--r);padding:12px;font-size:15px;font-weight:800;margin-bottom:14px}
+.nav .cta:hover{background:var(--btn-hover)}
+.nav .cta svg.lucide{width:18px;height:18px;stroke-width:2.4}
+.ng{font-size:11px;font-weight:700;color:var(--dim);padding:16px 12px 6px;letter-spacing:0}
+.ng:first-of-type{border-top:1px solid var(--line);margin-top:4px;padding-top:18px}
+.nav a{gap:12px;padding:10px 12px;font-size:14px;font-weight:600;color:var(--ink)}
+.nav a svg.lucide{width:19px;height:19px;stroke-width:1.8}
+.nav a[aria-current="page"]{background:var(--soft);color:var(--ink);font-weight:800}
+.nav a .cnt{background:var(--btn);color:var(--on-btn);min-width:20px;height:20px;border-radius:10px}
+.navfoot a{color:var(--ink);text-decoration:underline}
+@media (max-width:900px){.nav{top:calc(64px + env(safe-area-inset-top,0px));padding:8px max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px))}.nav .cta{margin:0;padding:8px 14px;font-size:13px;flex:none}}
+.main{padding-block:32px 72px}
+@media (min-width:901px){.main{padding-left:40px;padding-right:max(40px,env(safe-area-inset-right,0px))}}
+.wrap{gap:20px}
+
+/* page head */
+.ph{display:grid;gap:8px;align-items:stretch}
+.crumb{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);flex-wrap:wrap}
+.crumb a{color:var(--muted);display:inline-flex;align-items:center;gap:4px;text-decoration:none}
+.crumb a:hover{color:var(--ink)}
+.crumb svg.lucide{width:13px;height:13px}
+.live{background:var(--btn);color:var(--on-btn);font-size:11px;font-weight:800;border-radius:6px;padding:2px 7px}
+.phrow{display:flex;align-items:center;gap:12px 14px;flex-wrap:wrap}
+.ph h1{font-size:30px;font-weight:800;letter-spacing:-.03em}
+.ph .tools{margin-left:auto}
+.ph > p{margin:0;color:var(--muted);font-size:13px}
+
+/* pill buttons, chips, seg */
+.btn{border-radius:var(--pill);padding:8px 16px;font-weight:800}
+.btn.sm{padding:6px 13px;font-size:12px}
+.btn.pri:hover{transform:scale(1.03)}
+.seg{background:none;padding:0;gap:8px}
+.seg button,.chips button{border:0;background:var(--hover);border-radius:var(--pill);padding:9px 16px;font-size:14px;font-weight:800;color:var(--ink);box-shadow:none;display:inline-flex;align-items:center;gap:6px}
+.seg button:hover,.chips button:hover{background:var(--hover2)}
+.seg button[aria-pressed="true"],.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);box-shadow:none}
+.chips button b{color:inherit;opacity:.6;font-weight:700}
+.chips button[aria-pressed="true"] b{color:inherit;opacity:.75}
+.chips{gap:8px}
+.fbar{border-bottom:1px solid var(--line);padding:16px 20px}
+.fbar .search,.fbar select{border-radius:var(--pill)}
+.fbar .search{padding:0 14px;background:var(--soft)}
+.fbar .search input{padding:9px 0}
+.fbar select{padding:8px 12px;border-color:transparent;background:var(--soft);font-weight:700}
+.tpls button{border-radius:var(--pill)}
+
+/* cards: flat white on gray */
+.panel,.kpi{border:0;box-shadow:none;border-radius:12px}
+.panel > header{padding:18px 20px 0}
+.panel > header h2{font-size:15px}
+.pb{padding:16px 20px 20px}
+.kpi{padding:18px 18px 14px}
+.kpi .v{font-size:26px}
+.kpi.alert{background:var(--pane);box-shadow:inset 0 0 0 2px var(--st-bad)}
+
+/* tables */
+th{background:none;font-size:12px;font-weight:600;color:var(--dim);padding:16px 20px;border-bottom:1px solid var(--line)}
+td{padding:18px 20px;border-bottom:1px solid var(--line)}
+td b,td .ttl{font-weight:800}
+tbody tr.click:hover td{background:var(--pane2)}
+.unread td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+
+/* solid status pills */
+.pill{border-radius:var(--pill);padding:5px 12px;font-size:12px;font-weight:800}
+.p-bad{background:var(--st-bad);color:#ffffff}
+.p-warn{background:var(--st-warn);color:#ffffff}
+.p-good{background:var(--btn);color:var(--on-btn)}
+.p-info{background:var(--st-info);color:#ffffff}
+.p-mute{background:var(--hover);color:var(--ink)}
+.via i{border-radius:50%}
+
+/* drawer & fields */
+.drawer{border-radius:16px 0 0 16px}
+.field textarea,.field input,.field select{border-radius:10px;border-color:transparent;background:var(--soft)}
+.field textarea:focus,.field input:focus,.field select:focus{outline:2px solid var(--accent);outline-offset:0;background:var(--pane)}
+.quote{border:0;background:var(--soft)}
+.toast{border-radius:var(--pill);background:var(--btn);color:var(--on-btn)}
+.wrap{max-width:none}
+.fs .f,.hb .f,.fs .t,.hb .t{display:block}
+a.btn{color:var(--ink);text-decoration:none}
+a.btn.pri{color:var(--on-btn)}
+.acct{position:relative;display:flex;align-items:center;height:64px}
+.who{border:0;background:none;cursor:pointer;display:flex;align-items:center;gap:8px;height:44px;margin:0;line-height:1}
+.wt{text-align:left;gap:3px}
+.top .r{height:64px;align-items:center}
+.top .r > .icb{align-self:center}
+.amenu{position:absolute;right:0;top:50px;width:300px;background:var(--pane);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);z-index:30;padding:6px;display:grid}
+.ah{display:flex;align-items:center;gap:12px;padding:14px 12px}
+.ah b{display:block;font-size:15px}
+.ah small{font-size:12px;color:var(--muted)}
+.me.big{width:44px;height:44px;font-size:17px}
+.ainfo{margin:0 6px 8px;background:var(--soft);border-radius:10px;padding:12px 14px;display:grid;grid-template-columns:auto 1fr;gap:8px 12px;font-size:12px}
+.ainfo dt{color:var(--muted)}
+.ainfo dd{margin:0;text-align:right;font-weight:800;font-variant-numeric:tabular-nums}
+.aitems{display:grid;border-top:1px solid var(--line);padding:6px 0}
+.aitems button,.aitems a{border:0;background:none;text-align:left;display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;font-size:14px;font-weight:700;color:var(--ink);text-decoration:none}
+.aitems button:hover,.aitems a:hover{background:var(--hover)}
+.aitems svg.lucide{width:18px;height:18px}
+.aitems .out{color:var(--bad)}
+.navfoot{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.navfoot a{display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--muted);font-weight:700;padding:6px 0}
+.navfoot a:hover{color:var(--ink)}
+.navfoot svg.lucide{width:15px;height:15px}
+.thm{border:0;background:var(--soft);border-radius:var(--pill);padding:6px 12px;font-size:12px;font-weight:800;color:var(--ink);display:inline-flex;align-items:center;gap:6px}
+.thm:hover{background:var(--hover2)}
+@media (min-width:901px){.nav{display:flex;flex-direction:column}.navbot{margin-top:auto;padding:16px 10px 0}}
+@media (max-width:900px){.navbot{display:none}}
+.todo a{border-radius:10px}
+</style>
+
+<header class="top">
+  <button class="icb" id="menuBtn" aria-label="메뉴 접기·펼치기"><i data-lucide="menu"></i></button>
+  <div class="logo">교정왕<span class="adm">SUPER ADMIN</span></div>
+  <label class="gsearch"><input id="gq" placeholder="회원, 신고·문의 번호, 메뉴 검색" aria-label="전체 검색"><i data-lucide="search"></i></label>
+  <div class="r">
+    <a class="icb" href="#reports" aria-label="처리할 일"><i data-lucide="bell"></i><span class="bcount" id="bellDot"></span></a>
+    <div class="acct" id="acct"><button class="who" data-do="acct" aria-haspopup="menu" aria-expanded="false"><span class="me">G</span><span class="wt"><b>슈퍼관리자</b><small>전체 권한</small></span><i data-lucide="chevron-down"></i></button>
+      <div class="amenu" id="amenu" role="menu" hidden>
+        <div class="ah"><span class="me big">G</span><span><b>슈퍼관리자</b><small>admin@gyojeong.kr</small></span></div>
+        <dl class="ainfo"><dt>권한</dt><dd>전체 권한 (Owner)</dd><dt>담당 서비스</dt><dd>교정왕</dd><dt>최근 로그인</dt><dd>2026.10.25 08:39</dd></dl>
+        <div class="aitems"><button role="menuitem" data-do="myinfo"><i data-lucide="user"></i>내 정보 수정</button><button role="menuitem" data-do="pw"><i data-lucide="lock"></i>비밀번호 변경</button><a role="menuitem" href="#admins"><i data-lucide="users"></i>관리자 계정 관리</a><button role="menuitem" data-do="theme"><i data-lucide="sun-moon"></i>테마 전환</button></div>
+        <div class="aitems"><button role="menuitem" class="out" data-do="logout"><i data-lucide="log-out"></i>로그아웃</button></div>
+      </div></div>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="nav" id="nav" aria-label="관리 메뉴"></nav>
+  <main class="main"><div class="wrap" id="view"></div></main>
+</div>
+<div id="drawerHost"></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ---------- 유틸 ---------- */
+const $ = id => document.getElementById(id);
+const I = n => `<i data-lucide="${n}"></i>`;
+const icons = () => { try { window.lucide && lucide.createIcons(); } catch {} };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fmt = n => Math.round(n).toLocaleString('ko-KR');
+const pct = (a, b) => b ? (a / b * 100) : 0;
+const load = (k, f) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : f; } catch { return f; } };
+const store = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
+function rng(seed) { let s = seed >>> 0; return () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
+function toast(t) { const el = $('toast'); el.textContent = t; el.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), 2000); }
+const TODAY = new Date(2026, 9, 25);
+const dstr = (d, full) => { const z = n => String(n).padStart(2, '0'); return full ? `${d.getFullYear()}.${z(d.getMonth() + 1)}.${z(d.getDate())}` : `${d.getMonth() + 1}.${d.getDate()}`; };
+const ago = days => { const d = new Date(TODAY); d.setDate(d.getDate() - days); return d; };
+
+/* ---------- 상태 ---------- */
+const S = { range: load('ka-range', 30), view: 'overview', mf: 'all', mq: '', rf: 'open', ri: null, qf: 'open', qi: null, mi: null, ruleTab: 'proof', del: null, gq: '' };
+let P = load('ka-theme', null);
+
+/* ---------- 예시 데이터 ---------- */
+function series(days) {
+  const r = rng(days * 7 + 3), out = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const d = ago(i), wk = d.getDay(), trend = 1 + (days - i) / days * 0.35;
+    const base = (wk === 0 || wk === 6 ? 300 : 470) * trend * (0.88 + r() * 0.24);
+    const visits = Math.round(base), runs = Math.round(visits * (0.52 + r() * 0.08));
+    out.push({ d, visits, signups: Math.round(visits * (0.055 + r() * 0.025)), runs, chars: Math.round(runs * (1400 + r() * 500)) });
+  }
+  return out;
+}
+const SOURCES = [
+  ['네이버 검색', 'search', 0.30, 0.071], ['구글 검색', 'globe', 0.19, 0.068], ['직접 방문', 'mouse-pointer-click', 0.15, 0.081],
+  ['카카오톡 공유', 'message-circle', 0.09, 0.094], ['네이버 블로그', 'book-open', 0.08, 0.052], ['네이버 검색광고', 'megaphone', 0.07, 0.083],
+  ['인스타그램', 'camera', 0.06, 0.036], ['기타', 'more-horizontal', 0.06, 0.021],
+];
+const CAMPAIGNS = [
+  ['naver_sa', 'cpc', '교정_맞춤법검사기', 0.042, 0.091, 412000], ['naver_sa', 'cpc', 'AI톤_제거', 0.021, 0.104, 236000],
+  ['instagram', 'social', '10월_출시이벤트', 0.024, 0.038, 180000], ['blog', 'referral', '작가_체험후기', 0.016, 0.061, 0], ['kakao', 'share', '결과_공유하기', 0.031, 0.097, 0],
+];
+const PRESETS = [['자연스럽게', 0.46], ['맞춤법만', 0.24], ['정중한 메일로', 0.15], ['간결한 보고서로', 0.09], ['친근한 메시지로', 0.06]];
+const TYPES = [['맞춤법', 0.91], ['교열', 0.84], ['윤문', 0.62], ['AI톤', 0.71], ['톤', 0.66]];
+const EXPORTS = [['복사', 0.38], ['워드 (.docx)', 0.21], ['PDF', 0.17], ['워드 · 변경 표시', 0.11], ['텍스트 (.txt)', 0.08], ['이미지 (.png·.jpg)', 0.05]];
+const REJECTED = [
+  ['매우 ', '(삭제)', 'AI톤', 812, 0.71, 'tone-매우'], ['다양한', '여러', 'AI톤', 1290, 0.58, 'tone-다양한'], ['을 통해', '으로', 'AI톤', 954, 0.44, 'tone-통해'],
+  ['결론적으로, ', '(삭제)', 'AI톤', 388, 0.39, 'tone-결론'], ['유저', '사용자', '교열', 642, 0.35, 'unify-유저'],
+];
+const NAMES = ['김서연', '이도윤', '박지호', '최하은', '정민준', '강서준', '조유나', '윤지우', '장예린', '임건우', '한소율', '오태윤', '서지안', '신우진', '권나연', '황시우', '안채원', '송현우', '류다인', '전준서', '홍아린', '고은호', '문서아', '양도현', '손하린', '배지환', '백수아', '허민재', '유하람', '남궁연'];
+const VIA = [['카카오', 'kakao', 'K', 0.46], ['네이버', 'naver', 'N', 0.27], ['Google', 'google', 'G', 0.18], ['이메일', 'email', '@', 0.09]];
+function members() {
+  const r = rng(77), out = [];
+  for (let i = 0; i < 48; i++) {
+    const nm = NAMES[i % NAMES.length], x = r();
+    let acc = 0, via = VIA[0]; for (const v of VIA) { acc += v[3]; if (x <= acc) { via = v; break; } }
+    const joined = Math.floor(r() * 120), last = Math.min(joined, Math.floor(r() * r() * 60));
+    const docs = Math.floor(r() * 40), st = last > 45 ? 'dormant' : (i === 13 ? 'banned' : 'active');
+    const id = 'u' + (1048 - i);
+    const em = ['gmail.com', 'naver.com', 'kakao.com', 'daum.net'][Math.floor(r() * 4)];
+    out.push({ id, name: nm[0] + '*' + nm.slice(2), email: `${String.fromCharCode(97 + Math.floor(r() * 26))}${String.fromCharCode(97 + Math.floor(r() * 26))}***@${em}`, via, joined, last, docs, chars: Math.round(docs * (2200 + r() * 4000)), runs: docs * 2 + Math.floor(r() * 9), st, memo: '' });
+  }
+  return out;
+}
+let MEMBERS = members();
+let REPORTS = load('ka-reports', null) || [
+  { id: 'R-1082', type: '잘못된 제안', st: 'new', pri: 'high', at: 0.04, user: '김*연', via: 'kakao', preset: '자연스럽게', sug: ['매우 ', '(삭제)', 'AI톤'], sent: '이번 결과는 매우 중요한 분기점이 될 것이다.', body: '강조하려고 쓴 "매우"를 계속 지우라고 해요. 논문 초록이라 그대로 둬야 합니다.', env: 'Chrome 130 · Windows · 1920px' },
+  { id: 'R-1081', type: 'AI 응답 없음', st: 'new', pri: 'high', at: 0.2, user: '비회원', via: '', preset: '정중한 메일로', body: '8,400자 원고를 넣었더니 「AI 작업 중 3/4」에서 10분째 멈춰 있어요.', env: 'Safari 18 · macOS · 1440px' },
+  { id: 'R-1080', type: '파일 변환 오류', st: 'new', pri: 'mid', at: 0.6, user: '박*호', via: 'naver', preset: '맞춤법만', body: '워드 · 변경 표시로 받은 파일을 한글(HWP)에서 열면 취소선이 안 보이고 다 합쳐져 보여요.', env: 'Edge 130 · Windows · 1536px' },
+  { id: 'R-1079', type: '잘못된 제안', st: 'doing', pri: 'mid', at: 1.1, user: '최*은', via: 'google', preset: '자연스럽게', sug: ['유저', '사용자', '교열'], sent: '유저 인터페이스 개선 사항을 정리했다.', body: '게임 업계 문서라 "유저"를 그대로 써야 해요. 예외어에 넣었는데도 가끔 제안돼요.', env: 'Chrome 130 · Windows · 2560px' },
+  { id: 'R-1078', type: '화면 오류', st: 'doing', pri: 'low', at: 1.8, user: '정*준', via: 'kakao', preset: '자연스럽게', body: '다크 모드에서 노란 수정 표시가 배경이랑 비슷해서 잘 안 보입니다.', env: 'Chrome 130 · Android · 412px' },
+  { id: 'R-1077', type: '파일 변환 오류', st: 'done', pri: 'mid', at: 3.2, user: '조*나', via: 'kakao', preset: '간결한 보고서로', body: 'PDF로 저장하면 명조로 설정했는데 고딕으로 나와요.', env: 'Chrome 129 · macOS · 1440px', reply: '원고 글꼴이 PDF에 반영되도록 고쳤습니다. 다시 받아 보시면 명조로 저장됩니다.' },
+  { id: 'R-1076', type: '잘못된 제안', st: 'done', pri: 'low', at: 4.5, user: '윤*우', via: 'naver', preset: '맞춤법만', sug: ['일일히', '일일이', '맞춤법'], sent: '일일히 확인했다.', body: '이건 맞는 제안인데 이유 설명이 이상해요.', env: 'Whale 3 · Windows · 1366px', reply: '설명 문구를 고쳤습니다. 알려 주셔서 감사합니다.' },
+  { id: 'R-1075', type: '화면 오류', st: 'hold', pri: 'low', at: 6.0, user: '장*린', via: 'email', preset: '자연스럽게', body: '아이패드 가로 모드에서 제안 카드가 원고 아래로 내려가서 찾기 어려워요.', env: 'Safari · iPadOS · 1180px' },
+  { id: 'R-1074', type: '기타', st: 'done', pri: 'low', at: 8.3, user: '임*우', via: 'google', preset: '친근한 메시지로', body: '친근한 메시지로 바꾸면 이모지가 들어가는데 빼는 옵션이 있으면 좋겠어요.', env: 'Chrome 129 · Windows', reply: '의견 감사합니다. 다음 업데이트에서 검토할게요.' },
+];
+let INQ = load('ka-inq', null) || [
+  { id: 'Q-0431', type: '이용 방법', st: 'new', at: 0.1, user: '한*율', email: 'so***@naver.com', title: '학점은행제 과제 3만 자도 한 번에 되나요?', body: '리포트가 3만 자 정도인데 한 번에 넣어도 되는지, 나눠서 넣어야 하는지 궁금합니다.' },
+  { id: 'Q-0430', type: '제휴·도입', st: 'new', at: 0.5, user: '비회원', email: 'pr***@edupub.co.kr', title: '출판사 편집팀 단체 도입 문의', body: '편집자 6명이 같이 쓰려고 합니다. 팀 단위 요금이나 표기 규칙 공유 기능이 있을까요?' },
+  { id: 'Q-0429', type: '계정·로그인', st: 'new', at: 1.4, user: '오*윤', email: 'ty***@kakao.com', title: '탈퇴하면 문서함도 지워지나요?', body: '탈퇴 전에 문서를 백업하고 싶어요. 한 번에 내려받는 방법이 있나요?' },
+  { id: 'Q-0428', type: '결제·요금', st: 'done', at: 2.2, user: '서*안', email: 'ja***@gmail.com', title: '유료 플랜은 언제 나오나요?', body: '지금은 무료인데 나중에 유료로 바뀌면 기존 문서는 어떻게 되나요?', reply: '유료 플랜이 생겨도 저장된 문서는 그대로 열람·다운로드할 수 있습니다.' },
+  { id: 'Q-0427', type: '이용 방법', st: 'done', at: 3.9, user: '신*진', email: 'wj***@daum.net', title: '한글 파일은 못 올리나요?', body: 'hwp 파일을 바로 올리고 싶어요.', reply: '한글에서 [파일 → 다른 이름으로 저장 → 워드 문서]로 저장한 뒤 올려 주세요.' },
+];
+let RULES = load('ka-rules', null) || [
+  ['proof', '되야 → 돼야', "'되어야'의 준말", 3820, 0.97, true], ['proof', '-것 띄어쓰기 (있는것 → 있는 것)', '의존명사', 5210, 0.95, true], ['proof', '-되다 붙여쓰기 (개선 되 → 개선되)', '접미사', 2980, 0.92, true],
+  ['proof', '몇일 → 며칠', '표준어', 1440, 0.98, true], ['proof', '-히/-이 (일일히 → 일일이)', '부사 표기', 920, 0.96, true], ['proof', '컨텐츠 → 콘텐츠', '외래어 표기', 2110, 0.89, true],
+  ['proof', '공백 중복', '문장부호', 6420, 0.99, true], ['tone', '줄표(—) → 쉼표', '기호', 2210, 0.86, true], ['tone', '가운뎃점 나열', '기호', 980, 0.74, true],
+  ['tone', '매우 삭제', '강조 부사', 812, 0.29, true], ['tone', '다양한 → 여러', '흐린 수식어', 1290, 0.42, true], ['tone', '을/를 통해 → (으)로', '번역투', 954, 0.56, true],
+  ['tone', '결론적으로 삭제', '정리 상투어', 388, 0.61, true], ['tone', '하는 것이 가능하다 → 할 수 있다', '번역투', 610, 0.88, true], ['unify', '유저 = 사용자', '기본 표기 통일', 642, 0.65, true],
+].map(([g, n, d, hits, acc, on], i) => ({ id: 'rule' + i, g, n, d, hits, acc, on }));
+let NOTICES = load('ka-notices', null) || [
+  { id: 'n3', at: 0.2, kind: '알림', target: '전체', title: '새 기능: 톤 조절', body: '메일·메신저·보고서에 맞춰 원하는 톤으로 문장을 바꿔 줍니다.', reach: 1284 },
+  { id: 'n2', at: 6, kind: '배너', target: '비회원', title: '로그인하면 문서함에 자동 저장돼요', body: '카카오·네이버로 3초 만에 시작하세요.', reach: 3920 },
+  { id: 'n1', at: 14, kind: '알림', target: '회원', title: '교정왕에 오신 걸 환영해요', body: '원고를 붙여 넣고 다듬기를 시작해 보세요.', reach: 1010 },
+];
+const ADMINS = [['GOLDKING', '최고관리자', 'go***@akiaka.com', '방금'], ['운영 담당', '운영자', 'op***@gyojeong.kr', '2시간 전'], ['고객 지원', 'CS 담당', 'cs***@gyojeong.kr', '어제']];
+const saveAll = () => { store('ka-reports', REPORTS); store('ka-inq', INQ); store('ka-rules', RULES); store('ka-notices', NOTICES); };
+
+/* ---------- 상수 ---------- */
+const RST = { new: ['접수', 'p-bad', 'circle-alert'], doing: ['확인 중', 'p-warn', 'loader'], hold: ['보류', 'p-mute', 'pause'], done: ['해결', 'p-good', 'circle-check'] };
+const QST = { new: ['답변 대기', 'p-bad', 'mail'], done: ['답변 완료', 'p-good', 'mail-check'] };
+const PRI = { high: ['긴급', 'p-bad'], mid: ['보통', 'p-warn'], low: ['낮음', 'p-mute'] };
+const RTYPE = { '잘못된 제안': 'spell-check', 'AI 응답 없음': 'bot', '파일 변환 오류': 'file-warning', '화면 오류': 'monitor-x', '기타': 'message-square' };
+const pill = ([t, c, ic]) => `<span class="pill ${c}">${ic ? I(ic) : ''}${t}</span>`;
+const viaHTML = k => { const v = VIA.find(x => x[1] === k); return v ? `<span class="via v-${v[1]}"><i>${v[2]}</i>${v[0]}</span>` : '<span class="via v-email"><i>-</i>비회원</span>'; };
+const atText = a => a < 1 ? `${Math.max(1, Math.round(a * 24))}시간 전` : a < 2 ? '어제' : `${Math.round(a)}일 전`;
+const openR = () => REPORTS.filter(r => r.st === 'new').length;
+const openQ = () => INQ.filter(r => r.st === 'new').length;
+
+/* ---------- 메뉴 ---------- */
+const NAV = [
+  ['운영', [['overview', 'layout-dashboard', '대시보드']]],
+  ['통계', [['traffic', 'route', '유입 경로'], ['usage', 'chart-column', '이용 통계']]],
+  ['회원', [['members', 'users', '회원 관리']]],
+  ['고객 지원', [['reports', 'bug', '오류 신고', openR], ['inquiries', 'messages-square', '고객 문의', openQ]]],
+  ['서비스 관리', [['rules', 'book-check', '교정 규칙'], ['notices', 'megaphone', '공지·알림']]],
+  ['설정', [['admins', 'shield-check', '관리자·권한']]],
+];
+function renderNav() {
+  $('nav').innerHTML = `<a class="cta" href="#notices">${I('plus')}공지 보내기</a>` + NAV.map(([g, items]) => `<div class="ng">${g}</div>` + items.map(([k, ic, l, c]) => {
+    const n = c ? c() : 0;
+    return (k === 'traffic' ? '' : '') + `<a href="#${k}" aria-current="${S.view === k ? 'page' : 'false'}">${I(ic)}${l}${c ? `<span class="cnt${n ? '' : ' z'}">${n}</span>` : ''}</a>`;
+  }).join('')).join('') + `<div class="navfoot"><a href="https://claude.ai/artifact/2iqmmFZfdweJkn4PRnk8pJ" target="_blank" rel="noopener">${I('external-link')}서비스 열기</a></div><div class="navbot"><button class="thm" data-do="theme" aria-label="테마 전환">${I(dark() ? 'sun' : 'moon')}${dark() ? '라이트' : '다크'}</button></div>`;
+  const bc = openR() + openQ(); $('bellDot').textContent = bc; $('bellDot').hidden = !bc;
+}
+
+/* ---------- 공통 조각 ---------- */
+const rangeSeg = () => `<div class="seg" role="group" aria-label="기간">${[[7, '7일'], [30, '30일'], [90, '90일']].map(([v, l]) => `<button data-range="${v}" aria-pressed="${S.range === v}">${l}</button>`).join('')}</div>`;
+const ph = (t, p, tools = '') => `<div class="ph"><div class="crumb">교정왕<a href="https://claude.ai/artifact/2iqmmFZfdweJkn4PRnk8pJ" target="_blank" rel="noopener">gyojeongwang.kr${I('external-link')}</a><span class="live">운영중</span></div><div class="phrow"><h1>${t}</h1><a class="btn sm" href="https://claude.ai/artifact/2iqmmFZfdweJkn4PRnk8pJ" target="_blank" rel="noopener">서비스 열기</a><div class="tools">${tools}</div></div>${p ? `<p>${p}</p>` : ''}</div>`;
+const panel = (title, body, opt = {}) => `<section class="panel"${opt.id ? ` id="${opt.id}"` : ''}><header><h2>${opt.icon ? I(opt.icon) : ''}${title}</h2>${opt.sub ? `<span class="sub">${opt.sub}</span>` : ''}${opt.r ? `<div class="r">${opt.r}</div>` : ''}</header><div class="pb"${opt.flush ? ' style="padding:0;margin-top:12px"' : ''}>${body}</div></section>`;
+function sparkSVG(vals) {
+  const w = 120, h = 28, mx = Math.max(...vals), mn = Math.min(...vals), sp = mx - mn || 1;
+  const pts = vals.map((v, i) => [i / (vals.length - 1) * w, h - 3 - (v - mn) / sp * (h - 6)]);
+  const d = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+  const last = pts[pts.length - 1];
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path d="${d} L${w} ${h} L0 ${h}Z" fill="var(--accent-soft)"/><path d="${d}" fill="none" stroke="var(--accent)" stroke-width="1.6" vector-effect="non-scaling-stroke"/><circle cx="${last[0]}" cy="${last[1]}" r="2.5" fill="var(--accent)"/></svg>`;
+}
+function kpi(label, icon, value, unit, prev, cur, spark, opt = {}) {
+  const ch = prev ? (cur - prev) / prev * 100 : 0;
+  const cls = Math.abs(ch) < 0.5 ? 'flat' : ((ch > 0) !== !!opt.invert ? 'up' : 'down');
+  return `<div class="kpi${opt.alert ? ' alert' : ''}"><span class="l">${I(icon)}${label}</span><span class="v">${value}${unit ? `<small>${unit}</small>` : ''}</span>
+    ${opt.note ? `<span class="d flat">${opt.note}</span>` : `<span class="d ${cls}">${I(ch >= 0 ? 'trending-up' : 'trending-down')}${ch >= 0 ? '+' : ''}${ch.toFixed(1)}%<span>이전 ${S.range}일 대비</span></span>`}
+    ${spark ? sparkSVG(spark) : ''}</div>`;
+}
+function lineChart(id, data, key, color, label) {
+  const W = 760, H = 230, L = 44, R = 12, T = 12, B = 26;
+  const vals = data.map(x => x[key]), mx = Math.max(...vals);
+  const step = Math.pow(10, Math.floor(Math.log10(mx))) / (mx / Math.pow(10, Math.floor(Math.log10(mx))) > 5 ? 1 : 2), top = Math.ceil(mx / step) * step;
+  const X = i => L + i / (data.length - 1) * (W - L - R), Y = v => T + (1 - v / top) * (H - T - B);
+  let g = '';
+  for (let v = 0; v <= top + 1e-9; v += step) g += `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${L - 8}" y="${Y(v) + 4}" text-anchor="end">${fmt(v)}</text>`;
+  const every = Math.ceil(data.length / 7);
+  let xl = ''; data.forEach((x, i) => { if (i % every === 0 || i === data.length - 1) xl += `<text x="${X(i)}" y="${H - 6}" text-anchor="middle">${dstr(x.d)}</text>`; });
+  const d = data.map((x, i) => (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(x[key]).toFixed(1)).join(' ');
+  const li = data.length - 1;
+  return `<div class="chart" id="${id}" data-key="${key}" data-label="${label}"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${label} 일별 추이">
+    <g class="grid">${g}</g>${xl}
+    <path d="${d} L${X(li)} ${Y(0)} L${X(0)} ${Y(0)}Z" fill="${color}" opacity=".12"/>
+    <path class="ln" d="${d}" stroke="${color}"/>
+    <circle cx="${X(li)}" cy="${Y(data[li][key])}" r="4" fill="${color}" stroke="var(--pane)" stroke-width="2"/>
+    <line class="xh" x1="0" x2="0" y1="${T}" y2="${H - B}" stroke="var(--line2)" stroke-dasharray="3 3" visibility="hidden"/>
+    <circle class="xd" r="4" fill="${color}" stroke="var(--pane)" stroke-width="2" visibility="hidden"/>
+    <rect x="${L}" y="${T}" width="${W - L - R}" height="${H - T - B}" fill="transparent" class="hit"/>
+  </svg><div class="tip" hidden></div></div>`;
+}
+function bindLine(id, data, color, unit) {
+  const box = $(id); if (!box) return;
+  const svg = box.querySelector('svg'), tip = box.querySelector('.tip'), xh = svg.querySelector('.xh'), xd = svg.querySelector('.xd');
+  const key = box.dataset.key, label = box.dataset.label;
+  const W = 760, H = 230, L = 44, R = 12, T = 12, B = 26;
+  const vals = data.map(x => x[key]), mx = Math.max(...vals);
+  const step = Math.pow(10, Math.floor(Math.log10(mx))) / (mx / Math.pow(10, Math.floor(Math.log10(mx))) > 5 ? 1 : 2), top = Math.ceil(mx / step) * step;
+  const move = e => {
+    const r = svg.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * W;
+    const i = Math.max(0, Math.min(data.length - 1, Math.round((x - L) / (W - L - R) * (data.length - 1))));
+    const px = L + i / (data.length - 1) * (W - L - R), py = T + (1 - data[i][key] / top) * (H - T - B);
+    xh.setAttribute('x1', px); xh.setAttribute('x2', px); xh.setAttribute('visibility', 'visible');
+    xd.setAttribute('cx', px); xd.setAttribute('cy', py); xd.setAttribute('visibility', 'visible');
+    const d = data[i].d, wd = '일월화수목금토'[d.getDay()];
+    tip.innerHTML = `${dstr(d, true)} (${wd})<br>${label} <b>${fmt(data[i][key])}</b>${unit || ''}`;
+    tip.style.left = Math.max(60, Math.min(r.width - 60, px / W * r.width)) + 'px'; tip.style.top = (py / H * r.height) + 'px'; tip.hidden = false;
+  };
+  const hit = svg.querySelector('.hit');
+  hit.addEventListener('pointermove', move); hit.addEventListener('pointerdown', move);
+  hit.addEventListener('pointerleave', () => { tip.hidden = true; xh.setAttribute('visibility', 'hidden'); xd.setAttribute('visibility', 'hidden'); });
+}
+const hbars = (rows, opt = {}) => {
+  const mx = Math.max(...rows.map(r => r.v));
+  return `<div class="hbars">${rows.map(r => `<div class="hb" title="${esc(r.n)} · ${r.vt || fmt(r.v)}"><span class="n">${r.ic ? I(r.ic) : ''}${esc(r.n)}</span><span class="t"><span class="f${r.cls ? ' ' + r.cls : ''}" style="width:${(opt.max ? r.v / opt.max : r.v / mx) * 100}%"></span></span><span class="v">${r.vt || fmt(r.v)}${r.sub ? `<small>${r.sub}</small>` : ''}</span></div>`).join('')}</div>`;
+};
+const stack = parts => `<div class="stack" role="img" aria-label="${parts.map(p => `${p.n} ${p.p.toFixed(0)}%`).join(', ')}">${parts.map(p => `<span style="width:${p.p}%;background:${p.c}" title="${p.n} ${p.p.toFixed(1)}%"></span>`).join('')}</div>
+  <div class="stackl">${parts.map(p => `<div><i style="background:${p.c}"></i>${p.n}<b>${p.p.toFixed(0)}%</b></div>`).join('')}</div>`;
+const sum = (arr, k) => arr.reduce((a, x) => a + x[k], 0);
+
+/* ---------- 화면: 대시보드 ---------- */
+function vOverview() {
+  const cur = series(S.range), prev = series(S.range * 2).slice(0, S.range);
+  const v = sum(cur, 'visits'), su = sum(cur, 'signups'), ru = sum(cur, 'runs'), ch = sum(cur, 'chars');
+  const pv = sum(prev, 'visits') * 0.86, psu = sum(prev, 'signups') * 0.8, pru = sum(prev, 'runs') * 0.84, pch = sum(prev, 'chars') * 0.83;
+  const typed = Math.round(v * 0.71), dl = Math.round(ru * 0.58), acc = 0.78;
+  const steps = [['방문', v], ['원고 입력', typed], ['다듬기 실행', ru], ['제안 1건 이상 승인', Math.round(ru * acc)], ['복사·다운로드', dl], ['회원가입', su]];
+  const fun = steps.map(([n, x], i) => {
+    const p = pct(x, v), drop = i ? 100 - pct(x, steps[i - 1][1]) : 0;
+    return `<div class="fs"><span class="n">${n}</span><span class="t"><span class="f${p > 99 ? ' full' : ''}" style="width:${p}%"></span></span><span class="v">${fmt(x)}<small>${p.toFixed(1)}%</small></span>${i && drop > 35 ? `<span class="drop">이전 단계에서 ${drop.toFixed(0)}% 이탈</span>` : ''}</div>`;
+  }).join('');
+  const todo = [
+    ['reports', 'bug', 'var(--bad-bg)', 'var(--bad)', '새 오류 신고', REPORTS.filter(r => r.st === 'new').map(r => r.type).slice(0, 2).join(' · ') || '없음', openR()],
+    ['inquiries', 'messages-square', 'var(--warn-bg)', 'var(--warn)', '답변 대기 문의', INQ.filter(r => r.st === 'new')[0]?.title || '없음', openQ()],
+    ['usage', 'thumbs-down', 'var(--info-bg)', 'var(--info)', '거부율 50% 넘는 규칙', '매우 삭제 · 다양한 → 여러', RULES.filter(r => r.on && r.acc < 0.5).length],
+  ].map(([h, ic, bg, fg, t, s, n]) => `<a href="#${h}"><span class="ic" style="background:${bg};color:${fg}">${I(ic)}</span><span class="tx"><b>${t}</b><span>${esc(s)}</span></span><span class="n">${n}</span>${I('chevron-right')}</a>`).join('');
+  const recent = MEMBERS.slice().sort((a, b) => a.joined - b.joined).slice(0, 6);
+  return ph('대시보드', `${dstr(ago(S.range - 1), true)} ~ ${dstr(TODAY, true)} · 오늘 ${dstr(TODAY)} 기준`, rangeSeg())
+    + `<div class="kpis">
+      ${kpi('방문자', 'eye', fmt(v), '명', pv, v, cur.map(x => x.visits))}
+      ${kpi('신규 가입', 'user-plus', fmt(su), '명', psu, su, cur.map(x => x.signups))}
+      ${kpi('다듬기 실행', 'wand-sparkles', fmt(ru), '회', pru, ru, cur.map(x => x.runs))}
+      ${kpi('처리 글자 수', 'type', (ch / 10000).toFixed(0), '만 자', pch, ch, cur.map(x => x.chars))}
+      ${kpi('제안 승인율', 'check-check', '78.4', '%', 76.9, 78.4, null)}
+      ${kpi('처리할 신고·문의', 'inbox', openR() + openQ(), '건', 0, 0, null, { alert: openR() + openQ() > 0, note: `오류 신고 ${openR()} · 문의 ${openQ()}` })}
+    </div>
+    <div class="grid g2">
+      ${panel('방문자 추이', lineChart('lcV', cur, 'visits', 'var(--accent)', '방문자'), { icon: 'activity', sub: '일별 순 방문자' })}
+      ${panel('처리할 일', `<div class="todo">${todo}</div>`, { icon: 'list-todo' })}
+    </div>
+    <div class="grid g2">
+      ${panel('이용 단계별 전환', `<div class="funnel">${fun}</div>`, { icon: 'filter', sub: '방문한 사람 중 각 단계까지 온 비율' })}
+      ${panel('최근 가입 회원', `<div class="tw"><table><thead><tr><th>회원</th><th>가입 경로</th><th class="num">가입</th></tr></thead><tbody>${recent.map(m => `<tr class="click" data-member="${m.id}"><td>${m.name}<span class="sub">${m.email}</span></td><td>${viaHTML(m.via[1])}</td><td class="num mono">${m.joined ? m.joined + '일 전' : '오늘'}</td></tr>`).join('')}</tbody></table></div>`, { icon: 'user-plus', r: `<a class="btn ghost sm" href="#members">전체 보기${I('chevron-right')}</a>`, flush: true })}
+    </div>`;
+}
+
+/* ---------- 화면: 유입 경로 ---------- */
+function vTraffic() {
+  const cur = series(S.range), v = sum(cur, 'visits'), r = rng(S.range + 11);
+  const rows = SOURCES.map(([n, ic, share, conv]) => { const vis = Math.round(v * share * (0.92 + r() * 0.16)); const su = Math.round(vis * conv); return { n, ic, vis, su, conv: pct(su, vis), runs: Math.round(vis * (0.48 + r() * 0.15)), stay: 2 + r() * 5 }; }).sort((a, b) => b.vis - a.vis);
+  const tv = sum(rows, 'vis');
+  const camp = CAMPAIGNS.map(([src, med, name, share, conv, cost]) => { const vis = Math.round(v * share * (S.range / 30) ** 0 * (0.9 + r() * 0.2)); const su = Math.round(vis * conv); const c = Math.round(cost * S.range / 30); return { src, med, name, vis, su, conv: pct(su, vis), cost: c, cpa: su ? c / su : 0 }; });
+  const dev = [['모바일', 54, 'var(--s1)'], ['PC', 41, 'var(--s2)'], ['태블릿', 5, 'var(--s3)']].map(([n, p, c]) => ({ n, p, c }));
+  const kw = [['맞춤법 검사기', 1820], ['AI 교정', 1210], ['띄어쓰기 검사', 980], ['AI 티 안나게', 760], ['교정 교열 사이트', 540], ['메일 정중하게', 410], ['논문 교정', 330]];
+  const kwScale = v / 12000;
+  return ph('유입 경로', '방문자가 어디서 들어와 얼마나 가입했는지 봅니다.', rangeSeg())
+    + `<div class="grid g2">
+      ${panel('경로별 방문', hbars(rows.map(x => ({ n: x.n, ic: x.ic, v: x.vis, sub: pct(x.vis, tv).toFixed(1) + '%' }))), { icon: 'route', sub: `총 ${fmt(tv)}명` })}
+      <div class="grid">
+        ${panel('기기', stack(dev), { icon: 'smartphone' })}
+        ${panel('검색 유입 키워드', hbars(kw.map(([n, x]) => ({ n, v: Math.round(x * kwScale), cls: 'alt' }))), { icon: 'search', sub: '네이버·구글 합산' })}
+      </div>
+    </div>
+    ${panel('경로별 성과', `<div class="tw"><table><thead><tr><th>유입 경로</th><th class="num">방문</th><th class="num">다듬기 실행</th><th class="num">가입</th><th class="num">가입 전환율</th><th class="num">평균 체류</th></tr></thead><tbody>${rows.map(x => `<tr><td><span class="via">${I(x.ic)}${x.n}</span></td><td class="num">${fmt(x.vis)}</td><td class="num">${fmt(x.runs)}</td><td class="num">${fmt(x.su)}</td><td class="num"><b>${x.conv.toFixed(1)}%</b></td><td class="num mono">${x.stay.toFixed(1)}분</td></tr>`).join('')}</tbody></table></div>`, { icon: 'table', flush: true })}
+    ${panel('광고·캠페인 (UTM)', `<div class="tw"><table><thead><tr><th>캠페인</th><th>소스 / 매체</th><th class="num">방문</th><th class="num">가입</th><th class="num">전환율</th><th class="num">광고비</th><th class="num">가입당 비용</th></tr></thead><tbody>${camp.map(c => `<tr><td><b>${c.name}</b></td><td class="mono">${c.src} / ${c.med}</td><td class="num">${fmt(c.vis)}</td><td class="num">${fmt(c.su)}</td><td class="num">${c.conv.toFixed(1)}%</td><td class="num">${c.cost ? '₩' + fmt(c.cost) : '-'}</td><td class="num">${c.cpa ? '<b>₩' + fmt(c.cpa) + '</b>' : '-'}</td></tr>`).join('')}</tbody></table></div>`, { icon: 'megaphone', sub: 'utm_campaign 기준', flush: true })}`;
+}
+
+/* ---------- 화면: 이용 통계 ---------- */
+function vUsage() {
+  const cur = series(S.range), ru = sum(cur, 'runs'), ch = sum(cur, 'chars');
+  const calls = Math.round(ru * 2.3), fail = 0.012, cost = calls * 3.4;
+  return ph('이용 통계', '어떤 방식으로 다듬고, 어떤 제안을 받아들이는지 봅니다.', rangeSeg())
+    + `<div class="kpis">
+      ${kpi('다듬기 실행', 'wand-sparkles', fmt(ru), '회', ru * 0.84, ru, cur.map(x => x.runs))}
+      ${kpi('1회 평균 글자', 'type', fmt(ch / ru), '자', 1510, ch / ru, null)}
+      ${kpi('AI 호출', 'bot', fmt(calls), '회', calls * 0.85, calls, null)}
+      ${kpi('AI 실패율', 'circle-alert', (fail * 100).toFixed(1), '%', 1.6, 1.2, null, { invert: true })}
+      ${kpi('평균 응답 시간', 'timer', '6.8', '초', 7.4, 6.8, null, { invert: true })}
+      ${kpi('예상 AI 비용', 'coins', '₩' + fmt(cost), '', cost * 0.82, cost, null, { invert: true })}
+    </div>
+    ${panel('일별 다듬기 실행', lineChart('lcR', cur, 'runs', 'var(--s1)', '다듬기 실행'), { icon: 'activity' })}
+    <div class="grid g3">
+      ${panel('고치는 방식', hbars(PRESETS.map(([n, p]) => ({ n, v: Math.round(ru * p), sub: (p * 100).toFixed(0) + '%' }))), { icon: 'sliders-horizontal' })}
+      ${panel('제안 유형별 승인율', hbars(TYPES.map(([n, p]) => ({ n, v: p * 100, vt: (p * 100).toFixed(0) + '%', cls: p < 0.65 ? 'badf' : '' })), { max: 100 }) + `<p class="note" style="margin:12px 0 0">승인율이 65% 아래면 빨간색으로 표시해요.</p>`, { icon: 'check-check' })}
+      ${panel('결과를 가져가는 방법', hbars(EXPORTS.map(([n, p]) => ({ n, v: Math.round(ru * 0.58 * p), sub: (p * 100).toFixed(0) + '%', cls: 'alt' }))), { icon: 'download' })}
+    </div>
+    ${panel('자주 거부되는 제안', `<div class="tw"><table><thead><tr><th>제안</th><th>유형</th><th class="num">제안 횟수</th><th class="num">거부율</th><th></th></tr></thead><tbody>${REJECTED.map(([f, t, ty, n, rr, rid]) => {
+      const rule = RULES.find(x => x.n.includes(f.trim().replace(/,$/, '').replace(/^을 /, '')) ) ;
+      return `<tr><td><span class="chg" style="font-size:13px"><s>${esc(f.trim())}</s>${I('arrow-right')}<b>${esc(t)}</b></span></td><td>${pill([ty, ty === 'AI톤' ? 'p-info' : 'p-warn'])}</td><td class="num">${fmt(n * S.range / 30)}</td><td class="num"><span class="rate"><span class="bar"><i class="${rr > 0.5 ? 'hi' : ''}" style="width:${rr * 100}%"></i></span><b>${(rr * 100).toFixed(0)}%</b></span></td><td class="num"><a class="btn sm" href="#rules">규칙 보기</a></td></tr>`;
+    }).join('')}</tbody></table></div>`, { icon: 'thumbs-down', sub: '거부가 많은 제안은 규칙을 끄거나 조건을 좁혀 보세요', flush: true })}`;
+}
+
+/* ---------- 화면: 회원 ---------- */
+function vMembers() {
+  const q = S.mq.trim();
+  const cnt = { all: MEMBERS.length, active: 0, dormant: 0, banned: 0 }; MEMBERS.forEach(m => cnt[m.st]++);
+  const list = MEMBERS.filter(m => (S.mf === 'all' || m.st === S.mf) && (S.mvia ? m.via[1] === S.mvia : true) && (!q || m.name.includes(q) || m.email.includes(q) || m.id.includes(q)));
+  const ST = { active: ['정상', 'p-good'], dormant: ['휴면', 'p-mute'], banned: ['이용 정지', 'p-bad'] };
+  const viaMix = VIA.map(([n, k, , p], i) => ({ n, p: p * 100, c: ['var(--s1)', 'var(--s2)', 'var(--s3)', 'var(--s4)'][i] }));
+  return ph('회원 관리', `가입 회원 ${fmt(1048)}명 · 비회원 이용 최근 30일 ${fmt(4210)}명`, `<button class="btn" data-do="csv">${I('file-down')}명단 내려받기</button>`)
+    + `<div class="grid g3">
+      ${panel('가입 경로', stack(viaMix), { icon: 'log-in' })}
+      ${panel('활동 상태', stack([{ n: '정상', p: 81, c: 'var(--s3)' }, { n: '휴면 (45일 미접속)', p: 17, c: 'var(--s4)' }, { n: '이용 정지', p: 2, c: 'var(--s2)' }]), { icon: 'activity' })}
+      ${panel('회원 1인 평균', `<div class="kv"><dt>문서 수</dt><dd>14.2개</dd><dt>처리 글자</dt><dd>4.1만 자</dd><dt>재방문</dt><dd>주 2.3회</dd></div>`, { icon: 'user' })}
+    </div>
+    <section class="panel">
+      <div class="fbar">
+        <div class="chips" role="group" aria-label="상태">${[['all', '전체'], ['active', '정상'], ['dormant', '휴면'], ['banned', '이용 정지']].map(([k, l]) => `<button data-mf="${k}" aria-pressed="${S.mf === k}">${l}<b>${cnt[k]}</b></button>`).join('')}</div>
+        <select id="mvia" aria-label="가입 경로"><option value="">가입 경로 전체</option>${VIA.map(v => `<option value="${v[1]}" ${S.mvia === v[1] ? 'selected' : ''}>${v[0]}</option>`).join('')}</select>
+        <label class="search">${I('search')}<input id="mq" placeholder="이름·이메일·회원번호" value="${esc(S.mq)}" aria-label="회원 검색"></label>
+      </div>
+      <div class="tw"><table><thead><tr><th>회원</th><th>회원번호</th><th>가입 경로</th><th>상태</th><th class="num">문서</th><th class="num">처리 글자</th><th class="num">가입일</th><th class="num">최근 접속</th></tr></thead>
+      <tbody>${list.length ? list.map(m => `<tr class="click${S.mi === m.id ? ' sel' : ''}" data-member="${m.id}"><td><b>${m.name}</b><span class="sub">${m.email}</span></td><td class="mono">${m.id}</td><td>${viaHTML(m.via[1])}</td><td>${pill(ST[m.st])}</td><td class="num">${m.docs}</td><td class="num">${fmt(m.chars)}</td><td class="num mono">${dstr(ago(m.joined), true)}</td><td class="num mono">${m.last ? m.last + '일 전' : '오늘'}</td></tr>`).join('') : `<tr><td colspan="8"><div class="empty">조건에 맞는 회원이 없어요.</div></td></tr>`}</tbody></table></div>
+      <div class="pager">${list.length}명 표시 · 예시 데이터 48명</div>
+    </section>`;
+}
+function dMember(id) {
+  const m = MEMBERS.find(x => x.id === id); if (!m) return '';
+  const ST = { active: ['정상', 'p-good'], dormant: ['휴면', 'p-mute'], banned: ['이용 정지', 'p-bad'] };
+  return drawer(`${m.name} 회원`, `
+    <dl class="kv"><dt>회원번호</dt><dd>${m.id}</dd><dt>이메일</dt><dd>${m.email}</dd><dt>가입 경로</dt><dd>${viaHTML(m.via[1])}</dd><dt>상태</dt><dd>${pill(ST[m.st])}</dd>
+    <dt>가입일</dt><dd>${dstr(ago(m.joined), true)}</dd><dt>최근 접속</dt><dd>${m.last ? m.last + '일 전' : '오늘'}</dd><dt>문서</dt><dd>${m.docs}개 · 폴더 ${Math.ceil(m.docs / 6)}개</dd><dt>처리 글자</dt><dd>${fmt(m.chars)}자 · 다듬기 ${m.runs}회</dd></dl>
+    <div class="sect"><h4>최근 활동</h4><div class="timeline">
+      <div><span>${m.last ? m.last + '일 전' : '오늘'} 14:22</span><b>「주간 보고서」 다듬기 · 간결한 보고서로</b></div>
+      <div><span>${m.last + 1}일 전 10:05</span><b>워드 · 변경 표시 다운로드</b></div>
+      <div><span>${m.last + 3}일 전 21:40</span><b>폴더 「소설 원고」 만듦</b></div>
+      <div><span>${dstr(ago(m.joined), true)}</span><b>${m.via[0]}로 가입</b></div></div></div>
+    <label class="field" for="mmemo">관리자 메모<textarea id="mmemo" placeholder="이 회원에 대해 다른 관리자와 공유할 내용">${esc(m.memo)}</textarea></label>
+    ${S.del === m.id ? `<div class="confirm"><span>이용을 정지할까요? 로그인과 다듬기가 막혀요.</span><button class="btn sm" data-do="delCancel">취소</button><button class="btn sm warn" data-ban="${m.id}">정지</button></div>` : ''}`,
+    `${m.st === 'banned' ? `<button class="btn" data-unban="${m.id}">${I('unlock')}정지 해제</button>` : `<button class="btn warn" data-arm="${m.id}">${I('ban')}이용 정지</button>`}<button class="btn pri" data-savememo="${m.id}">${I('save')}메모 저장</button>`);
+}
+
+/* ---------- 화면: 오류 신고 ---------- */
+function vReports() {
+  const cnt = { open: 0, new: 0, doing: 0, hold: 0, done: 0, all: REPORTS.length };
+  REPORTS.forEach(r => { cnt[r.st]++; if (r.st !== 'done') cnt.open++; });
+  const list = REPORTS.filter(r => S.rf === 'all' ? true : S.rf === 'open' ? r.st !== 'done' : r.st === S.rf).filter(r => !S.rtype || r.type === S.rtype);
+  const byType = Object.keys(RTYPE).map(t => ({ n: t, ic: RTYPE[t], v: REPORTS.filter(r => r.type === t).length }));
+  return ph('오류 신고', '서비스 화면의 「오류 신고」로 들어온 내용입니다. 잘못된 제안은 바로 규칙 예외로 넘길 수 있어요.', '')
+    + `<div class="grid g2">
+    <section class="panel">
+      <div class="fbar">
+        <div class="chips" role="group" aria-label="처리 상태">${[['open', '처리 전'], ['new', '접수'], ['doing', '확인 중'], ['hold', '보류'], ['done', '해결'], ['all', '전체']].map(([k, l]) => `<button data-rf="${k}" aria-pressed="${S.rf === k}">${l}<b>${cnt[k]}</b></button>`).join('')}</div>
+        <select id="rtype" aria-label="신고 유형"><option value="">유형 전체</option>${Object.keys(RTYPE).map(t => `<option ${S.rtype === t ? 'selected' : ''}>${t}</option>`).join('')}</select>
+      </div>
+      <div class="tw"><table><thead><tr><th>번호</th><th>유형</th><th>내용</th><th>중요도</th><th>상태</th><th class="num">접수</th></tr></thead>
+      <tbody>${list.length ? list.map(r => `<tr class="click${r.st === 'new' ? ' unread' : ''}${S.ri === r.id ? ' sel' : ''}" data-report="${r.id}"><td class="mono">${r.id}</td><td><span class="via">${I(RTYPE[r.type])}${r.type}</span></td><td class="wrapc"><span class="clamp ttl">${esc(r.body)}</span><span class="sub">${esc(r.user)} · ${esc(r.preset)}</span></td><td>${pill(PRI[r.pri])}</td><td>${pill(RST[r.st])}</td><td class="num mono">${atText(r.at)}</td></tr>`).join('') : `<tr><td colspan="6"><div class="empty">처리할 신고가 없어요.</div></td></tr>`}</tbody></table></div>
+    </section>
+    <div class="grid" style="align-content:start">
+      ${panel('유형별 신고', hbars(byType.map(x => ({ ...x }))), { icon: 'chart-bar' })}
+      ${panel('처리 현황', `<dl class="kv"><dt>평균 첫 응답</dt><dd>3시간 12분</dd><dt>평균 해결</dt><dd>1.8일</dd><dt>이번 달 해결</dt><dd>${cnt.done}건</dd></dl>`, { icon: 'timer' })}
+    </div></div>`;
+}
+function dReport(id) {
+  const r = REPORTS.find(x => x.id === id); if (!r) return '';
+  const tpl = ['확인했습니다. 수정 후 다시 안내드릴게요.', '말씀하신 표현을 규칙 예외로 등록했습니다. 이제 해당 제안이 나오지 않아요.', '같은 증상이 재현되지 않습니다. 사용하신 원고 일부를 보내 주실 수 있을까요?'];
+  return drawer(`${r.id} · ${r.type}`, `
+    <div style="display:flex;gap:6px;flex-wrap:wrap">${pill(RST[r.st])}${pill(PRI[r.pri])}<span class="pill p-mute">${I('wand-sparkles')}${esc(r.preset)}</span></div>
+    <div class="sect"><h4>신고 내용</h4><div class="quote">${esc(r.body)}</div></div>
+    ${r.sug ? `<div class="sect"><h4>신고된 제안</h4><div class="quote" style="display:grid;gap:8px"><span class="chg"><s>${esc(r.sug[0].trim())}</s>${I('arrow-right')}<b>${esc(r.sug[1])}</b>${pill([r.sug[2], 'p-info'])}</span><span class="note">원문: ${esc(r.sent)}</span></div></div>` : ''}
+    <dl class="kv"><dt>신고자</dt><dd>${esc(r.user)} ${r.via ? viaHTML(r.via) : ''}</dd><dt>접수</dt><dd>${atText(r.at)}</dd><dt>환경</dt><dd class="mono">${esc(r.env)}</dd></dl>
+    <label class="field" for="rst">처리 상태<select id="rst">${Object.entries(RST).map(([k, v]) => `<option value="${k}" ${r.st === k ? 'selected' : ''}>${v[0]}</option>`).join('')}</select></label>
+    <div class="field"><label for="rreply">신고자에게 답변</label><div class="tpls">${tpl.map((t, i) => `<button data-tpl="${i}" data-for="rreply">${['확인 안내', '규칙 예외 등록', '추가 정보 요청'][i]}</button>`).join('')}</div><textarea id="rreply" placeholder="답변은 신고자의 교정왕 알림으로 전달돼요.">${esc(r.reply || '')}</textarea></div>`,
+    `${r.sug ? `<button class="btn" data-except="${r.id}">${I('shield-off')}규칙 예외로 등록</button>` : ''}<button class="btn pri" data-rsave="${r.id}">${I('send')}저장하고 답변 보내기</button>`, tpl);
+}
+
+/* ---------- 화면: 고객 문의 ---------- */
+function vInquiries() {
+  const cnt = { open: 0, all: INQ.length, done: 0 }; INQ.forEach(q => { if (q.st === 'new') cnt.open++; else cnt.done++; });
+  const list = INQ.filter(q => S.qf === 'all' ? true : S.qf === 'open' ? q.st === 'new' : q.st === 'done');
+  const types = ['이용 방법', '계정·로그인', '결제·요금', '제휴·도입', '기타'];
+  return ph('고객 문의', '서비스 화면의 「고객 문의」로 받은 질문입니다. 답변은 이메일과 알림으로 보내요.', '')
+    + `<div class="grid g2">
+    <section class="panel">
+      <div class="fbar"><div class="chips" role="group" aria-label="답변 상태">${[['open', '답변 대기'], ['done', '답변 완료'], ['all', '전체']].map(([k, l]) => `<button data-qf="${k}" aria-pressed="${S.qf === k}">${l}<b>${cnt[k]}</b></button>`).join('')}</div></div>
+      <div class="tw"><table><thead><tr><th>번호</th><th>유형</th><th>제목</th><th>상태</th><th class="num">접수</th></tr></thead>
+      <tbody>${list.length ? list.map(q => `<tr class="click${q.st === 'new' ? ' unread' : ''}${S.qi === q.id ? ' sel' : ''}" data-inq="${q.id}"><td class="mono">${q.id}</td><td>${pill([q.type, 'p-mute'])}</td><td class="wrapc"><span class="clamp ttl">${esc(q.title)}</span><span class="sub">${esc(q.user)} · ${esc(q.email)}</span></td><td>${pill(QST[q.st])}</td><td class="num mono">${atText(q.at)}</td></tr>`).join('') : `<tr><td colspan="5"><div class="empty">답변을 기다리는 문의가 없어요.</div></td></tr>`}</tbody></table></div>
+    </section>
+    <div class="grid" style="align-content:start">
+      ${panel('유형별 문의', hbars(types.map(t => ({ n: t, v: INQ.filter(q => q.type === t).length + (t === '이용 방법' ? 9 : t === '계정·로그인' ? 5 : 2) }))), { icon: 'chart-bar', sub: '최근 30일' })}
+      ${panel('자주 묻는 질문 후보', `<div class="todo">${[['원고 글자 수 제한', 6], ['한글(hwp) 파일 업로드', 5], ['탈퇴·문서 백업', 3]].map(([t, n]) => `<a href="#inquiries"><span class="ic" style="background:var(--soft);color:var(--muted)">${I('circle-help')}</span><span class="tx"><b>${t}</b><span>최근 30일 ${n}건 · FAQ에 넣으면 문의가 줄어요</span></span></a>`).join('')}</div>`, { icon: 'lightbulb' })}
+    </div></div>`;
+}
+function dInq(id) {
+  const q = INQ.find(x => x.id === id); if (!q) return '';
+  const tpl = ['안녕하세요, 교정왕입니다.\n\n문의 주셔서 감사합니다. ', '원고는 길이에 상관없이 넣으실 수 있어요. 긴 원고는 AI가 약 2,400자씩 나눠 읽고, 끝난 구간부터 제안이 쌓입니다.', '\n\n더 궁금한 점이 있으면 언제든 문의해 주세요. 감사합니다.'];
+  return drawer(`${q.id} · ${q.title}`, `
+    <div style="display:flex;gap:6px;flex-wrap:wrap">${pill(QST[q.st])}${pill([q.type, 'p-mute'])}</div>
+    <div class="sect"><h4>문의 내용</h4><div class="quote">${esc(q.body)}</div></div>
+    <dl class="kv"><dt>문의자</dt><dd>${esc(q.user)}</dd><dt>답변 받을 곳</dt><dd>${esc(q.email)}</dd><dt>접수</dt><dd>${atText(q.at)}</dd></dl>
+    <div class="field"><label for="qreply">답변</label><div class="tpls">${['인사말', '긴 원고 안내', '맺음말'].map((l, i) => `<button data-tpl="${i}" data-for="qreply" data-append="1">${l}</button>`).join('')}</div><textarea id="qreply" placeholder="답변을 쓰면 문의자 이메일과 교정왕 알림으로 보내요.">${esc(q.reply || '')}</textarea></div>`,
+    `<button class="btn" data-faq="${q.id}">${I('circle-help')}FAQ 후보로</button><button class="btn pri" data-qsave="${q.id}">${I('send')}답변 보내기</button>`, tpl);
+}
+
+/* ---------- 화면: 교정 규칙 ---------- */
+function vRules() {
+  const G = { proof: '맞춤법 규칙', tone: 'AI톤 규칙', unify: '기본 표기 통일' };
+  const list = RULES.filter(r => r.g === S.ruleTab);
+  const cnt = g => RULES.filter(r => r.g === g).length;
+  return ph('교정 규칙', 'AI보다 먼저 바로 적용되는 규칙입니다. 거부율이 높으면 끄거나 조건을 좁혀 보세요.', `<button class="btn pri" data-do="ruleAdd">${I('plus')}규칙 추가</button>`)
+    + `<section class="panel">
+      <div class="fbar"><div class="chips" role="group" aria-label="규칙 종류">${Object.entries(G).map(([k, l]) => `<button data-rtab="${k}" aria-pressed="${S.ruleTab === k}">${l}<b>${cnt(k)}</b></button>`).join('')}</div></div>
+      <div class="tw"><table><thead><tr><th>규칙</th><th>분류</th><th class="num">최근 30일 적용</th><th class="num">승인율</th><th class="num">사용</th></tr></thead>
+      <tbody>${list.map(r => `<tr><td><b>${esc(r.n)}</b></td><td>${pill([r.d, 'p-mute'])}</td><td class="num">${fmt(r.hits)}</td><td class="num"><span class="rate"><span class="bar"><i class="${r.acc < 0.5 ? 'hi' : ''}" style="width:${r.acc * 100}%"></i></span><b>${(r.acc * 100).toFixed(0)}%</b></span></td><td class="num"><button class="sw" role="switch" aria-checked="${r.on}" aria-label="${esc(r.n)} 사용" data-rule="${r.id}"></button></td></tr>`).join('')}</tbody></table></div>
+      <div class="pager">끈 규칙은 다음 다듬기부터 제안되지 않아요. 회원이 직접 만든 편집 규칙에는 영향이 없습니다.</div>
+    </section>
+    ${panel('규칙 예외어', `<div class="tpls" style="gap:8px">${(load('ka-except', ['유저 (게임 문서)', '매우 (논문 초록)'])).map(w => `<span class="pill p-mute" style="font-size:12px">${esc(w)}</span>`).join('')}</div><p class="note" style="margin:12px 0 0">오류 신고에서 「규칙 예외로 등록」을 누르면 여기에 추가돼요.</p>`, { icon: 'shield-off' })}`;
+}
+
+/* ---------- 화면: 공지·알림 ---------- */
+function vNotices() {
+  return ph('공지·알림', '보낸 공지는 교정왕 화면의 🔔 알림이나 상단 배너로 보여요.', '')
+    + `<div class="grid g2e">
+    ${panel('새 공지 보내기', `<form id="nform" class="grid" style="gap:14px">
+      <label class="field" for="ntitle">제목<input id="ntitle" maxlength="40" placeholder="예: 워드 변경 표시 파일이 한글에서도 보여요" required></label>
+      <label class="field" for="nbody">내용<textarea id="nbody" maxlength="140" placeholder="알림에 보일 한두 문장" style="min-height:80px" required></textarea></label>
+      <div class="grid g2e" style="gap:12px">
+        <label class="field" for="ntarget">받는 사람<select id="ntarget"><option>전체</option><option>회원</option><option>비회원</option></select></label>
+        <label class="field" for="nkind">보여 주는 방식<select id="nkind"><option>알림</option><option>배너</option></select></label>
+      </div>
+      <div class="field">미리보기<div class="preview"><span class="ic">${I('megaphone')}</span><span><b id="pvT">제목</b><p id="pvB">내용</p></span></div></div>
+      <div style="display:flex;justify-content:flex-end"><button class="btn pri" type="submit">${I('send')}보내기</button></div>
+    </form>`, { icon: 'send' })}
+    ${panel('보낸 공지', `<div class="nlist">${NOTICES.map(n => `<div class="nitem"><div class="top2">${pill([n.kind, n.kind === '배너' ? 'p-info' : 'p-good'])}${pill([n.target, 'p-mute'])}<span class="meta">${atText(n.at)} · ${fmt(n.reach)}명에게 표시</span></div><b>${esc(n.title)}</b><p>${esc(n.body)}</p></div>`).join('')}</div>`, { icon: 'history' })}
+    </div>`;
+}
+
+/* ---------- 화면: 관리자 ---------- */
+function vAdmins() {
+  const perms = [['대시보드·통계 보기', 1, 1, 1], ['회원 정보 보기', 1, 1, 1], ['회원 이용 정지', 1, 1, 0], ['오류 신고·문의 답변', 1, 1, 1], ['교정 규칙 수정', 1, 1, 0], ['공지 보내기', 1, 1, 0], ['관리자 추가·권한 변경', 1, 0, 0]];
+  return ph('관리자·권한', '관리자 계정과 역할별로 할 수 있는 일을 정합니다.', `<button class="btn pri" data-do="adminAdd">${I('user-plus')}관리자 초대</button>`)
+    + panel('관리자', `<div class="tw"><table><thead><tr><th>이름</th><th>역할</th><th>이메일</th><th class="num">최근 접속</th></tr></thead><tbody>${ADMINS.map(([n, r, e, l]) => `<tr><td><b>${n}</b></td><td>${pill([r, r === '최고관리자' ? 'p-good' : r === '운영자' ? 'p-info' : 'p-mute'])}</td><td class="mono">${e}</td><td class="num mono">${l}</td></tr>`).join('')}</tbody></table></div>`, { icon: 'shield-check', flush: true })
+    + panel('역할별 권한', `<div class="tw"><table class="perm"><thead><tr><th>할 수 있는 일</th><th>최고관리자</th><th>운영자</th><th>CS 담당</th></tr></thead><tbody>${perms.map(([n, ...v]) => `<tr><td>${n}</td>${v.map(x => `<td class="${x ? 'y' : 'n'}">${I(x ? 'check' : 'minus')}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`, { icon: 'key-round', flush: true });
+}
+
+/* ---------- 서랍 ---------- */
+let TPL = [];
+function drawer(title, body, foot, tpl) {
+  TPL = tpl || [];
+  return `<div class="scrim" data-do="close"></div><aside class="drawer" role="dialog" aria-modal="true" aria-label="${esc(title)}"><div class="dh"><h3>${esc(title)}</h3><button class="icb" data-do="close" aria-label="닫기">${I('x')}</button></div><div class="db">${body}</div><div class="df">${foot}</div></aside>`;
+}
+function renderDrawer() {
+  const h = S.mi ? dMember(S.mi) : S.ri ? dReport(S.ri) : S.qi ? dInq(S.qi) : '';
+  $('drawerHost').innerHTML = h; icons();
+}
+function closeDrawer() { S.mi = S.ri = S.qi = null; S.del = null; renderDrawer(); render(); }
+
+/* ---------- 렌더 ---------- */
+const VIEWS = { overview: vOverview, traffic: vTraffic, usage: vUsage, members: vMembers, reports: vReports, inquiries: vInquiries, rules: vRules, notices: vNotices, admins: vAdmins };
+function render() {
+  renderNav();
+  $('view').innerHTML = VIEWS[S.view]();
+  if (S.view === 'overview') bindLine('lcV', series(S.range), 'var(--accent)', '명');
+  if (S.view === 'usage') bindLine('lcR', series(S.range), 'var(--s1)', '회');
+  if (S.view === 'members') {
+    $('mq').addEventListener('input', e => { S.mq = e.target.value; const p = e.target.selectionStart; render(); const i = $('mq'); i.focus(); i.setSelectionRange(p, p); });
+    $('mvia').addEventListener('change', e => { S.mvia = e.target.value; render(); });
+  }
+  if (S.view === 'reports') $('rtype').addEventListener('change', e => { S.rtype = e.target.value; render(); });
+  if (S.view === 'notices') {
+    const up = () => { $('pvT').textContent = $('ntitle').value || '제목'; $('pvB').textContent = $('nbody').value || '내용'; };
+    $('ntitle').addEventListener('input', up); $('nbody').addEventListener('input', up);
+    $('nform').addEventListener('submit', e => {
+      e.preventDefault();
+      NOTICES.unshift({ id: 'n' + Date.now(), at: 0, kind: $('nkind').value, target: $('ntarget').value, title: $('ntitle').value.trim(), body: $('nbody').value.trim(), reach: 0 });
+      saveAll(); render(); toast('공지를 보냈어요 (예시 · 실제 발송은 개발 단계에서 연결)');
+    });
+  }
+  icons();
+}
+function go() {
+  const h = location.hash.replace('#', '');
+  S.view = VIEWS[h] ? h : 'overview'; S.mi = S.ri = S.qi = null; $('drawerHost').innerHTML = '';
+  render(); window.scrollTo(0, 0);
+}
+addEventListener('hashchange', go);
+
+/* ---------- 이벤트 ---------- */
+document.addEventListener('click', e => {
+  if (!$('amenu').hidden && !e.target.closest('#acct')) { $('amenu').hidden = true; document.querySelector('.who').setAttribute('aria-expanded', 'false'); }
+  if (e.target.closest('#amenu a')) $('amenu').hidden = true;
+  const t = e.target.closest('[data-range],[data-member],[data-report],[data-inq],[data-mf],[data-rf],[data-qf],[data-rtab],[data-rule],[data-do],[data-tpl],[data-arm],[data-ban],[data-unban],[data-savememo],[data-rsave],[data-qsave],[data-except],[data-faq]');
+  if (!t) return;
+  const ds = t.dataset;
+  if (ds.range) { S.range = +ds.range; store('ka-range', S.range); render(); return; }
+  if (ds.member) { S.mi = ds.member; S.del = null; renderDrawer(); if (S.view === 'members') render(); return; }
+  if (ds.report) { S.ri = ds.report; renderDrawer(); render(); return; }
+  if (ds.inq) { S.qi = ds.inq; renderDrawer(); render(); return; }
+  if (ds.mf) { S.mf = ds.mf; render(); return; }
+  if (ds.rf) { S.rf = ds.rf; render(); return; }
+  if (ds.qf) { S.qf = ds.qf; render(); return; }
+  if (ds.rtab) { S.ruleTab = ds.rtab; render(); return; }
+  if (ds.rule) { const r = RULES.find(x => x.id === ds.rule); r.on = !r.on; saveAll(); render(); toast(`「${r.n}」 규칙을 ${r.on ? '켰어요' : '껐어요'}`); return; }
+  if (ds.tpl != null) { const ta = $(ds.for); ta.value = ds.append ? ta.value + TPL[+ds.tpl] : TPL[+ds.tpl]; ta.focus(); return; }
+  if (ds.arm) { S.del = ds.arm; renderDrawer(); return; }
+  if (ds.ban) { const m = MEMBERS.find(x => x.id === ds.ban); m.st = 'banned'; S.del = null; renderDrawer(); render(); toast(`${m.name} 회원의 이용을 정지했어요`); return; }
+  if (ds.unban) { const m = MEMBERS.find(x => x.id === ds.unban); m.st = 'active'; renderDrawer(); render(); toast('이용 정지를 풀었어요'); return; }
+  if (ds.savememo) { const m = MEMBERS.find(x => x.id === ds.savememo); m.memo = $('mmemo').value; toast('메모를 저장했어요'); return; }
+  if (ds.rsave) {
+    const r = REPORTS.find(x => x.id === ds.rsave); r.st = $('rst').value; const rep = $('rreply').value.trim(); if (rep) r.reply = rep;
+    if (rep && r.st === 'new') r.st = 'doing';
+    saveAll(); toast(rep ? '저장하고 신고자에게 답변을 보냈어요 (예시)' : '처리 상태를 저장했어요'); closeDrawer(); return;
+  }
+  if (ds.except) {
+    const r = REPORTS.find(x => x.id === ds.except); const ex = load('ka-except', ['유저 (게임 문서)', '매우 (논문 초록)']);
+    const w = r.sug[0].trim(); if (!ex.some(x => x.startsWith(w))) { ex.push(w + ' (신고 ' + r.id + ')'); store('ka-except', ex); }
+    $('rst').value = 'done'; $('rreply').value = '말씀하신 표현을 규칙 예외로 등록했습니다. 이제 해당 제안이 나오지 않아요.';
+    toast(`「${w}」를 규칙 예외로 등록했어요. 답변을 확인하고 보내 주세요`); return;
+  }
+  if (ds.qsave) {
+    const q = INQ.find(x => x.id === ds.qsave), rep = $('qreply').value.trim();
+    if (!rep) { toast('답변을 먼저 써 주세요'); $('qreply').focus(); return; }
+    q.reply = rep; q.st = 'done'; saveAll(); toast(`${q.email}로 답변을 보냈어요 (예시)`); closeDrawer(); return;
+  }
+  if (ds.faq) { toast('FAQ 후보에 담았어요'); return; }
+  const a = ds.do;
+  if (a === 'close') { closeDrawer(); return; }
+  if (a === 'delCancel') { S.del = null; renderDrawer(); return; }
+  if (a === 'theme') { P = dark() ? 'light' : 'dark'; store('ka-theme', P); applyTheme(); render(); return; }
+  if (a === 'acct') { const m = $('amenu'); m.hidden = !m.hidden; t.setAttribute('aria-expanded', !m.hidden); icons(); return; }
+  if (a === 'myinfo' || a === 'pw') { $('amenu').hidden = true; toast(a === 'pw' ? '비밀번호 변경은 개발 단계에서 연결돼요' : '내 정보 수정은 개발 단계에서 연결돼요'); return; }
+  if (a === 'logout') { $('amenu').hidden = true; toast('로그아웃은 개발 단계에서 연결돼요'); return; }
+  if (a === 'csv') { toast('명단 내려받기는 개발 단계에서 연결돼요'); return; }
+  if (a === 'ruleAdd') { toast('규칙 추가 화면은 다음 단계에서 만들게요'); return; }
+  if (a === 'adminAdd') { toast('초대 메일 발송은 개발 단계에서 연결돼요'); return; }
+});
+addEventListener('keydown', e => { if (e.key === 'Escape' && $('drawerHost').innerHTML) closeDrawer(); });
+$('gq').addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  const q = e.target.value.trim(); if (!q) return;
+  if (/^R-/i.test(q)) { const r = REPORTS.find(x => x.id.toLowerCase() === q.toLowerCase()); if (r) { location.hash = 'reports'; setTimeout(() => { S.ri = r.id; renderDrawer(); render(); }, 0); return; } }
+  if (/^Q-/i.test(q)) { const r = INQ.find(x => x.id.toLowerCase() === q.toLowerCase()); if (r) { location.hash = 'inquiries'; setTimeout(() => { S.qi = r.id; renderDrawer(); render(); }, 0); return; } }
+  S.mq = q; S.mf = 'all'; if (location.hash === '#members') render(); else location.hash = 'members';
+});
+
+/* ---------- 테마 ---------- */
+function dark() { return P === 'dark' || (!P && matchMedia('(prefers-color-scheme: dark)').matches); }
+function applyTheme() { if (P) document.documentElement.setAttribute('data-theme', P); else document.documentElement.removeAttribute('data-theme'); }
+$('menuBtn').addEventListener('click', () => document.body.classList.toggle('navoff'));
+
+
+applyTheme();
+go();
+</script>
+
+</body></html>
