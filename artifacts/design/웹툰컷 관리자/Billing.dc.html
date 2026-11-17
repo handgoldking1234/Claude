@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>웹툰컷 관리자 · 요금제</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#f6f6f6}
+a{color:#13863c}a:hover{color:#0d6b2f}
+.nav a{color:#3a3a3a;text-decoration:none}
+.nav a:hover{background:#f0f0f0;color:#121212}
+.row:hover{background:#fafafa}
+button,input,select{font-family:inherit}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; min-height: 100vh; font-family: Figtree, 'Noto Sans KR', sans-serif; color: #121212; font-size: 13px; background: #f6f6f6">
+
+  <nav class="nav" aria-label="관리자 메뉴" style="flex: 1 1 220px; max-width: 100%; box-sizing: border-box; background: #ffffff; border-right: 1px solid #e3e3e3; padding: 16px 12px; display: flex; flex-direction: column; gap: 2px">
+    <div style="display: flex; align-items: center; gap: 8px; padding: 4px 8px 16px">
+      <div style="width: 28px; height: 28px; border-radius: 8px; background: #1db954; display: flex; align-items: center; justify-content: center">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>
+      </div>
+      <div style="display: flex; flex-direction: column">
+        <strong style="font-size: 14px; font-weight: 800">웹툰컷</strong>
+        <span style="font-size: 11px; color: #6a6a6a">관리자</span>
+      </div>
+    </div>
+    <a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 10px; border-radius: 8px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>대시보드</a>
+    <a href="Acquisition.dc.html" style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 10px; border-radius: 8px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 4h18l-7 8v6l-4 2v-8z"/></svg>유입경로</a>
+    <a href="Members.dc.html" style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 10px; border-radius: 8px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>회원관리</a>
+    <a href="Stats.dc.html" style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 10px; border-radius: 8px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg>통계</a>
+    <div style="height: 1px; background: #ececec; margin: 10px 4px"></div>
+    <a href="Billing.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 10px; border-radius: 8px; background: #e8f8ee; color: #13863c; font-weight: 700">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 10h19"/></svg>요금제<span style="margin-left: auto; font-size: 10.5px; font-weight: 700; color: #6a6a6a; background: #f0f0f0; padding: 1px 6px; border-radius: 8px">무료 운영</span></a>
+    <a href="Ops.dc.html" style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 10px; border-radius: 8px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>운영<span style="margin-left: auto; min-width: 18px; height: 18px; padding: 0 5px; box-sizing: border-box; border-radius: 9px; background: #121212; color: #ffffff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center">5</span></a>
+    <a href="Settings.dc.html" style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 10px; border-radius: 8px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/><path d="m4.9 4.9 2.1 2.1"/><path d="m17 17 2.1 2.1"/><path d="m4.9 19.1 2.1-2.1"/><path d="m17 7 2.1-2.1"/></svg>설정</a>
+    <div style="margin-top: auto; padding: 12px 8px 0; display: flex; align-items: center; gap: 8px">
+      <div style="width: 28px; height: 28px; border-radius: 50%; background: #121212; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700">GK</div>
+      <div style="display: flex; flex-direction: column"><span style="font-weight: 700">GOLDKING</span><span style="font-size: 11px; color: #6a6a6a">대표 · 전체 권한</span></div>
+    </div>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 20px 28px 40px; display: flex; flex-direction: column; gap: 16px">
+    <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+      <h1 style="margin: 0; font-size: 22px; font-weight: 800">요금제</h1>
+      <span style="font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 12px; background: #121212; color: #ffffff">무료 운영 중</span>
+      <span style="color: #6a6a6a">결제는 반응을 보고 연결해요</span>
+    </header>
+
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 12px; background: #ffffff; border: 1px solid #e3e3e3">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3a3a3a" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16h.01"/></svg>
+      <div style="display: flex; flex-direction: column; gap: 2px; flex: 1 1 300px">
+        <strong>지금은 모든 회원이 무료 요금제예요</strong>
+        <span style="color: #6a6a6a; font-size: 12.5px">AI 이미지는 가입 때 맛보기 10장만 주고, 「프로 알림 받기」 신청으로 유료 의향을 재요. 결제 연결 전에는 회원에게 가격이 보이지 않아요.</span>
+      </div>
+      <label style="display: flex; align-items: center; gap: 8px; font-weight: 600">
+        <input type="checkbox" disabled aria-describedby="payNote" style="width: 16px; height: 16px"> 결제 켜기
+      </label>
+      <span id="payNote" style="font-size: 11.5px; color: #6a6a6a">아래 준비 항목을 마치면 켤 수 있어요</span>
+    </div>
+
+    <section aria-label="무료 운영 지표" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px">
+      <div style="padding: 16px; border-radius: 12px; background: #ffffff; border: 1px solid #e3e3e3; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; color: #6a6a6a; font-weight: 600">프로 알림 신청</span><strong style="font-size: 22px; font-weight: 800">41명</strong><span style="font-size: 12px; font-weight: 600; color: #13863c">활성 제작자의 3.4% · 목표 5%</span></div>
+      <div style="padding: 16px; border-radius: 12px; background: #ffffff; border: 1px solid #e3e3e3; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; color: #6a6a6a; font-weight: 600">맛보기 10장 다 쓴 회원</span><strong style="font-size: 22px; font-weight: 800">96명</strong><span style="font-size: 12px; color: #6a6a6a">누적 · 유료 수요 신호</span></div>
+      <div style="padding: 16px; border-radius: 12px; background: #ffffff; border: 1px solid #e3e3e3; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; color: #6a6a6a; font-weight: 600">이번 달 AI 비용</span><strong style="font-size: 22px; font-weight: 800">₩312,000</strong><span style="font-size: 12px; font-weight: 600; color: #a15c00">월 한도 ₩500,000의 62%</span></div>
+      <div style="padding: 16px; border-radius: 12px; background: #ffffff; border: 1px solid #e3e3e3; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; color: #6a6a6a; font-weight: 600">활성 제작자 1인당 AI 비용</span><strong style="font-size: 22px; font-weight: 800">₩258</strong><span style="font-size: 12px; color: #6a6a6a">프로 가격의 4%</span></div>
+    </section>
+
+    <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 12px">
+      <div style="padding: 18px 20px; border-radius: 12px; background: #ffffff; border: 1px solid #e3e3e3; display: flex; flex-direction: column; gap: 10px">
+        <div style="display: flex; align-items: center"><h2 style="margin: 0; font-size: 15px; font-weight: 800">크레딧 규칙</h2><span style="margin-left: 8px; font-size: 11.5px; font-weight: 700; color: #13863c">지금 적용 중</span><button type="button" style="margin-left: auto; height: 28px; padding: 0 10px; border: 1px solid #d6d6d6; border-radius: 8px; background: #ffffff; font-size: 12px; font-weight: 600; cursor: pointer">편집</button></div>
+        <dl style="margin: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; font-size: 12.5px">
+          <sc-for list="{{ rules }}" as="r" hint-placeholder-count="7">
+            <dt style="padding: 9px 0; border-bottom: 1px solid #f0f0f0; color: #3a3a3a">{{ r.k }}</dt><dd style="margin: 0; padding: 9px 0; border-bottom: 1px solid #f0f0f0; text-align: right; font-weight: 700">{{ r.v }}</dd>
+          </sc-for>
+        </dl>
+        <span style="font-size: 11.5px; color: #6a6a6a">맛보기 10장을 다 쓰면 「프로 알림 받기」 안내가 떠요. 다 쓴 회원 1명당 원가는 약 ₩470이에요. 월 AI 비용이 한도에 닿으면 이미지 생성부터 잠시 멈춰요.</span>
+      </div>
+
+      <div style="padding: 18px 20px; border-radius: 12px; background: #ffffff; border: 1px solid #e3e3e3; display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0; font-size: 15px; font-weight: 800">결제 연결 준비</h2>
+        <sc-for list="{{ checks }}" as="c" hint-placeholder-count="6">
+          <label style="display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f0f0f0">
+            <input type="checkbox" checked="{{ c.done }}" style="width: 16px; height: 16px; margin: 1px 0 0">
+            <span style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 600">{{ c.t }}</span><span style="font-size: 12px; color: #6a6a6a">{{ c.d }}</span></span>
+          </label>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="padding: 18px 20px; border-radius: 12px; background: #ffffff; border: 1px solid #e3e3e3; display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><h2 style="margin: 0; font-size: 15px; font-weight: 800">추천 요금제</h2><span style="font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: #f0f0f0; color: #6a6a6a">공개 전</span><span style="font-size: 12px; color: #6a6a6a">결제를 켜면 이 가격으로 열려요 · 무료 오픈 회원은 첫 달 50% 쿠폰</span></div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px">
+        <sc-for list="{{ plans }}" as="p" hint-placeholder-count="4">
+          <div style="{{ p.box }}">
+            <div style="display: flex; align-items: center; gap: 8px"><strong style="font-size: 15px">{{ p.n }}</strong><span style="{{ p.tagStyle }}">{{ p.tag }}</span></div>
+            <div style="display: flex; flex-direction: column"><strong style="font-size: 20px; font-weight: 800">{{ p.price }}</strong><span style="font-size: 12px; color: #6a6a6a">{{ p.sub }}</span></div>
+            <ul style="margin: 0; padding-left: 16px; display: flex; flex-direction: column; gap: 4px; color: #3a3a3a; font-size: 12.5px">
+              <sc-for list="{{ p.feats }}" as="f" hint-placeholder-count="3"><li>{{ f }}</li></sc-for>
+            </ul>
+            <button type="button" style="margin-top: auto; height: 32px; border: 1px solid #d6d6d6; border-radius: 8px; background: #ffffff; font-size: 12px; font-weight: 600; cursor: pointer">가격 · 혜택 편집</button>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; padding: 12px 14px; border-radius: 10px; background: #f6f6f6; font-size: 12.5px">
+        <span><strong>크레딧 추가 구매</strong> · 100 크레딧 ₩1,900 · 500 크레딧 ₩7,900</span>
+        <span style="color: #6a6a6a">결제 수수료 약 3%를 뺀 금액 기준으로, 이미지 재생성 1회 원가의 3배 이상 남도록 잡았어요</span>
+      </div>
+    </section>
+
+    <section style="padding: 18px 20px; border-radius: 12px; background: #ffffff; border: 1px solid #e3e3e3; display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; align-items: center"><h2 style="margin: 0; font-size: 15px; font-weight: 800">프로 알림 신청자</h2><span style="margin-left: 8px; font-size: 12px; color: #6a6a6a">결제를 켜면 이분들께 먼저 알려요</span><button type="button" style="margin-left: auto; height: 32px; padding: 0 12px; border: 1px solid #d6d6d6; border-radius: 8px; background: #ffffff; font-size: 12px; font-weight: 600; cursor: pointer">CSV 내보내기</button></div>
+      <div style="overflow-x: auto">
+        <table style="width: 100%; min-width: 640px; border-collapse: collapse; font-size: 12.5px">
+          <thead><tr style="color: #6a6a6a; text-align: left">
+            <th scope="col" style="font-weight: 600; padding: 8px 10px; border-bottom: 1px solid #e3e3e3">회원</th>
+            <th scope="col" style="font-weight: 600; padding: 8px 10px; border-bottom: 1px solid #e3e3e3">신청일</th>
+            <th scope="col" style="font-weight: 600; padding: 8px 10px; border-bottom: 1px solid #e3e3e3">신청한 곳</th>
+            <th scope="col" style="font-weight: 600; padding: 8px 10px; border-bottom: 1px solid #e3e3e3; text-align: right">맛보기 사용</th>
+            <th scope="col" style="font-weight: 600; padding: 8px 10px; border-bottom: 1px solid #e3e3e3; text-align: right">누적 컷</th>
+          </tr></thead>
+          <tbody>
+            <sc-for list="{{ waits }}" as="w" hint-placeholder-count="5">
+              <tr class="row">
+                <td style="padding: 10px; border-bottom: 1px solid #f0f0f0; font-weight: 600">{{ w.m }}</td>
+                <td style="padding: 10px; border-bottom: 1px solid #f0f0f0; color: #3a3a3a">{{ w.d }}</td>
+                <td style="padding: 10px; border-bottom: 1px solid #f0f0f0">{{ w.at }}</td>
+                <td style="padding: 10px; border-bottom: 1px solid #f0f0f0; text-align: right">{{ w.cr }}</td>
+                <td style="padding: 10px; border-bottom: 1px solid #f0f0f0; text-align: right">{{ w.cuts }}</td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section style="padding: 28px 20px; border-radius: 12px; background: #ffffff; border: 1px dashed #d6d6d6; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9a9a9a" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 10h19"/></svg>
+      <strong>결제 내역 · 환불 · 쿠폰</strong>
+      <span style="color: #6a6a6a; font-size: 12.5px">결제를 연결하면 여기에 결제 내역, 환불 요청, 쿠폰 관리가 열려요.</span>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1460}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const rules = [
+      { k: '이미지 맛보기 (가입 시 1회)', v: '10장 · Lite 1K' },
+      { k: '무료 이미지 하루 한도', v: '10장' },
+      { k: '글 AI (대사 다듬기 · 프롬프트)', v: '매월 30회 충전' },
+      { k: '무료 지급 조건', v: '카카오 · 네이버 로그인 또는 휴대폰 인증' },
+      { k: '2K · Pro 이미지', v: '유료 전용' },
+      { k: '유료 이미지 (결제 연결 후)', v: '1K 10 · 2K 15 크레딧' },
+      { k: '월 AI 비용 한도', v: '₩500,000' }
+    ];
+    const checks = [
+      { t: '유료 의향 확인', d: '프로 알림 신청이 활성 제작자의 5% 또는 300명', done: false },
+      { t: '사업자등록 · 통신판매업 신고', d: '유료 판매 전에 필요해요', done: false },
+      { t: '결제 대행사 계약', d: '토스페이먼츠 · 포트원 중 선택, 정기결제 지원 확인', done: false },
+      { t: '이용약관 · 환불 정책', d: '디지털 콘텐츠 청약철회 기준 반영', done: false },
+      { t: '개인정보 처리방침 갱신', d: '결제 정보 처리 위탁 추가', done: false },
+      { t: '가격 확정', d: '아래 추천 요금제를 신청자 반응으로 조정', done: false }
+    ];
+    const box = (hl) => 'padding: 16px; border-radius: 12px; display: flex; flex-direction: column; gap: 10px; min-height: 220px; ' + (hl ? 'border: 2px solid #1db954; background: #f6fcf8' : 'border: 1px solid #e3e3e3; background: #ffffff');
+    const tag = (t) => 'margin-left: auto; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; ' + (t === '지금 운영 중' ? 'background: #121212; color: #ffffff' : t === '추천' ? 'background: #e8f8ee; color: #13863c' : 'background: #f0f0f0; color: #6a6a6a');
+    const plans = [
+      { n: '무료', price: '₩0', sub: '모든 회원', tag: '지금 운영 중', tagStyle: tag('지금 운영 중'), box: box(false), feats: ['AI 이미지 맛보기 10장 (가입 시 1회)', '글 AI 매월 30회', '작품 3개 · 워터마크 없음'] },
+      { n: '프로', price: '₩6,900 / 월', sub: '연 결제 ₩69,000 (2개월 무료)', tag: '추천', tagStyle: tag('추천'), box: box(true), feats: ['매월 400 크레딧 (이미지 1K 약 40장)', '2K 이미지 · 글 AI 무제한', '작품 무제한 · 여러 기기 보관'] },
+      { n: '팀', price: '₩9,900 / 석 · 월', sub: '2석부터', tag: '공개 전', tagStyle: tag('공개 전'), box: box(false), feats: ['석당 매월 400 크레딧', '작품 공유 · 함께 편집', '관리자 1명 지정'] },
+      { n: '교육', price: '₩0', sub: '교사 인증 시', tag: '공개 전', tagStyle: tag('공개 전'), box: box(false), feats: ['프로와 같은 기능', '학교 이메일 인증', '1년마다 재인증'] }
+    ];
+    const waits = [
+      { m: '구로다', d: '10.24', at: '맛보기 소진 안내', cr: '10 / 10', cuts: '412' },
+      { m: '서하나', d: '10.23', at: '2K 이미지 선택', cr: '9 / 10', cuts: '128' },
+      { m: '오세린', d: '10.22', at: '작품 4번째 만들기', cr: '6 / 10', cuts: '77' },
+      { m: 'lunar.cut', d: '10.21', at: '맛보기 소진 안내', cr: '10 / 10', cuts: '230' },
+      { m: 'jiyoon_toon', d: '10.20', at: '요금제 안내 페이지', cr: '2 / 10', cuts: '44' }
+    ];
+    return { rules, checks, plans, waits };
+  }
+}
+</script>
+</body>
+</html>

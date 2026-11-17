@@ -1,0 +1,92 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Edit.dc.html": {
+      "expand": "fill",
+      "h": 1080,
+      "is_interactive": true,
+      "title": "사이트 편집 (인라인)",
+      "w": 1280,
+      "x": 1360,
+      "y": 0
+    },
+    "Inbox.dc.html": {
+      "expand": "fill",
+      "h": 900,
+      "is_interactive": true,
+      "title": "문의함",
+      "w": 1280,
+      "x": 0,
+      "y": 1280
+    },
+    "Info.dc.html": {
+      "expand": "fill",
+      "h": 1160,
+      "is_interactive": true,
+      "title": "기본 정보",
+      "w": 1280,
+      "x": 2720,
+      "y": 0
+    },
+    "Main.dc.html": {
+      "expand": "fill",
+      "h": 1000,
+      "is_interactive": true,
+      "title": "홈 · 대시보드",
+      "w": 1280,
+      "x": 0,
+      "y": 0
+    },
+    "Mobile.dc.html": {
+      "h": 844,
+      "title": "모바일 홈",
+      "w": 390,
+      "x": 2720,
+      "y": 1280
+    },
+    "Stats.dc.html": {
+      "expand": "fill",
+      "h": 1160,
+      "is_interactive": true,
+      "title": "통계",
+      "w": 1280,
+      "x": 1360,
+      "y": 1280
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-10-23T03:10:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas"
+  },
+  "notes": {
+    "note-qal02m": {
+      "text": "",
+      "w": 240,
+      "x": 396,
+      "y": 42
+    },
+    "t1": {
+      "kind": "title1",
+      "maxW": 4000,
+      "text": "모두의 사이트 · 사장님 관리자",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Edit.dc.html",
+    "Info.dc.html",
+    "Inbox.dc.html",
+    "Stats.dc.html",
+    "Mobile.dc.html"
+  ],
+  "pages": [],
+  "title": "모두의 사이트 관리자"
+}

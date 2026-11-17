@@ -13,5 +13,5 @@
 | CLAUDE.md | 작업 규칙·공통 인프라 요약 (먼저 읽기) |
 | REPOS.md | 저장소 ↔ 프로젝트 ↔ 배포 주소 |
 | memory/ | 메모리 전체 (93개 파일) |
-| artifacts/ | 아티팩트 HTML 소스 98개 |
+| artifacts/ | 아티팩트 HTML 103개 · 문서 PDF 29개 · Claude Design 소스 5개 |
 | NOT-MIGRATED.md | 못 옮긴 것과 할 일 |

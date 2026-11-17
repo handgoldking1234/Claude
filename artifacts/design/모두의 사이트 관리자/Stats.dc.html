@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>통계</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Noto Sans KR',system-ui,sans-serif;color:#1B1F24;background:#F5F6F8}
+a{color:#2563EB}a:hover{color:#1D4ED8}
+@media (max-width:1024px){.adm-main{padding:28px 24px 40px!important}}
+@media (max-width:760px){
+.adm-nav{flex:1 1 100%!important;flex-direction:row!important;align-items:center!important;flex-wrap:nowrap!important;overflow-x:auto!important;padding:8px 12px!important;border-right:0!important;border-bottom:1px solid #E4E6EA!important;position:sticky;top:0;z-index:10}
+.adm-brand{flex:none;padding:0 8px 0 0!important}
+.adm-brand-text{display:none!important}
+.adm-navitem{flex:none;white-space:nowrap;padding:0 12px!important;font-size:14px!important;gap:6px!important}
+.adm-main{padding:20px 16px 32px!important;gap:16px!important}
+.adm-h1{font-size:21px!important}
+.adm-kpi{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+.adm-trend{gap:2px!important;height:140px!important}
+}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; min-height: 100vh; background: #F5F6F8; font-family: 'Noto Sans KR', system-ui, sans-serif; color: #1B1F24">
+
+  <nav class="adm-nav" aria-label="관리자 메뉴" style="flex: 1 1 220px; max-width: 100%; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E4E6EA; padding: 24px 16px; display: flex; flex-direction: column; gap: 4px">
+    <div class="adm-brand" style="display: flex; align-items: center; gap: 10px; padding: 4px 8px 20px">
+      <div style="width: 40px; height: 40px; border-radius: 10px; background: #2563EB; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 17px">솔</div>
+      <div class="adm-brand-text" style="display: flex; flex-direction: column">
+        <span style="font-weight: 700; font-size: 15px">솔바람 펜션</span>
+        <span style="font-size: 12px; color: #5F6670">solbaram.kr</span>
+      </div>
+    </div>
+    <sc-for list="{{nav}}" as="item" hint-placeholder-count="7">
+      <sc-if value="{{item.active}}" hint-placeholder-val="{{false}}">
+        <a class="adm-navitem" href="{{item.href}}" aria-current="page" style="display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border-radius: 10px; background: #EEF3FE; color: #1D4ED8; font-weight: 700; font-size: 15px; text-decoration: none">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{item.icon}}"></path></svg>
+          <span style="flex: 1">{{item.label}}</span>
+        </a>
+      </sc-if>
+      <sc-if value="{{item.idle}}" hint-placeholder-val="{{true}}">
+        <a class="adm-navitem" href="{{item.href}}" style="display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border-radius: 10px; color: #3B4149; font-size: 15px; text-decoration: none">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{item.icon}}"></path></svg>
+          <span style="flex: 1">{{item.label}}</span>
+          <sc-if value="{{item.badge}}" hint-placeholder-val="{{false}}">
+            <span style="min-width: 22px; height: 22px; padding: 0 6px; box-sizing: border-box; border-radius: 11px; background: #FFE7D6; color: #9A3C00; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{item.count}}</span>
+          </sc-if>
+        </a>
+      </sc-if>
+    </sc-for>
+  </nav>
+
+  <main class="adm-main" style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 32px 40px 48px; display: flex; flex-direction: column; gap: 20px">
+    <header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <h1 class="adm-h1" style="margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.02em">통계</h1>
+        <span style="font-size: 13px; color: #5F6670">{{range}}</span>
+      </div>
+      <div role="tablist" aria-label="기간" style="display: flex; padding: 4px; border-radius: 12px; background: #E9EBEF">
+        <sc-for list="{{tabs}}" as="t" hint-placeholder-count="2">
+          <sc-if value="{{t.on}}" hint-placeholder-val="{{false}}">
+            <button type="button" role="tab" aria-selected="true" onClick="{{t.pick}}" style="min-height: 40px; padding: 0 18px; border: 0; border-radius: 9px; background: #FFFFFF; font: inherit; font-size: 14px; font-weight: 700; color: #1B1F24; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.08)">{{t.label}}</button>
+          </sc-if>
+          <sc-if value="{{t.off}}" hint-placeholder-val="{{true}}">
+            <button type="button" role="tab" aria-selected="false" onClick="{{t.pick}}" style="min-height: 40px; padding: 0 18px; border: 0; border-radius: 9px; background: transparent; font: inherit; font-size: 14px; color: #3B4149; cursor: pointer">{{t.label}}</button>
+          </sc-if>
+        </sc-for>
+      </div>
+    </header>
+
+    <section class="adm-kpi" aria-label="요약" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px">
+      <sc-for list="{{kpis}}" as="k" hint-placeholder-count="4">
+        <div style="background: #FFFFFF; border: 1px solid #E4E6EA; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 8px">
+          <span style="font-size: 13px; color: #5F6670">{{k.label}}</span>
+          <span style="font-size: 28px; font-weight: 700; letter-spacing: -0.02em">{{k.value}}</span>
+          <span style="font-size: 12px; color: #5F6670">{{k.sub}}</span>
+        </div>
+      </sc-for>
+    </section>
+
+    <section aria-labelledby="trend" style="background: #FFFFFF; border: 1px solid #E4E6EA; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+      <h2 id="trend" style="margin: 0; font-size: 17px; font-weight: 700">방문자 추이</h2>
+      <div class="adm-trend" role="img" aria-label="{{trendLabel}}" style="display: flex; align-items: flex-end; gap: 6px; height: 180px; padding-top: 8px; border-bottom: 1px solid #E4E6EA">
+        <sc-for list="{{bars}}" as="b" hint-placeholder-count="14">
+          <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 100%">
+            <div style="width: 100%; max-width: 28px; height: {{b.h}}; background: #2563EB; border-radius: 4px 4px 0 0"></div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display: flex; justify-content: space-between; font-size: 12px; color: #5F6670">
+        <span>{{startLabel}}</span><span>오늘</span>
+      </div>
+    </section>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px">
+      <section aria-labelledby="dev" style="background: #FFFFFF; border: 1px solid #E4E6EA; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+        <h2 id="dev" style="margin: 0; font-size: 17px; font-weight: 700">어떤 기기로 봤나요</h2>
+        <div role="img" aria-label="모바일 78%, PC 22%" style="display: flex; height: 28px; border-radius: 8px; overflow: hidden">
+          <div style="width: 78%; background: #2563EB; color: #FFFFFF; font-size: 12px; font-weight: 700; display: flex; align-items: center; padding-left: 10px">모바일 78%</div>
+          <div style="width: 22%; background: #BFD2FA; color: #1E3A8A; font-size: 12px; font-weight: 700; display: flex; align-items: center; padding-left: 8px">PC 22%</div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+          <sc-for list="{{os}}" as="o" hint-placeholder-count="4">
+            <div style="display: flex; justify-content: space-between; padding: 12px 14px; border-radius: 10px; background: #F5F6F8; font-size: 14px">
+              <span style="color: #3B4149">{{o.name}}</span><span style="font-weight: 700">{{o.v}}</span>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section aria-labelledby="src" style="background: #FFFFFF; border: 1px solid #E4E6EA; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 12px">
+        <h2 id="src" style="margin: 0 0 4px; font-size: 17px; font-weight: 700">어디서 들어왔나요</h2>
+        <sc-for list="{{sources}}" as="s" hint-placeholder-count="5">
+          <div style="display: flex; align-items: center; gap: 12px">
+            <span style="width: 80px; font-size: 13px; color: #3B4149">{{s.name}}</span>
+            <div style="flex: 1; height: 10px; background: #EEF0F3; border-radius: 5px">
+              <div style="width: {{s.w}}; height: 10px; background: #2563EB; border-radius: 5px"></div>
+            </div>
+            <span style="width: 40px; text-align: right; font-size: 13px; font-weight: 500">{{s.w}}</span>
+          </div>
+        </sc-for>
+      </section>
+
+      <section aria-labelledby="kw" style="background: #FFFFFF; border: 1px solid #E4E6EA; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+          <h2 id="kw" style="margin: 0; font-size: 17px; font-weight: 700">검색어 (구글)</h2>
+          <span style="font-size: 12px; color: #5F6670">Search Console 연동</span>
+        </div>
+        <table style="width: 100%; border-collapse: collapse; font-size: 14px">
+          <thead>
+            <tr><th scope="col" style="text-align: left; padding: 8px 0; font-size: 12px; font-weight: 500; color: #5F6670; border-bottom: 1px solid #E4E6EA">검색어</th><th scope="col" style="text-align: right; padding: 8px 0; font-size: 12px; font-weight: 500; color: #5F6670; border-bottom: 1px solid #E4E6EA">클릭</th></tr>
+          </thead>
+          <tbody>
+            <sc-for list="{{keywords}}" as="w" hint-placeholder-count="4">
+              <tr><td style="padding: 10px 0; border-bottom: 1px solid #EEF0F3">{{w.k}}</td><td style="padding: 10px 0; text-align: right; font-weight: 500; border-bottom: 1px solid #EEF0F3">{{w.c}}</td></tr>
+            </sc-for>
+          </tbody>
+        </table>
+        <span style="font-size: 12px; color: #5F6670; line-height: 1.6">네이버 검색어는 네이버 서치어드바이저에서 확인할 수 있어요. <a href="#">바로가기</a></span>
+      </section>
+
+      <section aria-labelledby="pages" style="background: #FFFFFF; border: 1px solid #E4E6EA; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 4px">
+        <h2 id="pages" style="margin: 0 0 8px; font-size: 17px; font-weight: 700">많이 본 페이지</h2>
+        <sc-for list="{{topPages}}" as="p" hint-placeholder-count="4">
+          <div style="display: flex; justify-content: space-between; padding: 12px 0; border-top: 1px solid #EEF0F3; font-size: 14px">
+            <span>{{p.name}}</span><span style="font-weight: 500">{{p.v}}</span>
+          </div>
+        </sc-for>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1160}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { period: 7 };
+  }
+  renderVals() {
+    const self = this;
+    const ACTIVE = 'stats';
+    const NAV = [
+      ['home', '홈', 'Main.dc.html', 'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z', 0],
+      ['edit', '사이트 편집', 'Edit.dc.html', 'M4 20h4L19 9l-4-4L4 16v4z M13.5 6.5l4 4', 0],
+      ['info', '기본 정보', 'Info.dc.html', 'M4 5h16v14H4z M8 9h8 M8 13h8 M8 17h5', 0],
+      ['board', '게시판', '#', 'M5 4h14v16H5z M9 8h6 M9 12h6 M9 16h3', 0],
+      ['inbox', '문의함', 'Inbox.dc.html', 'M3 13l3-8h12l3 8v6H3z M3 13h5l1 3h6l1-3h5', 3],
+      ['stats', '통계', 'Stats.dc.html', 'M4 20V10 M10 20V4 M16 20v-7 M2 20h20', 0],
+      ['set', '설정', '#', 'M4 7h10 M18 7h2 M4 17h4 M12 17h8 M16 5v4 M10 15v4', 0]
+    ];
+    const nav = NAV.map(function (n) {
+      return { label: n[1], href: n[2], icon: n[3], count: n[4], badge: n[4] > 0, active: n[0] === ACTIVE, idle: n[0] !== ACTIVE };
+    });
+    const p = this.state.period;
+    const d7 = [38, 41, 35, 52, 48, 61, 37];
+    const d30 = [22, 25, 31, 28, 35, 44, 30, 26, 29, 33, 30, 38, 51, 34, 31, 36, 32, 40, 47, 58, 35, 38, 41, 35, 52, 48, 61, 37, 44, 48];
+    const data = p === 7 ? d7 : d30;
+    const max = Math.max.apply(null, data);
+    const total = data.reduce(function (a, b) { return a + b; }, 0);
+    const tabs = [7, 30].map(function (n) {
+      return { label: '최근 ' + n + '일', on: n === p, off: n !== p, pick: function () { self.setState({ period: n }); } };
+    });
+    return {
+      nav: nav,
+      tabs: tabs,
+      range: p === 7 ? '10월 17일 – 10월 23일' : '9월 24일 – 10월 23일',
+      startLabel: p === 7 ? '7일 전' : '30일 전',
+      trendLabel: '하루 방문자 ' + data.length + '일치, 가장 많은 날 ' + max + '명',
+      bars: data.map(function (v) { return { h: Math.round(v / max * 160) + 'px' }; }),
+      kpis: [
+        { label: '방문자', value: total.toLocaleString() + '명', sub: p === 7 ? '지난주보다 9% 늘었어요' : '지난달보다 14% 늘었어요' },
+        { label: '페이지 조회', value: Math.round(total * 2.6).toLocaleString() + '회', sub: '1명당 평균 2.6페이지' },
+        { label: '문의', value: (p === 7 ? 5 : 19) + '건', sub: '문의하기 폼 + 카카오톡' },
+        { label: '전화 버튼 클릭', value: (p === 7 ? 23 : 87) + '회', sub: '모바일에서 대부분' }
+      ],
+      os: [
+        { name: 'iPhone', v: '41%' },
+        { name: 'Android', v: '37%' },
+        { name: 'Windows', v: '15%' },
+        { name: 'Mac', v: '7%' }
+      ],
+      sources: [
+        { name: '네이버', w: '52%' },
+        { name: '직접 접속', w: '21%' },
+        { name: '인스타그램', w: '15%' },
+        { name: '구글', w: '9%' },
+        { name: '기타', w: '3%' }
+      ],
+      keywords: [
+        { k: '솔바람 펜션', c: p === 7 ? 34 : 128 },
+        { k: '가평 계곡 펜션', c: p === 7 ? 11 : 46 },
+        { k: '가평 바비큐 펜션', c: p === 7 ? 6 : 21 },
+        { k: '가평 반려견 펜션', c: p === 7 ? 3 : 12 }
+      ],
+      topPages: [
+        { name: '메인', v: '38%' },
+        { name: '객실 안내', v: '31%' },
+        { name: '예약 안내', v: '18%' },
+        { name: '오시는 길', v: '13%' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>문의함</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Noto Sans KR',system-ui,sans-serif;color:#1B1F24;background:#F5F6F8}
+a{color:#2563EB}a:hover{color:#1D4ED8}
+@media (max-width:1024px){.adm-main{padding:28px 24px 40px!important}}
+@media (max-width:760px){
+.adm-nav{flex:1 1 100%!important;flex-direction:row!important;align-items:center!important;flex-wrap:nowrap!important;overflow-x:auto!important;padding:8px 12px!important;border-right:0!important;border-bottom:1px solid #E4E6EA!important;position:sticky;top:0;z-index:10}
+.adm-brand{flex:none;padding:0 8px 0 0!important}
+.adm-brand-text{display:none!important}
+.adm-navitem{flex:none;white-space:nowrap;padding:0 12px!important;font-size:14px!important;gap:6px!important}
+.adm-main{padding:20px 16px 32px!important;gap:16px!important}
+.adm-h1{font-size:21px!important}
+.adm-tabs{width:100%;overflow-x:auto}
+.adm-detail{padding:20px!important}
+}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; min-height: 100vh; background: #F5F6F8; font-family: 'Noto Sans KR', system-ui, sans-serif; color: #1B1F24">
+
+  <nav class="adm-nav" aria-label="관리자 메뉴" style="flex: 1 1 220px; max-width: 100%; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E4E6EA; padding: 24px 16px; display: flex; flex-direction: column; gap: 4px">
+    <div class="adm-brand" style="display: flex; align-items: center; gap: 10px; padding: 4px 8px 20px">
+      <div style="width: 40px; height: 40px; border-radius: 10px; background: #2563EB; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 17px">솔</div>
+      <div class="adm-brand-text" style="display: flex; flex-direction: column">
+        <span style="font-weight: 700; font-size: 15px">솔바람 펜션</span>
+        <span style="font-size: 12px; color: #5F6670">solbaram.kr</span>
+      </div>
+    </div>
+    <sc-for list="{{nav}}" as="item" hint-placeholder-count="7">
+      <sc-if value="{{item.active}}" hint-placeholder-val="{{false}}">
+        <a class="adm-navitem" href="{{item.href}}" aria-current="page" style="display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border-radius: 10px; background: #EEF3FE; color: #1D4ED8; font-weight: 700; font-size: 15px; text-decoration: none">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{item.icon}}"></path></svg>
+          <span style="flex: 1">{{item.label}}</span>
+          <sc-if value="{{item.badge}}" hint-placeholder-val="{{false}}">
+            <span style="min-width: 22px; height: 22px; padding: 0 6px; box-sizing: border-box; border-radius: 11px; background: #FFE7D6; color: #9A3C00; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{item.count}}</span>
+          </sc-if>
+        </a>
+      </sc-if>
+      <sc-if value="{{item.idle}}" hint-placeholder-val="{{true}}">
+        <a class="adm-navitem" href="{{item.href}}" style="display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border-radius: 10px; color: #3B4149; font-size: 15px; text-decoration: none">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{item.icon}}"></path></svg>
+          <span style="flex: 1">{{item.label}}</span>
+        </a>
+      </sc-if>
+    </sc-for>
+  </nav>
+
+  <main class="adm-main" style="flex: 999 1 560px; min-width: 0; box-sizing: border-box; padding: 32px 40px 48px; display: flex; flex-direction: column; gap: 20px">
+    <header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+      <h1 class="adm-h1" style="margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.02em">문의함</h1>
+      <div class="adm-tabs" role="tablist" aria-label="문의 상태" style="display: flex; padding: 4px; border-radius: 12px; background: #E9EBEF">
+        <button type="button" role="tab" aria-selected="false" style="min-height: 40px; padding: 0 16px; border: 0; border-radius: 9px; background: transparent; font: inherit; font-size: 14px; color: #3B4149; cursor: pointer">전체 6</button>
+        <button type="button" role="tab" aria-selected="true" style="min-height: 40px; padding: 0 16px; border: 0; border-radius: 9px; background: #FFFFFF; font: inherit; font-size: 14px; font-weight: 700; color: #1B1F24; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.08)">새 문의 3</button>
+        <button type="button" role="tab" aria-selected="false" style="min-height: 40px; padding: 0 16px; border: 0; border-radius: 9px; background: transparent; font: inherit; font-size: 14px; color: #3B4149; cursor: pointer">처리 완료 3</button>
+      </div>
+    </header>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+      <section aria-label="문의 목록" style="flex: 1 1 320px; min-width: 0; background: #FFFFFF; border: 1px solid #E4E6EA; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column">
+        <sc-for list="{{items}}" as="q" hint-placeholder-count="5">
+          <sc-if value="{{q.selected}}" hint-placeholder-val="{{false}}">
+            <button type="button" onClick="{{q.pick}}" aria-current="true" style="display: flex; gap: 12px; padding: 16px 18px; border: 0; border-left: 4px solid #2563EB; border-bottom: 1px solid #EEF0F3; background: #EEF3FE; text-align: left; font: inherit; color: #1B1F24; cursor: pointer">
+              <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+                <span style="display: flex; gap: 8px; align-items: center"><span style="font-size: 15px; font-weight: 700">{{q.name}}</span><span style="font-size: 12px; color: #5F6670">{{q.time}}</span></span>
+                <span style="font-size: 13px; color: #3B4149; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{q.text}}</span>
+              </span>
+              <span style="align-self: flex-start; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; background: {{q.tagBg}}; color: {{q.tagFg}}">{{q.status}}</span>
+            </button>
+          </sc-if>
+          <sc-if value="{{q.unselected}}" hint-placeholder-val="{{true}}">
+            <button type="button" onClick="{{q.pick}}" style="display: flex; gap: 12px; padding: 16px 18px 16px 22px; border: 0; border-bottom: 1px solid #EEF0F3; background: #FFFFFF; text-align: left; font: inherit; color: #1B1F24; cursor: pointer">
+              <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+                <span style="display: flex; gap: 8px; align-items: center"><span style="font-size: 15px; font-weight: 700">{{q.name}}</span><span style="font-size: 12px; color: #5F6670">{{q.time}}</span></span>
+                <span style="font-size: 13px; color: #3B4149; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{q.text}}</span>
+              </span>
+              <span style="align-self: flex-start; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; background: {{q.tagBg}}; color: {{q.tagFg}}">{{q.status}}</span>
+            </button>
+          </sc-if>
+        </sc-for>
+      </section>
+
+      <section class="adm-detail" aria-label="문의 상세" style="flex: 999 1 420px; min-width: 0; background: #FFFFFF; border: 1px solid #E4E6EA; border-radius: 14px; padding: 28px; display: flex; flex-direction: column; gap: 20px">
+        <div style="display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px">
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <h2 style="margin: 0; font-size: 20px; font-weight: 700">{{cur.name}}</h2>
+            <span style="font-size: 13px; color: #5F6670">{{cur.time}} · {{cur.via}}</span>
+          </div>
+          <span style="padding: 4px 10px; border-radius: 8px; font-size: 13px; font-weight: 700; background: {{cur.tagBg}}; color: {{cur.tagFg}}">{{cur.status}}</span>
+        </div>
+        <dl style="margin: 0; display: grid; grid-template-columns: 96px 1fr; gap: 10px 16px; font-size: 14px">
+          <dt style="color: #5F6670">연락처</dt><dd style="margin: 0; font-weight: 500">{{cur.phone}}</dd>
+          <dt style="color: #5F6670">희망 날짜</dt><dd style="margin: 0">{{cur.date}}</dd>
+          <dt style="color: #5F6670">인원</dt><dd style="margin: 0">{{cur.people}}</dd>
+        </dl>
+        <div style="padding: 18px; border-radius: 10px; background: #F5F6F8; font-size: 15px; line-height: 1.7; color: #1B1F24">{{cur.text}}</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px">
+          <a href="#" style="min-height: 44px; padding: 0 18px; display: flex; align-items: center; gap: 8px; border-radius: 10px; background: #2563EB; color: #FFFFFF; font-size: 14px; font-weight: 700; text-decoration: none">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"></path></svg>
+            전화하기
+          </a>
+          <a href="#" style="min-height: 44px; padding: 0 18px; display: flex; align-items: center; border: 1px solid #C9CED6; border-radius: 10px; color: #1B1F24; font-size: 14px; font-weight: 500; text-decoration: none">문자 보내기</a>
+          <button type="button" onClick="{{markDone}}" style="min-height: 44px; padding: 0 18px; border: 1px solid #C9CED6; border-radius: 10px; background: #FFFFFF; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer">처리 완료로 표시</button>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <label for="memo" style="font-size: 13px; font-weight: 500; color: #3B4149">메모 (손님에게는 보이지 않아요)</label>
+          <textarea id="memo" rows="3" placeholder="예: 11/8 솔 객실 가예약, 입금 확인 후 확정" style="padding: 12px; border: 1px solid #C9CED6; border-radius: 10px; font: inherit; font-size: 14px; resize: vertical"></textarea>
+        </div>
+        <span style="font-size: 12px; color: #5F6670">문의 내용과 연락처는 1년 뒤 자동으로 삭제돼요.</span>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { picked: 0, done: {} };
+  }
+  renderVals() {
+    const self = this;
+    const ACTIVE = 'inbox';
+    const NAV = [
+      ['home', '홈', 'Main.dc.html', 'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z', 0],
+      ['edit', '사이트 편집', 'Edit.dc.html', 'M4 20h4L19 9l-4-4L4 16v4z M13.5 6.5l4 4', 0],
+      ['info', '기본 정보', 'Info.dc.html', 'M4 5h16v14H4z M8 9h8 M8 13h8 M8 17h5', 0],
+      ['board', '게시판', '#', 'M5 4h14v16H5z M9 8h6 M9 12h6 M9 16h3', 0],
+      ['inbox', '문의함', 'Inbox.dc.html', 'M3 13l3-8h12l3 8v6H3z M3 13h5l1 3h6l1-3h5', 3],
+      ['stats', '통계', 'Stats.dc.html', 'M4 20V10 M10 20V4 M16 20v-7 M2 20h20', 0],
+      ['set', '설정', '#', 'M4 7h10 M18 7h2 M4 17h4 M12 17h8 M16 5v4 M10 15v4', 0]
+    ];
+    const nav = NAV.map(function (n) {
+      return { label: n[1], href: n[2], icon: n[3], count: n[4], badge: n[4] > 0, active: n[0] === ACTIVE, idle: n[0] !== ACTIVE };
+    });
+    const RAW = [
+      { name: '김OO 님', time: '12분 전', via: '문의하기 폼', phone: '010-0000-1234', date: '11월 8일 (토) 1박', people: '2명', text: '11월 8일 토요일 2인 숙박 가능한가요? 바비큐도 이용하고 싶은데 숯이랑 그릴은 준비되어 있나요?', isNew: true },
+      { name: '이OO 님', time: '2시간 전', via: '문의하기 폼', phone: '010-0000-5678', date: '11월 15일 (토) 1박', people: '12명', text: '단체(12명) 예약 문의드립니다. 큰 객실 2개 붙어 있는 곳 있나요? 회사 워크숍이라 영수증 발행도 필요합니다.', isNew: true },
+      { name: '박OO 님', time: '어제', via: '카카오톡 채널', phone: '010-0000-9012', date: '미정', people: '3명 + 반려견 1', text: '반려견 동반 가능한지 궁금합니다. 소형견이고 배변 패드 챙겨갈게요.', isNew: true },
+      { name: '최OO 님', time: '10월 19일', via: '문의하기 폼', phone: '010-0000-3456', date: '10월 25일 (토) 1박', people: '4명', text: '체크인 시간 조금 일찍 가능할까요?', isNew: false },
+      { name: '정OO 님', time: '10월 17일', via: '문의하기 폼', phone: '010-0000-7890', date: '11월 1일 (토) 2박', people: '2명', text: '연박 할인 있는지 문의드려요.', isNew: false }
+    ];
+    const items = RAW.map(function (q, i) {
+      const isDone = !q.isNew || !!self.state.done[i];
+      return Object.assign({}, q, {
+        status: isDone ? '처리 완료' : '새 문의',
+        tagBg: isDone ? '#E3F4EA' : '#FFE7D6',
+        tagFg: isDone ? '#1E6B3C' : '#9A3C00',
+        selected: i === self.state.picked,
+        unselected: i !== self.state.picked,
+        pick: function () { self.setState({ picked: i }); }
+      });
+    });
+    return {
+      nav: nav,
+      items: items,
+      cur: items[this.state.picked],
+      markDone: function () {
+        const d = Object.assign({}, self.state.done);
+        d[self.state.picked] = true;
+        self.setState({ done: d });
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>
